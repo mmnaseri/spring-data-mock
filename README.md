@@ -1,4 +1,4 @@
-# spring-data-mock
+# Spring Data Mock
 Mock facility for Spring Data repositories.
 
 Using this tool you can mock your repositories. This is specially useful when you want to test services relying on repositories in an isolated manner.
