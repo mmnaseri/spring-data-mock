@@ -43,3 +43,7 @@ Or you can pass in the initial data when mocking:
         .mock();
 
 Note that the initial data passed this way will have to have its ID property set, whereas the insertion works like a normal DB would and sets the ID value for you.
+
+## License
+
+This project is released under the MIT license.
