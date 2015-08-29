@@ -29,7 +29,7 @@
         <version>7</version>
     </parent>
 
-    <groupId>com.agileapes.utils</groupId>
+    <groupId>com.mmnaseri.utils</groupId>
     <artifactId>spring-data-mock</artifactId>
     <version>1.0</version>
     <name>Spring Data Mock</name>
