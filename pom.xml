@@ -32,6 +32,34 @@
     <groupId>com.agileapes.utils</groupId>
     <artifactId>spring-data-mock</artifactId>
     <version>1.0</version>
+    <name>Spring Data Mock</name>
+    <description>A framework for mocking Spring Data repositories</description>
+    <url>https://github.com/mmnaseri/spring-data-mock</url>
+
+    <licenses>
+        <license>
+            <name>MIT</name>
+            <url>http://mit-license.org</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Milad Naseri</name>
+            <email>m.m.naseri@gmail.com</email>
+            <url>http://www.mmnaseri.com</url>
+            <roles>
+                <role>designer</role>
+                <role>developer</role>
+            </roles>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git@github.com:mmnaseri/spring-data-mock.git</connection>
+        <developerConnection>scm:git:git@github.com:mmnaseri/spring-data-mock.git</developerConnection>
+        <url>git@github.com:mmnaseri/spring-data-mock.git</url>
+    </scm>
 
     <build>
         <plugins>
