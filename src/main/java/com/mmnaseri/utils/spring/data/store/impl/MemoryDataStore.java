@@ -1,7 +1,8 @@
-package com.mmnaseri.utils.spring.impl;
+package com.mmnaseri.utils.spring.data.store.impl;
 
-import com.mmnaseri.utils.spring.DataStore;
+import com.mmnaseri.utils.spring.data.store.DataStore;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.concurrent.ConcurrentHashMap;
@@ -11,7 +12,7 @@ import java.util.concurrent.ConcurrentMap;
  * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/17/15)
  */
-public class MemoryDataStore<K, E> implements DataStore<K, E> {
+public class MemoryDataStore<K extends Serializable, E> implements DataStore<K, E> {
     
     private final ConcurrentMap<K, E> store = new ConcurrentHashMap<K, E>();
     

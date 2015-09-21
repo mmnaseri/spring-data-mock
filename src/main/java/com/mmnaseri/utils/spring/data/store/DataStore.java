@@ -1,12 +1,13 @@
-package com.mmnaseri.utils.spring;
+package com.mmnaseri.utils.spring.data.store;
 
+import java.io.Serializable;
 import java.util.Collection;
 
 /**
  * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/17/15)
  */
-public interface DataStore<K, E> {
+public interface DataStore<K extends Serializable, E> {
 
     void save(K key, E entity);
 
