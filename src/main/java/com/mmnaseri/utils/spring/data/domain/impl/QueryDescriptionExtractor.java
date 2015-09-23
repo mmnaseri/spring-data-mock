@@ -62,12 +62,23 @@ public class QueryDescriptionExtractor {
             //scan for words prior to 'By'
             while (reader.hasMore() && !reader.has("By")) {
                 //if the next word is Top, then we are setting a limit
-                if (reader.has("Top")) {
+                if (reader.has("First")) {
+                    if (limit > 0) {
+                        throw new IllegalStateException("There is already a limit of " + limit + " specified for this query: " + method);
+                    }
+                    reader.expect("First");
+                    if (reader.has("\\d+")) {
+                        limit = Integer.parseInt(reader.expect("\\d+"));
+                    } else {
+                        limit = 1;
+                    }
+                    continue;
+                } else if (reader.has("Top")) {
                     if (limit > 0) {
                         throw new IllegalStateException("There is already a limit of " + limit + " specified for this query: " + method);
                     }
                     reader.expect("Top");
-                    limit = Integer.parseInt(reader.read("\\d+"));
+                    limit = Integer.parseInt(reader.expect("\\d+"));
                     continue;
                 } else if (reader.has("Distinct")) {
                     //if the next word is 'Distinct', we are saying we should return distinct results
@@ -132,15 +143,15 @@ public class QueryDescriptionExtractor {
                         break;
                     }
                 }
-                //if no operator was found, it is the implied "EQUAL_TO" operator
+                //if no operator was found, it is the implied "IS" operator
                 if (operator == null) {
                     property = expression;
-                    operator = Operator.EQUAL_TO;
+                    operator = Operator.IS;
                 }
                 //if the property was empty, the operator name was the property name itself
                 if (property.isEmpty()) {
                     property = expression;
-                    operator = Operator.EQUAL_TO;
+                    operator = Operator.IS;
                 }
                 //let's get the property descriptor
                 final PropertyDescriptor propertyDescriptor = PropertyUtils.getPropertyDescriptor(repositoryMetadata.getEntityType(), property);
