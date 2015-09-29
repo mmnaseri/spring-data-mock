@@ -40,8 +40,8 @@ public abstract class PropertyUtils {
                 reader.read("_");
             }
             property += token;
-            property = uncapitalize(property);
-            String getterMethodName = "get" + capitalize(property);
+            property = StringUtils.uncapitalize(property);
+            String getterMethodName = "get" + StringUtils.capitalize(property);
             final Method getterMethod = ReflectionUtils.findMethod(context, getterMethodName);
             if (getterMethod != null && !void.class.equals(getterMethod.getReturnType())) {
                 path += "." + property;
@@ -65,14 +65,6 @@ public abstract class PropertyUtils {
         }
         path = path.substring(1);
         return new ImmutablePropertyDescriptor(path, context);
-    }
-
-    private static String uncapitalize(String expression) {
-        return expression.substring(0, 1).toLowerCase() + expression.substring(1);
-    }
-
-    private static String capitalize(String expression) {
-        return expression.substring(0, 1).toUpperCase() + expression.substring(1);
     }
 
 }

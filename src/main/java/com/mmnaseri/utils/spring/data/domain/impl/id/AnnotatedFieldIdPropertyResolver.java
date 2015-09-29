@@ -1,5 +1,6 @@
 package com.mmnaseri.utils.spring.data.domain.impl.id;
 
+import com.mmnaseri.utils.spring.data.domain.IdPropertyResolver;
 import org.springframework.data.annotation.Id;
 import org.springframework.util.ReflectionUtils;
 
@@ -11,7 +12,7 @@ import java.util.concurrent.atomic.AtomicReference;
  * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/23/15)
  */
-public class AnnotatedFieldIdPropertyResolver extends AbstractIdPropertyResolver {
+public class AnnotatedFieldIdPropertyResolver implements IdPropertyResolver {
 
     @Override
     public String resolve(Class<?> entityType, Class<? extends Serializable> idType) {
