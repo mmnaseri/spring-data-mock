@@ -21,13 +21,18 @@ public class NamedGetterIdPropertyResolver implements IdPropertyResolver {
         ReflectionUtils.doWithMethods(entityType, new ReflectionUtils.MethodCallback() {
             @Override
             public void doWith(Method method) throws IllegalArgumentException, IllegalAccessException {
-                if (StringUtils.uncapitalize(method.getName()).equals("id") && idType.isAssignableFrom(method.getReturnType())) {
+                if (StringUtils.uncapitalize(method.getName().substring(3)).equals("id")) {
                     found.set(method);
                 }
             }
         }, new GetterMethodFilter());
-        if (found.get() != null) {
-            return StringUtils.uncapitalize(found.get().getName());
+        final Method idAnnotatedMethod = found.get();
+        if (idAnnotatedMethod != null) {
+            if (!idType.isAssignableFrom(idAnnotatedMethod.getReturnType())) {
+                throw new IllegalStateException("Expected the ID field getter method to be of type " + idType);
+            } else {
+                return StringUtils.uncapitalize(idAnnotatedMethod.getName().substring(3));
+            }
         }
         return null;
     }

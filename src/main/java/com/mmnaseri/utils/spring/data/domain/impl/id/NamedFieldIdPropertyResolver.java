@@ -15,8 +15,12 @@ public class NamedFieldIdPropertyResolver implements IdPropertyResolver {
     @Override
     public String resolve(Class<?> entityType, Class<? extends Serializable> idType) {
         final Field field = ReflectionUtils.findField(entityType, "id");
-        if (field != null && idType.isAssignableFrom(field.getType())) {
-            return field.getName();
+        if (field != null) {
+            if (idType.isAssignableFrom(field.getType())) {
+                return field.getName();
+            } else {
+                throw new IllegalStateException("Expected field " + field.getName() + " to be of type " + idType);
+            }
         }
         return null;
     }
