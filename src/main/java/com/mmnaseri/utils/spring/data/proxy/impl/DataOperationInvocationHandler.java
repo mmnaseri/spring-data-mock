@@ -8,7 +8,6 @@ import com.mmnaseri.utils.spring.data.proxy.ResultAdapterContext;
 import com.mmnaseri.utils.spring.data.proxy.ResultConverter;
 import com.mmnaseri.utils.spring.data.store.DataStore;
 import com.mmnaseri.utils.spring.data.store.DataStoreOperation;
-import org.aopalliance.intercept.MethodInvocation;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;

@@ -1,9 +1,8 @@
 package com.mmnaseri.utils.spring.data.query.impl;
 
 import com.mmnaseri.utils.spring.data.domain.Invocation;
-import com.mmnaseri.utils.spring.data.query.PageParameterExtractor;
 import com.mmnaseri.utils.spring.data.query.Page;
-import com.mmnaseri.utils.spring.data.query.impl.ImmutablePage;
+import com.mmnaseri.utils.spring.data.query.PageParameterExtractor;
 import org.springframework.data.domain.Pageable;
 
 import java.util.Objects;

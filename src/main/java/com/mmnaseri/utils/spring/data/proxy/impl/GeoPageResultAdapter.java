@@ -1,7 +1,6 @@
 package com.mmnaseri.utils.spring.data.proxy.impl;
 
 import com.mmnaseri.utils.spring.data.domain.Invocation;
-import com.mmnaseri.utils.spring.data.proxy.impl.AbstractIterableResultAdapter;
 import org.springframework.data.geo.GeoPage;
 import org.springframework.data.geo.GeoResults;
 
