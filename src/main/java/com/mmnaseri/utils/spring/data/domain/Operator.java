@@ -32,7 +32,7 @@ public enum Operator {
     REGEX(1, null, "Regex", "MatchesRegex", "Matches"),
     STARTING_WITH(1, null, "StartingWith", "IsStartingWith", "StartsWith"),
     TRUE(0, null, "True", "IsTrue"),
-    WITHIN(1, null, "Within", "IsWithin"),
+    WITHIN(1, null, "Within", "IsWithin")
     ;
     private final int operands;
     private final Matcher matcher;

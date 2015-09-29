@@ -1,7 +1,6 @@
 package com.mmnaseri.utils.spring.data.proxy.impl;
 
 import com.mmnaseri.utils.spring.data.domain.Invocation;
-import org.springframework.dao.IncorrectResultSizeDataAccessException;
 
 import java.util.Iterator;
 import java.util.concurrent.Future;
@@ -31,7 +30,7 @@ public class SimpleResultAdapter extends AbstractIterableResultAdapter<Object> {
         if (iterator.hasNext()) {
             final Object value = iterator.next();
             if (iterator.hasNext()) {
-                throw new IncorrectResultSizeDataAccessException(1);
+                throw new IllegalStateException("Expected to get only one item but got many");
             }
             if (!invocation.getMethod().getReturnType().isInstance(value)) {
                 throw new IllegalStateException("Expected a value of type " + invocation.getMethod().getReturnType());

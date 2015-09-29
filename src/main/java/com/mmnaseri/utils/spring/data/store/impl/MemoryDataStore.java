@@ -15,7 +15,12 @@ import java.util.concurrent.ConcurrentMap;
 public class MemoryDataStore<K extends Serializable, E> implements DataStore<K, E> {
     
     private final ConcurrentMap<K, E> store = new ConcurrentHashMap<K, E>();
-    
+    private final Class<E> entityType;
+
+    public MemoryDataStore(Class<E> entityType) {
+        this.entityType = entityType;
+    }
+
     @Override
     public void save(K key, E entity) {
         store.put(key, entity);
@@ -40,5 +45,10 @@ public class MemoryDataStore<K extends Serializable, E> implements DataStore<K, 
     public synchronized Collection<E> retrieveAll() {
         return new LinkedList<E>(store.values());
     }
-    
+
+    @Override
+    public Class<E> getEntityType() {
+        return entityType;
+    }
+
 }

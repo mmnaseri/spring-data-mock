@@ -1,9 +1,11 @@
 package com.mmnaseri.utils.spring.data.query.impl;
 
 import com.mmnaseri.utils.spring.data.domain.Invocation;
+import com.mmnaseri.utils.spring.data.domain.Operator;
 import com.mmnaseri.utils.spring.data.domain.Parameter;
 import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
 import com.mmnaseri.utils.spring.data.query.*;
+import com.mmnaseri.utils.spring.data.tools.PropertyUtils;
 
 import java.util.List;
 
@@ -63,6 +65,24 @@ public class DefaultQueryDescriptor implements QueryDescriptor {
 
     @Override
     public boolean matches(Object entity, Invocation invocation) {
+        for (List<Parameter> branch : branches) {
+            boolean matches = true;
+            for (Parameter parameter : branch) {
+                final Object value = PropertyUtils.getPropertyValue(entity, parameter.getPath());
+                final Operator operator = parameter.getOperator();
+                final Object[] properties = new Object[operator.getOperands()];
+                for (int i = 0; i < operator.getOperands(); i++) {
+                    properties[i] = invocation.getArguments()[parameter.getIndices()[i]];
+                }
+                if (!operator.matches(parameter, value, properties)) {
+                    matches = false;
+                    break;
+                }
+            }
+            if (matches) {
+                return true;
+            }
+        }
         return false;
     }
     

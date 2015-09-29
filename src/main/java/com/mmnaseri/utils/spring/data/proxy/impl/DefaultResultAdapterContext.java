@@ -1,11 +1,12 @@
 package com.mmnaseri.utils.spring.data.proxy.impl;
 
 import com.mmnaseri.utils.spring.data.domain.Invocation;
-import com.mmnaseri.utils.spring.data.proxy.*;
+import com.mmnaseri.utils.spring.data.proxy.ResultAdapter;
+import com.mmnaseri.utils.spring.data.proxy.ResultAdapterContext;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
@@ -13,7 +14,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class DefaultResultAdapterContext implements ResultAdapterContext {
 
-    private final List<ResultAdapter<?>> adapters = new CopyOnWriteArrayList<ResultAdapter<?>>();
+    private final List<ResultAdapter<?>> adapters = new ArrayList<ResultAdapter<?>>();
 
     public DefaultResultAdapterContext() {
         adapters.add(new VoidResultAdapter());
@@ -34,10 +35,11 @@ public class DefaultResultAdapterContext implements ResultAdapterContext {
         adapters.add(new FutureResultAdapter());
         adapters.add(new ListenableFutureResultAdapter());
         Collections.sort(adapters);
+        this.adapters.addAll(adapters);
     }
 
     @Override
-    public void register(ResultAdapter<?> adapter) {
+    public synchronized void register(ResultAdapter<?> adapter) {
         adapters.add(adapter);
         Collections.sort(adapters);
     }
