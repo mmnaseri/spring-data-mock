@@ -8,7 +8,7 @@ import java.util.Objects;
  * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/17/15)
  */
-public class EqualToMatcher extends AbstractSimpleMatcher {
+public class IsEqualToMatcher extends AbstractSimpleMatcher {
 
     @Override
     protected boolean matches(Parameter parameter, Object actual, Object expected) {

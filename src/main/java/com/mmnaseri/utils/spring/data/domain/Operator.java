@@ -1,7 +1,6 @@
 package com.mmnaseri.utils.spring.data.domain;
 
-import com.mmnaseri.utils.spring.data.domain.impl.matchers.EqualToMatcher;
-import com.mmnaseri.utils.spring.data.domain.impl.matchers.IsNotMatcher;
+import com.mmnaseri.utils.spring.data.domain.impl.matchers.*;
 
 /**
  * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
@@ -9,30 +8,31 @@ import com.mmnaseri.utils.spring.data.domain.impl.matchers.IsNotMatcher;
  */
 public enum Operator {
 
-    AFTER(1, null, "After", "IsAfter"),
-    BEFORE(1, null, "Before", "IsBefore"),
-    CONTAINING(1, null, "Containing", "IsContaining", "Contains"),
-    BETWEEN(2, null, "Between", "IsBetween"),
-    ENDING_WITH(1, null, "EndingWith", "IsEndingWith", "EndsWith"),
-    EXISTS(1, null, "Exists"),
-    FALSE(0, null, "False", "IsFalse"),
-    GREATER_THAN(1, null, "GreaterThan", "IsGreaterThan"),
-    GREATER_THAN_EQUALS(1, null, "GreaterThanEqual", "IsGreaterThanEqual"),
-    IN(1, null, "In", "IsIn"),
-    IS(1, new EqualToMatcher(), "Is", "EqualTo", "IsEqualTo", "Equals"),
-    IS_NOT_NULL(0, null, "NotNull", "IsNotNull"),
-    IS_NULL(0, null, "Null", "IsNull"),
-    LESS_THAN(1, null, "LessThan", "IsLessThan"),
-    LESS_THAN_EQUAL(1, null, "LessThanEqual", "IsLessThanEqual"),
-    LIKE(1, null, "Like", "IsLike"),
+    AFTER(1, new IsAfterMatcher(), "After", "IsAfter"),
+    BEFORE(1, new IsBeforeMatcher(), "Before", "IsBefore"),
+    CONTAINING(1, new ContainingMatcher(), "Containing", "IsContaining", "Contains"),
+    BETWEEN(2, new IsBetweenMatcher(), "Between", "IsBetween"),
+    NOT_BETWEEN(2, new IsNotBetweenMatcher(), "NotBetween", "IsNotBetween"),
+    ENDING_WITH(1, new EndingWithMatcher(), "EndingWith", "IsEndingWith", "EndsWith"),
+//    EXISTS(1, null, "Exists"),
+    FALSE(0, new IsFalseMatcher(), "False", "IsFalse"),
+    GREATER_THAN(1, new IsGreaterThanMatcher(), "GreaterThan", "IsGreaterThan"),
+    GREATER_THAN_EQUALS(1, new IsGreaterThanOrEqualToMatcher(), "GreaterThanEqual", "IsGreaterThanEqual"),
+    IN(1, new IsInMatcher(), "In", "IsIn"),
+    IS(1, new IsEqualToMatcher(), "Is", "EqualTo", "IsEqualTo", "Equals"),
+    IS_NOT_NULL(0, new IsNotNullMatcher(), "NotNull", "IsNotNull"),
+    IS_NULL(0, new IsNullMatcher(), "Null", "IsNull"),
+    LESS_THAN(1, new IsLessThanMatcher(), "LessThan", "IsLessThan"),
+    LESS_THAN_EQUAL(1, new IsLessThanOrEqualToMatcher(), "LessThanEqual", "IsLessThanEqual"),
+    LIKE(1, new IsLikeMatcher(), "Like", "IsLike"),
     NEAR(1, null, "Near", "IsNear"),
     NOT(1, new IsNotMatcher(), "IsNot", "Not", "IsNotEqualTo", "DoesNotEqual"),
-    NOT_IN(1, null, "NotIn", "IsNotIn"),
-    NOT_LIKE(1, null, "NotLike", "IsNotLike"),
-    REGEX(1, null, "Regex", "MatchesRegex", "Matches"),
-    STARTING_WITH(1, null, "StartingWith", "IsStartingWith", "StartsWith"),
-    TRUE(0, null, "True", "IsTrue"),
-    WITHIN(1, null, "Within", "IsWithin")
+    NOT_IN(1, new IsNotInMatcher(), "NotIn", "IsNotIn"),
+    NOT_LIKE(1, new IsNotLikeMatcher(), "NotLike", "IsNotLike"),
+    REGEX(1, new RegexMatcher(), "Regex", "MatchesRegex", "Matches"),
+    STARTING_WITH(1, new StartingWithMatcher(), "StartingWith", "IsStartingWith", "StartsWith"),
+    TRUE(0, new IsTrueMatcher(), "True", "IsTrue"),
+//    WITHIN(1, null, "Within", "IsWithin")
     ;
     private final int operands;
     private final Matcher matcher;
