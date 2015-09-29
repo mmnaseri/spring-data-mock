@@ -22,17 +22,17 @@ import java.util.regex.Pattern;
  */
 public class QueryDescriptionExtractor {
 
-    public static final String ALL_IGNORE_CASE_SUFFIX = "AllIgnoreCase";
-    public static final String IGNORE_CASE_SUFFIX = "IgnoreCase";
+    public static final String ALL_IGNORE_CASE_SUFFIX = "(AllIgnoreCase|AllIgnoresCase|AllIgnoringCase)$";
+    public static final String IGNORE_CASE_SUFFIX = "(IgnoreCase|IgnoresCase|IgnoringCase)$";
     public static final String ASC_SUFFIX = "Asc";
     public static final String DESC_SUFFIX = "Desc";
 
     public QueryDescriptor extract(RepositoryMetadata repositoryMetadata, Method method) {
         String methodName = method.getName();
         //check to see if the AllIgnoreCase flag is set
-        boolean allIgnoreCase = methodName.endsWith(ALL_IGNORE_CASE_SUFFIX);
+        boolean allIgnoreCase = methodName.matches(ALL_IGNORE_CASE_SUFFIX);
         //we need to unify method name afterwards
-        methodName = allIgnoreCase ? methodName.substring(0, methodName.length() - ALL_IGNORE_CASE_SUFFIX.length()) : methodName;
+        methodName = allIgnoreCase ? methodName.replaceFirst(ALL_IGNORE_CASE_SUFFIX, "") : methodName;
         //create a document reader for processing method name
         final DocumentReader reader = new DefaultDocumentReader(methodName);
         //the first word in the method name is the function name
@@ -118,10 +118,10 @@ public class QueryDescriptionExtractor {
                     reader.backtrack(length);
                 }
                 final Set<Modifier> modifiers = new HashSet<Modifier>();
-                if (expression.endsWith(IGNORE_CASE_SUFFIX)) {
+                if (expression.matches(IGNORE_CASE_SUFFIX)) {
                     //if the expression ended in IgnoreCase, we need to strip that off
                     modifiers.add(Modifier.IGNORE_CASE);
-                    expression = expression.substring(0, expression.length() - IGNORE_CASE_SUFFIX.length());
+                    expression = expression.replaceFirst(IGNORE_CASE_SUFFIX, "");
                 } else if (allIgnoreCase) {
                     //if we had already set "AllIgnoreCase", we will still add the modifier
                     modifiers.add(Modifier.IGNORE_CASE);
