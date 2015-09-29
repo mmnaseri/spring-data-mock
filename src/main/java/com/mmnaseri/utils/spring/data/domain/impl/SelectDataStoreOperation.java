@@ -24,6 +24,10 @@ public class SelectDataStoreOperation<K extends Serializable, E> implements Data
         this.descriptor = descriptor;
     }
 
+    public QueryDescriptor getDescriptor() {
+        return descriptor;
+    }
+
     @Override
     public List<E> execute(DataStore<K, E> store, RepositoryMetadata repositoryMetadata, Invocation invocation) {
         List<E> selection = new LinkedList<E>();

@@ -1,7 +1,9 @@
-package com.mmnaseri.utils.spring.data.proxy;
+package com.mmnaseri.utils.spring.data.proxy.impl;
 
 import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
 import com.mmnaseri.utils.spring.data.domain.impl.ImmutableInvocation;
+import com.mmnaseri.utils.spring.data.proxy.ResultAdapterContext;
+import com.mmnaseri.utils.spring.data.proxy.ResultConverter;
 import com.mmnaseri.utils.spring.data.proxy.impl.DefaultResultConverter;
 import com.mmnaseri.utils.spring.data.store.DataStore;
 import com.mmnaseri.utils.spring.data.store.DataStoreOperation;
