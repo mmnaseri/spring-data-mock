@@ -74,7 +74,7 @@ public class DefaultQueryDescriptor implements QueryDescriptor {
                 for (int i = 0; i < operator.getOperands(); i++) {
                     properties[i] = invocation.getArguments()[parameter.getIndices()[i]];
                 }
-                if (!operator.matches(parameter, value, properties)) {
+                if (!operator.getMatcher().matches(parameter, value, properties)) {
                     matches = false;
                     break;
                 }

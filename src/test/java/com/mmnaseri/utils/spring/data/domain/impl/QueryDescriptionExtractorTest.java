@@ -16,7 +16,7 @@ public class QueryDescriptionExtractorTest {
 
     @BeforeMethod
     public void setUp() throws Exception {
-        extractor = new QueryDescriptionExtractor();
+        extractor = new QueryDescriptionExtractor(new DefaultOperatorContext());
         repositoryMetadata = new ImmutableRepositoryMetadata(String.class, Person.class, MalformedRepository.class, "id");
     }
 

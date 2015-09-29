@@ -1,9 +1,6 @@
 package com.mmnaseri.utils.spring.data.domain.impl;
 
-import com.mmnaseri.utils.spring.data.domain.Modifier;
-import com.mmnaseri.utils.spring.data.domain.Operator;
-import com.mmnaseri.utils.spring.data.domain.Parameter;
-import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
+import com.mmnaseri.utils.spring.data.domain.*;
 import com.mmnaseri.utils.spring.data.query.*;
 import com.mmnaseri.utils.spring.data.query.impl.*;
 import com.mmnaseri.utils.spring.data.string.DocumentReader;
@@ -26,6 +23,13 @@ public class QueryDescriptionExtractor {
     public static final String IGNORE_CASE_SUFFIX = "(IgnoreCase|IgnoresCase|IgnoringCase)$";
     public static final String ASC_SUFFIX = "Asc";
     public static final String DESC_SUFFIX = "Desc";
+    public static final String DEFAULT_OPERATOR_SUFFIX = "Is";
+
+    private final OperatorContext operatorContext;
+
+    public QueryDescriptionExtractor(OperatorContext operatorContext) {
+        this.operatorContext = operatorContext;
+    }
 
     public QueryDescriptor extract(RepositoryMetadata repositoryMetadata, Method method) {
         String methodName = method.getName();
@@ -137,21 +141,16 @@ public class QueryDescriptionExtractor {
                 Operator operator = null;
                 //let's find out the operator that covers the longest suffix of the operation
                 for (int i = 1; i < expression.length(); i++) {
-                    operator = Operator.getBySuffix(expression.substring(i));
+                    operator = operatorContext.getBySuffix(expression.substring(i));
                     if (operator != null) {
                         property = expression.substring(0, i);
                         break;
                     }
                 }
                 //if no operator was found, it is the implied "IS" operator
-                if (operator == null) {
+                if (operator == null || property.isEmpty()) {
                     property = expression;
-                    operator = Operator.IS;
-                }
-                //if the property was empty, the operator name was the property name itself
-                if (property.isEmpty()) {
-                    property = expression;
-                    operator = Operator.IS;
+                    operator = operatorContext.getBySuffix(DEFAULT_OPERATOR_SUFFIX);
                 }
                 //let's get the property descriptor
                 final PropertyDescriptor propertyDescriptor = PropertyUtils.getPropertyDescriptor(repositoryMetadata.getEntityType(), property);
