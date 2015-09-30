@@ -12,7 +12,7 @@ public class IsInMatcher extends AbstractCollectionMatcher {
 
     @Override
     protected boolean matches(Parameter parameter, Object actual, Collection collection) {
-        return collection.contains(actual);
+        return actual != null && collection.contains(actual);
     }
 
 }

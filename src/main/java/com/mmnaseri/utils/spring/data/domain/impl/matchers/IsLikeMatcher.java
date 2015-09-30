@@ -10,7 +10,7 @@ public class IsLikeMatcher extends AbstractSimpleStringMatcher {
 
     @Override
     protected boolean matches(Parameter parameter, String actual, String argument) {
-        return actual != null && argument != null && actual.toLowerCase().contains(argument.toLowerCase());
+        return actual != null && argument != null && actual.equalsIgnoreCase(argument);
     }
 
 }
