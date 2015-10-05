@@ -5,7 +5,8 @@ import com.mmnaseri.utils.spring.data.domain.Operator;
 import com.mmnaseri.utils.spring.data.domain.Parameter;
 import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
 import com.mmnaseri.utils.spring.data.query.*;
-import com.mmnaseri.utils.spring.data.tools.PropertyUtils;
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.BeanWrapperImpl;
 
 import java.util.List;
 
@@ -65,10 +66,11 @@ public class DefaultQueryDescriptor implements QueryDescriptor {
 
     @Override
     public boolean matches(Object entity, Invocation invocation) {
+        final BeanWrapper wrapper = new BeanWrapperImpl(entity);
         for (List<Parameter> branch : branches) {
             boolean matches = true;
             for (Parameter parameter : branch) {
-                final Object value = PropertyUtils.getPropertyValue(entity, parameter.getPath());
+                final Object value = wrapper.getPropertyValue(parameter.getPath());
                 final Operator operator = parameter.getOperator();
                 final Object[] properties = new Object[operator.getOperands()];
                 for (int i = 0; i < operator.getOperands(); i++) {

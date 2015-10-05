@@ -21,7 +21,7 @@ public class ImmutableOperator implements Operator {
         this.tokens = tokens;
     }
 
-    public String name() {
+    public String getName() {
         return name;
     }
 

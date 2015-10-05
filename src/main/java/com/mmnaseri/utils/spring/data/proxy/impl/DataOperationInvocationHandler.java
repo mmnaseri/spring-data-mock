@@ -13,6 +13,8 @@ import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
@@ -25,6 +27,7 @@ public class DataOperationInvocationHandler<K extends Serializable, E> implement
     private final ResultAdapterContext adapterContext;
     private final ResultConverter converter;
     private final List<InvocationMapping<K, E>> mappings;
+    private final Map<Method, InvocationMapping<K, E>> cache = new ConcurrentHashMap<Method, InvocationMapping<K, E>>();
 
     public DataOperationInvocationHandler(RepositoryMetadata repositoryMetadata, List<InvocationMapping<K, E>> mappings, DataStore<K, E> dataStore, ResultAdapterContext adapterContext) {
         this.repositoryMetadata = repositoryMetadata;
@@ -37,15 +40,25 @@ public class DataOperationInvocationHandler<K extends Serializable, E> implement
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         final Invocation methodInvocation = new ImmutableInvocation(method, args);
-        for (InvocationMapping<K, E> mapping : mappings) {
-            if (mapping.getMethod().equals(method)) {
-                final DataStoreOperation<?, K, E> operation = mapping.getOperation();
-                final Object operationResult = operation.execute(dataStore, repositoryMetadata, methodInvocation);
-                final Object convertedResult = converter.convert(methodInvocation, operationResult);
-                return adapterContext.adapt(methodInvocation, convertedResult);
+        InvocationMapping<K, E> targetMapping = null;
+        if (cache.containsKey(method)) {
+            targetMapping = cache.get(method);
+        } else {
+            for (InvocationMapping<K, E> mapping : mappings) {
+                if (mapping.getMethod().equals(method)) {
+                    targetMapping = mapping;
+                    cache.put(method, targetMapping);
+                    break;
+                }
             }
         }
-        throw new IllegalStateException("No operation mapping found for method " + method);
+        if (targetMapping == null) {
+            throw new IllegalStateException("No operation mapping found for method " + method);
+        }
+        final DataStoreOperation<?, K, E> operation = targetMapping.getOperation();
+        final Object operationResult = operation.execute(dataStore, repositoryMetadata, methodInvocation);
+        final Object convertedResult = converter.convert(methodInvocation, operationResult);
+        return adapterContext.adapt(methodInvocation, convertedResult);
     }
 
 }

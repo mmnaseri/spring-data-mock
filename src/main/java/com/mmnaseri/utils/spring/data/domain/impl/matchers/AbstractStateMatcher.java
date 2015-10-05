@@ -12,7 +12,7 @@ public abstract class AbstractStateMatcher implements Matcher {
     @Override
     public boolean matches(Parameter parameter, Object value, Object... properties) {
         if (properties.length != 0) {
-            throw new IllegalArgumentException("This operator does not take any operands: " + parameter.getOperator().name());
+            throw new IllegalArgumentException("This operator does not take any operands: " + parameter.getOperator().getName());
         }
         return matches(parameter, value);
     }

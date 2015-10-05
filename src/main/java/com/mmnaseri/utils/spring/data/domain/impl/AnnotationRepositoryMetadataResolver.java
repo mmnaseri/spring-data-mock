@@ -15,7 +15,9 @@ public class AnnotationRepositoryMetadataResolver extends AbstractRepositoryMeta
     @Override
     protected RepositoryMetadata resolveFromInterface(Class<?> repositoryInterface) {
         final RepositoryDefinition definition = repositoryInterface.getAnnotation(RepositoryDefinition.class);
-        Objects.requireNonNull(definition, "Expected the repository to be annotated with @RepositoryDefinition");
+        if (definition == null) {
+            throw new IllegalArgumentException("Expected the repository to be annotated with @RepositoryDefinition");
+        }
         final Class<?> entityType = definition.domainClass();
         final Class<? extends Serializable> idType = definition.idClass();
         String idProperty = resolveIdProperty(entityType, idType);

@@ -10,6 +10,8 @@ import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
@@ -18,53 +20,65 @@ import java.lang.reflect.Method;
 public abstract class PropertyUtils {
 
     public static Object getPropertyValue(Object context, String property) {
-        BeanWrapper wrapper = new BeanWrapperImpl(context);
-        while (property.contains(".")) {
-            final String[] split = property.split("\\.", 2);
-            wrapper = new BeanWrapperImpl(wrapper.getPropertyValue(split[0]));
-            property = split[1];
-        }
+        final BeanWrapper wrapper = new BeanWrapperImpl(context);
         return wrapper.getPropertyValue(property);
     }
 
     public static PropertyDescriptor getPropertyDescriptor(Class<?> domainType, String expression) {
-        final DocumentReader reader = new DefaultDocumentReader(expression);
-        String path = "";
-        String property = "";
+        final String followUp;
+        if (expression.contains("_")) {
+            final String[] split = expression.split("_", 2);
+            expression = split[0];
+            followUp = split[1];
+        } else {
+            followUp = "";
+        }
         Class<?> context = domainType;
+        final DocumentReader reader = new DefaultDocumentReader(expression);
+        final List<String> tokens = new ArrayList<String>();
         while (reader.hasMore()) {
-            boolean explicit = false;
-            final String token = reader.rest().contains("_") ? reader.expect("[^_]+") : reader.expect("[A-Z][a-z]*");
-            if (reader.has("_")) {
-                explicit = true;
-                reader.read("_");
+            tokens.add(reader.expect("[A-Z][a-z]*"));
+        }
+        int cursor = 0;
+        final StringBuilder path = new StringBuilder();
+        while (cursor < tokens.size()) {
+            boolean found = false;
+            for (int i = tokens.size(); i >= cursor; i--) {
+                final String propertyName = getPropertyName(tokens, cursor, i);
+                final Method getter = ReflectionUtils.findMethod(context, "get" + StringUtils.capitalize(propertyName));
+                if (getter != null) {
+                    context = getter.getReturnType();
+                    cursor = i;
+                    found = true;
+                    path.append(".").append(propertyName);
+                    break;
+                }
+                final Field field = ReflectionUtils.findField(context, propertyName);
+                if (field != null) {
+                    context = field.getType();
+                    cursor = i;
+                    found = true;
+                    path.append(".").append(propertyName);
+                    break;
+                }
             }
-            property += token;
-            property = StringUtils.uncapitalize(property);
-            String getterMethodName = "get" + StringUtils.capitalize(property);
-            final Method getterMethod = ReflectionUtils.findMethod(context, getterMethodName);
-            if (getterMethod != null && !void.class.equals(getterMethod.getReturnType())) {
-                path += "." + property;
-                property = "";
-                context = getterMethod.getReturnType();
-                continue;
-            }
-            final Field field = ReflectionUtils.findField(context, property);
-            if (field != null) {
-                path += "." + property;
-                property = "";
-                context = field.getType();
-                continue;
-            }
-            if (explicit) {
-                throw new IllegalStateException("Could not find property " + property + " on " + context);
+            if (!found) {
+                throw new IllegalStateException("Could not find property `" + getPropertyName(tokens, cursor, tokens.size()) + "` on `" + context + "`");
             }
         }
-        if (!property.isEmpty()) {
-            throw new IllegalStateException("Could not find property " + property + " on " + context);
+        if (!followUp.isEmpty()) {
+            final PropertyDescriptor descriptor = getPropertyDescriptor(context, followUp);
+            return new ImmutablePropertyDescriptor(path.substring(1) + "." + descriptor.getPath(), descriptor.getType());
         }
-        path = path.substring(1);
-        return new ImmutablePropertyDescriptor(path, context);
+        return new ImmutablePropertyDescriptor(path.substring(1), context);
+    }
+    
+    private static String getPropertyName(List<String> tokens, int from, int to) {
+        final StringBuilder builder = new StringBuilder();
+        for (int i = from; i < to; i++) {
+            builder.append(tokens.get(i));
+        }
+        return StringUtils.uncapitalize(builder.toString());
     }
 
 }

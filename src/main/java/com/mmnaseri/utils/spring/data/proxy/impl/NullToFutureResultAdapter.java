@@ -24,12 +24,14 @@ public class NullToFutureResultAdapter extends AbstractResultAdapter<Future> {
     @Override
     public Future adapt(Invocation invocation, Object originalValue) {
         //noinspection unchecked
-        return new FutureTask(new Callable() {
+        final FutureTask task = new FutureTask(new Callable() {
             @Override
             public Object call() throws Exception {
                 return null;
             }
         });
+        task.run();
+        return task;
     }
 
 }

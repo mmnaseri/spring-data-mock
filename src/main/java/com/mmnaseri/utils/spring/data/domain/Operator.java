@@ -6,7 +6,7 @@ package com.mmnaseri.utils.spring.data.domain;
  */
 public interface Operator {
 
-    String name();
+    String getName();
 
     int getOperands();
 

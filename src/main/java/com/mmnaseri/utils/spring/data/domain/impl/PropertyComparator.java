@@ -14,19 +14,21 @@ import java.util.Comparator;
 public class PropertyComparator implements Comparator<Object> {
 
     private static final NullHandling DEFAULT_NULL_HANDLING = NullHandling.NULLS_LAST;
-    private final Order order;
     private final NullHandling nullHandling;
+    private final String property;
+    private final SortDirection direction;
 
     public PropertyComparator(Order order) {
-        this.order = order;
         this.nullHandling = order.getNullHandling() == null || NullHandling.DEFAULT.equals(order.getNullHandling()) ? DEFAULT_NULL_HANDLING : order.getNullHandling();
+        property = order.getProperty();
+        direction = order.getDirection();
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public int compare(Object first, Object second) {
-        final Object firstValue = PropertyUtils.getPropertyValue(first, order.getProperty());
-        final Object secondValue = PropertyUtils.getPropertyValue(second, order.getProperty());
+        final Object firstValue = PropertyUtils.getPropertyValue(first, property);
+        final Object secondValue = PropertyUtils.getPropertyValue(second, property);
         int comparison = 0;
         if (firstValue == null && secondValue != null) {
             comparison = nullHandling.equals(NullHandling.NULLS_FIRST) ? -1 : 1;
@@ -34,17 +36,17 @@ public class PropertyComparator implements Comparator<Object> {
             comparison = nullHandling.equals(NullHandling.NULLS_FIRST) ? 1 : -1;
         } else if (firstValue != null && secondValue != null) {
             if (!(firstValue instanceof Comparable) || !(secondValue instanceof Comparable)) {
-                throw new IllegalStateException("Cannot compare values for property: " + order.getProperty());
+                throw new IllegalStateException("Cannot compare values for property: " + property);
             }
             if (firstValue.getClass().isInstance(secondValue)) {
                 comparison = ((Comparable) firstValue).compareTo(secondValue);
             } else if (secondValue.getClass().isInstance(firstValue)) {
                 comparison = ((Comparable) secondValue).compareTo(firstValue) * -1;
             } else {
-                throw new IllegalStateException("Values for were not of the same type for property: " + order.getProperty());
+                throw new IllegalStateException("Values for were not of the same type for property: " + property);
             }
         }
-        return comparison * (order.getDirection().equals(SortDirection.DESCENDING) ? -1 : 1);
+        return comparison * (direction.equals(SortDirection.DESCENDING) ? -1 : 1);
     }
 
 }

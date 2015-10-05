@@ -48,7 +48,7 @@ public class DefaultOperatorContext implements OperatorContext {
             for (String token : item.getTokens()) {
                 for (String newToken : operator.getTokens()) {
                     if (newToken.equals(token)) {
-                        throw new IllegalArgumentException("Another operator (" + item.name() + ") already defines answers to this token: " + token);
+                        throw new IllegalArgumentException("Another operator (" + item.getName() + ") already defines answers to this token: " + token);
                     }
                 }
             }

@@ -27,6 +27,9 @@ public abstract class AbstractRepositoryMetadataResolver implements RepositoryMe
         if (!Modifier.isInterface(repositoryInterface.getModifiers())) {
             throw new IllegalArgumentException("Cannot resolve repository metadata for a class object that isn't an interface");
         }
+        if (!Modifier.isPublic(repositoryInterface.getModifiers())) {
+            throw new IllegalArgumentException("Repository interface needs to be declared as public");
+        }
         return resolveFromInterface(repositoryInterface);
     }
 
