@@ -10,6 +10,7 @@ import com.mmnaseri.utils.spring.data.query.DataFunctionRegistry;
 import com.mmnaseri.utils.spring.data.store.DataStore;
 import com.mmnaseri.utils.spring.data.store.DataStoreOperation;
 import com.mmnaseri.utils.spring.data.store.DataStoreRegistry;
+import com.mmnaseri.utils.spring.data.store.impl.EventPublishingDataStore;
 import com.mmnaseri.utils.spring.data.store.impl.MemoryDataStore;
 
 import java.io.Serializable;
@@ -99,15 +100,18 @@ public class DefaultRepositoryFactory implements RepositoryFactory {
     }
 
     private DataStore<Serializable, Object> getDataStore(RepositoryMetadata metadata) {
-        final DataStore<Serializable, Object> dataStore;
+        DataStore<Serializable, Object> dataStore;
         if (dataStoreRegistry.has(metadata.getEntityType())) {
             //noinspection unchecked
             dataStore = (DataStore<Serializable, Object>) dataStoreRegistry.getDataStore(metadata.getEntityType());
         } else {
             //noinspection unchecked
             dataStore = new MemoryDataStore<Serializable, Object>((Class<Object>) metadata.getEntityType());
-            dataStoreRegistry.register(dataStore);
         }
+        if (!(dataStore instanceof EventPublishingDataStore)) {
+            dataStore = new EventPublishingDataStore<Serializable, Object>(dataStore, metadata);
+        }
+        dataStoreRegistry.register(dataStore);
         return dataStore;
     }
 
