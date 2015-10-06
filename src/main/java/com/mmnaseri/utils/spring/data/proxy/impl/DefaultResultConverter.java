@@ -16,6 +16,7 @@ public class DefaultResultConverter implements ResultConverter {
 
     public DefaultResultConverter() {
         converters = new LinkedList<ResultConverter>();
+        converters.add(new FutureToIterableConverter());
         converters.add(new IteratorToIterableConverter());
         converters.add(new SingleValueToIterableConverter());
     }
@@ -28,4 +29,5 @@ public class DefaultResultConverter implements ResultConverter {
         }
         return value;
     }
+
 }

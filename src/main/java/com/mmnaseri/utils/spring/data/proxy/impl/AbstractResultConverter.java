@@ -8,6 +8,7 @@ import com.mmnaseri.utils.spring.data.proxy.ResultConverter;
  * @since 1.0 (9/28/15)
  */
 public abstract class AbstractResultConverter implements ResultConverter {
+
     @Override
     public Object convert(Invocation invocation, Object original) {
         if (original == null || invocation.getMethod().getReturnType().equals(void.class)) {
@@ -20,4 +21,5 @@ public abstract class AbstractResultConverter implements ResultConverter {
     }
 
     protected abstract Object doConvert(Invocation invocation, Object original);
+
 }

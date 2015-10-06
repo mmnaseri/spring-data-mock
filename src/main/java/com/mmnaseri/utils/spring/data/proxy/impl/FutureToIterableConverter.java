@@ -11,16 +11,14 @@ import java.util.concurrent.Future;
  */
 public class FutureToIterableConverter extends AbstractResultConverter {
 
-    private final ResultConverter converter;
-
     public FutureToIterableConverter() {
-        converter = new DefaultResultConverter();
     }
 
     @Override
     protected Object doConvert(Invocation invocation, Object original) {
         if (original instanceof Future) {
             Future future = (Future) original;
+            final ResultConverter converter = new DefaultResultConverter();
             try {
                 final Object result = future.get();
                 return converter.convert(invocation, result);

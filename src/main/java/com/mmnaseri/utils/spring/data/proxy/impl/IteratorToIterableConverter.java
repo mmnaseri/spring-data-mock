@@ -4,6 +4,7 @@ import com.mmnaseri.utils.spring.data.domain.Invocation;
 
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
@@ -15,7 +16,7 @@ public class IteratorToIterableConverter extends AbstractResultConverter {
     protected Object doConvert(Invocation invocation, Object original) {
         if (original instanceof Iterator) {
             Iterator iterator = (Iterator) original;
-            final LinkedList<Object> list = new LinkedList<Object>();
+            final List<Object> list = new LinkedList<Object>();
             while (iterator.hasNext()) {
                 list.add(iterator.next());
             }
