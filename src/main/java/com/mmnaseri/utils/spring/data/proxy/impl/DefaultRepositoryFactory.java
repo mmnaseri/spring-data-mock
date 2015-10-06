@@ -64,16 +64,16 @@ public class DefaultRepositoryFactory implements RepositoryFactory {
             if (Modifier.isAbstract(implementation.getModifiers()) || Modifier.isInterface(implementation.getModifiers())) {
                 throw new IllegalStateException("Cannot instantiate a non-concrete class");
             }
-            final Object instance1;
+            final Object instance;
             try {
-                instance1 = implementation.newInstance();
+                instance = implementation.newInstance();
             } catch (InstantiationException e) {
                 throw new IllegalStateException("Failed to instantiate an object of type " + implementation, e);
             } catch (IllegalAccessException e) {
                 throw new IllegalStateException("Failed to access the constructor for " + implementation, e);
             }
             //noinspection unchecked
-            typeMappings.add(new ImmutableTypeMapping<Object>(implementation, instance1));
+            typeMappings.add(new ImmutableTypeMapping<Object>(implementation, instance));
         }
         for (TypeMapping<?> mapping : typeMappings) {
             if (mapping.getInstance() instanceof DataStoreAware<?, ?>) {
