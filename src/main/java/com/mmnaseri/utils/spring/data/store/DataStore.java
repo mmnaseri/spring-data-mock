@@ -9,6 +9,8 @@ import java.util.Collection;
  */
 public interface DataStore<K extends Serializable, E> {
 
+    boolean hasKey(K key);
+
     void save(K key, E entity);
 
     void delete(K key);
