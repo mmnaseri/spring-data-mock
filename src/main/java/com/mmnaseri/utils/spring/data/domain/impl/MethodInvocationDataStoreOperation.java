@@ -32,7 +32,7 @@ public class MethodInvocationDataStoreOperation<K extends Serializable, E> imple
         } catch (IllegalAccessException e) {
             throw new IllegalStateException("Failed to access target method: " + method, e);
         } catch (InvocationTargetException e) {
-            throw new IllegalStateException("Method call resulted in internal error: " + method, e);
+            throw new IllegalStateException("Method call resulted in internal error: " + method, e.getTargetException());
         }
         return result;
     }

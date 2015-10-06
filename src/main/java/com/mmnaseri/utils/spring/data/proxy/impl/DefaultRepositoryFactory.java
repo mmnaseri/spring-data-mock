@@ -1,5 +1,6 @@
 package com.mmnaseri.utils.spring.data.proxy.impl;
 
+import com.mmnaseri.utils.spring.data.commons.DefaultCrudRepository;
 import com.mmnaseri.utils.spring.data.domain.DataStoreAware;
 import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
 import com.mmnaseri.utils.spring.data.domain.RepositoryMetadataAware;
@@ -75,6 +76,7 @@ public class DefaultRepositoryFactory implements RepositoryFactory {
             //noinspection unchecked
             typeMappings.add(new ImmutableTypeMapping<Object>(implementation, instance));
         }
+        typeMappings.add(new ImmutableTypeMapping<DefaultCrudRepository>(DefaultCrudRepository.class, new DefaultCrudRepository()));
         for (TypeMapping<?> mapping : typeMappings) {
             if (mapping.getInstance() instanceof DataStoreAware<?, ?>) {
                 DataStoreAware instance = (DataStoreAware<?, ?>) mapping.getInstance();

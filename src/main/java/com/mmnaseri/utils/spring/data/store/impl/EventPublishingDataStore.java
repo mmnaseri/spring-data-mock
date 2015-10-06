@@ -10,6 +10,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -36,6 +37,8 @@ public class EventPublishingDataStore<K extends Serializable, E> implements Data
 
     @Override
     public void save(K key, E entity) {
+        Objects.requireNonNull(key, "Cannot save an entity with a null key");
+        Objects.requireNonNull(entity, "Cannot save null into the data store");
         final boolean entityIsNew = !delegate.hasKey(key);
         if (entityIsNew) {
             publishEvent(new BeforeInsertDataStoreEvent(repositoryMetadata, this, entity));
