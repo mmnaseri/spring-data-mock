@@ -19,12 +19,14 @@ public class FutureResultAdapter extends AbstractIterableResultAdapter<Future> {
     @Override
     protected Future doAdapt(Invocation invocation, final Iterable iterable) {
         //noinspection unchecked
-        return new FutureTask(new Callable() {
+        final FutureTask task = new FutureTask(new Callable() {
             @Override
             public Object call() throws Exception {
                 return iterable;
             }
         });
+        task.run();
+        return task;
     }
 
     @Override
