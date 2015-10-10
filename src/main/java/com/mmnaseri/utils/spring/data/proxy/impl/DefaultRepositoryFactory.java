@@ -1,28 +1,29 @@
 package com.mmnaseri.utils.spring.data.proxy.impl;
 
-import com.mmnaseri.utils.spring.data.commons.DefaultCrudRepository;
-import com.mmnaseri.utils.spring.data.domain.DataStoreAware;
-import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
-import com.mmnaseri.utils.spring.data.domain.RepositoryMetadataAware;
-import com.mmnaseri.utils.spring.data.domain.RepositoryMetadataResolver;
+import com.mmnaseri.utils.spring.data.domain.*;
 import com.mmnaseri.utils.spring.data.domain.impl.QueryDescriptionExtractor;
+import com.mmnaseri.utils.spring.data.domain.impl.UUIDKeyGenerator;
 import com.mmnaseri.utils.spring.data.proxy.*;
+import com.mmnaseri.utils.spring.data.proxy.dsl.config.RepositoryFactoryConfigurationBuilder;
 import com.mmnaseri.utils.spring.data.query.DataFunctionRegistry;
 import com.mmnaseri.utils.spring.data.store.DataStore;
 import com.mmnaseri.utils.spring.data.store.DataStoreOperation;
 import com.mmnaseri.utils.spring.data.store.DataStoreRegistry;
 import com.mmnaseri.utils.spring.data.store.impl.EventPublishingDataStore;
 import com.mmnaseri.utils.spring.data.store.impl.MemoryDataStore;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.Repository;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.lang.reflect.Proxy;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import static com.mmnaseri.utils.spring.data.proxy.dsl.mock.RepositoryMockBuilder.given;
 
 /**
  * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
@@ -36,47 +37,46 @@ public class DefaultRepositoryFactory implements RepositoryFactory {
     private final DataFunctionRegistry functionRegistry;
     private final DataStoreRegistry dataStoreRegistry;
     private final ResultAdapterContext adapterContext;
+    private final TypeMappingContext typeMappingContext;
+    private final RepositoryFactoryConfiguration configuration;
 
-    public DefaultRepositoryFactory(RepositoryMetadataResolver repositoryMetadataResolver, QueryDescriptionExtractor descriptionExtractor, DataFunctionRegistry functionRegistry, DataStoreRegistry dataStoreRegistry, ResultAdapterContext adapterContext) {
-        this.repositoryMetadataResolver = repositoryMetadataResolver;
-        this.descriptionExtractor = descriptionExtractor;
-        this.functionRegistry = functionRegistry;
-        this.dataStoreRegistry = dataStoreRegistry;
-        this.adapterContext = adapterContext;
+    public DefaultRepositoryFactory(RepositoryFactoryConfiguration configuration) {
+        this.configuration = configuration;
+        this.repositoryMetadataResolver = configuration.getRepositoryMetadataResolver();
+        this.descriptionExtractor = configuration.getDescriptionExtractor();
+        this.functionRegistry = configuration.getFunctionRegistry();
+        this.dataStoreRegistry = configuration.getDataStoreRegistry();
+        this.adapterContext = configuration.getResultAdapterContext();
+        this.typeMappingContext = configuration.getTypeMappingContext();
     }
 
     @Override
-    public <E> E getInstance(Class<E> repositoryInterface, Class... implementations) {
+    public <E> E getInstance(KeyGenerator<? extends Serializable> keyGenerator, Class<E> repositoryInterface, Class... implementations) {
         final RepositoryMetadata metadata = getRepositoryMetadata(repositoryInterface);
         final DataStore<Serializable, Object> dataStore = getDataStore(metadata);
-        final List<TypeMapping<?>> typeMappings = getTypeMappings(metadata, dataStore, implementations);
+        final List<TypeMapping<?>> typeMappings = getTypeMappings(metadata, dataStore, keyGenerator, implementations);
         final DataOperationResolver operationResolver = new DefaultDataOperationResolver(typeMappings, descriptionExtractor, metadata, functionRegistry);
         final Method[] methods = repositoryInterface.getMethods();
         final List<InvocationMapping<? extends Serializable, ?>> invocationMappings = getInvocationMappings(operationResolver, methods);
         //noinspection unchecked
         final InvocationHandler interceptor = new DataOperationInvocationHandler(metadata, invocationMappings, dataStore, adapterContext);
         final Object instance = Proxy.newProxyInstance(getClass().getClassLoader(), new Class[]{repositoryInterface}, interceptor);
+        for (TypeMapping<?> typeMapping : typeMappings) {
+            if (typeMapping.getInstance() instanceof RepositoryAware<?>) {
+                //noinspection unchecked
+                ((RepositoryAware) typeMapping.getInstance()).setRepository(instance);
+            }
+        }
         return repositoryInterface.cast(instance);
     }
 
-    private List<TypeMapping<?>> getTypeMappings(RepositoryMetadata metadata, DataStore<Serializable, Object> dataStore, Class[] implementations) {
+    private List<TypeMapping<?>> getTypeMappings(RepositoryMetadata metadata, DataStore<Serializable, Object> dataStore, KeyGenerator<? extends Serializable> keyGenerator, Class[] implementations) {
         final List<TypeMapping<?>> typeMappings = new LinkedList<TypeMapping<?>>();
+        final TypeMappingContext localContext = new DefaultTypeMappingContext(typeMappingContext);
         for (Class implementation : implementations) {
-            if (Modifier.isAbstract(implementation.getModifiers()) || Modifier.isInterface(implementation.getModifiers())) {
-                throw new IllegalStateException("Cannot instantiate a non-concrete class");
-            }
-            final Object instance;
-            try {
-                instance = implementation.newInstance();
-            } catch (InstantiationException e) {
-                throw new IllegalStateException("Failed to instantiate an object of type " + implementation, e);
-            } catch (IllegalAccessException e) {
-                throw new IllegalStateException("Failed to access the constructor for " + implementation, e);
-            }
-            //noinspection unchecked
-            typeMappings.add(new ImmutableTypeMapping<Object>(implementation, instance));
+            localContext.register(metadata.getRepositoryInterface(), implementation);
         }
-        typeMappings.add(new ImmutableTypeMapping<DefaultCrudRepository>(DefaultCrudRepository.class, new DefaultCrudRepository()));
+        typeMappings.addAll(localContext.getMappings(metadata.getRepositoryInterface()));
         for (TypeMapping<?> mapping : typeMappings) {
             if (mapping.getInstance() instanceof DataStoreAware<?, ?>) {
                 DataStoreAware instance = (DataStoreAware<?, ?>) mapping.getInstance();
@@ -85,6 +85,15 @@ public class DefaultRepositoryFactory implements RepositoryFactory {
             if (mapping.getInstance() instanceof RepositoryMetadataAware) {
                 RepositoryMetadataAware instance = (RepositoryMetadataAware) mapping.getInstance();
                 instance.setRepositoryMetadata(metadata);
+            }
+            if (mapping.getInstance() instanceof KeyGeneratorAware) {
+                KeyGeneratorAware instance = (KeyGeneratorAware) mapping.getInstance();
+                //noinspection unchecked
+                instance.setKeyGenerator(keyGenerator);
+            }
+            if (mapping.getInstance() instanceof RepositoryFactoryConfigurationAware) {
+                RepositoryFactoryConfigurationAware instance = (RepositoryFactoryConfigurationAware) mapping.getInstance();
+                instance.setRepositoryFactoryConfiguration(configuration);
             }
         }
         return typeMappings;
@@ -126,5 +135,114 @@ public class DefaultRepositoryFactory implements RepositoryFactory {
         }
         return invocationMappings;
     }
+
+
+    public static class Person {
+
+        private String id;
+        private String firstName;
+        private String lastName;
+
+        public Person() {
+        }
+
+        public Person(String firstName, String lastName) {
+            this.firstName = firstName;
+            this.lastName = lastName;
+        }
+
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public String getFirstName() {
+            return firstName;
+        }
+
+        public void setFirstName(String firstName) {
+            this.firstName = firstName;
+        }
+
+        public String getLastName() {
+            return lastName;
+        }
+
+        public void setLastName(String lastName) {
+            this.lastName = lastName;
+        }
+
+    }
+
+    public interface PersonRepository extends Repository<Person, String> {
+
+        void save(Person sample);
+
+        List<Person> findAll();
+
+        void saveOne();
+
+    }
+
+    public static class SampleImpl implements DataStoreAware<Person, String>, RepositoryFactoryConfigurationAware {
+
+        private StandardPersonRepository personRepository;
+
+        public interface StandardPersonRepository extends CrudRepository<Person, String> {
+        }
+
+        @Override
+        public void setRepositoryFactoryConfiguration(RepositoryFactoryConfiguration configuration) {
+            personRepository = given(configuration).generateKeysUsing(UUIDKeyGenerator.class).mock(StandardPersonRepository.class);
+        }
+
+        @Override
+        public <J extends String, F extends Person> void setDataStore(DataStore<J, F> dataStore) {
+
+        }
+
+        public Object saveOne() {
+            final Person person = new Person("Ziba", "Sadeghi");
+            return personRepository.save(person);
+        }
+
+    }
+
+    public static void main(String[] args) {
+        final DefaultTypeMappingContext context = new DefaultTypeMappingContext();
+        context.register(PersonRepository.class, SampleImpl.class);
+        final RepositoryFactoryConfiguration configuration = RepositoryFactoryConfigurationBuilder.givenTypeMappings(context).configure();
+        final PersonRepository instance = given(configuration).generateKeysUsing(UUIDKeyGenerator.class).mock(PersonRepository.class);
+        instance.save(new Person("Milad", "Naseri"));
+        instance.save(new Person("Maryam", "Naseri"));
+        instance.save(new Person("Pouria", "Naseri"));
+        final Iterable<Person> people = instance.findAll();
+        for (Person person : people) {
+            System.out.println(person.getId() + ": " + person.getLastName() + ", " + person.getFirstName());
+            instance.save(person);
+        }
+    }
+
+    /*
+    final MyRepository repository = givenOperators(operatorContext)
+                    .andFunctions(functionRegistry)
+                    .withDataStores(dataStoreRegistry)
+                    .andAdaptingResultsUsing(resultAdaptorContext)
+                    .mock(MyRepository.class);
+    final RepositoryFactoryConfiguration configuration = givenOperators(operatorContext)
+                                                            .andFunctions(functionRegistry)
+                                                            .withDataStores(dataStoreRegistry)
+                                                            .andAdaptingResultsUsing(resultAdaptorContext)
+                                                            .map(Object.class, MyImpl1.class)
+                                                            .andMap(Object.class, MyImpl2.class)
+                                                            .andMap(Object.class, MyImpl3.class)
+                                                            .configure();
+    final MyRepository repository = given(configuration).generatingKeysUsing(keyGenerator).andPreferringImplementations(impl1, impl2, impl3).mock(MyRepository.class);
+    final MyRepository repository = given(configuration).generatingKeysUsing(UUIDKeyGenerator.class).andPreferringImplementations(impl1, impl2, impl3).mock(MyRepository.class);
+     */
+
 
 }

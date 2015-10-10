@@ -1,8 +1,6 @@
 package com.mmnaseri.utils.spring.data.commons;
 
-import com.mmnaseri.utils.spring.data.domain.DataStoreAware;
-import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
-import com.mmnaseri.utils.spring.data.domain.RepositoryMetadataAware;
+import com.mmnaseri.utils.spring.data.domain.*;
 import com.mmnaseri.utils.spring.data.store.DataStore;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
@@ -16,13 +14,14 @@ import java.util.List;
  * @since 1.0 (10/6/15)
  */
 @SuppressWarnings("unchecked")
-public class DefaultCrudRepository implements DataStoreAware, RepositoryMetadataAware {
+public class DefaultCrudRepository implements DataStoreAware, RepositoryMetadataAware, KeyGeneratorAware<Serializable> {
 
+    private KeyGenerator<? extends Serializable> keyGenerator;
     private DataStore dataStore;
     private RepositoryMetadata repositoryMetadata;
 
     private Object generateKey() {
-        return null;
+        return keyGenerator.generate();
     }
 
     public Object save(Object entity) {
@@ -103,6 +102,11 @@ public class DefaultCrudRepository implements DataStoreAware, RepositoryMetadata
     @Override
     public void setRepositoryMetadata(RepositoryMetadata repositoryMetadata) {
         this.repositoryMetadata = repositoryMetadata;
+    }
+
+    @Override
+    public void setKeyGenerator(KeyGenerator<Serializable> keyGenerator) {
+        this.keyGenerator = keyGenerator;
     }
 
 }

@@ -321,7 +321,7 @@ public class DefaultDocumentReader implements DocumentReader {
     public String expect(Pattern pattern, boolean skipWhitespaces) {
         final String token = read(pattern, skipWhitespaces);
         if (token == null) {
-            throw new IllegalStateException("Expected pattern '" + pattern.pattern() + "' was not encountered");
+            throw new IllegalStateException("Expected pattern '" + pattern.pattern() + "' was not encountered in document: " + document);
         }
         return token;
     }

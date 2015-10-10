@@ -4,7 +4,6 @@ import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
 import org.springframework.data.repository.RepositoryDefinition;
 
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
