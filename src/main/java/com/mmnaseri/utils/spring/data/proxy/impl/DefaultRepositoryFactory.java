@@ -8,6 +8,7 @@ import com.mmnaseri.utils.spring.data.query.DataFunctionRegistry;
 import com.mmnaseri.utils.spring.data.store.DataStore;
 import com.mmnaseri.utils.spring.data.store.DataStoreOperation;
 import com.mmnaseri.utils.spring.data.store.DataStoreRegistry;
+import com.mmnaseri.utils.spring.data.store.impl.DefaultDataStoreEventListenerContext;
 import com.mmnaseri.utils.spring.data.store.impl.EventPublishingDataStore;
 import com.mmnaseri.utils.spring.data.store.impl.MemoryDataStore;
 import org.springframework.data.domain.Sort;
@@ -126,7 +127,7 @@ public class DefaultRepositoryFactory implements RepositoryFactory {
             dataStore = new MemoryDataStore<Serializable, Object>((Class<Object>) metadata.getEntityType());
         }
         if (!(dataStore instanceof EventPublishingDataStore)) {
-            dataStore = new EventPublishingDataStore<Serializable, Object>(dataStore, metadata);
+            dataStore = new EventPublishingDataStore<Serializable, Object>(dataStore, metadata, new DefaultDataStoreEventListenerContext(configuration.getEventListenerContext()));
         }
         dataStoreRegistry.register(dataStore);
         return dataStore;
