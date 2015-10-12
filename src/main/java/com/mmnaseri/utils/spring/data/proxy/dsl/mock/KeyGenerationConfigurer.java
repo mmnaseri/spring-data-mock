@@ -8,7 +8,7 @@ import java.io.Serializable;
  * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (10/9/15)
  */
-public interface KeyGenerationConfigurer {
+public interface KeyGenerationConfigurer extends BuildFinalizer {
 
     <S extends Serializable> ImplementationConfigurer generateKeysUsing(KeyGenerator<S> generator);
 

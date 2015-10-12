@@ -2,7 +2,7 @@ package com.mmnaseri.utils.spring.data.proxy.impl;
 
 import com.mmnaseri.utils.spring.data.domain.*;
 import com.mmnaseri.utils.spring.data.domain.impl.QueryDescriptionExtractor;
-import com.mmnaseri.utils.spring.data.domain.impl.UUIDKeyGenerator;
+import com.mmnaseri.utils.spring.data.domain.impl.key.UUIDKeyGenerator;
 import com.mmnaseri.utils.spring.data.proxy.*;
 import com.mmnaseri.utils.spring.data.proxy.dsl.config.RepositoryFactoryConfigurationBuilder;
 import com.mmnaseri.utils.spring.data.query.DataFunctionRegistry;
@@ -68,6 +68,11 @@ public class DefaultRepositoryFactory implements RepositoryFactory {
             }
         }
         return repositoryInterface.cast(instance);
+    }
+
+    @Override
+    public RepositoryFactoryConfiguration getConfiguration() {
+        return configuration;
     }
 
     private List<TypeMapping<?>> getTypeMappings(RepositoryMetadata metadata, DataStore<Serializable, Object> dataStore, KeyGenerator<? extends Serializable> keyGenerator, Class[] implementations) {
@@ -215,10 +220,11 @@ public class DefaultRepositoryFactory implements RepositoryFactory {
         final DefaultTypeMappingContext context = new DefaultTypeMappingContext();
         context.register(PersonRepository.class, SampleImpl.class);
         final RepositoryFactoryConfiguration configuration = RepositoryFactoryConfigurationBuilder.givenTypeMappings(context).configure();
-        final PersonRepository instance = given(configuration).generateKeysUsing(UUIDKeyGenerator.class).mock(PersonRepository.class);
+        final PersonRepository instance = given(configuration).mock(PersonRepository.class);
         instance.save(new Person("Milad", "Naseri"));
         instance.save(new Person("Maryam", "Naseri"));
         instance.save(new Person("Pouria", "Naseri"));
+        instance.saveOne();
         final Iterable<Person> people = instance.findAll();
         for (Person person : people) {
             System.out.println(person.getId() + ": " + person.getLastName() + ", " + person.getFirstName());

@@ -1,6 +1,8 @@
 package com.mmnaseri.utils.spring.data.proxy.dsl.mock;
 
 import com.mmnaseri.utils.spring.data.domain.KeyGenerator;
+import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
+import com.mmnaseri.utils.spring.data.domain.impl.key.KeyGeneratorProvider;
 import com.mmnaseri.utils.spring.data.proxy.RepositoryFactory;
 import com.mmnaseri.utils.spring.data.proxy.RepositoryFactoryConfiguration;
 import com.mmnaseri.utils.spring.data.proxy.dsl.config.RepositoryFactoryConfigurationBuilder;
@@ -30,6 +32,10 @@ public class RepositoryMockBuilder implements KeyGenerationConfigurer, Implement
 
     public static <S extends Serializable, G extends KeyGenerator<S>> ImplementationConfigurer generatingKeysUsing(Class<G> generatorType) {
         return given(RepositoryFactoryConfigurationBuilder.defaultConfiguration()).generateKeysUsing(generatorType);
+    }
+
+    public static <R> R mockRepository(Class<R> repositoryInterface) {
+        return generatingKeysUsing((KeyGenerator) null).mock(repositoryInterface);
     }
 
     private RepositoryMockBuilder(RepositoryFactory factory, KeyGenerator<? extends Serializable> keyGenerator, List<Class<?>> implementations) {
@@ -72,6 +78,18 @@ public class RepositoryMockBuilder implements KeyGenerationConfigurer, Implement
 
     @Override
     public <E> E mock(Class<E> repositoryInterface) {
+        KeyGenerator<? extends Serializable> keyGenerator = this.keyGenerator;
+        if (keyGenerator == null) {
+            final RepositoryFactoryConfiguration configuration = factory.getConfiguration();
+            final RepositoryMetadata metadata = configuration.getRepositoryMetadataResolver().resolve(repositoryInterface);
+            final KeyGeneratorProvider provider = new KeyGeneratorProvider();
+            //noinspection unchecked
+            final Class<? extends KeyGenerator<Serializable>> keyGeneratorType = provider.getKeyGenerator((Class<Serializable>) metadata.getIdentifierType());
+            if (keyGeneratorType == null) {
+                throw new IllegalStateException("Could not find a default key generator for keys of type " + metadata.getIdentifierType());
+            }
+            return new RepositoryMockBuilder(factory, null, implementations).generateKeysUsing(keyGeneratorType).mock(repositoryInterface);
+        }
         return factory.getInstance(keyGenerator, repositoryInterface, implementations.toArray(new Class[implementations.size()]));
     }
 

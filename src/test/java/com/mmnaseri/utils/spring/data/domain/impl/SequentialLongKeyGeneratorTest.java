@@ -1,6 +1,7 @@
 package com.mmnaseri.utils.spring.data.domain.impl;
 
 import com.mmnaseri.utils.spring.data.domain.KeyGenerator;
+import com.mmnaseri.utils.spring.data.domain.impl.key.SequentialLongKeyGenerator;
 import org.testng.annotations.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;

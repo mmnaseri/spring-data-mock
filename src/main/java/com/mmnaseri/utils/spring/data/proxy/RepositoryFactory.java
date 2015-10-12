@@ -12,4 +12,6 @@ public interface RepositoryFactory {
 
     <E> E getInstance(KeyGenerator<? extends Serializable> keyGenerator, Class<E> repositoryInterface, Class... implementations);
 
+    RepositoryFactoryConfiguration getConfiguration();
+
 }

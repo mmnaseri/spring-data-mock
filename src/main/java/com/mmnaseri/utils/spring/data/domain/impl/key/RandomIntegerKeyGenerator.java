@@ -1,4 +1,6 @@
-package com.mmnaseri.utils.spring.data.domain.impl;
+package com.mmnaseri.utils.spring.data.domain.impl.key;
+
+import com.mmnaseri.utils.spring.data.domain.impl.AbstractRandomKeyGenerator;
 
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
