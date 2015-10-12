@@ -3,16 +3,12 @@ package com.mmnaseri.utils.spring.data.store.impl;
 import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
 import com.mmnaseri.utils.spring.data.store.DataStore;
 import com.mmnaseri.utils.spring.data.store.DataStoreEvent;
-import com.mmnaseri.utils.spring.data.store.DataStoreEventListener;
+import com.mmnaseri.utils.spring.data.store.DataStoreEventListenerContext;
 import com.mmnaseri.utils.spring.data.store.DataStoreEventPublisher;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.List;
-import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
@@ -22,12 +18,12 @@ public class EventPublishingDataStore<K extends Serializable, E> implements Data
 
     private final DataStore<K, E> delegate;
     private final RepositoryMetadata repositoryMetadata;
-    private final Map<Class<? extends DataStoreEvent>, List<DataStoreEventListener<?>>> listeners;
+    private final DataStoreEventListenerContext listenerContext;
 
-    public EventPublishingDataStore(DataStore<K, E> delegate, RepositoryMetadata repositoryMetadata) {
+    public EventPublishingDataStore(DataStore<K, E> delegate, RepositoryMetadata repositoryMetadata, DataStoreEventListenerContext listenerContext) {
         this.delegate = delegate;
         this.repositoryMetadata = repositoryMetadata;
-        listeners = new ConcurrentHashMap<Class<? extends DataStoreEvent>, List<DataStoreEventListener<?>>>();
+        this.listenerContext = listenerContext;
     }
 
     @Override
@@ -79,26 +75,9 @@ public class EventPublishingDataStore<K extends Serializable, E> implements Data
         return delegate.getEntityType();
     }
 
-    public <V extends DataStoreEvent> void addEventListener(DataStoreEventListener<V> listener) {
-        final SmartDataStoreEventListener<V> smartListener = new SmartDataStoreEventListener<V>(listener);
-        if (!listeners.containsKey(smartListener.getEventType())) {
-            listeners.put(smartListener.getEventType(), new CopyOnWriteArrayList<DataStoreEventListener<?>>());
-        }
-        final List<DataStoreEventListener<?>> eventListeners = listeners.get(smartListener.getEventType());
-        eventListeners.add(smartListener);
-    }
-
     @Override
     public void publishEvent(DataStoreEvent event) {
-        for (Class<? extends DataStoreEvent> eventType : listeners.keySet()) {
-            if (eventType.isInstance(event)) {
-                final List<DataStoreEventListener<?>> eventListeners = listeners.get(eventType);
-                for (DataStoreEventListener eventListener : eventListeners) {
-                    //noinspection unchecked
-                    eventListener.onEvent(event);
-                }
-            }
-        }
+         listenerContext.trigger(event);
     }
 
 }
