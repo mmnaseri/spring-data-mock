@@ -11,13 +11,28 @@ import org.springframework.util.ReflectionUtils;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/17/15)
  */
 public abstract class PropertyUtils {
+
+    private static final Map<Class<?>, Class<?>> types = new HashMap<Class<?>, Class<?>>();
+
+    static {
+        types.put(int.class, Integer.class);
+        types.put(short.class, Short.class);
+        types.put(long.class, Long.class);
+        types.put(double.class, Double.class);
+        types.put(char.class, Character.class);
+        types.put(float.class, Float.class);
+        types.put(boolean.class, Boolean.class);
+        types.put(byte.class, Byte.class);
+    }
 
     public static Object getPropertyValue(Object context, String property) {
         final BeanWrapper wrapper = new BeanWrapperImpl(context);
@@ -79,6 +94,14 @@ public abstract class PropertyUtils {
             builder.append(tokens.get(i));
         }
         return StringUtils.uncapitalize(builder.toString());
+    }
+
+    public static Class<?> getTypeOf(Class<?> type) {
+        if (type.isPrimitive()) {
+            return types.get(type);
+        } else {
+            return type;
+        }
     }
 
 }

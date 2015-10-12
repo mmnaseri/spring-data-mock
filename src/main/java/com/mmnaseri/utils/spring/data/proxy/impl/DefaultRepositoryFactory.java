@@ -4,13 +4,13 @@ import com.mmnaseri.utils.spring.data.domain.*;
 import com.mmnaseri.utils.spring.data.domain.impl.QueryDescriptionExtractor;
 import com.mmnaseri.utils.spring.data.domain.impl.key.UUIDKeyGenerator;
 import com.mmnaseri.utils.spring.data.proxy.*;
-import com.mmnaseri.utils.spring.data.proxy.dsl.config.RepositoryFactoryConfigurationBuilder;
 import com.mmnaseri.utils.spring.data.query.DataFunctionRegistry;
 import com.mmnaseri.utils.spring.data.store.DataStore;
 import com.mmnaseri.utils.spring.data.store.DataStoreOperation;
 import com.mmnaseri.utils.spring.data.store.DataStoreRegistry;
 import com.mmnaseri.utils.spring.data.store.impl.EventPublishingDataStore;
 import com.mmnaseri.utils.spring.data.store.impl.MemoryDataStore;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.Repository;
 
@@ -24,6 +24,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static com.mmnaseri.utils.spring.data.proxy.dsl.mock.RepositoryMockBuilder.given;
+import static com.mmnaseri.utils.spring.data.proxy.dsl.mock.RepositoryMockBuilder.mock;
 
 /**
  * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
@@ -180,19 +181,25 @@ public class DefaultRepositoryFactory implements RepositoryFactory {
             this.lastName = lastName;
         }
 
+        @Override
+        public String toString() {
+            return (id == null ? "(unidentified)" : id) + " - " + lastName + ", " + firstName;
+        }
     }
 
     public interface PersonRepository extends Repository<Person, String> {
 
         void save(Person sample);
 
-        List<Person> findAll();
+        List<Person> findAll(Sort sort);
 
-        void saveOne();
+        List<Person> findByFirstNameIsNullOrFirstNameIsNotNullOrderByFirstNameAsc();
+
+        int count();
 
     }
 
-    public static class SampleImpl implements DataStoreAware<Person, String>, RepositoryFactoryConfigurationAware {
+    public static class SampleImpl implements RepositoryFactoryConfigurationAware {
 
         private StandardPersonRepository personRepository;
 
@@ -201,35 +208,31 @@ public class DefaultRepositoryFactory implements RepositoryFactory {
 
         @Override
         public void setRepositoryFactoryConfiguration(RepositoryFactoryConfiguration configuration) {
-            personRepository = given(configuration).generateKeysUsing(UUIDKeyGenerator.class).mock(StandardPersonRepository.class);
-        }
-
-        @Override
-        public <J extends String, F extends Person> void setDataStore(DataStore<J, F> dataStore) {
-
-        }
-
-        public Object saveOne() {
-            final Person person = new Person("Ziba", "Sadeghi");
-            return personRepository.save(person);
+            personRepository = given(configuration).generateKeysUsing(UUIDKeyGenerator.class).instantiate(StandardPersonRepository.class);
         }
 
     }
 
     public static void main(String[] args) {
-        final DefaultTypeMappingContext context = new DefaultTypeMappingContext();
-        context.register(PersonRepository.class, SampleImpl.class);
-        final RepositoryFactoryConfiguration configuration = RepositoryFactoryConfigurationBuilder.givenTypeMappings(context).configure();
-        final PersonRepository instance = given(configuration).mock(PersonRepository.class);
-        instance.save(new Person("Milad", "Naseri"));
-        instance.save(new Person("Maryam", "Naseri"));
-        instance.save(new Person("Pouria", "Naseri"));
-        instance.saveOne();
-        final Iterable<Person> people = instance.findAll();
+        final PersonRepository instance = mock(PersonRepository.class);
+        System.out.println(instance.count());
+        instance.save(print(new Person("Milad", "Naseri")));
+        System.out.println(instance.count());
+        instance.save(print(new Person("Maryam", "Naseri")));
+        System.out.println(instance.count());
+        instance.save(print(new Person("Pouria", "Naseri")));
+        System.out.println(instance.count());
+        final Iterable<Person> people = instance.findAll(new Sort("firstName"));
         for (Person person : people) {
-            System.out.println(person.getId() + ": " + person.getLastName() + ", " + person.getFirstName());
+            System.out.println(person);
             instance.save(person);
         }
+        System.out.println(instance.count());
+    }
+
+    private static  <E> E print(E e) {
+        System.out.println(e);
+        return e;
     }
 
     /*
@@ -237,7 +240,7 @@ public class DefaultRepositoryFactory implements RepositoryFactory {
                     .andFunctions(functionRegistry)
                     .withDataStores(dataStoreRegistry)
                     .andAdaptingResultsUsing(resultAdaptorContext)
-                    .mock(MyRepository.class);
+                    .instantiate(MyRepository.class);
     final RepositoryFactoryConfiguration configuration = givenOperators(operatorContext)
                                                             .andFunctions(functionRegistry)
                                                             .withDataStores(dataStoreRegistry)
@@ -246,8 +249,8 @@ public class DefaultRepositoryFactory implements RepositoryFactory {
                                                             .andMap(Object.class, MyImpl2.class)
                                                             .andMap(Object.class, MyImpl3.class)
                                                             .configure();
-    final MyRepository repository = given(configuration).generatingKeysUsing(keyGenerator).andPreferringImplementations(impl1, impl2, impl3).mock(MyRepository.class);
-    final MyRepository repository = given(configuration).generatingKeysUsing(UUIDKeyGenerator.class).andPreferringImplementations(impl1, impl2, impl3).mock(MyRepository.class);
+    final MyRepository repository = given(configuration).generatingKeysUsing(keyGenerator).andPreferringImplementations(impl1, impl2, impl3).instantiate(MyRepository.class);
+    final MyRepository repository = given(configuration).generatingKeysUsing(UUIDKeyGenerator.class).andPreferringImplementations(impl1, impl2, impl3).instantiate(MyRepository.class);
      */
 
 

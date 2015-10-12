@@ -1,6 +1,7 @@
 package com.mmnaseri.utils.spring.data.proxy.impl;
 
 import com.mmnaseri.utils.spring.data.commons.DefaultCrudRepository;
+import com.mmnaseri.utils.spring.data.commons.DefaultPagingAndSortingRepository;
 import com.mmnaseri.utils.spring.data.proxy.TypeMapping;
 import com.mmnaseri.utils.spring.data.proxy.TypeMappingContext;
 import org.springframework.core.OrderComparator;
@@ -24,6 +25,7 @@ public class DefaultTypeMappingContext implements TypeMappingContext {
 
     public DefaultTypeMappingContext() {
         this(null);
+        register(Object.class, DefaultPagingAndSortingRepository.class);
         register(Object.class, DefaultCrudRepository.class);
     }
 

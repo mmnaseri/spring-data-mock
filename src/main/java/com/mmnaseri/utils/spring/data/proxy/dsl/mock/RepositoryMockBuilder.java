@@ -34,8 +34,8 @@ public class RepositoryMockBuilder implements KeyGenerationConfigurer, Implement
         return given(RepositoryFactoryConfigurationBuilder.defaultConfiguration()).generateKeysUsing(generatorType);
     }
 
-    public static <R> R mockRepository(Class<R> repositoryInterface) {
-        return generatingKeysUsing((KeyGenerator) null).mock(repositoryInterface);
+    public static <R> R mock(Class<R> repositoryInterface) {
+        return generatingKeysUsing((KeyGenerator) null).instantiate(repositoryInterface);
     }
 
     private RepositoryMockBuilder(RepositoryFactory factory, KeyGenerator<? extends Serializable> keyGenerator, List<Class<?>> implementations) {
@@ -77,7 +77,7 @@ public class RepositoryMockBuilder implements KeyGenerationConfigurer, Implement
     }
 
     @Override
-    public <E> E mock(Class<E> repositoryInterface) {
+    public <E> E instantiate(Class<E> repositoryInterface) {
         KeyGenerator<? extends Serializable> keyGenerator = this.keyGenerator;
         if (keyGenerator == null) {
             final RepositoryFactoryConfiguration configuration = factory.getConfiguration();
@@ -88,7 +88,7 @@ public class RepositoryMockBuilder implements KeyGenerationConfigurer, Implement
             if (keyGeneratorType == null) {
                 throw new IllegalStateException("Could not find a default key generator for keys of type " + metadata.getIdentifierType());
             }
-            return new RepositoryMockBuilder(factory, null, implementations).generateKeysUsing(keyGeneratorType).mock(repositoryInterface);
+            return new RepositoryMockBuilder(factory, null, implementations).generateKeysUsing(keyGeneratorType).instantiate(repositoryInterface);
         }
         return factory.getInstance(keyGenerator, repositoryInterface, implementations.toArray(new Class[implementations.size()]));
     }

@@ -26,6 +26,7 @@ public class DefaultResultAdapterContext implements ResultAdapterContext {
         adapters.add(new NullToSliceResultAdapter());
         adapters.add(new NullToFutureResultAdapter());
         adapters.add(new NullToListenableFutureResultAdapter());
+        adapters.add(new NumberResultAdapter());
         adapters.add(new SimpleResultAdapter());
         adapters.add(new IteratorResultAdapter());
         adapters.add(new CollectionResultAdapter());

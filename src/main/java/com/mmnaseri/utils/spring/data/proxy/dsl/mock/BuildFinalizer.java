@@ -6,6 +6,6 @@ package com.mmnaseri.utils.spring.data.proxy.dsl.mock;
  */
 public interface BuildFinalizer {
 
-    <E> E mock(Class<E> repositoryInterface);
+    <E> E instantiate(Class<E> repositoryInterface);
 
 }
