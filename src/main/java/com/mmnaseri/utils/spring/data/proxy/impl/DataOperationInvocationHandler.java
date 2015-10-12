@@ -1,9 +1,9 @@
 package com.mmnaseri.utils.spring.data.proxy.impl;
 
 import com.mmnaseri.utils.spring.data.domain.Invocation;
-import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
 import com.mmnaseri.utils.spring.data.domain.impl.ImmutableInvocation;
 import com.mmnaseri.utils.spring.data.proxy.InvocationMapping;
+import com.mmnaseri.utils.spring.data.proxy.RepositoryConfiguration;
 import com.mmnaseri.utils.spring.data.proxy.ResultAdapterContext;
 import com.mmnaseri.utils.spring.data.proxy.ResultConverter;
 import com.mmnaseri.utils.spring.data.store.DataStore;
@@ -22,15 +22,15 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class DataOperationInvocationHandler<K extends Serializable, E> implements InvocationHandler {
 
-    private final RepositoryMetadata repositoryMetadata;
     private final DataStore<K, E> dataStore;
     private final ResultAdapterContext adapterContext;
     private final ResultConverter converter;
+    private final RepositoryConfiguration repositoryConfiguration;
     private final List<InvocationMapping<K, E>> mappings;
     private final Map<Method, InvocationMapping<K, E>> cache = new ConcurrentHashMap<Method, InvocationMapping<K, E>>();
 
-    public DataOperationInvocationHandler(RepositoryMetadata repositoryMetadata, List<InvocationMapping<K, E>> mappings, DataStore<K, E> dataStore, ResultAdapterContext adapterContext) {
-        this.repositoryMetadata = repositoryMetadata;
+    public DataOperationInvocationHandler(RepositoryConfiguration repositoryConfiguration, List<InvocationMapping<K, E>> mappings, DataStore<K, E> dataStore, ResultAdapterContext adapterContext) {
+        this.repositoryConfiguration = repositoryConfiguration;
         this.mappings = mappings;
         this.dataStore = dataStore;
         this.adapterContext = adapterContext;
@@ -56,7 +56,7 @@ public class DataOperationInvocationHandler<K extends Serializable, E> implement
             throw new IllegalStateException("No operation mapping found for method " + method);
         }
         final DataStoreOperation<?, K, E> operation = targetMapping.getOperation();
-        final Object operationResult = operation.execute(dataStore, repositoryMetadata, methodInvocation);
+        final Object operationResult = operation.execute(dataStore, repositoryConfiguration, methodInvocation);
         final Object convertedResult = converter.convert(methodInvocation, operationResult);
         return adapterContext.adapt(methodInvocation, convertedResult);
     }

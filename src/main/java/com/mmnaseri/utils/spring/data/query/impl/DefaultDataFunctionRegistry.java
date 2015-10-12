@@ -4,6 +4,7 @@ import com.mmnaseri.utils.spring.data.query.DataFunction;
 import com.mmnaseri.utils.spring.data.query.DataFunctionRegistry;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -31,6 +32,11 @@ public class DefaultDataFunctionRegistry implements DataFunctionRegistry {
             throw new IllegalArgumentException("No function with this name has been registered: " + name);
         }
         return functions.get(name);
+    }
+
+    @Override
+    public Set<String> getFunctions() {
+        return functions.keySet();
     }
 
 }

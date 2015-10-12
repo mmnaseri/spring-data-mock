@@ -1,7 +1,7 @@
 package com.mmnaseri.utils.spring.data.domain.impl;
 
 import com.mmnaseri.utils.spring.data.domain.Invocation;
-import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
+import com.mmnaseri.utils.spring.data.proxy.RepositoryConfiguration;
 import com.mmnaseri.utils.spring.data.store.DataStore;
 import com.mmnaseri.utils.spring.data.store.DataStoreOperation;
 
@@ -25,7 +25,7 @@ public class MethodInvocationDataStoreOperation<K extends Serializable, E> imple
     }
 
     @Override
-    public Object execute(DataStore<K, E> store, RepositoryMetadata repositoryMetadata, Invocation invocation) {
+    public Object execute(DataStore<K, E> store, RepositoryConfiguration configuration, Invocation invocation) {
         final Object result;
         try {
             result = method.invoke(instance, invocation.getArguments());

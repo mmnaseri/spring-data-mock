@@ -4,6 +4,7 @@ import com.mmnaseri.utils.spring.data.domain.Invocation;
 import com.mmnaseri.utils.spring.data.domain.Operator;
 import com.mmnaseri.utils.spring.data.domain.Parameter;
 import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
+import com.mmnaseri.utils.spring.data.proxy.RepositoryFactoryConfiguration;
 import com.mmnaseri.utils.spring.data.query.*;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
@@ -22,16 +23,23 @@ public class DefaultQueryDescriptor implements QueryDescriptor {
     private final PageParameterExtractor pageExtractor;
     private final SortParameterExtractor sortExtractor;
     private final List<List<Parameter>> branches;
+    private final RepositoryFactoryConfiguration configuration;
     private final RepositoryMetadata repositoryMetadata;
 
-    public DefaultQueryDescriptor(boolean distinct, String function, int limit, PageParameterExtractor pageExtractor, SortParameterExtractor sortExtractor, List<List<Parameter>> branches, RepositoryMetadata repositoryMetadata) {
+    public DefaultQueryDescriptor(boolean distinct, String function, int limit, PageParameterExtractor pageExtractor, SortParameterExtractor sortExtractor, List<List<Parameter>> branches, RepositoryFactoryConfiguration configuration, RepositoryMetadata repositoryMetadata) {
         this.distinct = distinct;
         this.function = function;
         this.limit = limit;
         this.pageExtractor = pageExtractor;
         this.sortExtractor = sortExtractor;
         this.branches = branches;
+        this.configuration = configuration;
         this.repositoryMetadata = repositoryMetadata;
+    }
+
+    @Override
+    public RepositoryFactoryConfiguration getConfiguration() {
+        return configuration;
     }
 
     @Override
@@ -66,6 +74,9 @@ public class DefaultQueryDescriptor implements QueryDescriptor {
 
     @Override
     public boolean matches(Object entity, Invocation invocation) {
+        if (branches.isEmpty()) {
+            return true;
+        }
         final BeanWrapper wrapper = new BeanWrapperImpl(entity);
         for (List<Parameter> branch : branches) {
             boolean matches = true;

@@ -5,6 +5,7 @@ import com.mmnaseri.utils.spring.data.domain.impl.DescribedDataStoreOperation;
 import com.mmnaseri.utils.spring.data.domain.impl.QueryDescriptionExtractor;
 import com.mmnaseri.utils.spring.data.domain.impl.SelectDataStoreOperation;
 import com.mmnaseri.utils.spring.data.proxy.DataOperationResolver;
+import com.mmnaseri.utils.spring.data.proxy.RepositoryFactoryConfiguration;
 import com.mmnaseri.utils.spring.data.query.DataFunctionRegistry;
 import com.mmnaseri.utils.spring.data.query.QueryDescriptor;
 import com.mmnaseri.utils.spring.data.store.DataStoreOperation;
@@ -21,16 +22,18 @@ public class QueryMethodDataOperationResolver implements DataOperationResolver {
     private final QueryDescriptionExtractor descriptionExtractor;
     private final RepositoryMetadata repositoryMetadata;
     private final DataFunctionRegistry functionRegistry;
+    private final RepositoryFactoryConfiguration configuration;
 
-    public QueryMethodDataOperationResolver(QueryDescriptionExtractor descriptionExtractor, RepositoryMetadata repositoryMetadata, DataFunctionRegistry functionRegistry) {
+    public QueryMethodDataOperationResolver(QueryDescriptionExtractor descriptionExtractor, RepositoryMetadata repositoryMetadata, DataFunctionRegistry functionRegistry, RepositoryFactoryConfiguration configuration) {
         this.descriptionExtractor = descriptionExtractor;
         this.repositoryMetadata = repositoryMetadata;
         this.functionRegistry = functionRegistry;
+        this.configuration = configuration;
     }
 
     @Override
     public DataStoreOperation<?, ?, ?> resolve(Method method) {
-        final QueryDescriptor descriptor = descriptionExtractor.extract(repositoryMetadata, method);
+        final QueryDescriptor descriptor = descriptionExtractor.extract(repositoryMetadata, method, configuration);
         return new DescribedDataStoreOperation<Serializable, Object>(new SelectDataStoreOperation<Serializable, Object>(descriptor), functionRegistry);
     }
 

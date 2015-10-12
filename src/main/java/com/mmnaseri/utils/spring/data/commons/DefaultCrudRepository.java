@@ -63,10 +63,6 @@ public class DefaultCrudRepository implements DataStoreAware, RepositoryMetadata
         return entities;
     }
 
-    public long count() {
-        return dataStore.retrieveAll().size();
-    }
-
     public Object delete(Serializable id) {
         final Object retrieved = dataStore.retrieve(id);
         dataStore.delete(id);

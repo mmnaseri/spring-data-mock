@@ -1,5 +1,6 @@
 package com.mmnaseri.utils.spring.data.query.impl;
 
+import com.mmnaseri.utils.spring.data.proxy.RepositoryConfiguration;
 import com.mmnaseri.utils.spring.data.query.DataFunction;
 import com.mmnaseri.utils.spring.data.query.QueryDescriptor;
 import com.mmnaseri.utils.spring.data.store.DataStore;
@@ -15,7 +16,7 @@ import java.util.List;
 public class DeleteDataFunction implements DataFunction<List<?>> {
 
     @Override
-    public <K extends Serializable, E> List<E> apply(DataStore<K, E> dataStore, QueryDescriptor query, List<E> selection) {
+    public <K extends Serializable, E> List<E> apply(DataStore<K, E> dataStore, QueryDescriptor query, RepositoryConfiguration repositoryConfiguration, List<E> selection) {
         final String identifier = query.getRepositoryMetadata().getIdentifier();
         for (E item : selection) {
             final Object key = PropertyUtils.getPropertyValue(item, identifier);

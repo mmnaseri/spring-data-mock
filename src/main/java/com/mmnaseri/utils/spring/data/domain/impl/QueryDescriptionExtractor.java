@@ -1,6 +1,7 @@
 package com.mmnaseri.utils.spring.data.domain.impl;
 
 import com.mmnaseri.utils.spring.data.domain.*;
+import com.mmnaseri.utils.spring.data.proxy.RepositoryFactoryConfiguration;
 import com.mmnaseri.utils.spring.data.query.*;
 import com.mmnaseri.utils.spring.data.query.impl.*;
 import com.mmnaseri.utils.spring.data.string.DocumentReader;
@@ -31,7 +32,7 @@ public class QueryDescriptionExtractor {
         this.operatorContext = operatorContext;
     }
 
-    public QueryDescriptor extract(RepositoryMetadata repositoryMetadata, Method method) {
+    public QueryDescriptor extract(RepositoryMetadata repositoryMetadata, Method method, RepositoryFactoryConfiguration configuration) {
         String methodName = method.getName();
         //check to see if the AllIgnoreCase flag is set
         boolean allIgnoreCase = methodName.matches(ALL_IGNORE_CASE_SUFFIX);
@@ -229,7 +230,7 @@ public class QueryDescriptionExtractor {
                 throw new IllegalStateException("Too many parameters declared for query method " + method);
             }
         }
-        return new DefaultQueryDescriptor(distinct, function, limit, pageExtractor, sortExtractor, branches, repositoryMetadata);
+        return new DefaultQueryDescriptor(distinct, function, limit, pageExtractor, sortExtractor, branches, configuration, repositoryMetadata);
     }
 
 }

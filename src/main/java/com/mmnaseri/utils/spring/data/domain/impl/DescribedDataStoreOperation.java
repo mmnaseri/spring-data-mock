@@ -1,7 +1,7 @@
 package com.mmnaseri.utils.spring.data.domain.impl;
 
 import com.mmnaseri.utils.spring.data.domain.Invocation;
-import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
+import com.mmnaseri.utils.spring.data.proxy.RepositoryConfiguration;
 import com.mmnaseri.utils.spring.data.query.DataFunction;
 import com.mmnaseri.utils.spring.data.query.DataFunctionRegistry;
 import com.mmnaseri.utils.spring.data.query.QueryDescriptor;
@@ -26,14 +26,14 @@ public class DescribedDataStoreOperation<K extends Serializable, E> implements D
     }
 
     @Override
-    public Object execute(DataStore<K, E> store, RepositoryMetadata repositoryMetadata, Invocation invocation) {
-        final List<E> selection = selectOperation.execute(store, repositoryMetadata, invocation);
+    public Object execute(DataStore<K, E> store, RepositoryConfiguration configuration, Invocation invocation) {
+        final List<E> selection = selectOperation.execute(store, configuration, invocation);
         final QueryDescriptor descriptor = selectOperation.getDescriptor();
         if (descriptor.getFunction() == null) {
             return selection;
         }
         final DataFunction<?> function = functionRegistry.getFunction(descriptor.getFunction());
-        return function.apply(store, descriptor, selection);
+        return function.apply(store, descriptor, configuration, selection);
     }
     
 }

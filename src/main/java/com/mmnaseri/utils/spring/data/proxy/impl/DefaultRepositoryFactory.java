@@ -4,18 +4,23 @@ import com.mmnaseri.utils.spring.data.domain.*;
 import com.mmnaseri.utils.spring.data.domain.impl.QueryDescriptionExtractor;
 import com.mmnaseri.utils.spring.data.domain.impl.key.UUIDKeyGenerator;
 import com.mmnaseri.utils.spring.data.proxy.*;
+import com.mmnaseri.utils.spring.data.query.DataFunction;
 import com.mmnaseri.utils.spring.data.query.DataFunctionRegistry;
+import com.mmnaseri.utils.spring.data.query.QueryDescriptor;
 import com.mmnaseri.utils.spring.data.store.DataStore;
 import com.mmnaseri.utils.spring.data.store.DataStoreOperation;
 import com.mmnaseri.utils.spring.data.store.DataStoreRegistry;
 import com.mmnaseri.utils.spring.data.store.impl.DefaultDataStoreEventListenerContext;
 import com.mmnaseri.utils.spring.data.store.impl.EventPublishingDataStore;
 import com.mmnaseri.utils.spring.data.store.impl.MemoryDataStore;
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.Repository;
 
-import java.io.Serializable;
+import java.beans.PropertyDescriptor;
+import java.io.*;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
@@ -24,8 +29,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static com.mmnaseri.utils.spring.data.proxy.dsl.config.RepositoryFactoryConfigurationBuilder.givenFunctions;
+import static com.mmnaseri.utils.spring.data.proxy.dsl.function.FunctionRegistryBuilder.givenFunction;
 import static com.mmnaseri.utils.spring.data.proxy.dsl.mock.RepositoryMockBuilder.given;
-import static com.mmnaseri.utils.spring.data.proxy.dsl.mock.RepositoryMockBuilder.mock;
 
 /**
  * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
@@ -57,11 +63,16 @@ public class DefaultRepositoryFactory implements RepositoryFactory {
         final RepositoryMetadata metadata = getRepositoryMetadata(repositoryInterface);
         final DataStore<Serializable, Object> dataStore = getDataStore(metadata);
         final List<TypeMapping<?>> typeMappings = getTypeMappings(metadata, dataStore, keyGenerator, implementations);
-        final DataOperationResolver operationResolver = new DefaultDataOperationResolver(typeMappings, descriptionExtractor, metadata, functionRegistry);
+        final DataOperationResolver operationResolver = new DefaultDataOperationResolver(typeMappings, descriptionExtractor, metadata, functionRegistry, configuration);
         final Method[] methods = repositoryInterface.getMethods();
         final List<InvocationMapping<? extends Serializable, ?>> invocationMappings = getInvocationMappings(operationResolver, methods);
+        final List<Class<?>> boundImplementations = new LinkedList<Class<?>>();
+        for (TypeMapping<?> mapping : typeMappings) {
+            boundImplementations.add(mapping.getType());
+        }
+        final RepositoryConfiguration repositoryConfiguration = new ImmutableRepositoryConfiguration(metadata, keyGenerator, boundImplementations);
         //noinspection unchecked
-        final InvocationHandler interceptor = new DataOperationInvocationHandler(metadata, invocationMappings, dataStore, adapterContext);
+        final InvocationHandler interceptor = new DataOperationInvocationHandler(repositoryConfiguration, invocationMappings, dataStore, adapterContext);
         final Object instance = Proxy.newProxyInstance(getClass().getClassLoader(), new Class[]{repositoryInterface}, interceptor);
         for (TypeMapping<?> typeMapping : typeMappings) {
             if (typeMapping.getInstance() instanceof RepositoryAware<?>) {
@@ -198,6 +209,8 @@ public class DefaultRepositoryFactory implements RepositoryFactory {
 
         int count();
 
+        void duplicate();
+
     }
 
     public static class SampleImpl implements RepositoryFactoryConfigurationAware {
@@ -214,21 +227,72 @@ public class DefaultRepositoryFactory implements RepositoryFactory {
 
     }
 
-    public static void main(String[] args) {
-        final PersonRepository instance = mock(PersonRepository.class);
-        System.out.println(instance.count());
-        instance.save(print(new Person("Milad", "Naseri")));
-        System.out.println(instance.count());
-        instance.save(print(new Person("Maryam", "Naseri")));
-        System.out.println(instance.count());
-        instance.save(print(new Person("Pouria", "Naseri")));
-        System.out.println(instance.count());
-        final Iterable<Person> people = instance.findAll(new Sort("firstName"));
-        for (Person person : people) {
-            System.out.println(person);
-            instance.save(person);
+    private static Object copyObject(Object original) {
+        if (original instanceof Serializable) {
+            try {
+                final ByteArrayOutputStream out = new ByteArrayOutputStream();
+                final ObjectOutputStream outputStream = new ObjectOutputStream(out);
+                outputStream.writeObject(original);
+                outputStream.close();
+                final ObjectInputStream inputStream = new ObjectInputStream(new ByteArrayInputStream(out.toByteArray()));
+                final Object object = inputStream.readObject();
+                inputStream.close();
+                return object;
+            } catch (Exception e) {
+                return null;
+            }
+        } else {
+            try {
+                final Object copy = original.getClass().newInstance();
+                final BeanWrapper source = new BeanWrapperImpl(original);
+                final BeanWrapper target = new BeanWrapperImpl(copy);
+                for (PropertyDescriptor descriptor : source.getPropertyDescriptors()) {
+                    if (source.isReadableProperty(descriptor.getName()) && target.isWritableProperty(descriptor.getName())) {
+                        target.setPropertyValue(descriptor.getName(), copyObject(source.getPropertyValue(descriptor.getName())));
+                    }
+                }
+                return copy;
+            } catch (Exception e) {
+                return null;
+            }
         }
-        System.out.println(instance.count());
+    }
+
+    private static <E> E copy(E object) {
+        //noinspection unchecked
+        return (E) copyObject(object);
+    }
+
+    public static void main(String[] args) {
+        final DataFunction<Object> duplicateFunction = new DataFunction<Object>() {
+            @Override
+            public <K extends Serializable, E> Object apply(DataStore<K, E> dataStore, QueryDescriptor query, RepositoryConfiguration configuration, List<E> selection) {
+                final List<E> inserted = new LinkedList<E>();
+                for (E entity : selection) {
+                    final E copy = copy(entity);
+                    final BeanWrapper wrapper = new BeanWrapperImpl(copy);
+                    final Serializable key = configuration.getKeyGenerator().generate();
+                    wrapper.setPropertyValue(query.getRepositoryMetadata().getIdentifier(), key);
+                    //noinspection unchecked
+                    dataStore.save((K) key, copy);
+                    inserted.add(copy);
+                }
+                return inserted;
+            }
+        };
+        final DataFunctionRegistry registry = givenFunction("duplicate", duplicateFunction).build();
+        final RepositoryFactoryConfiguration configuration = givenFunctions(registry).configure();
+        final PersonRepository repository = given(configuration).instantiate(PersonRepository.class);
+        repository.save(new Person("Milad", "Naseri"));
+        repository.duplicate();
+        repository.duplicate();
+        repository.duplicate();
+        repository.duplicate();
+        final List<Person> all = repository.findAll(new Sort("firstName"));
+        for (Person person : all) {
+            System.out.println(person);
+        }
+        System.out.println(repository.count());
     }
 
     private static  <E> E print(E e) {

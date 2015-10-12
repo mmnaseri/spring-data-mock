@@ -1,7 +1,7 @@
 package com.mmnaseri.utils.spring.data.domain.impl;
 
 import com.mmnaseri.utils.spring.data.domain.Invocation;
-import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
+import com.mmnaseri.utils.spring.data.proxy.RepositoryConfiguration;
 import com.mmnaseri.utils.spring.data.query.Order;
 import com.mmnaseri.utils.spring.data.query.Page;
 import com.mmnaseri.utils.spring.data.query.QueryDescriptor;
@@ -29,7 +29,7 @@ public class SelectDataStoreOperation<K extends Serializable, E> implements Data
     }
 
     @Override
-    public List<E> execute(DataStore<K, E> store, RepositoryMetadata repositoryMetadata, Invocation invocation) {
+    public List<E> execute(DataStore<K, E> store, RepositoryConfiguration configuration, Invocation invocation) {
         List<E> selection = new LinkedList<E>();
         final Collection<E> all = new LinkedList<E>(store.retrieveAll());
         for (E entity : all) {

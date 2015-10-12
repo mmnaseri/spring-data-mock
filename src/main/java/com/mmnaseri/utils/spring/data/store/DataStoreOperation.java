@@ -2,6 +2,7 @@ package com.mmnaseri.utils.spring.data.store;
 
 import com.mmnaseri.utils.spring.data.domain.Invocation;
 import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
+import com.mmnaseri.utils.spring.data.proxy.RepositoryConfiguration;
 
 import java.io.Serializable;
 
@@ -11,6 +12,6 @@ import java.io.Serializable;
  */
 public interface DataStoreOperation<R, K extends Serializable, E> {
 
-    R execute(DataStore<K, E> store, RepositoryMetadata repositoryMetadata, Invocation invocation);
+    R execute(DataStore<K, E> store, RepositoryConfiguration configuration, Invocation invocation);
 
 }
