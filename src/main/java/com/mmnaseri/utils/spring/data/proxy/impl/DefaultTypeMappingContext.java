@@ -1,19 +1,20 @@
 package com.mmnaseri.utils.spring.data.proxy.impl;
 
 import com.mmnaseri.utils.spring.data.commons.DefaultCrudRepository;
+import com.mmnaseri.utils.spring.data.commons.DefaultGemfireRepository;
 import com.mmnaseri.utils.spring.data.commons.DefaultJpaRepository;
 import com.mmnaseri.utils.spring.data.commons.DefaultPagingAndSortingRepository;
 import com.mmnaseri.utils.spring.data.proxy.TypeMapping;
 import com.mmnaseri.utils.spring.data.proxy.TypeMappingContext;
 import org.springframework.core.OrderComparator;
+import org.springframework.data.gemfire.repository.GemfireRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.util.ClassUtils;
 
 import java.lang.reflect.Modifier;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
@@ -21,12 +22,37 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class DefaultTypeMappingContext implements TypeMappingContext {
 
+    private static class Mapping {
+
+        private final Class<?> key;
+        private final Class<?> value;
+
+        public Mapping(Class<?> key, Class<?> value) {
+            this.key = key;
+            this.value = value;
+        }
+
+        public Class<?> getKey() {
+            return key;
+        }
+
+        public Class<?> getValue() {
+            return value;
+        }
+
+    }
+
     private final TypeMappingContext parent;
-    private final ConcurrentMap<Class<?>, List<Class<?>>> mappings = new ConcurrentHashMap<Class<?>, List<Class<?>>>();
+    private final List<Mapping> mappings = new LinkedList<Mapping>();
 
     public DefaultTypeMappingContext() {
         this(null);
-        register(Object.class, DefaultJpaRepository.class);
+        if (ClassUtils.isPresent("org.springframework.data.gemfire.repository.GemfireRepository", ClassUtils.getDefaultClassLoader())) {
+            register(GemfireRepository.class, DefaultGemfireRepository.class);
+        }
+        if (ClassUtils.isPresent("org.springframework.data.jpa.repository.JpaRepository", ClassUtils.getDefaultClassLoader())) {
+            register(JpaRepository.class, DefaultJpaRepository.class);
+        }
         register(Object.class, DefaultPagingAndSortingRepository.class);
         register(Object.class, DefaultCrudRepository.class);
     }
@@ -37,16 +63,15 @@ public class DefaultTypeMappingContext implements TypeMappingContext {
 
     @Override
     public void register(Class<?> repositoryType, Class<?> implementation) {
-        mappings.putIfAbsent(repositoryType, new CopyOnWriteArrayList<Class<?>>());
-        mappings.get(repositoryType).add(implementation);
+        mappings.add(new Mapping(repositoryType, implementation));
     }
 
     @Override
     public List<Class<?>> getImplementations(Class<?> repositoryType) {
         final List<Class<?>> classes = new LinkedList<Class<?>>();
-        for (Class<?> superType : mappings.keySet()) {
-            if (superType.isAssignableFrom(repositoryType)) {
-                classes.addAll(mappings.get(superType));
+        for (Mapping mapping : mappings) {
+            if (mapping.getKey().isAssignableFrom(repositoryType)) {
+                classes.add(mapping.getValue());
             }
         }
         Collections.sort(classes, new OrderComparator());
