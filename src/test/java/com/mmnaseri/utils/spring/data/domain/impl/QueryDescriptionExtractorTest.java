@@ -39,7 +39,7 @@ public class QueryDescriptionExtractorTest {
         extractor.extract(repositoryMetadata, MalformedRepository.class.getMethod("findDistinctDistinct"), configuration);
     }
 
-    @Test(expectedExceptions = IllegalStateException.class, expectedExceptionsMessageRegExp = "Expected pattern 'By' was not encountered")
+    @Test(expectedExceptions = IllegalStateException.class, expectedExceptionsMessageRegExp = "Expected pattern 'By' was not encountered.*")
     public void testNonSimpleQueryWithoutBy() throws Exception {
         extractor.extract(repositoryMetadata, MalformedRepository.class.getMethod("findTop10Distinct"), configuration);
     }

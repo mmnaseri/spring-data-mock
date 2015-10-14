@@ -15,7 +15,7 @@ import static org.hamcrest.Matchers.*;
  */
 public class PropertyUtilsTest {
 
-    @Test(expectedExceptions = IllegalStateException.class, expectedExceptionsMessageRegExp = "Expected pattern '.*?' was not encountered")
+    @Test(expectedExceptions = IllegalStateException.class, expectedExceptionsMessageRegExp = "Expected pattern '.*?' was not encountered.*")
     public void testPropertyPathThatDoesNotStartWithCapitalLetter() throws Exception {
         PropertyUtils.getPropertyDescriptor(Person.class, "address");
     }
