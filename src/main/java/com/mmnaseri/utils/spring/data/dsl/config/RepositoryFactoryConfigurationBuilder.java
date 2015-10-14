@@ -1,4 +1,4 @@
-package com.mmnaseri.utils.spring.data.proxy.dsl.config;
+package com.mmnaseri.utils.spring.data.dsl.config;
 
 import com.mmnaseri.utils.spring.data.domain.OperatorContext;
 import com.mmnaseri.utils.spring.data.domain.RepositoryMetadataResolver;

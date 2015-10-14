@@ -1,11 +1,11 @@
-package com.mmnaseri.utils.spring.data.proxy.dsl.mock;
+package com.mmnaseri.utils.spring.data.dsl.mock;
 
 import com.mmnaseri.utils.spring.data.domain.KeyGenerator;
 import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
 import com.mmnaseri.utils.spring.data.domain.impl.key.KeyGeneratorProvider;
 import com.mmnaseri.utils.spring.data.proxy.RepositoryFactory;
 import com.mmnaseri.utils.spring.data.proxy.RepositoryFactoryConfiguration;
-import com.mmnaseri.utils.spring.data.proxy.dsl.config.RepositoryFactoryConfigurationBuilder;
+import com.mmnaseri.utils.spring.data.dsl.config.RepositoryFactoryConfigurationBuilder;
 import com.mmnaseri.utils.spring.data.proxy.impl.DefaultRepositoryFactory;
 
 import java.io.Serializable;

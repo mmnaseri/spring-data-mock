@@ -1,4 +1,4 @@
-package com.mmnaseri.utils.spring.data.proxy.dsl.function;
+package com.mmnaseri.utils.spring.data.dsl.function;
 
 import com.mmnaseri.utils.spring.data.query.DataFunctionRegistry;
 

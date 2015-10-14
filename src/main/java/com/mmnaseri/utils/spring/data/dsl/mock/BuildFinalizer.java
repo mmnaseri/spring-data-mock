@@ -1,4 +1,4 @@
-package com.mmnaseri.utils.spring.data.proxy.dsl.mock;
+package com.mmnaseri.utils.spring.data.dsl.mock;
 
 /**
  * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)

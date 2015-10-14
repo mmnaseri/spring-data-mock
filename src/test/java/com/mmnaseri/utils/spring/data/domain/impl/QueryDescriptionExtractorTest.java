@@ -3,7 +3,7 @@ package com.mmnaseri.utils.spring.data.domain.impl;
 import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
 import com.mmnaseri.utils.spring.data.domain.model.Person;
 import com.mmnaseri.utils.spring.data.proxy.RepositoryFactoryConfiguration;
-import com.mmnaseri.utils.spring.data.proxy.dsl.config.RepositoryFactoryConfigurationBuilder;
+import com.mmnaseri.utils.spring.data.dsl.config.RepositoryFactoryConfigurationBuilder;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 

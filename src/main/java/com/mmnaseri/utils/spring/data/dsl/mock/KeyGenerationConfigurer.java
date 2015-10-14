@@ -1,4 +1,4 @@
-package com.mmnaseri.utils.spring.data.proxy.dsl.mock;
+package com.mmnaseri.utils.spring.data.dsl.mock;
 
 import com.mmnaseri.utils.spring.data.domain.KeyGenerator;
 

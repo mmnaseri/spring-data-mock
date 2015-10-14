@@ -1,4 +1,4 @@
-package com.mmnaseri.utils.spring.data.proxy.dsl.config;
+package com.mmnaseri.utils.spring.data.dsl.config;
 
 /**
  * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
