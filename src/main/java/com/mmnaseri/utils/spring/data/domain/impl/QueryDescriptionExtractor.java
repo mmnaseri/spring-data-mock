@@ -233,4 +233,8 @@ public class QueryDescriptionExtractor {
         return new DefaultQueryDescriptor(distinct, function, limit, pageExtractor, sortExtractor, branches, configuration, repositoryMetadata);
     }
 
+    public OperatorContext getOperatorContext() {
+        return operatorContext;
+    }
+
 }

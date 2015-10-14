@@ -2,8 +2,8 @@ package com.mmnaseri.utils.spring.data.domain.impl;
 
 import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
 import com.mmnaseri.utils.spring.data.domain.model.Person;
+import com.mmnaseri.utils.spring.data.dsl.factory.RepositoryFactoryBuilder;
 import com.mmnaseri.utils.spring.data.proxy.RepositoryFactoryConfiguration;
-import com.mmnaseri.utils.spring.data.dsl.config.RepositoryFactoryConfigurationBuilder;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -25,7 +25,7 @@ public class QueryDescriptionExtractorTest {
 
     @Test(expectedExceptions = IllegalStateException.class, expectedExceptionsMessageRegExp = "Malformed query method name.*")
     public void testMethodNameNotStartingWithNormalWord() throws Exception {
-        configuration = RepositoryFactoryConfigurationBuilder.defaultConfiguration();
+        configuration = RepositoryFactoryBuilder.defaultConfiguration();
         extractor.extract(repositoryMetadata, MalformedRepository.class.getMethod("Malformed"), configuration);
     }
 
