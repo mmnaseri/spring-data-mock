@@ -38,7 +38,7 @@ public class AuditableWrapper implements Auditable {
     }
 
     private static <E> E getProperty(Class<E> type, BeanWrapper wrapper, String property) {
-        if (property == null) {
+        if (property == null || !wrapper.isReadableProperty(property)) {
             return null;
         }
         Object propertyValue = wrapper.getPropertyValue(property);
@@ -63,7 +63,9 @@ public class AuditableWrapper implements Auditable {
                     value = new java.sql.Time(dateTime.toDate().getTime());
                 }
             }
-            wrapper.setPropertyValue(property, value);
+            if (wrapper.isWritableProperty(property)) {
+                wrapper.setPropertyValue(property, value);
+            }
         }
     }
 
