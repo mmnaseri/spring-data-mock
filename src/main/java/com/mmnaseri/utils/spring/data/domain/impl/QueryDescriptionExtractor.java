@@ -35,7 +35,7 @@ public class QueryDescriptionExtractor {
     public QueryDescriptor extract(RepositoryMetadata repositoryMetadata, Method method, RepositoryFactoryConfiguration configuration) {
         String methodName = method.getName();
         //check to see if the AllIgnoreCase flag is set
-        boolean allIgnoreCase = methodName.matches(ALL_IGNORE_CASE_SUFFIX);
+        boolean allIgnoreCase = methodName.matches(".*" + ALL_IGNORE_CASE_SUFFIX);
         //we need to unify method name afterwards
         methodName = allIgnoreCase ? methodName.replaceFirst(ALL_IGNORE_CASE_SUFFIX, "") : methodName;
         //create a document reader for processing method name
@@ -123,7 +123,7 @@ public class QueryDescriptionExtractor {
                     reader.backtrack(length);
                 }
                 final Set<Modifier> modifiers = new HashSet<Modifier>();
-                if (expression.matches(IGNORE_CASE_SUFFIX)) {
+                if (expression.matches(".*" + IGNORE_CASE_SUFFIX)) {
                     //if the expression ended in IgnoreCase, we need to strip that off
                     modifiers.add(Modifier.IGNORE_CASE);
                     expression = expression.replaceFirst(IGNORE_CASE_SUFFIX, "");
@@ -206,9 +206,6 @@ public class QueryDescriptionExtractor {
                 sort = new ImmutableSort(orders);
             } else {
                 sort = null;
-            }
-            if (reader.hasMore()) {
-                throw new IllegalStateException("Too many tokens in the query name: " + method);
             }
             if (method.getParameterTypes().length == index) {
                 pageExtractor = null;

@@ -73,7 +73,13 @@ public class DefaultQueryDescriptor implements QueryDescriptor {
     }
 
     @Override
+    public List<List<Parameter>> getBranches() {
+        return branches;
+    }
+
+    @Override
     public boolean matches(Object entity, Invocation invocation) {
+        final List<List<Parameter>> branches = getBranches();
         if (branches.isEmpty()) {
             return true;
         }

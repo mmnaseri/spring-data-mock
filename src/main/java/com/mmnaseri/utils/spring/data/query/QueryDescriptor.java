@@ -2,8 +2,11 @@ package com.mmnaseri.utils.spring.data.query;
 
 import com.mmnaseri.utils.spring.data.domain.Invocation;
 import com.mmnaseri.utils.spring.data.domain.InvocationMatcher;
+import com.mmnaseri.utils.spring.data.domain.Parameter;
 import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
 import com.mmnaseri.utils.spring.data.proxy.RepositoryFactoryConfiguration;
+
+import java.util.List;
 
 /**
  * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
@@ -24,5 +27,7 @@ public interface QueryDescriptor extends InvocationMatcher {
     Page getPage(Invocation invocation);
 
     Sort getSort(Invocation invocation);
+
+    List<List<Parameter>> getBranches();
 
 }
