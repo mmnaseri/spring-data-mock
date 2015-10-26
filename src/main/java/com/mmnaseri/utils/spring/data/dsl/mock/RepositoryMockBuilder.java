@@ -18,6 +18,12 @@ import java.util.List;
  */
 public class RepositoryMockBuilder implements Start, ImplementationAnd, KeyGeneration {
 
+    private static final KeyGenerator<? extends Serializable> NOOP = new KeyGenerator<Serializable>() {
+        @Override
+        public Serializable generate() {
+            return null;
+        }
+    };
     private final RepositoryFactory factory;
     private final List<Class<?>> implementations;
     private final KeyGenerator<? extends Serializable> keyGenerator;
@@ -66,6 +72,11 @@ public class RepositoryMockBuilder implements Start, ImplementationAnd, KeyGener
         return new RepositoryMockBuilder(factory, implementations, instance);
     }
 
+    @Override
+    public Implementation withoutGeneratingKeys() {
+        return new RepositoryMockBuilder(factory, implementations, NOOP);
+    }
+
     protected KeyGenerator<?> createKeyGenerator(Class<? extends KeyGenerator> generatorType) {
         final KeyGenerator instance;
         try {
@@ -92,7 +103,7 @@ public class RepositoryMockBuilder implements Start, ImplementationAnd, KeyGener
             final KeyGenerator<? extends Serializable> keyGenerator = createKeyGenerator(keyGeneratorType);
             return generateKeysUsing(keyGenerator).mock(repositoryInterface);
         } else {
-            return repositoryFactory.getInstance(keyGenerator, repositoryInterface, implementations.toArray(new Class[implementations.size()]));
+            return repositoryFactory.getInstance(NOOP.equals(keyGenerator) ? null : keyGenerator, repositoryInterface, implementations.toArray(new Class[implementations.size()]));
         }
     }
 

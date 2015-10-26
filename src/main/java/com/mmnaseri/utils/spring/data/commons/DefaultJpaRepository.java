@@ -53,7 +53,7 @@ public class DefaultJpaRepository implements DataStoreAware, RepositoryMetadataA
 
     public Object saveAndFlush(Object entity) {
         final BeanWrapper wrapper = new BeanWrapperImpl(entity);
-        if (wrapper.getPropertyValue(repositoryMetadata.getIdentifier()) == null) {
+        if (wrapper.getPropertyValue(repositoryMetadata.getIdentifier()) == null && wrapper.isWritableProperty(repositoryMetadata.getIdentifier()) && keyGenerator != null) {
             wrapper.setPropertyValue(repositoryMetadata.getIdentifier(), keyGenerator.generate());
         }
         dataStore.save((Serializable) wrapper.getPropertyValue(repositoryMetadata.getIdentifier()), entity);

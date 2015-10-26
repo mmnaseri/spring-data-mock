@@ -14,4 +14,6 @@ public interface KeyGeneration extends Implementation {
 
     <S extends Serializable, G extends KeyGenerator<S>> Implementation generateKeysUsing(Class<G> generatorType);
 
+    Implementation withoutGeneratingKeys();
+
 }

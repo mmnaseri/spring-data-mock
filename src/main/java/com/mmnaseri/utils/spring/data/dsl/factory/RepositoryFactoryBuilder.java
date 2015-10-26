@@ -215,6 +215,11 @@ public class RepositoryFactoryBuilder implements Start, DataFunctionsAnd, DataSt
     }
 
     @Override
+    public Implementation withoutGeneratingKeys() {
+        return new RepositoryMockBuilder().useFactory(build()).withoutGeneratingKeys();
+    }
+
+    @Override
     public ImplementationAnd usingImplementation(Class<?> implementation) {
         return new RepositoryMockBuilder().useFactory(build()).usingImplementation(implementation);
     }

@@ -20,16 +20,14 @@ public class DefaultCrudRepository implements DataStoreAware, RepositoryMetadata
     private DataStore dataStore;
     private RepositoryMetadata repositoryMetadata;
 
-    private Object generateKey() {
-        return keyGenerator.generate();
-    }
-
     public Object save(Object entity) {
         final BeanWrapper wrapper = new BeanWrapperImpl(entity);
         Object key = wrapper.getPropertyValue(repositoryMetadata.getIdentifier());
-        if (key == null) {
-            key = generateKey();
-            wrapper.setPropertyValue(repositoryMetadata.getIdentifier(), key);
+        if (key == null && keyGenerator != null) {
+            key = keyGenerator.generate();
+            if (wrapper.isWritableProperty(repositoryMetadata.getIdentifier())) {
+                wrapper.setPropertyValue(repositoryMetadata.getIdentifier(), key);
+            }
         }
         dataStore.save((Serializable) key, entity);
         return entity;
