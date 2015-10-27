@@ -4,8 +4,10 @@ import com.mmnaseri.utils.spring.data.domain.*;
 import com.mmnaseri.utils.spring.data.store.DataStore;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
+import org.springframework.util.ReflectionUtils;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -53,8 +55,22 @@ public class DefaultJpaRepository implements DataStoreAware, RepositoryMetadataA
 
     public Object saveAndFlush(Object entity) {
         final BeanWrapper wrapper = new BeanWrapperImpl(entity);
-        if (wrapper.getPropertyValue(repositoryMetadata.getIdentifier()) == null && wrapper.isWritableProperty(repositoryMetadata.getIdentifier()) && keyGenerator != null) {
-            wrapper.setPropertyValue(repositoryMetadata.getIdentifier(), keyGenerator.generate());
+        final Object currentKey = wrapper.getPropertyValue(repositoryMetadata.getIdentifier());
+        if (currentKey == null && keyGenerator != null) {
+            final Serializable generated = keyGenerator.generate();
+            if (wrapper.isWritableProperty(repositoryMetadata.getIdentifier())) {
+                wrapper.setPropertyValue(repositoryMetadata.getIdentifier(), generated);
+            } else {
+                final Field field = ReflectionUtils.findField(repositoryMetadata.getEntityType(), repositoryMetadata.getIdentifier());
+                if (field != null) {
+                    field.setAccessible(true);
+                    try {
+                        field.set(entity, generated);
+                    } catch (IllegalAccessException e) {
+                        throw new IllegalStateException(e);
+                    }
+                }
+            }
         }
         dataStore.save((Serializable) wrapper.getPropertyValue(repositoryMetadata.getIdentifier()), entity);
         flush();

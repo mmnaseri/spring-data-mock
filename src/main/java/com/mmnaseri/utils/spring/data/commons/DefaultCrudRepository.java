@@ -4,8 +4,10 @@ import com.mmnaseri.utils.spring.data.domain.*;
 import com.mmnaseri.utils.spring.data.store.DataStore;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
+import org.springframework.util.ReflectionUtils;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -27,6 +29,16 @@ public class DefaultCrudRepository implements DataStoreAware, RepositoryMetadata
             key = keyGenerator.generate();
             if (wrapper.isWritableProperty(repositoryMetadata.getIdentifier())) {
                 wrapper.setPropertyValue(repositoryMetadata.getIdentifier(), key);
+            } else {
+                final Field field = ReflectionUtils.findField(repositoryMetadata.getEntityType(), repositoryMetadata.getIdentifier());
+                if (field != null) {
+                    field.setAccessible(true);
+                    try {
+                        field.set(entity, key);
+                    } catch (IllegalAccessException e) {
+                        throw new IllegalStateException(e);
+                    }
+                }
             }
         }
         dataStore.save((Serializable) key, entity);
