@@ -32,7 +32,7 @@ public class RepositoryMockBuilder implements Start, ImplementationAnd, KeyGener
         this(null, new LinkedList<Class<?>>(), null);
     }
 
-    public RepositoryMockBuilder(RepositoryFactory factory, List<Class<?>> implementations, KeyGenerator<? extends Serializable> keyGenerator) {
+    private RepositoryMockBuilder(RepositoryFactory factory, List<Class<?>> implementations, KeyGenerator<? extends Serializable> keyGenerator) {
         this.factory = factory;
         this.implementations = implementations;
         this.keyGenerator = keyGenerator;
