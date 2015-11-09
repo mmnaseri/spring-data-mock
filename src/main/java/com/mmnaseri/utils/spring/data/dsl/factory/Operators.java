@@ -11,6 +11,6 @@ public interface Operators extends DataFunctions {
 
     DataFunctions withOperators(OperatorContext context);
 
-    OperatorsAnd register(Operator operator);
+    OperatorsAnd registerOperator(Operator operator);
 
 }

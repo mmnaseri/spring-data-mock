@@ -23,7 +23,7 @@ public class DefaultGemfireRepository implements DataStoreAware, RepositoryMetad
         final Object entity = wrapper.getEntity();
         final Serializable key = wrapper.getKey();
         final BeanWrapper beanWrapper = new BeanWrapperImpl(entity);
-        beanWrapper.setPropertyValue(repositoryMetadata.getIdentifier(), key);
+        beanWrapper.setPropertyValue(repositoryMetadata.getIdentifierProperty(), key);
         //noinspection unchecked
         dataStore.save(key, entity);
         return entity;

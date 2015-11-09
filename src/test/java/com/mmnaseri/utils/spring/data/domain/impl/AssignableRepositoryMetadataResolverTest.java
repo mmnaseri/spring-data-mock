@@ -30,7 +30,7 @@ public class AssignableRepositoryMetadataResolverTest {
         assertThat(metadata.getRepositoryInterface(), equalTo((Class) SampleInheritingRepository.class));
         assertThat(metadata.getEntityType(), equalTo((Class) Person.class));
         assertThat(metadata.getIdentifierType(), equalTo((Class) String.class));
-        assertThat(metadata.getIdentifier(), is("id"));
+        assertThat(metadata.getIdentifierProperty(), is("id"));
     }
 
 }

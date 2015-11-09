@@ -29,7 +29,7 @@ public class DefaultJpaRepository implements DataStoreAware, RepositoryMetadataA
         final List result = new LinkedList();
         for (Object entity : entities) {
             final BeanWrapper wrapper = new BeanWrapperImpl(entity);
-            final Object key = wrapper.getPropertyValue(repositoryMetadata.getIdentifier());
+            final Object key = wrapper.getPropertyValue(repositoryMetadata.getIdentifierProperty());
             if (key == null) {
                 throw new IllegalArgumentException("Expected entity to have a key: " + entity);
             }
@@ -55,13 +55,13 @@ public class DefaultJpaRepository implements DataStoreAware, RepositoryMetadataA
 
     public Object saveAndFlush(Object entity) {
         final BeanWrapper wrapper = new BeanWrapperImpl(entity);
-        final Object currentKey = wrapper.getPropertyValue(repositoryMetadata.getIdentifier());
+        final Object currentKey = wrapper.getPropertyValue(repositoryMetadata.getIdentifierProperty());
         if (currentKey == null && keyGenerator != null) {
             final Serializable generated = keyGenerator.generate();
-            if (wrapper.isWritableProperty(repositoryMetadata.getIdentifier())) {
-                wrapper.setPropertyValue(repositoryMetadata.getIdentifier(), generated);
+            if (wrapper.isWritableProperty(repositoryMetadata.getIdentifierProperty())) {
+                wrapper.setPropertyValue(repositoryMetadata.getIdentifierProperty(), generated);
             } else {
-                final Field field = ReflectionUtils.findField(repositoryMetadata.getEntityType(), repositoryMetadata.getIdentifier());
+                final Field field = ReflectionUtils.findField(repositoryMetadata.getEntityType(), repositoryMetadata.getIdentifierProperty());
                 if (field != null) {
                     field.setAccessible(true);
                     try {
@@ -72,7 +72,7 @@ public class DefaultJpaRepository implements DataStoreAware, RepositoryMetadataA
                 }
             }
         }
-        dataStore.save((Serializable) wrapper.getPropertyValue(repositoryMetadata.getIdentifier()), entity);
+        dataStore.save((Serializable) wrapper.getPropertyValue(repositoryMetadata.getIdentifierProperty()), entity);
         flush();
         return entity;
     }

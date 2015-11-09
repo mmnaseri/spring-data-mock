@@ -120,7 +120,7 @@ public class AuditableWrapper implements Auditable {
 
     @Override
     public Serializable getId() {
-        return (Serializable) wrapper.getPropertyValue(repositoryMetadata.getIdentifier());
+        return (Serializable) wrapper.getPropertyValue(repositoryMetadata.getIdentifierProperty());
     }
 
     @Override

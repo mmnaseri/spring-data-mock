@@ -23,7 +23,7 @@ public class ImmutableRepositoryMetadata implements RepositoryMetadata {
     }
 
     @Override
-    public String getIdentifier() {
+    public String getIdentifierProperty() {
         return identifier;
     }
 

@@ -24,13 +24,13 @@ public class DefaultCrudRepository implements DataStoreAware, RepositoryMetadata
 
     public Object save(Object entity) {
         final BeanWrapper wrapper = new BeanWrapperImpl(entity);
-        Object key = wrapper.getPropertyValue(repositoryMetadata.getIdentifier());
+        Object key = wrapper.getPropertyValue(repositoryMetadata.getIdentifierProperty());
         if (key == null && keyGenerator != null) {
             key = keyGenerator.generate();
-            if (wrapper.isWritableProperty(repositoryMetadata.getIdentifier())) {
-                wrapper.setPropertyValue(repositoryMetadata.getIdentifier(), key);
+            if (wrapper.isWritableProperty(repositoryMetadata.getIdentifierProperty())) {
+                wrapper.setPropertyValue(repositoryMetadata.getIdentifierProperty(), key);
             } else {
-                final Field field = ReflectionUtils.findField(repositoryMetadata.getEntityType(), repositoryMetadata.getIdentifier());
+                final Field field = ReflectionUtils.findField(repositoryMetadata.getEntityType(), repositoryMetadata.getIdentifierProperty());
                 if (field != null) {
                     field.setAccessible(true);
                     try {
@@ -81,9 +81,9 @@ public class DefaultCrudRepository implements DataStoreAware, RepositoryMetadata
 
     public Object delete(Object entity) {
         final BeanWrapper wrapper = new BeanWrapperImpl(entity);
-        final Object key = wrapper.getPropertyValue(repositoryMetadata.getIdentifier());
+        final Object key = wrapper.getPropertyValue(repositoryMetadata.getIdentifierProperty());
         if (key == null) {
-            throw new IllegalArgumentException("Entity must have a valid key: " + repositoryMetadata.getIdentifier());
+            throw new IllegalArgumentException("Entity must have a valid key: " + repositoryMetadata.getIdentifierProperty());
         }
         return delete((Serializable) key);
     }

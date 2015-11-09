@@ -17,7 +17,7 @@ public class DeleteDataFunction implements DataFunction<List<?>> {
 
     @Override
     public <K extends Serializable, E> List<E> apply(DataStore<K, E> dataStore, QueryDescriptor query, RepositoryConfiguration repositoryConfiguration, List<E> selection) {
-        final String identifier = query.getRepositoryMetadata().getIdentifier();
+        final String identifier = query.getRepositoryMetadata().getIdentifierProperty();
         for (E item : selection) {
             final Object key = PropertyUtils.getPropertyValue(item, identifier);
             if (key == null) {

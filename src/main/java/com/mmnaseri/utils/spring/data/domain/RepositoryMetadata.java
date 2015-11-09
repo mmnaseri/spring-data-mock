@@ -8,7 +8,7 @@ import java.io.Serializable;
  */
 public interface RepositoryMetadata {
 
-    String getIdentifier();
+    String getIdentifierProperty();
 
     Class<? extends Serializable> getIdentifierType();
 

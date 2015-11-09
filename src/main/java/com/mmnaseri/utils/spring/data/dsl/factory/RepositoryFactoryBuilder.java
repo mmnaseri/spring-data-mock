@@ -77,7 +77,7 @@ public class RepositoryFactoryBuilder implements Start, DataFunctionsAnd, DataSt
     }
 
     @Override
-    public OperatorsAnd register(Operator operator) {
+    public OperatorsAnd registerOperator(Operator operator) {
         queryDescriptionExtractor.getOperatorContext().register(operator);
         return this;
     }
