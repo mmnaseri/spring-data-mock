@@ -169,7 +169,7 @@ Spring Data actually expand beyond what it is today.
 Below is a list of the default operators that ship with this framework:
 
  Operator | Suffixes
---------------------------------------------------------------
+----------|---------------------------------------------------
  **AFTER** | `After`, `IsAfter`
 
 #### Data Functions
