@@ -8,7 +8,6 @@ import com.mmnaseri.utils.spring.data.proxy.TypeMapping;
 import com.mmnaseri.utils.spring.data.proxy.TypeMappingContext;
 import org.springframework.core.OrderComparator;
 import org.springframework.data.gemfire.repository.GemfireRepository;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.util.ClassUtils;
 
 import java.lang.reflect.Modifier;
@@ -48,10 +47,10 @@ public class DefaultTypeMappingContext implements TypeMappingContext {
     public DefaultTypeMappingContext() {
         this(null);
         if (ClassUtils.isPresent("org.springframework.data.gemfire.repository.GemfireRepository", ClassUtils.getDefaultClassLoader())) {
-            register(GemfireRepository.class, DefaultGemfireRepository.class);
+            register(Object.class, DefaultGemfireRepository.class);
         }
         if (ClassUtils.isPresent("org.springframework.data.jpa.repository.JpaRepository", ClassUtils.getDefaultClassLoader())) {
-            register(JpaRepository.class, DefaultJpaRepository.class);
+            register(Object.class, DefaultJpaRepository.class);
         }
         register(Object.class, DefaultPagingAndSortingRepository.class);
         register(Object.class, DefaultCrudRepository.class);

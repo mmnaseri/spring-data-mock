@@ -168,9 +168,34 @@ Spring Data actually expand beyond what it is today.
 
 Below is a list of the default operators that ship with this framework:
 
-| Operator | Suffixes |
-|---------
-| **AFTER** | `After`, `IsAfter`
+ Operator                  | Suffixes
+---------------------------|---------------------------------------------------
+AFTER                      | `After`, `IsAfter`
+BEFORE                     | `Before`, `IsBefore`
+CONTAINING                 | `Containing`, `IsContaining`, `Contains`
+BETWEEN                    | `Between`, `IsBetween`
+NOT_BETWEEN                | `NotBetween`, `IsNotBetween`
+ENDING_WITH                | `EndingWith`, `IsEndingWith`, `EndsWith`
+FALSE                      | `False`, `IsFalse`
+GREATER_THAN               | `GreaterThan`, `IsGreaterThan`
+GREATER_THAN_EQUALS        | `GreaterThanEqual`, `IsGreaterThanEqual`
+IN                         | `In`, `IsIn`
+IS                         | `Is`, `EqualTo`, `IsEqualTo`, `Equals`
+NOT_NULL                   | `NotNull`, `IsNotNull`
+NULL                       | `Null`, `IsNull`
+LESS_THAN                  | `LessThan`, `IsLessThan`
+LESS_THAN_EQUAL            | `LessThanEqual`, `IsLessThanEqual`
+LIKE                       | `Like`, `IsLike`
+NEAR                       | `Near`, `IsNear`
+NOT                        | `IsNot`, `Not`, `IsNotEqualTo`, `DoesNotEqual`
+NOT_IN                     | `NotIn`, `IsNotIn`
+NOT_LIKE                   | `NotLike`, `IsNotLike`
+REGEX                      | `Regex`, `MatchesRegex`, `Matches`
+STARTING_WITH              | `StartingWith`, `IsStartingWith`, `StartsWith`
+TRUE                       | `True`, `IsTrue`
+
+If no suffix is present to determine the operator by, it is assumed that the `IS` operator was intended.
+
 
 #### Data Functions
 
@@ -213,6 +238,19 @@ When proxying a repository method this is the order with which a method is bound
   2. We look at globally available implementations supplied through the configuration object
   3. We try to interpret the method name as a query.
 
+By default, the following type mappings are in place:
+
+  * All repositories can include any of the methods defined in `com.mmnaseri.utils.spring.data.commons.DefaultCrudRepository`
+  which implements the methods introduced in `org.springframework.data.repository.CrudRepository`.
+  * All repositories can include any of the methods defined in `com.mmnaseri.utils.spring.data.commons.DefaultPagingAndSortingRepository`
+  which adds paging and sorting capabilities to the repositories as per `org.springframework.data.repository.PagingAndSortingRepository`.
+  * If `org.springframework.data.jpa.repository.JpaRepository` is found in the classpath, all repositories will be able to have
+  methods from `com.mmnaseri.utils.spring.data.commons.DefaultJpaRepository` that are not already present in one of the above in
+  their repertoire.
+  * If `org.springframework.data.gemfire.repository.GemfireRepository` is present in the classpath, all repositories will be able to
+  include methods from this interface that are not present in the above in their list of methods and rest assured that an implementation
+  will be provided, courtesy of `com.mmnaseri.utils.spring.data.commons.DefaultGemfireRepository`.
+
 #### Event Listeners
 
 You can register event listeners for each of the following events:
@@ -226,9 +264,16 @@ You can register event listeners for each of the following events:
 
 The event handlers can then modify, take note of, or otherwise interact with the entities for which the event was raised.
 
+If you use the `enableAuditing()` feature above, an event listener (`com.mmnaseri.utils.spring.data.store.impl.AuditDataEventListener`)
+will be registered with the configuration which will enable auditing features and will set relevant properties in the appropriate
+juncture by listening closely to the events listed above.
+
 ##### Auditing
 
 Out-of-the-box auditing is supported through this event mechanism for the usual `CreatedBy`, `CreatedDate`, `LastModifiedBy`,
 and `LastModifiedDate` audit annotations provided by Spring Data Commons. To support user-related auditing (created by and last
 modified by) you will need to supply an `AuditorAware` or accept the default one, which will always return a String object with
 value, `"User"`.
+
+By default, auditing is disabled. This is to follow in the footprints of Spring. Since Spring Data asks you to explicitly enable
+auditing, this framework, too, pushes for the same requirement.
