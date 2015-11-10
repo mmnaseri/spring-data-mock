@@ -238,6 +238,19 @@ When proxying a repository method this is the order with which a method is bound
   2. We look at globally available implementations supplied through the configuration object
   3. We try to interpret the method name as a query.
 
+By default, the following type mappings are in place:
+
+  * All repositories can include any of the methods defined in `com.mmnaseri.utils.spring.data.commons.DefaultCrudRepository`
+  which implements the methods introduced in `org.springframework.data.repository.CrudRepository`.
+  * All repositories can include any of the methods defined in `com.mmnaseri.utils.spring.data.commons.DefaultPagingAndSortingRepository`
+  which adds paging and sorting capabilities to the repositories as per `org.springframework.data.repository.PagingAndSortingRepository`.
+  * If `org.springframework.data.jpa.repository.JpaRepository` is found in the classpath, all repositories will be able to have
+  methods from `com.mmnaseri.utils.spring.data.commons.DefaultJpaRepository` that are not already present in one of the above in
+  their repertoire.
+  * If `org.springframework.data.gemfire.repository.GemfireRepository` is present in the classpath, all repositories will be able to
+  include methods from this interface that are not present in the above in their list of methods and rest assured that an implementation
+  will be provided, courtesy of `com.mmnaseri.utils.spring.data.commons.DefaultGemfireRepository`.
+
 #### Event Listeners
 
 You can register event listeners for each of the following events:
@@ -251,9 +264,16 @@ You can register event listeners for each of the following events:
 
 The event handlers can then modify, take note of, or otherwise interact with the entities for which the event was raised.
 
+If you use the `enableAuditing()` feature above, an event listener (`com.mmnaseri.utils.spring.data.store.impl.AuditDataEventListener`)
+will be registered with the configuration which will enable auditing features and will set relevant properties in the appropriate
+juncture by listening closely to the events listed above.
+
 ##### Auditing
 
 Out-of-the-box auditing is supported through this event mechanism for the usual `CreatedBy`, `CreatedDate`, `LastModifiedBy`,
 and `LastModifiedDate` audit annotations provided by Spring Data Commons. To support user-related auditing (created by and last
 modified by) you will need to supply an `AuditorAware` or accept the default one, which will always return a String object with
 value, `"User"`.
+
+By default, auditing is disabled. This is to follow in the footprints of Spring. Since Spring Data asks you to explicitly enable
+auditing, this framework, too, pushes for the same requirement.
