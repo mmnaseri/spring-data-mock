@@ -170,29 +170,29 @@ Below is a list of the default operators that ship with this framework:
 
  Operator                  | Suffixes
 ---------------------------|---------------------------------------------------
- **AFTER**                 | `After`, `IsAfter`
-**BEFORE**                 | `Before`, `IsBefore`
-**CONTAINING**             | `Containing`, `IsContaining`, `Contains`
-**BETWEEN**                | `Between`, `IsBetween`
-**NOT_BETWEEN**            | `NotBetween`, `IsNotBetween`
-**ENDING_WITH**            | `EndingWith`, `IsEndingWith`, `EndsWith`
-**FALSE**                  | `False`, `IsFalse`
-**GREATER_THAN**           | `GreaterThan`, `IsGreaterThan`
-**GREATER_THAN_EQUALS**    | `GreaterThanEqual`, `IsGreaterThanEqual`
-**IN**                     | `In`, `IsIn`
-**IS**                     | `Is`, `EqualTo`, `IsEqualTo`, `Equals`
-**NOT_NULL**               | `NotNull`, `IsNotNull`
-**NULL**                   | `Null`, `IsNull`
-**LESS_THAN**              | `LessThan`, `IsLessThan`
-**LESS_THAN_EQUAL**        | `LessThanEqual`, `IsLessThanEqual`
-**LIKE**                   | `Like`, `IsLike`
-**NEAR**                   | `Near`, `IsNear`
-**NOT**                    | `IsNot`, `Not`, `IsNotEqualTo`, `DoesNotEqual`
-**NOT_IN**                 | `NotIn`, `IsNotIn`
-**NOT_LIKE**               | `NotLike`, `IsNotLike`
-**REGEX**                  | `Regex`, `MatchesRegex`, `Matches`
-**STARTING_WITH**          | `StartingWith`, `IsStartingWith`, `StartsWith`
-**TRUE**                   | `True`, `IsTrue`
+AFTER                      | `After`, `IsAfter`
+BEFORE                     | `Before`, `IsBefore`
+CONTAINING                 | `Containing`, `IsContaining`, `Contains`
+BETWEEN                    | `Between`, `IsBetween`
+NOT_BETWEEN                | `NotBetween`, `IsNotBetween`
+ENDING_WITH                | `EndingWith`, `IsEndingWith`, `EndsWith`
+FALSE                      | `False`, `IsFalse`
+GREATER_THAN               | `GreaterThan`, `IsGreaterThan`
+GREATER_THAN_EQUALS        | `GreaterThanEqual`, `IsGreaterThanEqual`
+IN                         | `In`, `IsIn`
+IS                         | `Is`, `EqualTo`, `IsEqualTo`, `Equals`
+NOT_NULL                   | `NotNull`, `IsNotNull`
+NULL                       | `Null`, `IsNull`
+LESS_THAN                  | `LessThan`, `IsLessThan`
+LESS_THAN_EQUAL            | `LessThanEqual`, `IsLessThanEqual`
+LIKE                       | `Like`, `IsLike`
+NEAR                       | `Near`, `IsNear`
+NOT                        | `IsNot`, `Not`, `IsNotEqualTo`, `DoesNotEqual`
+NOT_IN                     | `NotIn`, `IsNotIn`
+NOT_LIKE                   | `NotLike`, `IsNotLike`
+REGEX                      | `Regex`, `MatchesRegex`, `Matches`
+STARTING_WITH              | `StartingWith`, `IsStartingWith`, `StartsWith`
+TRUE                       | `True`, `IsTrue`
 
 If no suffix is present to determine the operator by, it is assumed that the `IS` operator was intended.
 
