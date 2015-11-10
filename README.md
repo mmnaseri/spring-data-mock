@@ -145,6 +145,12 @@ the repository as well as the persistent entity it is supporting. This is what t
   * the (either actual or encapsulated) property of the persistent entity which holds the identifier
   * the type of the identifier associated with the entity
 
+The default metadata resolver is the `com.mmnaseri.utils.spring.data.domain.impl.DefaultRepositoryMetadataResolver`
+class, which will first see if the repository is annotated with `@org.springframework.data.repository.RepositoryDefinition`
+and if not tries to extract its metadata from the interface should it extend `org.springframework.data.repository.Repository`.
+
+If none of these conditions are met, it will throw an exception.
+
 #### The Operators
 
 The operators are what drive how the query methods are parsed. This is the general recipe:
@@ -159,6 +165,12 @@ the query.
 By extending the operators, you can practically extend the query method DSL. This might not be practical, as we might not want
 to support things that Spring Data doesn't support yet, but it allows for a better maintainability and easier extensibility should
 Spring Data actually expand beyond what it is today.
+
+Below is a list of the default operators that ship with this framework:
+
+| Operator | Suffixes |
+|---------
+| **AFTER** | `After`, `IsAfter`
 
 #### Data Functions
 
