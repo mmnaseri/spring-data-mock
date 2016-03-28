@@ -2,8 +2,6 @@
 ### JetBrains template
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm
 
-*.iml
-
 ## Directory-based project format:
 .idea/
 # if you remove the above rule, at least ignore the following:
@@ -11,6 +9,7 @@
 ## File-based project format:
 *.ipr
 *.iws
+*.iml
 
 ## Plugin-specific files:
 
@@ -28,4 +27,8 @@ com_crashlytics_export_strings.xml
 crashlytics.properties
 crashlytics-build.properties
 
+# Maven Target
+target
 
+# Mac OS X junk
+.DS_Store
