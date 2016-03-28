@@ -32,6 +32,7 @@ public interface DocumentReader {
     /**
      * This method will skip all the characters matching the pattern from this point in the document
      * onwards (if any)
+     * @param pattern the pattern to skip by
      */
     void skip(Pattern pattern);
 
@@ -83,7 +84,7 @@ public interface DocumentReader {
     /**
      * Will give the next token. If no tokens can be found, the method will either take further action
      * to fix this, or throw an Exception. You can confer {@link #hasTokens} to see if another token exists
-     * in the document.<br/>
+     * in the document.<br>
      * <strong>NB</strong> This method will attempt to read the <em>first</em> identifiable token, meaning
      * that if one token is the prefix of another, then the first will be discovered.
      *
@@ -197,6 +198,7 @@ public interface DocumentReader {
     /**
      * This method will give the control momentarily to the given {@link SnippetParser} instance.
      * @param parser    the parser to give over the flow to
+     * @param <E>       the type of the snippet
      * @return the data returned by the parser
      */
     <E> E parse(SnippetParser<E> parser);
@@ -216,6 +218,7 @@ public interface DocumentReader {
 
     /**
      * Forgets the latest remembered position
+     * @return the state being forgotten
      */
     ReaderSnapshot forget();
 

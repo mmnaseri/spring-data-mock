@@ -198,7 +198,7 @@ public class DefaultDocumentReader implements DocumentReader {
     /**
      * Will give the next token. If no tokens can be found, the method will either take further action
      * to fix this, or throw an Exception. You can confer {@link #hasTokens} to see if another token exists
-     * in the document.<br/>
+     * in the document.<br>
      * <strong>NB</strong> This method will attempt to read the <em>first</em> identifiable token, meaning
      * that if one token is the prefix of another, then the first will be discovered.
      *
