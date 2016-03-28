@@ -15,6 +15,20 @@ infrastructure replicating what Spring would do with an actual database, only in
 repository with actual data. Thus, you can test your services *without* having to start up the application context, and
 with the highest level of isolation -- with actual data.
 
+## Downloading
+
+You can either clone this project and start using it:
+
+    $ git clone https://github.com/mmnaseri/spring-data-mock.git
+
+or you can add a maven dependency since it is now available in Maven central:
+
+    <dependency>
+        <groupId>com.mmnaseri.utils</groupId>
+        <artifactId>spring-data-mock</artifactId>
+        <version>1.0</version>
+    </dependency>
+
 ## Quick Start
 
 Regardless of how you add the necessary dependency to your project, mocking a repository can be as simple as:
