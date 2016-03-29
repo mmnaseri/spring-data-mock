@@ -1,4 +1,5 @@
 language: java
+
 after_success:
   # Run Cobertura test coverage and submit the results to coveralls.io
   - mvn -P coverage clean cobertura:cobertura coveralls:report
