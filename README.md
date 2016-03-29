@@ -1,5 +1,7 @@
 # Spring Data Mock
 
+[![Build Status](https://travis-ci.org/mmnaseri/spring-data-mock.svg?branch=master)](https://travis-ci.org/mmnaseri/spring-data-mock)
+
 This is a fairly flexible, versatile framework for mocking Spring Data repositories. Spring Data provides a very good
 foundation for separating the concerns of managing a database and its subsequently resulting queries from those of the
 business layer.
