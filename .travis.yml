@@ -1,3 +1,6 @@
 language: java
 after_success:
-  - mvn clean -P coverage cobertura:cobertura coveralls:report
+  # Run Cobertura test coverage and submit the results to coveralls.io
+  - mvn -P coverage clean cobertura:cobertura coveralls:report
+  # If we are on "master" deploy to OSSRH
+  - "[[ $TRAVIS_BRANCH == \"master\" ]] && mvn -P release -DskipTests=true --settings ./settings.xml -B clean deploy"
