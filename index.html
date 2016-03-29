@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Spring Data Mock by mmnaseri</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Spring Data Mock</h1>
+      <h2 class="project-tagline">Mock facility for Spring Data repositories</h2>
+      <a href="https://github.com/mmnaseri/spring-data-mock" class="btn">View on GitHub</a>
+      <a href="https://github.com/mmnaseri/spring-data-mock/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/mmnaseri/spring-data-mock/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="spring-data-mock" class="anchor" href="#spring-data-mock" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Spring Data Mock</h1>
+
+<p>This is a fairly flexible, versatile framework for mocking Spring Data repositories. Spring Data provides a very good
+foundation for separating the concerns of managing a database and its subsequently resulting queries from those of the
+business layer.</p>
+
+<p>This is great for writing services. They only need to depend upon Spring Data repositories and manage their data through
+this level of indirection. This, however, means that for testing purposes, you will either have to write lots of boilerplate
+code for your Spring powered application, or you will have to start up a full blown application context with a backing
+database.</p>
+
+<p>For most test cases, this is entirely unnecessary and, moreover, creates time burdens and takes away valuable time from
+productive tasks. This is why I decided to write this framework: to avoid the unnecessary effort, and to have a reliable
+infrastructure replicating what Spring would do with an actual database, only in-memory. This will allow for mocking the
+repository with actual data. Thus, you can test your services <em>without</em> having to start up the application context, and
+with the highest level of isolation -- with actual data.</p>
+
+<h2>
+<a id="downloading" class="anchor" href="#downloading" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Downloading</h2>
+
+<p>You can either clone this project and start using it:</p>
+
+<pre><code>$ git clone https://github.com/mmnaseri/spring-data-mock.git
+</code></pre>
+
+<p>or you can add a maven dependency since it is now available in Maven central:</p>
+
+<pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;com.mmnaseri.utils&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-data-mock&lt;/artifactId&gt;
+    &lt;version&gt;1.0&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+
+<h2>
+<a id="quick-start" class="anchor" href="#quick-start" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Quick Start</h2>
+
+<p>Regardless of how you add the necessary dependency to your project, mocking a repository can be as simple as:</p>
+
+<pre><code>final UserRepository repository = builder().mock(UserRepository.class);
+</code></pre>
+
+<p>where <code>builder()</code> is a static method of the <code>RepositoryFactoryBuilder</code> class under package <code>com.mmnaseri.utils.spring.data.dsl.factory</code>.</p>
+
+<p>An alternate way of mocking a repository would be by using the <code>RepositoryMockBuilder</code> class under the <code>com.mmnaseri.utils.spring.data.dsl.mock</code>
+package:</p>
+
+<pre><code>final RepositoryFactoryConfiguration configuration = ... ;
+final UserRepository repository = new RepositoryMockBuilder().useConfiguration(configuration).mock(UserRepository.class);
+</code></pre>
+
+<h2>
+<a id="mocking-a-repository" class="anchor" href="#mocking-a-repository" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Mocking a Repository</h2>
+
+<p>To mock a repository you must somehow use the underlying <code>RepositoryFactory</code>. There is currently a single implementation of
+this interface available, <code>com.mmnaseri.utils.spring.data.proxy.impl.DefaultRepositoryFactory</code>. The factory has a <code>getInstance(...)</code>
+method that let's you customize the mocking for each instance of the repository you create. This means that you can mock a
+single repository multiple times, each time with a different set of behaviors:</p>
+
+<pre><code>final UserRepository repository = factory.getInstance(keyGenerator, UserRepository.class, Implementation1.class, Implementation2.class);
+</code></pre>
+
+<p>There are three components to this method call:</p>
+
+<ol>
+<li>The <strong>key generator</strong> (which can be <code>null</code>) will determine the strategy for generating keys for the ID field for
+an entity when it is inserted into the underlying data store.</li>
+<li>The <strong>repository interface</strong> which is the interface you want to instantiate and have proxied for you.</li>
+<li>The <strong>custom implementations</strong> (which are optional) that can provide custom ways of handling repository method calls.</li>
+</ol>
+
+<p>A minimal way of instantiating a repository would be:</p>
+
+<pre><code>final UserRepository repository = factory.getInstance(null, UserRepository.class);
+</code></pre>
+
+<p>which disables automatic key generation, and relies solely on default implementations for handling method calls.</p>
+
+<h3>
+<a id="repository-factory-configuration" class="anchor" href="#repository-factory-configuration" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Repository Factory Configuration</h3>
+
+<p>The default repository factory implementation takes in a configuration object which will let you customize multiple
+aspects of the mocking mechanism.</p>
+
+<p>The configuration object allows you the following customizations:</p>
+
+<ul>
+<li>Change the way <em>repository metadata</em> is resolved from a given repository class object. The following metadata is
+required to work with a repository and to be able to efficiently mock its intended behavior: 1) the entity type,
+2) the type of the identifier 3) the property corresponding to the identifier</li>
+<li>Change the way a <em>query method name</em> is parsed and converted into a data filter object. By default, query methods
+which follow the standard declared by Spring Data are parsed and honored. Additionally, the first word is taken as
+a function and can thus be used to implement custom behavior. This is to enable extension in case of further support
+by the Spring Data team. Also, the operators (such as "Is Greater Than", "Is Equal To", "Is Between", etc.) are customizable.</li>
+<li>Customize the set of available aggregate and operational <em>functions</em>.</li>
+<li>Customize the underlying <em>data store</em> mapping for each entity type. By default, storage is done in-memory. But there is
+nothing preventing you from attaching the data store for a particular type of entity to another source. All you have to do
+is to implement the <code>com.mmnaseri.utils.spring.data.store.DataStore</code> interface and add it to this context. It is actually
+much easier than it sounds.</li>
+<li>Decide <em>how results should be adapted</em> from an actual value returned from implementation methods to the way a
+repository method is supposed to return values. This is to allow, for instance, to implement a <code>findAll</code> method that
+returns a collection of items, and then reuse its implementation for a repository method named <code>findAll</code> that is supposed
+to return a set.</li>
+<li>Set <em>default implementations</em> for particular repository types and subtypes.</li>
+<li>Add and customize <em>event listeners</em> to data store actions. These can listen to events before and after inserting, updating,
+and deleting a particular entity.</li>
+</ul>
+
+<p>Since the configuration object is complex and can be a hassle to create, you can use the much easier to use DSL via the
+<code>com.mmnaseri.utils.spring.data.dsl.factory.RepositoryFactoryBuilder</code> class. We will go over that shortly.</p>
+
+<h3>
+<a id="using-the-dsl-to-mock-a-repository" class="anchor" href="#using-the-dsl-to-mock-a-repository" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Using the DSL to Mock a Repository</h3>
+
+<p>Once you have a configuration object at hand, you can use the DSL bundled with this framework to easily mock
+your repositories and avoid going through the RepositoryFactory class.</p>
+
+<p>You can mock a repository this way:</p>
+
+<pre><code>final RepositoryMockBuilder builder = new RepositoryMockBuilder();
+final UserRepository repository = builder.useConfiguration(configuration)
+    .generateKeysUsing(UUIDKeyGenerator.class) //***
+    .usingImplementation(SampleImpl1.class)
+        .and(SampleImpl2.class)
+        .and(SampleImpl3.class)
+    .mock(UserRepository.class);
+</code></pre>
+
+<p>You have to note that this builder is <em>stateless</em>, meaning that each of the methods in this builder will not modify an
+internal state, but rather return an object which reflects all the configurations up to this point.</p>
+
+<p>This is by design, and is to allow developers and testers the freedom of reusing their configurations.</p>
+
+<h3>
+<a id="using-the-dsl-to-create-a-configuration" class="anchor" href="#using-the-dsl-to-create-a-configuration" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Using the DSL to Create a Configuration</h3>
+
+<p>Whereas mocking a repository is a relatively painless process and might not require the use of a dedicated DSL, creating
+a configuration is another story altogether. In recognition of this fact, I have created a DSL for this very purpose, so
+that you can craft configurations using a <em>stateful</em> builder via this DSL:</p>
+
+<pre><code>final RepositoryFactoryBuilder builder = RepositoryFactoryBuilder.builder()
+    .resolveMetadataUsing(...)
+    .registerOperator(...) //register some operator
+        .and(...).and(...) //register other operators
+    .registerFunction(...) //register data function
+        .and(...).and(...) //register additional data functions
+    .registerDataStore(...) //register a data store to be used in the configured repositories
+        .and(...).and(...) //register additional data stores
+    .adaptResultsUsing(...) //register a result adapter
+        .and(...).and(...) //register additional result adapters
+    .honoringImplementation(...) //add some custom implementation on a global scope
+        .and(...).and(...) //register additional implementations
+    .enableAuditing(...) //enable support for Spring Data's auditing and pass in a custom auditor aware instance
+    .withListener(...) //register some event listener
+        .and(...).and(...) //register additional event listeners
+</code></pre>
+
+<p>At this stage, you can either call to the <code>configure()</code> method on the builder object to get a configuration object, or
+you can skip this step and continue from the key generation step of the mock builder (marked with three stars in the previous
+listing).</p>
+
+<p>All of the steps above are optional. All values have defaults and you can skip setting them and still expect everything
+to just work out of the box.</p>
+
+<p>To answer the question of what all of these configurable steps mean, we need to go to the next section.</p>
+
+<h3>
+<a id="the-mechanics" class="anchor" href="#the-mechanics" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>The Mechanics</h3>
+
+<p>In this section, we will detail the framework and go over how each part of it can be configured.</p>
+
+<h4>
+<a id="metadata-resolver" class="anchor" href="#metadata-resolver" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Metadata Resolver</h4>
+
+<p>The metadata resolver is an entity that is capable of looking at a repository interface and figuring out detail about
+the repository as well as the persistent entity it is supporting. This is what the metadata resolver will find out:</p>
+
+<ul>
+<li>the type of the entity for which the repository has been created</li>
+<li>the (either actual or encapsulated) property of the persistent entity which holds the identifier</li>
+<li>the type of the identifier associated with the entity</li>
+</ul>
+
+<p>The default metadata resolver is the <code>com.mmnaseri.utils.spring.data.domain.impl.DefaultRepositoryMetadataResolver</code>
+class, which will first see if the repository is annotated with <code>@org.springframework.data.repository.RepositoryDefinition</code>
+and if not tries to extract its metadata from the interface should it extend <code>org.springframework.data.repository.Repository</code>.</p>
+
+<p>If none of these conditions are met, it will throw an exception.</p>
+
+<h4>
+<a id="the-operators" class="anchor" href="#the-operators" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>The Operators</h4>
+
+<p>The operators are what drive how the query methods are parsed. This is the general recipe:</p>
+
+<p>At each juncture, we look for the operator whose tokens matches the longest suffix, and assume the rest to be a
+property path, so that for instance, if we are parsing "ParentParentAgeGreaterThanEqual", we will match it with the
+operator "GreaterThanEqual", and consider the "ParentParentAge" to be a property path (which might be <code>parent.parent.age</code>).</p>
+
+<p>Each operator has a <code>Matcher</code>, which will help identify whether or not based on a given criteria an entity instance matches
+the query.</p>
+
+<p>By extending the operators, you can practically extend the query method DSL. This might not be practical, as we might not want
+to support things that Spring Data doesn't support yet, but it allows for a better maintainability and easier extensibility should
+Spring Data actually expand beyond what it is today.</p>
+
+<p>Below is a list of the default operators that ship with this framework:</p>
+
+<table>
+<thead>
+<tr>
+<th>Operator</th>
+<th>Suffixes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AFTER</td>
+<td>
+<code>After</code>, <code>IsAfter</code>
+</td>
+</tr>
+<tr>
+<td>BEFORE</td>
+<td>
+<code>Before</code>, <code>IsBefore</code>
+</td>
+</tr>
+<tr>
+<td>CONTAINING</td>
+<td>
+<code>Containing</code>, <code>IsContaining</code>, <code>Contains</code>
+</td>
+</tr>
+<tr>
+<td>BETWEEN</td>
+<td>
+<code>Between</code>, <code>IsBetween</code>
+</td>
+</tr>
+<tr>
+<td>NOT_BETWEEN</td>
+<td>
+<code>NotBetween</code>, <code>IsNotBetween</code>
+</td>
+</tr>
+<tr>
+<td>ENDING_WITH</td>
+<td>
+<code>EndingWith</code>, <code>IsEndingWith</code>, <code>EndsWith</code>
+</td>
+</tr>
+<tr>
+<td>FALSE</td>
+<td>
+<code>False</code>, <code>IsFalse</code>
+</td>
+</tr>
+<tr>
+<td>GREATER_THAN</td>
+<td>
+<code>GreaterThan</code>, <code>IsGreaterThan</code>
+</td>
+</tr>
+<tr>
+<td>GREATER_THAN_EQUALS</td>
+<td>
+<code>GreaterThanEqual</code>, <code>IsGreaterThanEqual</code>
+</td>
+</tr>
+<tr>
+<td>IN</td>
+<td>
+<code>In</code>, <code>IsIn</code>
+</td>
+</tr>
+<tr>
+<td>IS</td>
+<td>
+<code>Is</code>, <code>EqualTo</code>, <code>IsEqualTo</code>, <code>Equals</code>
+</td>
+</tr>
+<tr>
+<td>NOT_NULL</td>
+<td>
+<code>NotNull</code>, <code>IsNotNull</code>
+</td>
+</tr>
+<tr>
+<td>NULL</td>
+<td>
+<code>Null</code>, <code>IsNull</code>
+</td>
+</tr>
+<tr>
+<td>LESS_THAN</td>
+<td>
+<code>LessThan</code>, <code>IsLessThan</code>
+</td>
+</tr>
+<tr>
+<td>LESS_THAN_EQUAL</td>
+<td>
+<code>LessThanEqual</code>, <code>IsLessThanEqual</code>
+</td>
+</tr>
+<tr>
+<td>LIKE</td>
+<td>
+<code>Like</code>, <code>IsLike</code>
+</td>
+</tr>
+<tr>
+<td>NEAR</td>
+<td>
+<code>Near</code>, <code>IsNear</code>
+</td>
+</tr>
+<tr>
+<td>NOT</td>
+<td>
+<code>IsNot</code>, <code>Not</code>, <code>IsNotEqualTo</code>, <code>DoesNotEqual</code>
+</td>
+</tr>
+<tr>
+<td>NOT_IN</td>
+<td>
+<code>NotIn</code>, <code>IsNotIn</code>
+</td>
+</tr>
+<tr>
+<td>NOT_LIKE</td>
+<td>
+<code>NotLike</code>, <code>IsNotLike</code>
+</td>
+</tr>
+<tr>
+<td>REGEX</td>
+<td>
+<code>Regex</code>, <code>MatchesRegex</code>, <code>Matches</code>
+</td>
+</tr>
+<tr>
+<td>STARTING_WITH</td>
+<td>
+<code>StartingWith</code>, <code>IsStartingWith</code>, <code>StartsWith</code>
+</td>
+</tr>
+<tr>
+<td>TRUE</td>
+<td>
+<code>True</code>, <code>IsTrue</code>
+</td>
+</tr>
+</tbody>
+</table>
+
+<p>If no suffix is present to determine the operator by, it is assumed that the <code>IS</code> operator was intended.</p>
+
+<h4>
+<a id="data-functions" class="anchor" href="#data-functions" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Data Functions</h4>
+
+<p>Data functions determine what should be done with a particular selection of entities before a result is returned. For instance,
+the <code>count</code> data function just returns the collection size for a subset of data, thus allowing you to start your query method with
+<code>count</code> and expect it to return the size of the selection. Currently, the only other selected function is <code>delete</code>.</p>
+
+<p>By extending the data functions, you are also extending the DSL for query methods by allowing various new data function names to be
+used in the beginning of a query method's name.</p>
+
+<h4>
+<a id="data-stores" class="anchor" href="#data-stores" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Data Stores</h4>
+
+<p>This framework has an abstraction hiding away the details of where and how entities are stored and are looked up. The default
+behavior is, of course, to keep everything in memory. It might, however, be necessary to delegate this to some external service
+or entity, such as an im-memory data store, a distributed cache, or an actual database.</p>
+
+<p>All you have to do is implement the <code>com.mmnaseri.utils.spring.data.store.DataStore</code> interface and point it to the right direction.</p>
+
+<h4>
+<a id="result-adapters" class="anchor" href="#result-adapters" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Result Adapters</h4>
+
+<p>Many times the actual implementation methods for an operation return very generic results, such as a list or a set, whereas the
+required return type for the repository interface method might be something else. Suppose for instance, that the implementation
+method returns a List, while the interface method returns just one instance.</p>
+
+<p>In such cases, it is necessary to adapt the results to the output format, and that is exactly what the result adapters are for.</p>
+
+<p>They have a priority order which dictates in what order they will be executed.</p>
+
+<h4>
+<a id="custom-implementations-and-type-mapping-context" class="anchor" href="#custom-implementations-and-type-mapping-context" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Custom Implementations and Type Mapping Context</h4>
+
+<p>You can map custom implementations to repository interfaces. To this end, a type mapping context exists which will let you bind
+particular repository interface super types to custom implementation classes. The methods are then looked up according to their
+signature.</p>
+
+<p>Implementations registered with a type mapping context are made available to all repository factory instances and are thus shared.</p>
+
+<p>When proxying a repository method this is the order with which a method is bound to an implementation:</p>
+
+<ol>
+<li>We first look for custom implementations supplied directly to the factory while requesting a mock instance</li>
+<li>We look at globally available implementations supplied through the configuration object</li>
+<li>We try to interpret the method name as a query.</li>
+</ol>
+
+<p>By default, the following type mappings are in place:</p>
+
+<ul>
+<li>All repositories can include any of the methods defined in <code>com.mmnaseri.utils.spring.data.commons.DefaultCrudRepository</code>
+which implements the methods introduced in <code>org.springframework.data.repository.CrudRepository</code>.</li>
+<li>All repositories can include any of the methods defined in <code>com.mmnaseri.utils.spring.data.commons.DefaultPagingAndSortingRepository</code>
+which adds paging and sorting capabilities to the repositories as per <code>org.springframework.data.repository.PagingAndSortingRepository</code>.</li>
+<li>If <code>org.springframework.data.jpa.repository.JpaRepository</code> is found in the classpath, all repositories will be able to have
+methods from <code>com.mmnaseri.utils.spring.data.commons.DefaultJpaRepository</code> that are not already present in one of the above in
+their repertoire.</li>
+<li>If <code>org.springframework.data.gemfire.repository.GemfireRepository</code> is present in the classpath, all repositories will be able to
+include methods from this interface that are not present in the above in their list of methods and rest assured that an implementation
+will be provided, courtesy of <code>com.mmnaseri.utils.spring.data.commons.DefaultGemfireRepository</code>.</li>
+</ul>
+
+<h4>
+<a id="event-listeners" class="anchor" href="#event-listeners" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Event Listeners</h4>
+
+<p>You can register event listeners for each of the following events:</p>
+
+<ul>
+<li><code>BeforeInsertDataStoreEvent</code></li>
+<li><code>AfterInsertDataStoreEvent</code></li>
+<li><code>BeforeUpdateDataStoreEvent</code></li>
+<li><code>AfterUpdateDataStoreEvent</code></li>
+<li><code>BeforeDeleteDataStoreEvent</code></li>
+<li><code>AfterDeleteDataStoreEvent</code></li>
+</ul>
+
+<p>The event handlers can then modify, take note of, or otherwise interact with the entities for which the event was raised.</p>
+
+<p>If you use the <code>enableAuditing()</code> feature above, an event listener (<code>com.mmnaseri.utils.spring.data.store.impl.AuditDataEventListener</code>)
+will be registered with the configuration which will enable auditing features and will set relevant properties in the appropriate
+juncture by listening closely to the events listed above.</p>
+
+<h5>
+<a id="auditing" class="anchor" href="#auditing" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Auditing</h5>
+
+<p>Out-of-the-box auditing is supported through this event mechanism for the usual <code>CreatedBy</code>, <code>CreatedDate</code>, <code>LastModifiedBy</code>,
+and <code>LastModifiedDate</code> audit annotations provided by Spring Data Commons. To support user-related auditing (created by and last
+modified by) you will need to supply an <code>AuditorAware</code> or accept the default one, which will always return a String object with
+value, <code>"User"</code>.</p>
+
+<p>By default, auditing is disabled. This is to follow in the footprints of Spring. Since Spring Data asks you to explicitly enable
+auditing, this framework, too, pushes for the same requirement.</p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/mmnaseri/spring-data-mock">Spring Data Mock</a> is maintained by <a href="https://github.com/mmnaseri">mmnaseri</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
