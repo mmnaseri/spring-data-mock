@@ -1,8 +1,10 @@
 package com.mmnaseri.utils.spring.data.query.impl;
 
 import com.mmnaseri.utils.spring.data.domain.Invocation;
+import com.mmnaseri.utils.spring.data.error.InvalidArgumentException;
 import com.mmnaseri.utils.spring.data.query.Sort;
 import org.springframework.data.domain.Pageable;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.Objects;
 
@@ -21,7 +23,9 @@ public class PageableSortParameterExtractor extends AbstractSortParameterExtract
     @Override
     public Sort extract(Invocation invocation) {
         final Object value = invocation.getArguments()[index];
-        Objects.requireNonNull(value, "Page value should not be empty");
+        if (value == null) {
+            throw new InvalidArgumentException("Page value should not be empty");
+        }
         if (value instanceof Pageable) {
             final Pageable pageable = (Pageable) value;
             final org.springframework.data.domain.Sort sort = pageable.getSort();
@@ -30,7 +34,7 @@ public class PageableSortParameterExtractor extends AbstractSortParameterExtract
             }
             return getSort(sort);
         }
-        throw new IllegalArgumentException();
+        throw new InvalidArgumentException("No valid value was passed to deduce the sort description from");
     }
 
 }

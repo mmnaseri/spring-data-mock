@@ -1,6 +1,7 @@
 package com.mmnaseri.utils.spring.data.proxy.impl;
 
 import com.mmnaseri.utils.spring.data.domain.Invocation;
+import com.mmnaseri.utils.spring.data.error.ResultAdapterFailureException;
 
 import java.util.Iterator;
 import java.util.concurrent.Future;
@@ -27,7 +28,7 @@ public class NullSimpleResultAdapter extends AbstractResultAdapter<Object> {
     @Override
     public Object adapt(Invocation invocation, Object originalValue) {
         if (invocation.getMethod().getReturnType().isPrimitive()) {
-            throw new IllegalStateException("Cannot convert null to primitive for " + invocation.getMethod());
+            throw new ResultAdapterFailureException(null, invocation.getMethod().getReturnType());
         }
         return null;
     }

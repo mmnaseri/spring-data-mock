@@ -104,4 +104,8 @@ public abstract class PropertyUtils {
         }
     }
 
+    public static String getPropertyName(Method getter) {
+        return StringUtils.uncapitalize(getter.getName().substring(3));
+    }
+
 }

@@ -1,6 +1,8 @@
 package com.mmnaseri.utils.spring.data.domain.impl.id;
 
 import com.mmnaseri.utils.spring.data.domain.IdPropertyResolver;
+import com.mmnaseri.utils.spring.data.error.MultipleIdPropertiesException;
+import com.mmnaseri.utils.spring.data.error.PropertyTypeMismatchException;
 import org.springframework.data.annotation.Id;
 import org.springframework.util.ReflectionUtils;
 
@@ -15,7 +17,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public class AnnotatedFieldIdPropertyResolver implements IdPropertyResolver {
 
     @Override
-    public String resolve(Class<?> entityType, Class<? extends Serializable> idType) {
+    public String resolve(final Class<?> entityType, Class<? extends Serializable> idType) {
         final AtomicReference<Field> found = new AtomicReference<Field>();
         ReflectionUtils.doWithFields(entityType, new ReflectionUtils.FieldCallback() {
             @Override
@@ -24,7 +26,7 @@ public class AnnotatedFieldIdPropertyResolver implements IdPropertyResolver {
                     if (found.get() == null) {
                         found.set(field);
                     } else {
-                        throw new IllegalStateException("More than one method found annotated with " + Id.class);
+                        throw new MultipleIdPropertiesException(entityType, Id.class);
                     }
                 }
             }
@@ -32,7 +34,7 @@ public class AnnotatedFieldIdPropertyResolver implements IdPropertyResolver {
         final Field idAnnotatedField = found.get();
         if (idAnnotatedField != null) {
             if (!idType.isAssignableFrom(idAnnotatedField.getType())) {
-                throw new IllegalStateException("Expected the ID field to be of type " + idType);
+                throw new PropertyTypeMismatchException(entityType, idAnnotatedField.getName(), idType, idAnnotatedField.getType());
             } else {
                 return idAnnotatedField.getName();
             }

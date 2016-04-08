@@ -147,10 +147,11 @@ public class RepositoryFactoryBuilder implements Start, DataFunctionsAnd, DataSt
     }
 
     @Override
-    public OperationHandlersAnd registerOperationHandler(NonDataOperationHandler handler) {
+    public OperationHandlersAnd withOperationHandler(NonDataOperationHandler handler) {
         operationInvocationHandler.register(handler);
         return this;
     }
+
     @Override
     public End withListeners(DataStoreEventListenerContext context) {
         eventListenerContext = context;

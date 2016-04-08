@@ -1,12 +1,14 @@
 package com.mmnaseri.utils.spring.data.domain.impl;
 
 import com.mmnaseri.utils.spring.data.domain.*;
+import com.mmnaseri.utils.spring.data.error.QueryParserException;
 import com.mmnaseri.utils.spring.data.proxy.RepositoryFactoryConfiguration;
 import com.mmnaseri.utils.spring.data.query.*;
 import com.mmnaseri.utils.spring.data.query.impl.*;
 import com.mmnaseri.utils.spring.data.string.DocumentReader;
 import com.mmnaseri.utils.spring.data.string.impl.DefaultDocumentReader;
 import com.mmnaseri.utils.spring.data.tools.PropertyUtils;
+import com.mmnaseri.utils.spring.data.tools.StringUtils;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
@@ -43,7 +45,7 @@ public class QueryDescriptionExtractor {
         //the first word in the method name is the function name
         String function = reader.read(Pattern.compile("^[a-z]+"));
         if (function == null) {
-            throw new IllegalStateException("Malformed query method name: " + method);
+            throw new QueryParserException(method.getDeclaringClass(), "Malformed query method name: " + method);
         }
         //if the method name is one of the following, it is a simple read, and no function is required
         if (Arrays.asList("read", "find", "query", "get", "load", "select").contains(function)) {
@@ -69,7 +71,7 @@ public class QueryDescriptionExtractor {
                 //if the next word is Top, then we are setting a limit
                 if (reader.has("First")) {
                     if (limit > 0) {
-                        throw new IllegalStateException("There is already a limit of " + limit + " specified for this query: " + method);
+                        throw new QueryParserException(method.getDeclaringClass(), "There is already a limit of " + limit + " specified for this query: " + method);
                     }
                     reader.expect("First");
                     if (reader.has("\\d+")) {
@@ -80,7 +82,7 @@ public class QueryDescriptionExtractor {
                     continue;
                 } else if (reader.has("Top")) {
                     if (limit > 0) {
-                        throw new IllegalStateException("There is already a limit of " + limit + " specified for this query: " + method);
+                        throw new QueryParserException(method.getDeclaringClass(), "There is already a limit of " + limit + " specified for this query: " + method);
                     }
                     reader.expect("Top");
                     limit = Integer.parseInt(reader.expect("\\d+"));
@@ -88,16 +90,20 @@ public class QueryDescriptionExtractor {
                 } else if (reader.has("Distinct")) {
                     //if the next word is 'Distinct', we are saying we should return distinct results
                     if (distinct) {
-                        throw new IllegalStateException("You have already stated that this query should return distinct items: " + method);
+                        throw new QueryParserException(method.getDeclaringClass(), "You have already stated that this query should return distinct items: " + method);
                     }
                     distinct = true;
                 }
                 //we read the words until we reach "By".
                 reader.expect("[A-Z][a-z]+");
             }
-            reader.expect("By");
+            try {
+                reader.expect("By");
+            } catch (Exception e) {
+                throw new QueryParserException(method.getDeclaringClass(), "Expected pattern 'By' was not encountered in " + method.getName(), e);
+            }
             if (!reader.hasMore()) {
-                throw new IllegalStateException("Query method name cannot end with `By`");
+                throw new QueryParserException(method.getDeclaringClass(), "Query method name cannot end with `By`");
             }
             int index = 0;
             branches.add(new LinkedList<Parameter>());
@@ -134,7 +140,7 @@ public class QueryDescriptionExtractor {
                 //if the expression ends in And/Or, we expect there to be more
                 if (expression.matches(".*?(And|Or)$")) {
                     if (!reader.hasMore()) {
-                        throw new IllegalStateException("Expected more tokens to follow AND/OR operator");
+                        throw new QueryParserException(method.getDeclaringClass(), "Expected more tokens to follow AND/OR operator");
                     }
                 }
                 expression = expression.replaceFirst("(And|Or)$", "");
@@ -154,16 +160,21 @@ public class QueryDescriptionExtractor {
                     operator = operatorContext.getBySuffix(DEFAULT_OPERATOR_SUFFIX);
                 }
                 //let's get the property descriptor
-                final PropertyDescriptor propertyDescriptor = PropertyUtils.getPropertyDescriptor(repositoryMetadata.getEntityType(), property);
+                final PropertyDescriptor propertyDescriptor;
+                try {
+                    propertyDescriptor = PropertyUtils.getPropertyDescriptor(repositoryMetadata.getEntityType(), property);
+                } catch (Exception e) {
+                    throw new QueryParserException(method.getDeclaringClass(), "Could not find property `" + StringUtils.uncapitalize(property) + "` on `" + repositoryMetadata.getEntityType() + "`", e);
+                }
                 property = propertyDescriptor.getPath();
                 //we need to match the method parameters with the operands for the designated operator
                 final int[] indices = new int[operator.getOperands()];
                 for (int i = 0; i < operator.getOperands(); i++) {
                     if (index >= method.getParameterTypes().length) {
-                        throw new IllegalStateException("Expected to see parameter with index " + index);
+                        throw new QueryParserException(method.getDeclaringClass(), "Expected to see parameter with index " + index);
                     }
                     if (!propertyDescriptor.getType().isAssignableFrom(method.getParameterTypes()[index])) {
-                        throw new IllegalStateException("Expected parameter " + index + " on method " + methodName + " to be a descendant of " + propertyDescriptor.getType());
+                        throw new QueryParserException(method.getDeclaringClass(), "Expected parameter " + index + " on method " + methodName + " to be a descendant of " + propertyDescriptor.getType());
                     }
                     indices[i] = index ++;
                 }
@@ -196,9 +207,14 @@ public class QueryDescriptionExtractor {
                         direction = SortDirection.DESCENDING;
                         expression = expression.substring(0, expression.length() - DESC_SUFFIX.length());
                     }
-                    final PropertyDescriptor propertyDescriptor = PropertyUtils.getPropertyDescriptor(repositoryMetadata.getEntityType(), expression);
+                    final PropertyDescriptor propertyDescriptor;
+                    try {
+                        propertyDescriptor = PropertyUtils.getPropertyDescriptor(repositoryMetadata.getEntityType(), expression);
+                    } catch (Exception e) {
+                        throw new QueryParserException(method.getDeclaringClass(), "Failed to get a property descriptor for expression: " + expression, e);
+                    }
                     if (!Comparable.class.isAssignableFrom(propertyDescriptor.getType())) {
-                        throw new IllegalStateException("Sort property " + propertyDescriptor.getPath() + " is not comparable " + method);
+                        throw new QueryParserException(method.getDeclaringClass(), "Sort property " + propertyDescriptor.getPath() + " is not comparable " + method);
                     }
                     final Order order = new ImmutableOrder(direction, propertyDescriptor.getPath(), NullHandling.DEFAULT);
                     orders.add(order);
@@ -216,15 +232,15 @@ public class QueryDescriptionExtractor {
                     sortExtractor = sort == null ? new PageableSortParameterExtractor(index) : new WrappedSortParameterExtractor(sort);
                 } else if (Sort.class.isAssignableFrom(method.getParameterTypes()[index])) {
                     if (sort != null) {
-                        throw new IllegalStateException("You cannot specify both an order-by clause and a dynamic ordering");
+                        throw new QueryParserException(method.getDeclaringClass(), "You cannot specify both an order-by clause and a dynamic ordering");
                     }
                     pageExtractor = null;
                     sortExtractor = new DirectSortParameterExtractor(index);
                 } else {
-                    throw new IllegalStateException("Invalid last argument: expected paging or sorting " + method);
+                    throw new QueryParserException(method.getDeclaringClass(), "Invalid last argument: expected paging or sorting " + method);
                 }
             } else {
-                throw new IllegalStateException("Too many parameters declared for query method " + method);
+                throw new QueryParserException(method.getDeclaringClass(), "Too many parameters declared for query method " + method);
             }
         }
         return new DefaultQueryDescriptor(distinct, function, limit, pageExtractor, sortExtractor, branches, configuration, repositoryMetadata);

@@ -1,5 +1,6 @@
 package com.mmnaseri.utils.spring.data.proxy.impl;
 
+import com.mmnaseri.utils.spring.data.error.UnknownDataOperationException;
 import com.mmnaseri.utils.spring.data.proxy.NonDataOperationHandler;
 import com.mmnaseri.utils.spring.data.proxy.impl.regular.EqualsNonDataOperationHandler;
 import com.mmnaseri.utils.spring.data.proxy.impl.regular.HashCodeNonDataOperationHandler;
@@ -32,7 +33,7 @@ public class NonDataOperationInvocationHandler implements InvocationHandler {
                 return handler.invoke(proxy, args);
             }
         }
-        throw new IllegalStateException("No operation mapping found for method " + method);
+        throw new UnknownDataOperationException(method);
     }
 
     public void register(NonDataOperationHandler handler) {

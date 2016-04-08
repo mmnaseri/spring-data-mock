@@ -1,5 +1,6 @@
 package com.mmnaseri.utils.spring.data.commons;
 
+import com.mmnaseri.utils.spring.data.error.EntityMissingKeyException;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 
@@ -23,7 +24,7 @@ public class DefaultJpaRepository extends AbstractCrudRepository {
             final BeanWrapper wrapper = new BeanWrapperImpl(entity);
             final Object key = wrapper.getPropertyValue(getRepositoryMetadata().getIdentifierProperty());
             if (key == null) {
-                throw new IllegalArgumentException("Expected entity to have a key: " + entity);
+                throw new EntityMissingKeyException(getRepositoryMetadata().getEntityType(), getRepositoryMetadata().getIdentifierProperty());
             }
             final Serializable serializable = (Serializable) key;
             if (getDataStore().hasKey(serializable)) {

@@ -1,6 +1,7 @@
 package com.mmnaseri.utils.spring.data.query.impl;
 
 import com.mmnaseri.utils.spring.data.domain.Invocation;
+import com.mmnaseri.utils.spring.data.error.InvalidArgumentException;
 import com.mmnaseri.utils.spring.data.query.Sort;
 
 import java.util.Objects;
@@ -20,10 +21,12 @@ public class DirectSortParameterExtractor extends AbstractSortParameterExtractor
     @Override
     public Sort extract(Invocation invocation) {
         final Object value = invocation.getArguments()[index];
-        Objects.requireNonNull(value, "Page value should not be empty");
+        if (value == null) {
+            throw new InvalidArgumentException("Page value should not be empty");
+        }
         if (value instanceof org.springframework.data.domain.Sort) {
             return getSort((org.springframework.data.domain.Sort) value);
         }
-        throw new IllegalArgumentException();
+        throw new InvalidArgumentException("No valid value was passed to deduce the paging description from");
     }
 }

@@ -1,6 +1,7 @@
 package com.mmnaseri.utils.spring.data.domain.impl.id;
 
 import com.mmnaseri.utils.spring.data.domain.IdPropertyResolver;
+import com.mmnaseri.utils.spring.data.error.PropertyTypeMismatchException;
 import org.testng.annotations.Test;
 
 import java.io.Serializable;
@@ -20,7 +21,7 @@ public abstract class BaseIdPropertyResolverTest {
 
     protected abstract Class<?> entityWithNoProperty();
 
-    @Test(expectedExceptions = IllegalStateException.class)
+    @Test(expectedExceptions = PropertyTypeMismatchException.class)
     public void testFindingTheIdFieldWithWrongType() throws Exception {
         final IdPropertyResolver resolver = getIdPropertyResolver();
         resolver.resolve(properEntity(), Long.class);

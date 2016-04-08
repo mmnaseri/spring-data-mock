@@ -1,5 +1,6 @@
 package com.mmnaseri.utils.spring.data.domain.impl;
 
+import com.mmnaseri.utils.spring.data.error.InvalidArgumentException;
 import com.mmnaseri.utils.spring.data.query.NullHandling;
 import com.mmnaseri.utils.spring.data.query.Order;
 import com.mmnaseri.utils.spring.data.query.SortDirection;
@@ -27,8 +28,18 @@ public class PropertyComparator implements Comparator<Object> {
     @SuppressWarnings("unchecked")
     @Override
     public int compare(Object first, Object second) {
-        final Object firstValue = PropertyUtils.getPropertyValue(first, property);
-        final Object secondValue = PropertyUtils.getPropertyValue(second, property);
+        final Object firstValue;
+        try {
+            firstValue = PropertyUtils.getPropertyValue(first, property);
+        } catch (Exception e) {
+            throw new InvalidArgumentException("Failed to read property value for " + property + " on " + first, e);
+        }
+        final Object secondValue;
+        try {
+            secondValue = PropertyUtils.getPropertyValue(second, property);
+        } catch (Exception e) {
+            throw new InvalidArgumentException("Failed to read property value for " + property + " on " + second, e);
+        }
         int comparison = 0;
         if (firstValue == null && secondValue != null) {
             comparison = nullHandling.equals(NullHandling.NULLS_FIRST) ? -1 : 1;
@@ -36,14 +47,14 @@ public class PropertyComparator implements Comparator<Object> {
             comparison = nullHandling.equals(NullHandling.NULLS_FIRST) ? 1 : -1;
         } else if (firstValue != null && secondValue != null) {
             if (!(firstValue instanceof Comparable) || !(secondValue instanceof Comparable)) {
-                throw new IllegalStateException("Cannot compare values for property: " + property);
+                throw new InvalidArgumentException("Expected both values to be comparable for property: " + property);
             }
             if (firstValue.getClass().isInstance(secondValue)) {
                 comparison = ((Comparable) firstValue).compareTo(secondValue);
             } else if (secondValue.getClass().isInstance(firstValue)) {
                 comparison = ((Comparable) secondValue).compareTo(firstValue) * -1;
             } else {
-                throw new IllegalStateException("Values for were not of the same type for property: " + property);
+                throw new InvalidArgumentException("Values for were not of the same type for property: " + property);
             }
         }
         return comparison * (direction.equals(SortDirection.DESCENDING) ? -1 : 1);
