@@ -1,5 +1,7 @@
 package com.mmnaseri.utils.spring.data.query.impl;
 
+import com.mmnaseri.utils.spring.data.error.DataFunctionException;
+import com.mmnaseri.utils.spring.data.error.EntityMissingKeyException;
 import com.mmnaseri.utils.spring.data.proxy.RepositoryConfiguration;
 import com.mmnaseri.utils.spring.data.query.DataFunction;
 import com.mmnaseri.utils.spring.data.query.QueryDescriptor;
@@ -19,9 +21,14 @@ public class DeleteDataFunction implements DataFunction<List<?>> {
     public <K extends Serializable, E> List<E> apply(DataStore<K, E> dataStore, QueryDescriptor query, RepositoryConfiguration repositoryConfiguration, List<E> selection) {
         final String identifier = query.getRepositoryMetadata().getIdentifierProperty();
         for (E item : selection) {
-            final Object key = PropertyUtils.getPropertyValue(item, identifier);
+            final Object key;
+            try {
+                key = PropertyUtils.getPropertyValue(item, identifier);
+            } catch (Exception e) {
+                throw new DataFunctionException("Failed to read property value for property " + identifier, e);
+            }
             if (key == null) {
-                throw new IllegalStateException("Cannot delete an entity without the key property being set: " + identifier);
+                throw new DataFunctionException("Cannot delete an entity without the key property being set: " + identifier);
             }
             //noinspection unchecked
             dataStore.delete((K) key);

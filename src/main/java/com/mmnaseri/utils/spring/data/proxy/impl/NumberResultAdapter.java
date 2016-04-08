@@ -1,6 +1,7 @@
 package com.mmnaseri.utils.spring.data.proxy.impl;
 
 import com.mmnaseri.utils.spring.data.domain.Invocation;
+import com.mmnaseri.utils.spring.data.error.ResultAdapterFailureException;
 import com.mmnaseri.utils.spring.data.tools.PropertyUtils;
 
 import java.util.Iterator;
@@ -34,7 +35,7 @@ public class NumberResultAdapter extends AbstractIterableResultAdapter<Object> {
         } else if (Float.class.equals(returnType)) {
             return number.floatValue();
         }
-        throw new IllegalStateException("Cannot convert " + value + " to type " + returnType);
+        throw new ResultAdapterFailureException(value, returnType);
     }
 
     @Override

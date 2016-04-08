@@ -2,6 +2,7 @@ package com.mmnaseri.utils.spring.data.domain.impl;
 
 import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
 import com.mmnaseri.utils.spring.data.domain.model.Person;
+import com.mmnaseri.utils.spring.data.error.RepositoryDefinitionException;
 import org.springframework.data.repository.RepositoryDefinition;
 import org.testng.annotations.Test;
 
@@ -21,7 +22,7 @@ public class AnnotationRepositoryMetadataResolverTest {
 
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Expected the repository to be annotated with @RepositoryDefinition")
+    @Test(expectedExceptions = RepositoryDefinitionException.class, expectedExceptionsMessageRegExp = ".*?: Expected the repository to be annotated with @RepositoryDefinition")
     public void testResolvingFromRepositoryWithoutAnnotations() throws Exception {
         new AnnotationRepositoryMetadataResolver().resolve(SampleUnannotatedRepository.class);
     }

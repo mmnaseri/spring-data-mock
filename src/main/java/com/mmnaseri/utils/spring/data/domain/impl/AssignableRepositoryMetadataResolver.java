@@ -1,6 +1,7 @@
 package com.mmnaseri.utils.spring.data.domain.impl;
 
 import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
+import com.mmnaseri.utils.spring.data.error.RepositoryDefinitionException;
 import org.springframework.core.GenericTypeResolver;
 import org.springframework.data.repository.Repository;
 
@@ -15,7 +16,7 @@ public class AssignableRepositoryMetadataResolver extends AbstractRepositoryMeta
     @Override
     protected RepositoryMetadata resolveFromInterface(Class<?> repositoryInterface) {
         if (!Repository.class.isAssignableFrom(repositoryInterface)) {
-            throw new IllegalArgumentException("Expected interface to extend " + Repository.class);
+            throw new RepositoryDefinitionException(repositoryInterface, "Expected interface to extend " + Repository.class);
         }
         final Class<?>[] arguments = GenericTypeResolver.resolveTypeArguments(repositoryInterface, Repository.class);
         final Class<?> entityType = arguments[0];

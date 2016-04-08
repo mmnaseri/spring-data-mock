@@ -62,4 +62,8 @@ public class SelectDataStoreOperation<K extends Serializable, E> implements Data
         return selection;
     }
 
+    @Override
+    public String toString() {
+        return descriptor.toString();
+    }
 }

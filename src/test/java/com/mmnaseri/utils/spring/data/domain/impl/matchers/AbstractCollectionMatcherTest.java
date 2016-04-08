@@ -2,6 +2,7 @@ package com.mmnaseri.utils.spring.data.domain.impl.matchers;
 
 import com.mmnaseri.utils.spring.data.domain.Parameter;
 import com.mmnaseri.utils.spring.data.domain.impl.ImmutableParameter;
+import com.mmnaseri.utils.spring.data.error.InvalidArgumentException;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
@@ -33,7 +34,7 @@ public class AbstractCollectionMatcherTest {
 
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Comparison property cannot be null: xyz")
+    @Test(expectedExceptions = InvalidArgumentException.class, expectedExceptionsMessageRegExp = "Comparison property cannot be null: xyz")
     public void testWhenPivotIsNull() throws Exception {
         new PreservingCollectionMatcher().matches(new ImmutableParameter("xyz", null, null, null), 1, new Object[]{null});
     }
@@ -65,7 +66,7 @@ public class AbstractCollectionMatcherTest {
         assertThat(matcher.getCollection(), containsInAnyOrder((Object) 1, 2, 3, 4));
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Expected an array, an iterator, or an iterable object")
+    @Test(expectedExceptions = InvalidArgumentException.class, expectedExceptionsMessageRegExp = "Expected an array, an iterator, or an iterable object")
     public void testPassingInAnythingElse() throws Exception {
         new PreservingCollectionMatcher().matches(null, null, new Object[]{new Object()});
     }

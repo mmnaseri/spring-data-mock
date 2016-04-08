@@ -1,8 +1,7 @@
 package com.mmnaseri.utils.spring.data.domain.impl.id;
 
-import com.mmnaseri.utils.spring.data.domain.IdPropertyResolver;
 import com.mmnaseri.utils.spring.data.tools.GetterMethodFilter;
-import com.mmnaseri.utils.spring.data.tools.StringUtils;
+import com.mmnaseri.utils.spring.data.tools.PropertyUtils;
 import org.springframework.util.ReflectionUtils;
 
 import java.io.Serializable;
@@ -13,7 +12,7 @@ import java.util.concurrent.atomic.AtomicReference;
  * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/23/15)
  */
-public class NamedGetterIdPropertyResolver implements IdPropertyResolver {
+public class NamedGetterIdPropertyResolver extends AnnotatedIdPropertyResolver {
 
     @Override
     public String resolve(Class<?> entityType, final Class<? extends Serializable> idType) {
@@ -21,20 +20,13 @@ public class NamedGetterIdPropertyResolver implements IdPropertyResolver {
         ReflectionUtils.doWithMethods(entityType, new ReflectionUtils.MethodCallback() {
             @Override
             public void doWith(Method method) throws IllegalArgumentException, IllegalAccessException {
-                if (StringUtils.uncapitalize(method.getName().substring(3)).equals("id")) {
+                if (PropertyUtils.getPropertyName(method).equals("id")) {
                     found.set(method);
                 }
             }
         }, new GetterMethodFilter());
         final Method idAnnotatedMethod = found.get();
-        if (idAnnotatedMethod != null) {
-            if (!idType.isAssignableFrom(idAnnotatedMethod.getReturnType())) {
-                throw new IllegalStateException("Expected the ID field getter method to be of type " + idType);
-            } else {
-                return StringUtils.uncapitalize(idAnnotatedMethod.getName().substring(3));
-            }
-        }
-        return null;
+        return getPropertyNameFromAnnotatedMethod(entityType, idType, idAnnotatedMethod);
     }
 
 }

@@ -104,5 +104,10 @@ public class DefaultQueryDescriptor implements QueryDescriptor {
         }
         return false;
     }
-    
+
+    @Override
+    public String toString() {
+        return (function != null ? function + " " : "") + (distinct ? "distinct " : "") + branches;
+    }
+
 }

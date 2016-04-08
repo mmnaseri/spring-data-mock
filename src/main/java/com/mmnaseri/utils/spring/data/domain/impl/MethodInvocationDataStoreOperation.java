@@ -37,4 +37,8 @@ public class MethodInvocationDataStoreOperation<K extends Serializable, E> imple
         return result;
     }
 
+    @Override
+    public String toString() {
+        return method + " on " + instance;
+    }
 }

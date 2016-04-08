@@ -2,6 +2,7 @@ package com.mmnaseri.utils.spring.data.domain.impl;
 
 import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
 import com.mmnaseri.utils.spring.data.domain.model.Person;
+import com.mmnaseri.utils.spring.data.error.RepositoryDefinitionException;
 import org.springframework.data.repository.Repository;
 import org.testng.annotations.Test;
 
@@ -18,7 +19,7 @@ public class AssignableRepositoryMetadataResolverTest {
 
     public interface SampleInheritingRepository extends Repository<Person, String> {}
 
-    @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Expected interface to extend .*?\\.Repository")
+    @Test(expectedExceptions = RepositoryDefinitionException.class, expectedExceptionsMessageRegExp = ".*?: Expected interface to extend .*?\\.Repository")
     public void testResolvingFromNonInheritingRepository() throws Exception {
         new AssignableRepositoryMetadataResolver().resolve(SampleNonInheritingRepository.class);
     }

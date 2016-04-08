@@ -28,12 +28,15 @@ public class DataOperationInvocationHandler<K extends Serializable, E> implement
     private final RepositoryConfiguration repositoryConfiguration;
     private final List<InvocationMapping<K, E>> mappings;
     private final Map<Method, InvocationMapping<K, E>> cache = new ConcurrentHashMap<Method, InvocationMapping<K, E>>();
+    private final NonDataOperationInvocationHandler operationInvocationHandler;
 
-    public DataOperationInvocationHandler(RepositoryConfiguration repositoryConfiguration, List<InvocationMapping<K, E>> mappings, DataStore<K, E> dataStore, ResultAdapterContext adapterContext) {
+    public DataOperationInvocationHandler(RepositoryConfiguration repositoryConfiguration,
+                                          List<InvocationMapping<K, E>> mappings, DataStore<K, E> dataStore, ResultAdapterContext adapterContext, NonDataOperationInvocationHandler operationInvocationHandler) {
         this.repositoryConfiguration = repositoryConfiguration;
         this.mappings = mappings;
         this.dataStore = dataStore;
         this.adapterContext = adapterContext;
+        this.operationInvocationHandler = operationInvocationHandler;
         this.converter = new DefaultResultConverter();
     }
 
@@ -53,7 +56,7 @@ public class DataOperationInvocationHandler<K extends Serializable, E> implement
             }
         }
         if (targetMapping == null) {
-            throw new IllegalStateException("No operation mapping found for method " + method);
+            return operationInvocationHandler.invoke(proxy, method, args);
         }
         final DataStoreOperation<?, K, E> operation = targetMapping.getOperation();
         final Object operationResult = operation.execute(dataStore, repositoryConfiguration, methodInvocation);

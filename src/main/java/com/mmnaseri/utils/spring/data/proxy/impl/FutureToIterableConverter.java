@@ -1,6 +1,7 @@
 package com.mmnaseri.utils.spring.data.proxy.impl;
 
 import com.mmnaseri.utils.spring.data.domain.Invocation;
+import com.mmnaseri.utils.spring.data.error.ResultConversionFailureException;
 import com.mmnaseri.utils.spring.data.proxy.ResultConverter;
 
 import java.util.concurrent.Future;
@@ -23,7 +24,7 @@ public class FutureToIterableConverter extends AbstractResultConverter {
                 final Object result = future.get();
                 return converter.convert(invocation, result);
             } catch (Exception e) {
-                throw new IllegalStateException("Failed to retrieve promised result", e);
+                throw new ResultConversionFailureException("Failed to retrieve promised result", e);
             }
         }
         return original;
