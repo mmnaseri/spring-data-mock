@@ -1,6 +1,7 @@
 package com.mmnaseri.utils.spring.data.domain.impl.id;
 
 import com.mmnaseri.utils.spring.data.domain.IdPropertyResolver;
+import com.mmnaseri.utils.spring.data.error.NoIdPropertyException;
 
 import java.io.Serializable;
 
@@ -28,7 +29,7 @@ public class EntityIdPropertyResolver implements IdPropertyResolver {
             idProperty = namedFieldIdPropertyResolver.resolve(entityType, idType);
         }
         if (idProperty == null) {
-            throw new IllegalStateException("Could not resolve id property for entity type " + entityType);
+            throw new NoIdPropertyException(entityType);
         }
         return idProperty;
     }

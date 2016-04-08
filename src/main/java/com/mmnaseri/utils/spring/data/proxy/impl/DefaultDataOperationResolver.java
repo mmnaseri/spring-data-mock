@@ -2,6 +2,7 @@ package com.mmnaseri.utils.spring.data.proxy.impl;
 
 import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
 import com.mmnaseri.utils.spring.data.domain.impl.QueryDescriptionExtractor;
+import com.mmnaseri.utils.spring.data.error.UnknownDataOperationException;
 import com.mmnaseri.utils.spring.data.proxy.DataOperationResolver;
 import com.mmnaseri.utils.spring.data.proxy.RepositoryFactoryConfiguration;
 import com.mmnaseri.utils.spring.data.proxy.TypeMapping;
@@ -34,7 +35,7 @@ public class DefaultDataOperationResolver implements DataOperationResolver {
                 return resolution;
             }
         }
-        throw new IllegalStateException("Failed to resolve query for method: " + method);
+        throw new UnknownDataOperationException(method);
     }
 
 }

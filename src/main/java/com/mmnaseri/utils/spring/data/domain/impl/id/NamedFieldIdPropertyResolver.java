@@ -1,6 +1,7 @@
 package com.mmnaseri.utils.spring.data.domain.impl.id;
 
 import com.mmnaseri.utils.spring.data.domain.IdPropertyResolver;
+import com.mmnaseri.utils.spring.data.error.PropertyTypeMismatchException;
 import org.springframework.util.ReflectionUtils;
 
 import java.io.Serializable;
@@ -19,7 +20,7 @@ public class NamedFieldIdPropertyResolver implements IdPropertyResolver {
             if (idType.isAssignableFrom(field.getType())) {
                 return field.getName();
             } else {
-                throw new IllegalStateException("Expected field " + field.getName() + " to be of type " + idType);
+                throw new PropertyTypeMismatchException(entityType, field.getName(), idType, field.getType());
             }
         }
         return null;

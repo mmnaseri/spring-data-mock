@@ -4,6 +4,7 @@ import com.mmnaseri.utils.spring.data.commons.DefaultCrudRepository;
 import com.mmnaseri.utils.spring.data.commons.DefaultGemfireRepository;
 import com.mmnaseri.utils.spring.data.commons.DefaultJpaRepository;
 import com.mmnaseri.utils.spring.data.commons.DefaultPagingAndSortingRepository;
+import com.mmnaseri.utils.spring.data.error.RepositoryDefinitionException;
 import com.mmnaseri.utils.spring.data.proxy.TypeMapping;
 import com.mmnaseri.utils.spring.data.proxy.TypeMappingContext;
 import org.springframework.core.OrderComparator;
@@ -86,15 +87,15 @@ public class DefaultTypeMappingContext implements TypeMappingContext {
         final List<Class<?>> implementations = getImplementations(repositoryType);
         for (Class<?> implementation : implementations) {
             if (Modifier.isAbstract(implementation.getModifiers()) || Modifier.isInterface(implementation.getModifiers())) {
-                throw new IllegalStateException("Cannot instantiate a non-concrete class");
+                throw new RepositoryDefinitionException(repositoryType, "Cannot instantiate a non-concrete class");
             }
             final Object instance;
             try {
                 instance = implementation.newInstance();
             } catch (InstantiationException e) {
-                throw new IllegalStateException("Failed to instantiate an object of type " + implementation, e);
+                throw new RepositoryDefinitionException(repositoryType, "Failed to instantiate an object of type " + implementation, e);
             } catch (IllegalAccessException e) {
-                throw new IllegalStateException("Failed to access the constructor for " + implementation, e);
+                throw new RepositoryDefinitionException(repositoryType, "Failed to access the constructor for " + implementation, e);
             }
             //noinspection unchecked
             typeMappings.add(new ImmutableTypeMapping<Object>((Class<Object>) implementation, instance));

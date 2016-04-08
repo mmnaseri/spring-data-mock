@@ -4,6 +4,7 @@ import com.mmnaseri.utils.spring.data.domain.KeyGenerator;
 import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
 import com.mmnaseri.utils.spring.data.domain.impl.key.KeyGeneratorProvider;
 import com.mmnaseri.utils.spring.data.dsl.factory.RepositoryFactoryBuilder;
+import com.mmnaseri.utils.spring.data.error.MockBuilderException;
 import com.mmnaseri.utils.spring.data.proxy.RepositoryFactory;
 import com.mmnaseri.utils.spring.data.proxy.RepositoryFactoryConfiguration;
 import com.mmnaseri.utils.spring.data.proxy.impl.DefaultRepositoryFactory;
@@ -77,12 +78,12 @@ public class RepositoryMockBuilder implements Start, ImplementationAnd, KeyGener
         return new RepositoryMockBuilder(factory, implementations, NOOP);
     }
 
-    protected KeyGenerator<?> createKeyGenerator(Class<? extends KeyGenerator> generatorType) {
+    private KeyGenerator<?> createKeyGenerator(Class<? extends KeyGenerator> generatorType) {
         final KeyGenerator instance;
         try {
             instance = generatorType.newInstance();
         } catch (Exception e) {
-            throw new IllegalStateException("Failed to instantiate key generator of type " + generatorType, e);
+            throw new MockBuilderException("Failed to instantiate key generator of type " + generatorType, e);
         }
         return instance;
     }

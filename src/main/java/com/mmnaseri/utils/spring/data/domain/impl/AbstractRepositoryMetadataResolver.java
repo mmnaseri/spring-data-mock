@@ -4,6 +4,7 @@ import com.mmnaseri.utils.spring.data.domain.IdPropertyResolver;
 import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
 import com.mmnaseri.utils.spring.data.domain.RepositoryMetadataResolver;
 import com.mmnaseri.utils.spring.data.domain.impl.id.EntityIdPropertyResolver;
+import com.mmnaseri.utils.spring.data.error.RepositoryDefinitionException;
 
 import java.io.Serializable;
 import java.lang.reflect.Modifier;
@@ -23,12 +24,14 @@ public abstract class AbstractRepositoryMetadataResolver implements RepositoryMe
 
     @Override
     public RepositoryMetadata resolve(Class<?> repositoryInterface) {
-        Objects.requireNonNull(repositoryInterface, "Repository interface cannot be null");
+        if (repositoryInterface == null) {
+            throw new RepositoryDefinitionException(null, "Repository interface must not be null");
+        }
         if (!Modifier.isInterface(repositoryInterface.getModifiers())) {
-            throw new IllegalArgumentException("Cannot resolve repository metadata for a class object that isn't an interface");
+            throw new RepositoryDefinitionException(repositoryInterface, "Cannot resolve repository metadata for a class object that isn't an interface");
         }
         if (!Modifier.isPublic(repositoryInterface.getModifiers())) {
-            throw new IllegalArgumentException("Repository interface needs to be declared as public");
+            throw new RepositoryDefinitionException(repositoryInterface, "Repository interface needs to be declared as public");
         }
         return resolveFromInterface(repositoryInterface);
     }

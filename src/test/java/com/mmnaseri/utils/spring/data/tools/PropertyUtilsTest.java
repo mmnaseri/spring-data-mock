@@ -3,6 +3,7 @@ package com.mmnaseri.utils.spring.data.tools;
 import com.mmnaseri.utils.spring.data.domain.model.Address;
 import com.mmnaseri.utils.spring.data.domain.model.Person;
 import com.mmnaseri.utils.spring.data.domain.model.Zip;
+import com.mmnaseri.utils.spring.data.error.ParserException;
 import com.mmnaseri.utils.spring.data.query.PropertyDescriptor;
 import org.testng.annotations.Test;
 
@@ -15,7 +16,7 @@ import static org.hamcrest.Matchers.*;
  */
 public class PropertyUtilsTest {
 
-    @Test(expectedExceptions = IllegalStateException.class, expectedExceptionsMessageRegExp = "Expected pattern '.*?' was not encountered.*")
+    @Test(expectedExceptions = ParserException.class, expectedExceptionsMessageRegExp = "Expected pattern '.*?' was not encountered.*")
     public void testPropertyPathThatDoesNotStartWithCapitalLetter() throws Exception {
         PropertyUtils.getPropertyDescriptor(Person.class, "address");
     }

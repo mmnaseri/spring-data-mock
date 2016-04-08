@@ -1,6 +1,7 @@
 package com.mmnaseri.utils.spring.data.domain.impl.matchers;
 
 import com.mmnaseri.utils.spring.data.domain.impl.ImmutableParameter;
+import com.mmnaseri.utils.spring.data.error.InvalidArgumentException;
 import org.testng.annotations.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -12,7 +13,7 @@ import static org.hamcrest.Matchers.is;
  */
 public class IsLessThanMatcherTest {
 
-    @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Expected property to be comparable: xyz")
+    @Test(expectedExceptions = InvalidArgumentException.class, expectedExceptionsMessageRegExp = "Expected property to be comparable: xyz")
     public void testValueIsNotComparable() throws Exception {
         new IsLessThanMatcher().matches(new ImmutableParameter("xyz", null, null, null), new Object(), new Object());
     }

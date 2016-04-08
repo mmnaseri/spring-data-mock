@@ -1,6 +1,7 @@
 package com.mmnaseri.utils.spring.data.domain.impl.matchers;
 
 import com.mmnaseri.utils.spring.data.domain.Parameter;
+import com.mmnaseri.utils.spring.data.error.InvalidArgumentException;
 
 /**
  * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
@@ -11,7 +12,7 @@ public abstract class AbstractSimpleComparableMatcher extends AbstractSimpleMatc
     @Override
     protected boolean matches(Parameter parameter, Object actual, Object expected) {
         if (!(actual instanceof Comparable) || !(expected instanceof Comparable)) {
-            throw new IllegalArgumentException("Expected property to be comparable: " + parameter.getPath());
+            throw new InvalidArgumentException("Expected property to be comparable: " + parameter.getPath());
         }
         return matches(parameter, (Comparable) actual, (Comparable) expected);
     }

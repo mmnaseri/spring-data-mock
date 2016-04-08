@@ -1,6 +1,7 @@
 package com.mmnaseri.utils.spring.data.domain.impl;
 
 import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
+import com.mmnaseri.utils.spring.data.error.RepositoryDefinitionException;
 import org.testng.annotations.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -28,17 +29,17 @@ public class AbstractRepositoryMetadataResolverTest {
 
     }
 
-    @Test(expectedExceptions = NullPointerException.class, expectedExceptionsMessageRegExp = "Repository interface cannot be null")
+    @Test(expectedExceptions = RepositoryDefinitionException.class, expectedExceptionsMessageRegExp = ".*?: Repository interface must not be null")
     public void testThatItDoesNotAcceptNull() throws Exception {
         new NullReturningRepositoryMetadataResolver().resolve(null);
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Cannot resolve repository metadata for a class object that isn't an interface")
+    @Test(expectedExceptions = RepositoryDefinitionException.class, expectedExceptionsMessageRegExp = ".*?: Cannot resolve repository metadata for a class object that isn't an interface")
     public void testThatItOnlyAcceptsInterfaces() throws Exception {
         new NullReturningRepositoryMetadataResolver().resolve(SampleClass.class);
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Repository interface needs to be declared as public")
+    @Test(expectedExceptions = RepositoryDefinitionException.class, expectedExceptionsMessageRegExp = ".*?: Repository interface needs to be declared as public")
     public void testThatItOnlyAcceptsPublicInterfaces() throws Exception {
         new NullReturningRepositoryMetadataResolver().resolve(SamplePrivateInterface.class);
     }
