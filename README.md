@@ -1,7 +1,7 @@
 # Spring Data Mock
 
 [![Build Status](https://travis-ci.org/mmnaseri/spring-data-mock.svg?branch=master)](https://travis-ci.org/mmnaseri/spring-data-mock)
-[![Coverage Status](https://coveralls.io/repos/github/mmnaseri/spring-data-mock/badge.svg?branch=development)](https://coveralls.io/github/mmnaseri/spring-data-mock?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/mmnaseri/spring-data-mock/badge.svg?branch=master)](https://coveralls.io/github/mmnaseri/spring-data-mock?branch=master)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.mmnaseri.utils/spring-data-mock/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.mmnaseri.utils/spring-data-mock)
 
 
@@ -138,6 +138,8 @@ that you can craft configurations using a *stateful* builder via this DSL:
             .and(...).and(...) //register additional result adapters
         .honoringImplementation(...) //add some custom implementation on a global scope
             .and(...).and(...) //register additional implementations
+        .withOperationHandler(...) //register other operation handlers
+            .and(...).and(...) //add more operation handlers
         .enableAuditing(...) //enable support for Spring Data's auditing and pass in a custom auditor aware instance
         .withListener(...) //register some event listener
             .and(...).and(...) //register additional event listeners
@@ -269,6 +271,25 @@ By default, the following type mappings are in place:
   * If `org.springframework.data.gemfire.repository.GemfireRepository` is present in the classpath, all repositories will be able to
   include methods from this interface that are not present in the above in their list of methods and rest assured that an implementation
   will be provided, courtesy of `com.mmnaseri.utils.spring.data.commons.DefaultGemfireRepository`.
+
+#### Non-Data-Operation Handlers
+
+Non-data-operation handlers, as the name suggests, are operation handlers that support invocation of methods that are not
+data-specific. Examples include `Object.equals(...)` and `Object.hashCode(...)`.
+
+These are registered with `com.mmnaseri.utils.spring.data.proxy.impl.NonDataOperationInvocationHandler` which has a `register(...)`
+method for the purpose.
+
+You can implement your own handlers, which will be investigated and invoked in the order in which they were registered,
+but these come with the framework:
+
+  * `com.mmnaseri.utils.spring.data.proxy.impl.regular.EqualsNonDataOperationHandler`: for handling `Object.equals(Object)`
+  * `com.mmnaseri.utils.spring.data.proxy.impl.regular.HashCodeNonDataOperationHandler` for handling `Object.hashCode()`
+  * `com.mmnaseri.utils.spring.data.proxy.impl.regular.ToStringNonDataOperationHandler` for handling `Object.toString()`
+
+##### Disclaimer
+
+The credit for fixing this goes to @Kaidjin who went all ninja on this and helped resolve #12 in all speed.
 
 #### Event Listeners
 
