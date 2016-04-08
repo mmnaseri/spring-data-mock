@@ -3,6 +3,7 @@ package com.mmnaseri.utils.spring.data.domain.impl;
 import com.mmnaseri.utils.spring.data.domain.Operator;
 import com.mmnaseri.utils.spring.data.domain.OperatorContext;
 import com.mmnaseri.utils.spring.data.domain.impl.matchers.*;
+import com.mmnaseri.utils.spring.data.error.DuplicateOperatorException;
 
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -48,7 +49,7 @@ public class DefaultOperatorContext implements OperatorContext {
             for (String token : item.getTokens()) {
                 for (String newToken : operator.getTokens()) {
                     if (newToken.equals(token)) {
-                        throw new IllegalArgumentException("Another operator (" + item.getName() + ") already defines answers to this token: " + token);
+                        throw new DuplicateOperatorException(item, token);
                     }
                 }
             }

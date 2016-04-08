@@ -1,5 +1,6 @@
 package com.mmnaseri.utils.spring.data.commons;
 
+import com.mmnaseri.utils.spring.data.error.EntityMissingKeyException;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 
@@ -52,7 +53,7 @@ public class DefaultCrudRepository extends AbstractCrudRepository {
         final BeanWrapper wrapper = new BeanWrapperImpl(entity);
         final Object key = wrapper.getPropertyValue(getRepositoryMetadata().getIdentifierProperty());
         if (key == null) {
-            throw new IllegalArgumentException("Entity must have a valid key: " + getRepositoryMetadata().getIdentifierProperty());
+            throw new EntityMissingKeyException(getRepositoryMetadata().getEntityType(), getRepositoryMetadata().getIdentifierProperty());
         }
         return delete((Serializable) key);
     }

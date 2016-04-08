@@ -1,6 +1,7 @@
 package com.mmnaseri.utils.spring.data.proxy.impl;
 
 import com.mmnaseri.utils.spring.data.domain.Invocation;
+import com.mmnaseri.utils.spring.data.error.ResultAdapterFailureException;
 import com.mmnaseri.utils.spring.data.proxy.ResultAdapter;
 import com.mmnaseri.utils.spring.data.proxy.ResultAdapterContext;
 
@@ -52,7 +53,7 @@ public class DefaultResultAdapterContext implements ResultAdapterContext {
                 return adapter.adapt(invocation, originalResult);
             }
         }
-        throw new IllegalArgumentException("Could not adapt value: " + originalResult + " to type " + invocation.getMethod().getReturnType());
+        throw new ResultAdapterFailureException(originalResult, invocation.getMethod().getReturnType());
     }
 
 }

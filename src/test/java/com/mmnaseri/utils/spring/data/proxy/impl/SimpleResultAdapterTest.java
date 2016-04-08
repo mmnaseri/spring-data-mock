@@ -1,6 +1,7 @@
 package com.mmnaseri.utils.spring.data.proxy.impl;
 
 import com.mmnaseri.utils.spring.data.domain.impl.ImmutableInvocation;
+import com.mmnaseri.utils.spring.data.error.ResultAdapterFailureException;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
@@ -38,13 +39,13 @@ public class SimpleResultAdapterTest {
         assertThat(value, is((Object) 1));
     }
 
-    @Test(expectedExceptions = IllegalStateException.class, expectedExceptionsMessageRegExp = "Expected to get only one item but got many")
+    @Test(expectedExceptions = ResultAdapterFailureException.class, expectedExceptionsMessageRegExp = ".*?; Expected only one item but found many")
     public void testAdaptingMultiItemList() throws Exception {
         final SimpleResultAdapter adapter = new SimpleResultAdapter();
         adapter.adapt(new ImmutableInvocation(Sample.class.getMethod("findObject"), null), Arrays.asList(1, 2, 3));
     }
 
-    @Test(expectedExceptions = IllegalStateException.class, expectedExceptionsMessageRegExp = "Expected a value of type class java.lang.Integer")
+    @Test(expectedExceptions = ResultAdapterFailureException.class, expectedExceptionsMessageRegExp = "Could not adapt value: <hello> to type <class java.lang.Integer>; Expected value to be of the indicated type")
     public void testAdaptingIncompatibleValue() throws Exception {
         final SimpleResultAdapter adapter = new SimpleResultAdapter();
         adapter.adapt(new ImmutableInvocation(Sample.class.getMethod("findInteger"), null), Collections.singletonList("hello"));

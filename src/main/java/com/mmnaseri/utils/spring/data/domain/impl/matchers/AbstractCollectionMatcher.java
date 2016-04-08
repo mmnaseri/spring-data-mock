@@ -1,6 +1,7 @@
 package com.mmnaseri.utils.spring.data.domain.impl.matchers;
 
 import com.mmnaseri.utils.spring.data.domain.Parameter;
+import com.mmnaseri.utils.spring.data.error.InvalidArgumentException;
 
 import java.lang.reflect.Array;
 import java.util.Collection;
@@ -16,7 +17,7 @@ public abstract class AbstractCollectionMatcher extends AbstractSimpleMatcher {
     @Override
     protected boolean matches(Parameter parameter, Object actual, Object property) {
         if (property == null) {
-            throw new IllegalArgumentException("Comparison property cannot be null: " + parameter.getPath());
+            throw new InvalidArgumentException("Comparison property cannot be null: " + parameter.getPath());
         }
         final Collection collection;
         if (property.getClass().isArray()) {
@@ -40,7 +41,7 @@ public abstract class AbstractCollectionMatcher extends AbstractSimpleMatcher {
                 collection.add(item);
             }
         } else {
-            throw new IllegalArgumentException("Expected an array, an iterator, or an iterable object");
+            throw new InvalidArgumentException("Expected an array, an iterator, or an iterable object");
         }
         return matches(parameter, actual, collection);
     }

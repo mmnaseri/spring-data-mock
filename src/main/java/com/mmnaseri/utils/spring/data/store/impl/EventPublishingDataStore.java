@@ -1,6 +1,7 @@
 package com.mmnaseri.utils.spring.data.store.impl;
 
 import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
+import com.mmnaseri.utils.spring.data.error.CorruptDataException;
 import com.mmnaseri.utils.spring.data.store.DataStore;
 import com.mmnaseri.utils.spring.data.store.DataStoreEvent;
 import com.mmnaseri.utils.spring.data.store.DataStoreEventListenerContext;
@@ -33,8 +34,12 @@ public class EventPublishingDataStore<K extends Serializable, E> implements Data
 
     @Override
     public void save(K key, E entity) {
-        Objects.requireNonNull(key, "Cannot save an entity with a null key");
-        Objects.requireNonNull(entity, "Cannot save null into the data store");
+        if (key == null) {
+            throw new CorruptDataException(getEntityType(), null, "Cannot save an entity with a null key");
+        }
+        if (entity == null) {
+            throw new CorruptDataException(getEntityType(), null, "Cannot save null into the data store");
+        }
         final boolean entityIsNew = !delegate.hasKey(key);
         if (entityIsNew) {
             publishEvent(new BeforeInsertDataStoreEvent(repositoryMetadata, this, entity));

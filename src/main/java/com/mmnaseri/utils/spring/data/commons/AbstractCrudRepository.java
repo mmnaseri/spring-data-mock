@@ -1,6 +1,7 @@
 package com.mmnaseri.utils.spring.data.commons;
 
 import com.mmnaseri.utils.spring.data.domain.*;
+import com.mmnaseri.utils.spring.data.error.PropertyAccessException;
 import com.mmnaseri.utils.spring.data.store.DataStore;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
@@ -33,7 +34,7 @@ public class AbstractCrudRepository implements DataStoreAware, RepositoryMetadat
                     try {
                         field.set(entity, key);
                     } catch (IllegalAccessException e) {
-                        throw new IllegalStateException(e);
+                        throw new PropertyAccessException(entity, field.getName(), e);
                     }
                 }
             }

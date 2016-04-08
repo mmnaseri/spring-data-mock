@@ -1,6 +1,7 @@
 package com.mmnaseri.utils.spring.data.proxy.impl;
 
 import com.mmnaseri.utils.spring.data.domain.Invocation;
+import com.mmnaseri.utils.spring.data.error.ResultAdapterFailureException;
 import com.mmnaseri.utils.spring.data.tools.CollectionInstanceUtils;
 
 import java.util.Collection;
@@ -17,7 +18,12 @@ public class CollectionResultAdapter extends AbstractIterableResultAdapter<Colle
 
     @Override
     protected Collection doAdapt(Invocation invocation, Iterable iterable) {
-        final Collection collection = CollectionInstanceUtils.getCollection(invocation.getMethod().getReturnType());
+        final Collection collection;
+        try {
+            collection = CollectionInstanceUtils.getCollection(invocation.getMethod().getReturnType());
+        } catch (IllegalArgumentException e) {
+            throw new ResultAdapterFailureException(iterable, invocation.getMethod().getReturnType(), e);
+        }
         for (Object item : iterable) {
             //noinspection unchecked
             collection.add(item);

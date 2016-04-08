@@ -14,7 +14,6 @@ public abstract class AbstractResultAdapter<E> implements ResultAdapter<E> {
         this.priority = priority;
     }
 
-    @SuppressWarnings("NullableProblems")
     @Override
     public int compareTo(ResultAdapter that) {
         return Integer.compare(getPriority(), that.getPriority());

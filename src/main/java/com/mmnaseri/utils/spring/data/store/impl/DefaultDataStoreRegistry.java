@@ -1,5 +1,6 @@
 package com.mmnaseri.utils.spring.data.store.impl;
 
+import com.mmnaseri.utils.spring.data.error.DataStoreNotFoundException;
 import com.mmnaseri.utils.spring.data.store.DataStore;
 import com.mmnaseri.utils.spring.data.store.DataStoreRegistry;
 
@@ -23,7 +24,7 @@ public class DefaultDataStoreRegistry implements DataStoreRegistry {
     @Override
     public <E, K extends Serializable> DataStore<K, E> getDataStore(Class<E> entityType) {
         if (!dataStores.containsKey(entityType)) {
-            throw new IllegalArgumentException("No data store registered for type " + entityType);
+            throw new DataStoreNotFoundException(entityType);
         }
         //noinspection unchecked
         return (DataStore<K, E>) dataStores.get(entityType);

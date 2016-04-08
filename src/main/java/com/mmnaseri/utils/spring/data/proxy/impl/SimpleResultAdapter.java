@@ -1,6 +1,7 @@
 package com.mmnaseri.utils.spring.data.proxy.impl;
 
 import com.mmnaseri.utils.spring.data.domain.Invocation;
+import com.mmnaseri.utils.spring.data.error.ResultAdapterFailureException;
 import com.mmnaseri.utils.spring.data.tools.PropertyUtils;
 
 import java.util.Iterator;
@@ -31,10 +32,10 @@ public class SimpleResultAdapter extends AbstractIterableResultAdapter<Object> {
         if (iterator.hasNext()) {
             final Object value = iterator.next();
             if (iterator.hasNext()) {
-                throw new IllegalStateException("Expected to get only one item but got many");
+                throw new ResultAdapterFailureException(iterable, invocation.getMethod().getReturnType(), "Expected only one item but found many");
             }
             if (!PropertyUtils.getTypeOf(invocation.getMethod().getReturnType()).isInstance(value)) {
-                throw new IllegalStateException("Expected a value of type " + invocation.getMethod().getReturnType());
+                throw new ResultAdapterFailureException(value, invocation.getMethod().getReturnType(), "Expected value to be of the indicated type");
             }
             return value;
         } else {

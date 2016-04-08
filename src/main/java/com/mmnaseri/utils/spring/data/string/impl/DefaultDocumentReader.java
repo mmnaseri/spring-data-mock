@@ -1,5 +1,6 @@
 package com.mmnaseri.utils.spring.data.string.impl;
 
+import com.mmnaseri.utils.spring.data.error.ParserException;
 import com.mmnaseri.utils.spring.data.string.DocumentReader;
 import com.mmnaseri.utils.spring.data.string.SnippetParser;
 import com.mmnaseri.utils.spring.data.string.Token;
@@ -174,7 +175,7 @@ public class DefaultDocumentReader implements DocumentReader {
     @Override
     public char nextChar() {
         if (!hasMore()) {
-            throw new IllegalStateException();
+            throw new ParserException("Expected another character, but hit the end of the document");
         }
         return processChar(document.charAt(cursor++));
     }
@@ -221,7 +222,7 @@ public class DefaultDocumentReader implements DocumentReader {
     public Token expectToken(TokenReader tokenReader) {
         final Token token = nextToken(tokenReader);
         if (token == null) {
-            throw new IllegalStateException();
+            throw new ParserException("Expected tokens that the token reader could read, but found none");
         }
         return token;
     }
@@ -234,10 +235,10 @@ public class DefaultDocumentReader implements DocumentReader {
     @Override
     public String read(Token token) {
         if (token.getStart() < 0) {
-            throw new IllegalArgumentException();
+            throw new ParserException("Token start is a negative value ");
         }
         if (token.getEnd() > rest().length()) {
-            throw new IllegalArgumentException();
+            throw new ParserException("Token end reaches beyond the document");
         }
         final String result = processText(rest().substring(0, token.getEnd() + token.getMargin()))
                 .substring(0, token.getEnd()).substring(token.getStart());
@@ -321,7 +322,7 @@ public class DefaultDocumentReader implements DocumentReader {
     public String expect(Pattern pattern, boolean skipWhitespaces) {
         final String token = read(pattern, skipWhitespaces);
         if (token == null) {
-            throw new IllegalStateException("Expected pattern '" + pattern.pattern() + "' was not encountered in document: " + document);
+            throw new ParserException("Expected pattern '" + pattern.pattern() + "' was not encountered in document: " + document);
         }
         return token;
     }
@@ -389,15 +390,15 @@ public class DefaultDocumentReader implements DocumentReader {
         }
         //if there are now less snapshots than what we recall, we have a problem
         if (snapshots.size() < snapshotsRemembered) {
-            throw new IllegalStateException();
+            throw new ParserException("There are less snapshots than we recall");
         }
         //if the last remembered position does not match our marker, we have a problem
         if (forget() != start) {
-            throw new IllegalStateException();
+            throw new ParserException("The parser didn't end in the same state as it started");
         }
         //Also, the cursor should not have moved backwards in the document
         if (cursor < start.getCursorPosition()) {
-            throw new IllegalStateException();
+            throw new ParserException("The cursor moved backwards and we are now at a position before where we started");
         }
         return parsed;
     }
@@ -410,11 +411,11 @@ public class DefaultDocumentReader implements DocumentReader {
     @Override
     public String peek(int length) {
         if (length <= 0) {
-            throw new IllegalArgumentException();
+            throw new ParserException("There is nothing to peek at");
         }
         final String rest = rest();
         if (length > rest.length()) {
-            throw new IllegalArgumentException();
+            throw new ParserException("There isn't enough left of the document to peek at: " + length);
         }
         return rest.substring(0, length);
     }
@@ -449,7 +450,7 @@ public class DefaultDocumentReader implements DocumentReader {
     @Override
     public void rewind() {
         if (snapshots.isEmpty()) {
-            throw new IllegalStateException();
+            throw new ParserException("There aren't any more snapshots to restore");
         }
         reposition(forget());
     }
@@ -461,13 +462,13 @@ public class DefaultDocumentReader implements DocumentReader {
     @Override
     public void reposition(ReaderSnapshot snapshot) {
         if (snapshot.getDocumentReader() != this) {
-            throw new IllegalArgumentException();
+            throw new ParserException("This snapshot belongs to another document reader");
         }
         if (snapshot.getTimestamp() < timestamp) {
-            throw new IllegalArgumentException();
+            throw new ParserException("This snapshot was created at a different time than this document reader");
         }
         if (snapshot.getCursorPosition() < 0 || snapshot.getCursorPosition() >= document.length()) {
-            throw new IllegalArgumentException();
+            throw new ParserException("The snapshot refers to positions that are beyond the current document");
         }
         cursor = snapshot.getCursorPosition();
         line = snapshot.getLine();
@@ -497,7 +498,7 @@ public class DefaultDocumentReader implements DocumentReader {
     @Override
     public void backtrack(int count) {
         if (cursor - count < 0) {
-            throw new IllegalStateException();
+            throw new ParserException("Cannot backtrack more than the read portion of the document.");
         }
         cursor -= count;
     }

@@ -1,5 +1,6 @@
 package com.mmnaseri.utils.spring.data.query.impl;
 
+import com.mmnaseri.utils.spring.data.error.FunctionNotFoundException;
 import com.mmnaseri.utils.spring.data.query.DataFunction;
 import com.mmnaseri.utils.spring.data.query.DataFunctionRegistry;
 
@@ -29,7 +30,7 @@ public class DefaultDataFunctionRegistry implements DataFunctionRegistry {
     @Override
     public DataFunction<?> getFunction(String name) {
         if (!functions.containsKey(name)) {
-            throw new IllegalArgumentException("No function with this name has been registered: " + name);
+            throw new FunctionNotFoundException(name);
         }
         return functions.get(name);
     }

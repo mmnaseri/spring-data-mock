@@ -5,6 +5,7 @@ import com.mmnaseri.utils.spring.data.domain.Parameter;
 import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
 import com.mmnaseri.utils.spring.data.domain.model.Person;
 import com.mmnaseri.utils.spring.data.dsl.factory.RepositoryFactoryBuilder;
+import com.mmnaseri.utils.spring.data.error.QueryParserException;
 import com.mmnaseri.utils.spring.data.proxy.RepositoryFactoryConfiguration;
 import com.mmnaseri.utils.spring.data.query.QueryDescriptor;
 import org.testng.annotations.BeforeMethod;
@@ -33,53 +34,53 @@ public class QueryDescriptionExtractorTest {
         sampleRepositoryMetadata = new ImmutableRepositoryMetadata(String.class, Person.class, SampleRepository.class, "id");
     }
 
-    @Test(expectedExceptions = IllegalStateException.class, expectedExceptionsMessageRegExp = "Malformed query method name.*")
+    @Test(expectedExceptions = QueryParserException.class, expectedExceptionsMessageRegExp = ".*?: Malformed query method name.*")
     public void testMethodNameNotStartingWithNormalWord() throws Exception {
         configuration = RepositoryFactoryBuilder.defaultConfiguration();
         extractor.extract(malformedRepositoryMetadata, MalformedRepository.class.getMethod("Malformed"), configuration);
     }
 
-    @Test(expectedExceptions = IllegalStateException.class, expectedExceptionsMessageRegExp = "There is already a limit of 10 specified for this query:.*")
+    @Test(expectedExceptions = QueryParserException.class, expectedExceptionsMessageRegExp = ".*?: There is already a limit of 10 specified for this query:.*")
     public void testMultipleLimits() throws Exception {
         extractor.extract(malformedRepositoryMetadata, MalformedRepository.class.getMethod("findTop10Top5"), configuration);
     }
 
-    @Test(expectedExceptions = IllegalStateException.class, expectedExceptionsMessageRegExp = "You have already stated that this query should return distinct items:.*")
+    @Test(expectedExceptions = QueryParserException.class, expectedExceptionsMessageRegExp = ".*?: You have already stated that this query should return distinct items:.*")
     public void testMultipleDistinctFlags() throws Exception {
         extractor.extract(malformedRepositoryMetadata, MalformedRepository.class.getMethod("findDistinctDistinct"), configuration);
     }
 
-    @Test(expectedExceptions = IllegalStateException.class, expectedExceptionsMessageRegExp = "Expected pattern 'By' was not encountered.*")
+    @Test(expectedExceptions = QueryParserException.class, expectedExceptionsMessageRegExp = ".*?: Expected pattern 'By' was not encountered.*")
     public void testNonSimpleQueryWithoutBy() throws Exception {
         extractor.extract(malformedRepositoryMetadata, MalformedRepository.class.getMethod("findTop10Distinct"), configuration);
     }
 
-    @Test(expectedExceptions = IllegalStateException.class, expectedExceptionsMessageRegExp = "Query method name cannot end with `By`")
+    @Test(expectedExceptions = QueryParserException.class, expectedExceptionsMessageRegExp = ".*?: Query method name cannot end with `By`")
     public void testNonSimpleQueryEndingInBy() throws Exception {
         extractor.extract(malformedRepositoryMetadata, MalformedRepository.class.getMethod("findTop10DistinctBy"), configuration);
     }
 
-    @Test(expectedExceptions = IllegalStateException.class, expectedExceptionsMessageRegExp = "Could not find property `unknownProperty`.*")
+    @Test(expectedExceptions = QueryParserException.class, expectedExceptionsMessageRegExp = ".*?: Could not find property `unknownProperty`.*")
     public void testUnknownPropertyInExpression() throws Exception {
         extractor.extract(malformedRepositoryMetadata, MalformedRepository.class.getMethod("findByUnknownProperty"), configuration);
     }
 
-    @Test(expectedExceptions = IllegalStateException.class, expectedExceptionsMessageRegExp = "Expected to see parameter with index 0")
+    @Test(expectedExceptions = QueryParserException.class, expectedExceptionsMessageRegExp = ".*?: Expected to see parameter with index 0")
     public void testTooFewParameterNumber() throws Exception {
         extractor.extract(malformedRepositoryMetadata, MalformedRepository.class.getMethod("findByFirstName"), configuration);
     }
 
-    @Test(expectedExceptions = IllegalStateException.class, expectedExceptionsMessageRegExp = "Expected parameter 0 on .*? to be a descendant of class .*?\\.String")
+    @Test(expectedExceptions = QueryParserException.class, expectedExceptionsMessageRegExp = ".*?: Expected parameter 0 on .*? to be a descendant of class .*?\\.String")
     public void testBadParameterType() throws Exception {
         extractor.extract(malformedRepositoryMetadata, MalformedRepository.class.getMethod("findByFirstName", Object.class), configuration);
     }
 
-    @Test(expectedExceptions = IllegalStateException.class, expectedExceptionsMessageRegExp = "Invalid last argument: expected paging or sorting.*?")
+    @Test(expectedExceptions = QueryParserException.class, expectedExceptionsMessageRegExp = ".*?: Invalid last argument: expected paging or sorting.*?")
     public void testBadLastParameter() throws Exception {
         extractor.extract(malformedRepositoryMetadata, MalformedRepository.class.getMethod("findByFirstName", String.class, Object.class), configuration);
     }
 
-    @Test(expectedExceptions = IllegalStateException.class, expectedExceptionsMessageRegExp = "Too many parameters.*?")
+    @Test(expectedExceptions = QueryParserException.class, expectedExceptionsMessageRegExp = ".*?: Too many parameters.*?")
     public void testTooManyParameters() throws Exception {
         extractor.extract(malformedRepositoryMetadata, MalformedRepository.class.getMethod("findByFirstName", String.class, Object.class, Object.class), configuration);
     }

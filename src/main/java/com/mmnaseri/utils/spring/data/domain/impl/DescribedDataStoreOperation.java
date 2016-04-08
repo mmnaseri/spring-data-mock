@@ -35,5 +35,9 @@ public class DescribedDataStoreOperation<K extends Serializable, E> implements D
         final DataFunction<?> function = functionRegistry.getFunction(descriptor.getFunction());
         return function.apply(store, descriptor, configuration, selection);
     }
-    
+
+    @Override
+    public String toString() {
+        return selectOperation.toString();
+    }
 }
