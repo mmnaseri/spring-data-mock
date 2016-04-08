@@ -22,6 +22,7 @@ public class DefaultRepositoryFactoryConfiguration implements RepositoryFactoryC
     private ResultAdapterContext resultAdapterContext;
     private TypeMappingContext typeMappingContext;
     private DataStoreEventListenerContext eventListenerContext;
+    private NonDataOperationInvocationHandler operationInvocationHandler;
 
     @Override
     public RepositoryMetadataResolver getRepositoryMetadataResolver() {
@@ -84,6 +85,15 @@ public class DefaultRepositoryFactoryConfiguration implements RepositoryFactoryC
 
     public void setEventListenerContext(DataStoreEventListenerContext eventListenerContext) {
         this.eventListenerContext = eventListenerContext;
+    }
+
+    @Override
+    public NonDataOperationInvocationHandler getOperationInvocationHandler() {
+        return operationInvocationHandler;
+    }
+
+    public void setOperationInvocationHandler(NonDataOperationInvocationHandler operationInvocationHandler) {
+        this.operationInvocationHandler = operationInvocationHandler;
     }
 
 }

@@ -34,6 +34,7 @@ public class DefaultRepositoryFactory implements RepositoryFactory {
     private final ResultAdapterContext adapterContext;
     private final TypeMappingContext typeMappingContext;
     private final RepositoryFactoryConfiguration configuration;
+    private final NonDataOperationInvocationHandler operationInvocationHandler;
 
     public DefaultRepositoryFactory(RepositoryFactoryConfiguration configuration) {
         this.configuration = configuration;
@@ -43,6 +44,7 @@ public class DefaultRepositoryFactory implements RepositoryFactory {
         this.dataStoreRegistry = configuration.getDataStoreRegistry();
         this.adapterContext = configuration.getResultAdapterContext();
         this.typeMappingContext = configuration.getTypeMappingContext();
+        this.operationInvocationHandler = configuration.getOperationInvocationHandler();
     }
 
     @Override
@@ -59,7 +61,7 @@ public class DefaultRepositoryFactory implements RepositoryFactory {
         }
         final RepositoryConfiguration repositoryConfiguration = new ImmutableRepositoryConfiguration(metadata, keyGenerator, boundImplementations);
         //noinspection unchecked
-        final InvocationHandler interceptor = new DataOperationInvocationHandler(repositoryConfiguration, invocationMappings, dataStore, adapterContext);
+        final InvocationHandler interceptor = new DataOperationInvocationHandler(repositoryConfiguration, invocationMappings, dataStore, adapterContext, operationInvocationHandler);
         final Object instance = Proxy.newProxyInstance(getClass().getClassLoader(), new Class[]{repositoryInterface}, interceptor);
         for (TypeMapping<?> typeMapping : typeMappings) {
             if (typeMapping.getInstance() instanceof RepositoryAware<?>) {

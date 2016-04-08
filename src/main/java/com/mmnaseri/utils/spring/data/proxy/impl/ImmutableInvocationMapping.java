@@ -30,4 +30,8 @@ public class ImmutableInvocationMapping<K extends Serializable, E> implements In
         return operation;
     }
 
+    @Override
+    public String toString() {
+        return method + " -> " + operation;
+    }
 }
