@@ -1,7 +1,11 @@
 language: java
-
 after_success:
-  # Run Cobertura test coverage and submit the results to coveralls.io
-  - mvn -P coverage clean cobertura:cobertura coveralls:report
-  # If we are on "master" deploy to OSSRH
-  - "[[ $TRAVIS_BRANCH == \"master\" ]] && mvn -P release -DskipTests=true --settings ./settings.xml -B clean deploy"
+- mvn -P coverage clean cobertura:cobertura coveralls:report
+- '[[ $TRAVIS_BRANCH == "master" ]] && bash depoy.sh eb1a6f34f056 key.asc.enc settings.xml'
+sudo: true
+env:
+  global:
+  - secure: DPkao3yJ4hhEsUOfs2VQJ8WCV3VdR3ToFiGB1l461PUstjaytTeXYK3bW2PmZqYJs6Hxxwyl8UHFvgBvWLb/yQV/dqyyJAV8XRb9UC37e4ddLoi8HE7NSGQIiXq0tySiMaOTyd2NtRTepfNAMEMDP746Nrox1giPEq1FPv+K98o=
+  - secure: Q5vJOKht3ZKs9I/HOaAPL+9AUMNdw52/jVhOPFqGDIkcOMXoDMfGaQMlDoZE3DZ0dBl3y1RtGX1tQFxcBkNWJCAzEv26coV7WfCTEfQbLE7nWKKUx2wt/MxbXZqSs2A+NsAdQUax2qYVv6IXwtqO7q8Cr5Z1IkNtaXQBSz6dgjk=
+  - secure: EPOGLKvhrEhy2Zyo7WA1488uLmJ8cONz635DJEkneRbRpnb0Vmjvs9WDvEXMw/mCTnbLJ5bnVTCQrSB0eE+5uRN4WMAlvMAJog4GOmoyajMDEZDp3vmNqG/njXc8GT8/3kYgmoW7skhWlq947uB9ItU3c73VD6XGUl54cqP72CM=
+  - secure: E6w6cl60RNqo0GJuoFeFzUdg8S0b6X2HAnZ/5AGOWBnBcnjZxdBlCa+wDQNw89uCRll9NC38rCCcyJM4jUJ+uI205YfijgYzhVIEQH3x8cSf8+gt95A4z8hafEayPGwlb7buDaKoQR3n7RMkuyFTjc0rxjAICnv0MljIbYiDRAQ=
