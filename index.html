@@ -22,7 +22,9 @@
       <h1>
 <a id="spring-data-mock" class="anchor" href="#spring-data-mock" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Spring Data Mock</h1>
 
-<p><a href="https://travis-ci.org/mmnaseri/spring-data-mock"><img src="https://travis-ci.org/mmnaseri/spring-data-mock.svg?branch=master" alt="Build Status"></a></p>
+<p><a href="https://travis-ci.org/mmnaseri/spring-data-mock"><img src="https://travis-ci.org/mmnaseri/spring-data-mock.svg?branch=master" alt="Build Status"></a>
+<a href="https://coveralls.io/github/mmnaseri/spring-data-mock?branch=master"><img src="https://coveralls.io/repos/github/mmnaseri/spring-data-mock/badge.svg?branch=master" alt="Coverage Status"></a>
+<a href="https://maven-badges.herokuapp.com/maven-central/com.mmnaseri.utils/spring-data-mock"><img src="https://maven-badges.herokuapp.com/maven-central/com.mmnaseri.utils/spring-data-mock/badge.svg" alt="Maven Central"></a></p>
 
 <p>This is a fairly flexible, versatile framework for mocking Spring Data repositories. Spring Data provides a very good
 foundation for separating the concerns of managing a database and its subsequently resulting queries from those of the
@@ -174,6 +176,8 @@ that you can craft configurations using a <em>stateful</em> builder via this DSL
         .and(...).and(...) //register additional result adapters
     .honoringImplementation(...) //add some custom implementation on a global scope
         .and(...).and(...) //register additional implementations
+    .withOperationHandler(...) //register other operation handlers
+        .and(...).and(...) //add more operation handlers
     .enableAuditing(...) //enable support for Spring Data's auditing and pass in a custom auditor aware instance
     .withListener(...) //register some event listener
         .and(...).and(...) //register additional event listeners
@@ -441,6 +445,35 @@ their repertoire.</li>
 include methods from this interface that are not present in the above in their list of methods and rest assured that an implementation
 will be provided, courtesy of <code>com.mmnaseri.utils.spring.data.commons.DefaultGemfireRepository</code>.</li>
 </ul>
+
+<h4>
+<a id="non-data-operation-handlers" class="anchor" href="#non-data-operation-handlers" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Non-Data-Operation Handlers</h4>
+
+<p>Non-data-operation handlers, as the name suggests, are operation handlers that support invocation of methods that are not
+data-specific. Examples include <code>Object.equals(...)</code> and <code>Object.hashCode(...)</code>.</p>
+
+<p>These are registered with <code>com.mmnaseri.utils.spring.data.proxy.impl.NonDataOperationInvocationHandler</code> which has a <code>register(...)</code>
+method for the purpose.</p>
+
+<p>You can implement your own handlers, which will be investigated and invoked in the order in which they were registered,
+but these come with the framework:</p>
+
+<ul>
+<li>
+<code>com.mmnaseri.utils.spring.data.proxy.impl.regular.EqualsNonDataOperationHandler</code>: for handling <code>Object.equals(Object)</code>
+</li>
+<li>
+<code>com.mmnaseri.utils.spring.data.proxy.impl.regular.HashCodeNonDataOperationHandler</code> for handling <code>Object.hashCode()</code>
+</li>
+<li>
+<code>com.mmnaseri.utils.spring.data.proxy.impl.regular.ToStringNonDataOperationHandler</code> for handling <code>Object.toString()</code>
+</li>
+</ul>
+
+<h5>
+<a id="disclaimer" class="anchor" href="#disclaimer" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Disclaimer</h5>
+
+<p>The credit for fixing this goes to <a href="https://github.com/Kaidjin" class="user-mention">@Kaidjin</a> who went all ninja on this and helped resolve #12 in all speed.</p>
 
 <h4>
 <a id="event-listeners" class="anchor" href="#event-listeners" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Event Listeners</h4>
