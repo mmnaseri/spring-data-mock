@@ -19,9 +19,13 @@ import java.util.Map;
  * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/17/15)
  */
-public abstract class PropertyUtils {
+public final class PropertyUtils {
 
     private static final Map<Class<?>, Class<?>> types = new HashMap<Class<?>, Class<?>>();
+
+    private PropertyUtils() {
+        throw new UnsupportedOperationException();
+    }
 
     static {
         types.put(int.class, Integer.class);
