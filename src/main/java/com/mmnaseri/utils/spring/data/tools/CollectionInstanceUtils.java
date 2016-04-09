@@ -7,36 +7,40 @@ import java.util.concurrent.*;
  * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/24/15)
  */
-public abstract class CollectionInstanceUtils {
+public final class CollectionInstanceUtils {
+
+    private CollectionInstanceUtils() {
+        throw new UnsupportedOperationException();
+    }
 
     public static Collection<?> getCollection(Class<?> collectionType) {
-        if (collectionType.equals(HashSet.class)) {
+        if (HashSet.class.equals(collectionType)) {
             return new HashSet<Object>();
-        } else if (collectionType.equals(TreeSet.class)) {
+        } else if (TreeSet.class.equals(collectionType)) {
             return new TreeSet<Object>();
-        } else if (collectionType.equals(CopyOnWriteArraySet.class)) {
+        } else if (CopyOnWriteArraySet.class.equals(collectionType)) {
             return new CopyOnWriteArraySet<Object>();
-        } else if (collectionType.equals(LinkedHashSet.class)) {
+        } else if (LinkedHashSet.class.equals(collectionType)) {
             return new LinkedHashSet<Object>();
-        } else if (collectionType.equals(ArrayList.class)) {
+        } else if (ArrayList.class.equals(collectionType)) {
             return new ArrayList<Object>();
-        } else if (collectionType.equals(LinkedList.class)) {
+        } else if (LinkedList.class.equals(collectionType)) {
             return new LinkedList<Object>();
-        } else if (collectionType.equals(Vector.class)) {
+        } else if (Vector.class.equals(collectionType)) {
             return new Vector<Object>();
-        } else if (collectionType.equals(Stack.class)) {
+        } else if (Stack.class.equals(collectionType)) {
             return new Stack<Object>();
-        } else if (collectionType.equals(PriorityQueue.class)) {
+        } else if (PriorityQueue.class.equals(collectionType)) {
             return new PriorityQueue<Object>();
-        } else if (collectionType.equals(PriorityBlockingQueue.class)) {
+        } else if (PriorityBlockingQueue.class.equals(collectionType)) {
             return new PriorityBlockingQueue<Object>();
-        } else if (collectionType.equals(ArrayDeque.class)) {
+        } else if (ArrayDeque.class.equals(collectionType)) {
             return new ArrayDeque<Object>();
-        } else if (collectionType.equals(ConcurrentLinkedQueue.class)) {
+        } else if (ConcurrentLinkedQueue.class.equals(collectionType)) {
             return new ConcurrentLinkedQueue<Object>();
-        } else if (collectionType.equals(LinkedBlockingQueue.class)) {
+        } else if (LinkedBlockingQueue.class.equals(collectionType)) {
             return new LinkedBlockingQueue<Object>();
-        } else if (collectionType.equals(LinkedBlockingDeque.class)) {
+        } else if (LinkedBlockingDeque.class.equals(collectionType)) {
             return new LinkedBlockingDeque<Object>();
         } else if (List.class.equals(collectionType)) {
             return new LinkedList<Object>();
