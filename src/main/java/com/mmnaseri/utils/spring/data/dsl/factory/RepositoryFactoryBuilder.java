@@ -171,12 +171,7 @@ public class RepositoryFactoryBuilder implements Start, DataFunctionsAnd, DataSt
 
     @Override
     public EventListener enableAuditing() {
-        return enableAuditing(new AuditorAware() {
-            @Override
-            public Object getCurrentAuditor() {
-                return DEFAULT_USER;
-            }
-        });
+        return enableAuditing(new DefaultAuditorAware());
     }
 
     @Override
@@ -311,6 +306,15 @@ public class RepositoryFactoryBuilder implements Start, DataFunctionsAnd, DataSt
         @Override
         public NonDataOperationInvocationHandler getOperationInvocationHandler() {
             return operationInvocationHandler;
+        }
+
+    }
+
+    private static class DefaultAuditorAware implements AuditorAware<String> {
+
+        @Override
+        public String getCurrentAuditor() {
+            return DEFAULT_USER;
         }
 
     }
