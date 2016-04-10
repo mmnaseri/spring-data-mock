@@ -1,6 +1,7 @@
 Spring Data Mock
 ================
 
+[![Donae](https://img.shields.io/badge/paypal-donate-yellow.svg)](https://paypal.me/mmnaseri)
 [![MIT license](http://img.shields.io/badge/license-MIT-brightgreen.svg)](http://opensource.org/licenses/MIT)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.mmnaseri.utils/spring-data-mock/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.mmnaseri.utils/spring-data-mock)
 [![Dependency Status](https://www.versioneye.com/user/projects/5709ee7dfcd19a00415b101a/badge.svg?style=flat)](https://www.versioneye.com/user/projects/5709ee7dfcd19a00415b101a)
@@ -50,6 +51,9 @@ The future of this project depends highly on the availability of contributors.
 
 At the moment I am maintaining this myself since this is something I actively
 use (that is actually how this framework was born to begin with).
+
+[Donating](https://paypal.me/mmnaseri) certainly doesn't hurt in my esteem of the project
+and how much time I dedicate to it.
 
 However, there is [a road map](#/roadmap) that I keep, just to stay focused when I do
 any development work on this project.

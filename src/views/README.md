@@ -1,8 +1,5 @@
 # Spring Data Mock
 
-[![Build Status](https://travis-ci.org/mmnaseri/spring-data-mock.svg?branch=master)](https://travis-ci.org/mmnaseri/spring-data-mock)
-[![Coverage Status](https://coveralls.io/repos/github/mmnaseri/spring-data-mock/badge.svg?branch=master)](https://coveralls.io/github/mmnaseri/spring-data-mock?branch=master)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.mmnaseri.utils/spring-data-mock/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.mmnaseri.utils/spring-data-mock)
 
 
 This is a fairly flexible, versatile framework for mocking Spring Data repositories. Spring Data provides a very good
@@ -19,20 +16,6 @@ productive tasks. This is why I decided to write this framework: to avoid the un
 infrastructure replicating what Spring would do with an actual database, only in-memory. This will allow for mocking the
 repository with actual data. Thus, you can test your services *without* having to start up the application context, and
 with the highest level of isolation -- with actual data.
-
-## Downloading
-
-You can either clone this project and start using it:
-
-    $ git clone https://github.com/mmnaseri/spring-data-mock.git
-
-or you can add a maven dependency since it is now available in Maven central:
-
-    <dependency>
-        <groupId>com.mmnaseri.utils</groupId>
-        <artifactId>spring-data-mock</artifactId>
-        <version>1.0</version>
-    </dependency>
 
 ## Quick Start
 
