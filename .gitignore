@@ -1,0 +1,49 @@
+# Created by .ignore support plugin (hsz.mobi)
+### JetBrains template
+# Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm
+
+## Directory-based project format:
+.idea/
+# if you remove the above rule, at least ignore the following:
+
+## File-based project format:
+*.ipr
+*.iws
+*.iml
+
+## Plugin-specific files:
+
+# IntelliJ
+out/
+
+# mpeltonen/sbt-idea plugin
+.idea_modules/
+
+# JIRA plugin
+atlassian-ide-plugin.xml
+
+# Crashlytics plugin (for Android Studio and IntelliJ)
+com_crashlytics_export_strings.xml
+crashlytics.properties
+crashlytics-build.properties
+
+# Maven Target
+target
+
+# Mac OS X junk
+.DS_Store
+
+# Dev
+node_modules
+src/lib/**/*.js
+src/lib/**/*.css
+src/lib/**/*.gzip
+src/lib/**/*.md
+src/lib/**/*.json
+src/lib/**/LICENSE
+src/lib/**/Makefile
+src/lib/**/README
+src/lib/**/CHANGELOG
+src/lib/**/ROADMAP
+!src/lib/**/*.min.js
+!src/lib/**/*.min.css

@@ -1,0 +1,22 @@
+{
+  "name": "spring-data-mock-site",
+  "homepage": "https://mmnaseri.github.io/spring-data-mock",
+  "authors": [
+    "Milad Naseri <mmnaseri@programmer.net>"
+  ],
+  "description": "Website for the spring-data-mock project",
+  "main": "index.html",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "angularjs#^1.5.3",
+    "marked": "^0.3.5"
+  }
+}

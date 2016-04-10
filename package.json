@@ -1,0 +1,30 @@
+{
+  "name": "spring-data-mock-site",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mmnaseri/spring-data-mock.git"
+  },
+  "author": "Milad Naseri",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mmnaseri/spring-data-mock/issues"
+  },
+  "homepage": "https://github.com/mmnaseri/spring-data-mock#readme",
+  "devDependencies": {
+    "del": "^2.2.0",
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.0",
+    "gulp-copy": "0.0.2",
+    "gulp-git": "^1.7.1",
+    "gulp-sourcemaps": "^1.6.0",
+    "gulp-uglify": "^1.5.3",
+    "gulp-watch": "^4.3.5",
+    "gulp-wiredep": "0.0.0"
+  }
+}
