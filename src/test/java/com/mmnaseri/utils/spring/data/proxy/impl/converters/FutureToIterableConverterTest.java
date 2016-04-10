@@ -1,6 +1,7 @@
 package com.mmnaseri.utils.spring.data.proxy.impl.converters;
 
 import com.mmnaseri.utils.spring.data.domain.impl.ImmutableInvocation;
+import com.mmnaseri.utils.spring.data.error.ResultConversionFailureException;
 import org.testng.annotations.Test;
 
 import java.util.Iterator;
@@ -44,6 +45,20 @@ public class FutureToIterableConverterTest {
         assertThat(value, is(notNullValue()));
         assertThat(value, is(original));
         assertThat(iterator.hasNext(), is(false));
+    }
+
+    @Test(expectedExceptions = ResultConversionFailureException.class)
+    public void testConvertingFutureError() throws Exception {
+        final FutureToIterableConverter converter = new FutureToIterableConverter();
+        //noinspection unchecked
+        final FutureTask task = new FutureTask(new Callable() {
+            @Override
+            public Object call() throws Exception {
+                throw new RuntimeException();
+            }
+        });
+        task.run();
+        converter.convert(new ImmutableInvocation(Sample.class.getMethod("doSomething"), null), task);
     }
 
 }

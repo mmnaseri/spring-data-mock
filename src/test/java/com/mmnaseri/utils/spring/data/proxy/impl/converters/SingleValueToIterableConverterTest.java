@@ -3,6 +3,7 @@ package com.mmnaseri.utils.spring.data.proxy.impl.converters;
 import com.mmnaseri.utils.spring.data.domain.impl.ImmutableInvocation;
 import org.testng.annotations.Test;
 
+import java.util.Arrays;
 import java.util.Iterator;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -33,4 +34,21 @@ public class SingleValueToIterableConverterTest {
         assertThat(iterator.next(), is(original));
         assertThat(iterator.hasNext(), is(false));
     }
+
+    @Test
+    public void testConvertingIterableToIterable() throws Exception {
+        final SingleValueToIterableConverter converter = new SingleValueToIterableConverter();
+        final Object original = Arrays.asList(1, 2, 3);
+        final Object converted = converter.convert(new ImmutableInvocation(Sample.class.getMethod("findSomething"), null), original);
+        assertThat(converted, is(original));
+    }
+
+    @Test
+    public void testConvertingIteratorToIterable() throws Exception {
+        final SingleValueToIterableConverter converter = new SingleValueToIterableConverter();
+        final Object original = Arrays.asList(1, 2, 3).iterator();
+        final Object converted = converter.convert(new ImmutableInvocation(Sample.class.getMethod("findSomething"), null), original);
+        assertThat(converted, is(original));
+    }
+
 }
