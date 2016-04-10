@@ -11,7 +11,6 @@
     <!-- bower:js -->
     <script type='application/javascript' src='lib/jquery/dist/jquery.min.js'></script>
     <script type='application/javascript' src='lib/angular/angular.min.js'></script>
-    <script type='application/javascript' src='lib/marked/marked.min.js'></script>
     <script type='application/javascript' src='lib/angular-route/angular-route.min.js'></script>
     <script type='application/javascript' src='lib/angular-ui-router/release/angular-ui-router.min.js'></script>
     <script type='application/javascript' src='lib/bootstrap/dist/js/bootstrap.min.js'></script>
@@ -19,6 +18,7 @@
     <script type="application/javascript" src="lib/angular-bootstrap/ui-bootstrap.min.js"></script>
     <script type="application/javascript" src="lib/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
     <script type="application/javascript" src="lib/angular-ui/build/angular-ui.min.js"></script>
+    <script type="application/javascript" src="lib/angular-ui-router/release/angular-ui-router.min.js"></script>
     <script type="application/javascript" src="js/all.min.js"></script>
     <script type="application/javascript" src="http://localhost:13001/livereload.js"></script>
 </head>
@@ -30,6 +30,11 @@
     <a href="https://github.com/mmnaseri/spring-data-mock/zipball/master" class="btn">Download .zip</a>
     <a href="https://github.com/mmnaseri/spring-data-mock/tarball/master" class="btn">Download .tar.gz</a>
 </div>
-
+<div class="page-sub-header">
+    <a class="btn" ui-sref="readme">Read Me</a>
+    <a class="btn" ui-sref="roadmap">Road Map</a>
+    <a class="btn" ui-sref="changelog">Changes</a>
+</div>
+<div ui-view="" class="container"></div>
 </body>
 </html>

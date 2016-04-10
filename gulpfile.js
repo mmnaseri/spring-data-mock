@@ -14,6 +14,7 @@ var sourcemaps = require('gulp-sourcemaps');
 var git = require('gulp-git');
 var sass = require('gulp-sass');
 var refresh = require('gulp-refresh');
+var markedown = require('gulp-markdown');
 
 //configs
 var paths = {
@@ -25,15 +26,23 @@ var paths = {
     styles: [
         'src/scss/*.scss'
     ],
+    parts: [
+        'src/scss/**/*.scss'
+    ],
     lib: [
         "src/lib/**/*.min.js",
         "src/lib/**/*.min.css"
+    ],
+    views: [
+        "src/views/*.md",
+        "src/views/*.html"
     ],
     site: {
         root: "site",
         scripts: "site/js",
         styles: "site/css",
-        lib: "site/lib"
+        lib: "site/lib",
+        views: "site/views"
     }
 };
 
@@ -69,9 +78,6 @@ gulp.task("index", function () {
                 }
             },
             overrides: {
-                marked: {
-                    main: ["marked.min.js"]
-                },
                 'angular-ui': {
                     main: ['/build/angular-ui.min.js', '/build/angular-ui.min.css']
                 }
@@ -102,15 +108,18 @@ gulp.task('watch', function () {
         port: 13001
     });
     gulp.watch(paths.site.root, ['git-site']);
-    gulp.watch(paths.styles, ['sass']);
+    gulp.watch(paths.parts, ['sass']);
     gulp.watch(paths.scripts, ['scripts']);
     gulp.watch(paths.lib, ['lib']);
     gulp.watch(paths.main, ['index']);
+    gulp.watch(paths.views, ['views']);
 });
 
 
 gulp.task("views", function () {
-
+    return gulp.src(paths.views)
+        .pipe(markedown())
+        .pipe(gulp.dest(paths.site.views))
 });
 
-gulp.task("default", ["watch", "lib", "scripts", "sass", "index", "git-site"]);
+gulp.task("default", ["watch", "lib", "scripts", "sass", "views", "index", "git-site"]);
