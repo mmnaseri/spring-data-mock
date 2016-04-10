@@ -26,7 +26,8 @@ var paths = {
         'src/scss/*.scss'
     ],
     lib: [
-        "src/lib/**"
+        "src/lib/**/*.min.js",
+        "src/lib/**/*.min.css"
     ],
     site: {
         root: "site",
@@ -48,7 +49,6 @@ gulp.task("lib", function () {
 
 gulp.task("scripts", function () {
     return gulp.src(paths.scripts)
-        .pipe(uglify())
         .pipe(concat('all.min.js'))
         .pipe(sourcemaps.write())
         .pipe(gulp.dest(paths.site.scripts))
@@ -61,8 +61,19 @@ gulp.task("index", function () {
             fileTypes: {
                 html: {
                     replace: {
-                        js: '<script type="application/javascript" src="{{filePath}}"></script>'
+                        js: function (path) {
+                            path = path.replace(/\.js$/, '.min.js').replace(/(\.min)+.js/, '.min.js');
+                            return "<script type='application/javascript' src='" + path + "'></script>";
+                        }
                     }
+                }
+            },
+            overrides: {
+                marked: {
+                    main: ["marked.min.js"]
+                },
+                'angular-ui': {
+                    main: ['/build/angular-ui.min.js', '/build/angular-ui.min.css']
                 }
             }
         }))
@@ -90,7 +101,6 @@ gulp.task('watch', function () {
     refresh.listen({
         port: 13001
     });
-    console.log(refresh.server);
     gulp.watch(paths.site.root, ['git-site']);
     gulp.watch(paths.styles, ['sass']);
     gulp.watch(paths.scripts, ['scripts']);

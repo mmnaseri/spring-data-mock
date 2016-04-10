@@ -18,6 +18,9 @@
   "dependencies": {
     "angular": "angularjs#^1.5.3",
     "marked": "^0.3.5",
-    "angular-route": "^1.5.3"
+    "angular-route": "^1.5.3",
+    "angular-ui": "^0.4.0",
+    "angular-ui-router": "^0.2.18",
+    "bootstrap": "^3.3.6"
   }
 }
