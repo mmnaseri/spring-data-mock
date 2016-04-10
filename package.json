@@ -22,6 +22,7 @@
     "gulp-concat": "^2.6.0",
     "gulp-copy": "0.0.2",
     "gulp-git": "^1.7.1",
+    "gulp-highlight": "^2.0.0",
     "gulp-markdown": "^1.2.0",
     "gulp-refresh": "^1.1.0",
     "gulp-sass": "^2.2.0",

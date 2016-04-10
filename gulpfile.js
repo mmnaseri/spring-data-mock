@@ -15,6 +15,7 @@ var git = require('gulp-git');
 var sass = require('gulp-sass');
 var refresh = require('gulp-refresh');
 var markedown = require('gulp-markdown');
+var highlight = require('gulp-highlight');
 
 //configs
 var paths = {
@@ -119,7 +120,9 @@ gulp.task('watch', function () {
 gulp.task("views", function () {
     return gulp.src(paths.views)
         .pipe(markedown())
+        .pipe(highlight())
         .pipe(gulp.dest(paths.site.views))
+        .pipe(refresh())
 });
 
 gulp.task("default", ["watch", "lib", "scripts", "sass", "views", "index", "git-site"]);
