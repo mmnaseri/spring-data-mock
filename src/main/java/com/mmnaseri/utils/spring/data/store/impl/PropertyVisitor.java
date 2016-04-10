@@ -1,7 +1,6 @@
 package com.mmnaseri.utils.spring.data.store.impl;
 
 import com.mmnaseri.utils.spring.data.tools.PropertyUtils;
-import com.mmnaseri.utils.spring.data.tools.StringUtils;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.ReflectionUtils;
 

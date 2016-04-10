@@ -1,6 +1,5 @@
 package com.mmnaseri.utils.spring.data.tools;
 
-import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.testng.annotations.Test;
 
 import java.lang.reflect.*;

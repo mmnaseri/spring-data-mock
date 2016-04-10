@@ -27,15 +27,17 @@ public class MemoryDataStore<K extends Serializable, E> implements DataStore<K, 
     }
 
     @Override
-    public void save(K key, E entity) {
-        store.put(key, entity);
+    public boolean save(K key, E entity) {
+        return store.put(key, entity) == null;
     }
 
     @Override
-    public void delete(K key) {
+    public boolean delete(K key) {
         if (store.containsKey(key)) {
             store.remove(key);
+            return true;
         }
+        return false;
     }
 
     @Override

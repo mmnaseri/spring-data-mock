@@ -1,5 +1,6 @@
 package com.mmnaseri.utils.spring.data.query.impl;
 
+import com.mmnaseri.utils.spring.data.error.InvalidArgumentException;
 import com.mmnaseri.utils.spring.data.proxy.RepositoryConfiguration;
 import com.mmnaseri.utils.spring.data.query.DataFunction;
 import com.mmnaseri.utils.spring.data.query.QueryDescriptor;
@@ -16,6 +17,9 @@ public class CountDataFunction implements DataFunction<Long> {
 
     @Override
     public <K extends Serializable, E> Long apply(DataStore<K, E> dataStore, QueryDescriptor query, RepositoryConfiguration repositoryConfiguration, List<E> selection) {
+        if (selection == null) {
+            throw new InvalidArgumentException("Selection cannot be null");
+        }
         return ((Integer) selection.size()).longValue();
     }
 

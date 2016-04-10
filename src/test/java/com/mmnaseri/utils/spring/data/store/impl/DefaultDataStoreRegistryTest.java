@@ -9,8 +9,6 @@ import org.testng.annotations.Test;
 import java.io.Serializable;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.testng.Assert.*;
 
 /**
  * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)

@@ -1,17 +1,8 @@
 package com.mmnaseri.utils.spring.data.domain.impl.key;
 
 import com.mmnaseri.utils.spring.data.domain.KeyGenerator;
-import org.springframework.asm.ClassReader;
 import org.springframework.core.GenericTypeResolver;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-import org.springframework.core.io.support.ResourcePatternResolver;
-import org.springframework.core.type.classreading.AnnotationMetadataReadingVisitor;
-import org.springframework.util.ClassUtils;
 
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.LinkedList;

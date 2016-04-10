@@ -11,9 +11,9 @@ public interface DataStore<K extends Serializable, E> {
 
     boolean hasKey(K key);
 
-    void save(K key, E entity);
+    boolean save(K key, E entity);
 
-    void delete(K key);
+    boolean delete(K key);
 
     E retrieve(K key);
 

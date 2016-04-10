@@ -9,7 +9,6 @@ import com.mmnaseri.utils.spring.data.store.DataStoreEventPublisher;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.Objects;
 
 /**
  * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
@@ -33,7 +32,7 @@ public class EventPublishingDataStore<K extends Serializable, E> implements Data
     }
 
     @Override
-    public void save(K key, E entity) {
+    public boolean save(K key, E entity) {
         if (key == null) {
             throw new CorruptDataException(getEntityType(), null, "Cannot save an entity with a null key");
         }
@@ -49,20 +48,23 @@ public class EventPublishingDataStore<K extends Serializable, E> implements Data
         delegate.save(key, entity);
         if (entityIsNew) {
             publishEvent(new AfterInsertDataStoreEvent(repositoryMetadata, this, entity));
+            return true;
         } else {
             publishEvent(new AfterUpdateDataStoreEvent(repositoryMetadata, this, entity));
+            return false;
         }
     }
 
     @Override
-    public void delete(K key) {
+    public boolean delete(K key) {
         if (!delegate.hasKey(key)) {
-            return;
+            return false;
         }
         final E entity = delegate.retrieve(key);
         publishEvent(new BeforeDeleteDataStoreEvent(repositoryMetadata, this, entity));
         delegate.delete(key);
         publishEvent(new AfterDeleteDataStoreEvent(repositoryMetadata, this, entity));
+        return true;
     }
 
     @Override

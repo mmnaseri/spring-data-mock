@@ -8,7 +8,6 @@ import com.mmnaseri.utils.spring.data.error.RepositoryDefinitionException;
 import com.mmnaseri.utils.spring.data.proxy.TypeMapping;
 import com.mmnaseri.utils.spring.data.proxy.TypeMappingContext;
 import org.springframework.core.OrderComparator;
-import org.springframework.data.gemfire.repository.GemfireRepository;
 import org.springframework.util.ClassUtils;
 
 import java.lang.reflect.Modifier;

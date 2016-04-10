@@ -1,14 +1,13 @@
 package com.mmnaseri.utils.spring.data.proxy.impl;
 
+import com.mmnaseri.utils.spring.data.domain.model.SampleEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.testng.annotations.Test;
+
 import static com.mmnaseri.utils.spring.data.dsl.factory.RepositoryFactoryBuilder.builder;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
-
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.testng.annotations.Test;
-
-import com.mmnaseri.utils.spring.data.domain.model.SampleEntity;
 
 public class DataOperationInvocationHandlerTest {
 

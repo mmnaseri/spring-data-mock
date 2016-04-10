@@ -8,7 +8,6 @@ import com.mmnaseri.utils.spring.data.error.RepositoryDefinitionException;
 
 import java.io.Serializable;
 import java.lang.reflect.Modifier;
-import java.util.Objects;
 
 /**
  * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
