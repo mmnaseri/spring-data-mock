@@ -4,6 +4,7 @@ import com.mmnaseri.utils.spring.data.domain.Invocation;
 import com.mmnaseri.utils.spring.data.error.ResultAdapterFailureException;
 import com.mmnaseri.utils.spring.data.proxy.ResultAdapter;
 import com.mmnaseri.utils.spring.data.proxy.ResultAdapterContext;
+import com.mmnaseri.utils.spring.data.proxy.impl.adapters.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -27,11 +28,11 @@ public class DefaultResultAdapterContext implements ResultAdapterContext {
         adapters.add(new NullToSliceResultAdapter());
         adapters.add(new NullToFutureResultAdapter());
         adapters.add(new NullToListenableFutureResultAdapter());
-        adapters.add(new NumberResultAdapter());
+        adapters.add(new IterableNumberResultAdapter());
         adapters.add(new SimpleResultAdapter());
         adapters.add(new IteratorResultAdapter());
         adapters.add(new CollectionResultAdapter());
-        adapters.add(new SliceResultAdapter());
+        adapters.add(new IterableSliceResultAdapter());
         adapters.add(new PageResultAdapter());
         adapters.add(new GeoPageResultAdapter());
         adapters.add(new FutureResultAdapter());

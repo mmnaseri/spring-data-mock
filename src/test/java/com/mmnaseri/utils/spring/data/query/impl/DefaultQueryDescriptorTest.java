@@ -5,7 +5,6 @@ import com.mmnaseri.utils.spring.data.domain.OperatorContext;
 import com.mmnaseri.utils.spring.data.domain.Parameter;
 import com.mmnaseri.utils.spring.data.domain.impl.DefaultOperatorContext;
 import com.mmnaseri.utils.spring.data.domain.impl.ImmutableInvocation;
-import com.mmnaseri.utils.spring.data.domain.impl.ImmutableOperator;
 import com.mmnaseri.utils.spring.data.domain.impl.ImmutableParameter;
 import com.mmnaseri.utils.spring.data.domain.model.Address;
 import com.mmnaseri.utils.spring.data.domain.model.Person;
