@@ -20,6 +20,10 @@ Minor
   * [#18](https://github.com/mmnaseri/spring-data-mock/issues/18):
   Increase test coverage so that future development can be done with more
   certainty and users feel better about the source code they use.
+  * [#27](https://github.com/mmnaseri/spring-data-mock/issues/27):
+  Increase code quality metrics
+  * [#28](https://github.com/mmnaseri/spring-data-mock/issues/28):
+   Update project dependencies
 
 Major
 -----

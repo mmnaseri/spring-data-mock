@@ -35,16 +35,6 @@ target
 
 # Dev
 node_modules
-src/lib/**/*.js
-src/lib/**/*.css
-src/lib/**/*.gzip
-src/lib/**/*.md
-src/lib/**/*.json
-src/lib/**/LICENSE
-src/lib/**/Makefile
-src/lib/**/README
-src/lib/**/CHANGELOG
-src/lib/**/ROADMAP
-src/lib/**/.*
-!src/lib/**/*.min.js
-!src/lib/**/*.min.css
+
+# Bower
+src/lib
