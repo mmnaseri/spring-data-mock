@@ -11,9 +11,9 @@ var copy = require("gulp-copy");
 var concat = require("gulp-concat");
 var wiredep = require("gulp-wiredep");
 var sourcemaps = require('gulp-sourcemaps');
-var watch = require('gulp-watch');
 var git = require('gulp-git');
 var sass = require('gulp-sass');
+var refresh = require('gulp-refresh');
 
 //configs
 var paths = {
@@ -36,13 +36,14 @@ var paths = {
     }
 };
 
-gulp.task('clean', function(done) {
+gulp.task('clean', function (done) {
     del([paths.site.root], done);
 });
 
 gulp.task("lib", function () {
     return gulp.src(paths.lib)
-        .pipe(copy(paths.site.lib, {prefix: 2}));
+        .pipe(copy(paths.site.lib, {prefix: 2}))
+        .pipe(refresh())
 });
 
 gulp.task("scripts", function () {
@@ -50,7 +51,8 @@ gulp.task("scripts", function () {
         .pipe(uglify())
         .pipe(concat('all.min.js'))
         .pipe(sourcemaps.write())
-        .pipe(gulp.dest(paths.site.scripts));
+        .pipe(gulp.dest(paths.site.scripts))
+        .pipe(refresh())
 });
 
 gulp.task("index", function () {
@@ -65,6 +67,7 @@ gulp.task("index", function () {
             }
         }))
         .pipe(gulp.dest(paths.site.root))
+        .pipe(refresh())
 
 });
 
@@ -73,7 +76,8 @@ gulp.task('sass', function () {
         .pipe(sourcemaps.init())
         .pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
         .pipe(sourcemaps.write())
-        .pipe(gulp.dest(paths.site.styles));
+        .pipe(gulp.dest(paths.site.styles))
+        .pipe(refresh())
 });
 
 
@@ -82,20 +86,21 @@ gulp.task('git-site', function () {
         .pipe(git.add());
 });
 
-gulp.task('watch', function() {
+gulp.task('watch', function () {
+    refresh.listen({
+        port: 13001
+    });
+    console.log(refresh.server);
     gulp.watch(paths.site.root, ['git-site']);
     gulp.watch(paths.styles, ['sass']);
+    gulp.watch(paths.scripts, ['scripts']);
+    gulp.watch(paths.lib, ['lib']);
+    gulp.watch(paths.main, ['index']);
 });
 
 
 gulp.task("views", function () {
-    
+
 });
 
 gulp.task("default", ["watch", "lib", "scripts", "sass", "index", "git-site"]);
-
-// gulp.task("js", function () {
-//     gulp.src(paths.scripts)
-//         .pipe(uglify())
-//         .pipe(gulp.dest('build'));
-// });
