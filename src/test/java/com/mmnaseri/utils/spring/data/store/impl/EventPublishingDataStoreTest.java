@@ -13,6 +13,8 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -26,6 +28,7 @@ import static org.hamcrest.Matchers.*;
 public class EventPublishingDataStoreTest {
 
     private static AtomicLong counter = new AtomicLong(0);
+    private RepositoryMetadata repositoryMetadata;
 
     private static class DummyEvent implements DataStoreEvent {
         @Override
@@ -47,7 +50,7 @@ public class EventPublishingDataStoreTest {
 
     @BeforeMethod
     public void setUp() throws Exception {
-        final RepositoryMetadata repositoryMetadata = new ImmutableRepositoryMetadata(String.class, Person.class, SimplePersonRepository.class, "id");
+        repositoryMetadata = new ImmutableRepositoryMetadata(String.class, Person.class, SimplePersonRepository.class, "id");
         listenerContext = new SpyingListenerContext(counter);
         delegate = new MemoryDataStore<>(Person.class);
         delegateSpy = new SpyingDataStore<>(delegate, counter);
@@ -92,6 +95,21 @@ public class EventPublishingDataStoreTest {
         assertThat(listenerContext.getEvents().get(0).getEvent(), Matchers.<DataStoreEvent>is(event));
     }
 
+    @Test
+    public void testKeysDelegation() throws Exception {
+        final AtomicBoolean called = new AtomicBoolean(false);
+        final DataStore<String, Person> localDataStore = new EventPublishingDataStore<>(new MemoryDataStore<String, Person>(Person.class) {
+            @Override
+            public Collection<String> keys() {
+                called.set(true);
+                return super.keys();
+            }
+        }, repositoryMetadata, listenerContext);
+        assertThat(called.get(), is(false));
+        localDataStore.keys();
+        assertThat(called.get(), is(true));
+    }
+
     @Test(expectedExceptions = CorruptDataException.class)
     public void testSavingNullKey() throws Exception {
         dataStore.save(null, new Person());
@@ -110,15 +128,15 @@ public class EventPublishingDataStoreTest {
         assertThat(listenerContext.getEvents(), hasSize(2));
         assertThat(listenerContext.getEvents().get(0).getEvent(), is(instanceOf(BeforeInsertDataStoreEvent.class)));
         assertThat(listenerContext.getEvents().get(1).getEvent(), is(instanceOf(AfterInsertDataStoreEvent.class)));
-        assertThat(delegateSpy.getRequests(), hasSize(1));
-        final OperationRequest request = delegateSpy.getRequests().get(0);
-        assertThat(request.getOperation(), is(Operation.SAVE));
-        assertThat(request.getKey(), Matchers.<Serializable>is(key));
-        assertThat(request.getEntity(), Matchers.<Object>is(entity));
+        assertThat(delegateSpy.getRequests(), hasSize(2));
+        final OperationRequest save = delegateSpy.getRequests().get(1);
+        assertThat(save.getOperation(), is(Operation.SAVE));
+        assertThat(save.getKey(), Matchers.<Serializable>is(key));
+        assertThat(save.getEntity(), Matchers.<Object>is(entity));
         final EventTrigger before = listenerContext.getEvents().get(0);
         final EventTrigger after = listenerContext.getEvents().get(1);
-        assertThat(before.getTimestamp(), is(lessThan(request.getTimestamp())));
-        assertThat(request.getTimestamp(), is(lessThan(after.getTimestamp())));
+        assertThat(before.getTimestamp(), is(lessThan(save.getTimestamp())));
+        assertThat(save.getTimestamp(), is(lessThan(after.getTimestamp())));
         assertThat(before.getEvent().getDataStore(), Matchers.<DataStore<?, ?>>is(dataStore));
         assertThat(after.getEvent().getDataStore(), Matchers.<DataStore<?, ?>>is(dataStore));
     }
@@ -134,8 +152,8 @@ public class EventPublishingDataStoreTest {
         assertThat(listenerContext.getEvents(), hasSize(2));
         assertThat(listenerContext.getEvents().get(0).getEvent(), is(instanceOf(BeforeUpdateDataStoreEvent.class)));
         assertThat(listenerContext.getEvents().get(1).getEvent(), is(instanceOf(AfterUpdateDataStoreEvent.class)));
-        assertThat(delegateSpy.getRequests(), hasSize(1));
-        final OperationRequest request = delegateSpy.getRequests().get(0);
+        assertThat(delegateSpy.getRequests(), hasSize(2));
+        final OperationRequest request = delegateSpy.getRequests().get(1);
         assertThat(request.getOperation(), is(Operation.SAVE));
         assertThat(request.getKey(), Matchers.<Serializable>is(key));
         assertThat(request.getEntity(), Matchers.<Object>is(entity));
@@ -150,7 +168,7 @@ public class EventPublishingDataStoreTest {
     @Test
     public void testDeletingNonExistentKey() throws Exception {
         dataStore.delete("key");
-        assertThat(delegateSpy.getRequests(), is(Matchers.<OperationRequest>empty()));
+        assertThat(delegateSpy.getRequests(), hasSize(1));
         assertThat(listenerContext.getEvents(), is(Matchers.<EventTrigger>empty()));
     }
 
@@ -165,8 +183,8 @@ public class EventPublishingDataStoreTest {
         assertThat(listenerContext.getEvents(), hasSize(2));
         assertThat(listenerContext.getEvents().get(0).getEvent(), is(instanceOf(BeforeDeleteDataStoreEvent.class)));
         assertThat(listenerContext.getEvents().get(1).getEvent(), is(instanceOf(AfterDeleteDataStoreEvent.class)));
-        assertThat(delegateSpy.getRequests(), hasSize(1));
-        final OperationRequest request = delegateSpy.getRequests().get(0);
+        assertThat(delegateSpy.getRequests(), hasSize(3));
+        final OperationRequest request = delegateSpy.getRequests().get(2);
         assertThat(request.getOperation(), is(Operation.DELETE));
         assertThat(request.getKey(), Matchers.<Serializable>is(key));
         assertThat(request.getEntity(), is(nullValue()));

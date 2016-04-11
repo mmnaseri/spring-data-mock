@@ -17,6 +17,8 @@ public interface DataStore<K extends Serializable, E> {
 
     E retrieve(K key);
 
+    Collection<K> keys();
+
     Collection<E> retrieveAll();
 
     Class<E> getEntityType();

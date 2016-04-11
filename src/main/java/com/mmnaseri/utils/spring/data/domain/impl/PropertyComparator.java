@@ -3,10 +3,14 @@ package com.mmnaseri.utils.spring.data.domain.impl;
 import com.mmnaseri.utils.spring.data.error.InvalidArgumentException;
 import com.mmnaseri.utils.spring.data.query.NullHandling;
 import com.mmnaseri.utils.spring.data.query.Order;
+import com.mmnaseri.utils.spring.data.query.Sort;
 import com.mmnaseri.utils.spring.data.query.SortDirection;
 import com.mmnaseri.utils.spring.data.tools.PropertyUtils;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 /**
  * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
@@ -58,6 +62,12 @@ public class PropertyComparator implements Comparator<Object> {
             }
         }
         return comparison * (SortDirection.DESCENDING.equals(direction) ? -1 : 1);
+    }
+
+    public static void sort(List<?> collection, Sort sort) {
+        for (int i = sort.getOrders().size() - 1; i >= 0; i--) {
+            Collections.sort(collection, new PropertyComparator(sort.getOrders().get(i)));
+        }
     }
 
 }

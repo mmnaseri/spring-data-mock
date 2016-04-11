@@ -13,16 +13,18 @@ public class State implements Comparable<State> {
         return name;
     }
 
-    public void setName(String name) {
+    public State setName(String name) {
         this.name = name;
+        return this;
     }
 
     public String getAbbreviation() {
         return abbreviation;
     }
 
-    public void setAbbreviation(String abbreviation) {
+    public State setAbbreviation(String abbreviation) {
         this.abbreviation = abbreviation;
+        return this;
     }
 
     @Override

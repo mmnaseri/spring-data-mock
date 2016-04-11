@@ -1,10 +1,12 @@
 package com.mmnaseri.utils.spring.data.commons;
 
 import com.mmnaseri.utils.spring.data.error.EntityMissingKeyException;
-import org.springframework.beans.BeanWrapper;
-import org.springframework.beans.BeanWrapperImpl;
+import com.mmnaseri.utils.spring.data.store.DataStore;
+import com.mmnaseri.utils.spring.data.store.QueueingDataStore;
+import com.mmnaseri.utils.spring.data.tools.PropertyUtils;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -13,30 +15,42 @@ import java.util.List;
  * @since 1.0 (10/13/15)
  */
 @SuppressWarnings("unchecked")
-public class DefaultJpaRepository extends AbstractCrudRepository {
+public class DefaultJpaRepository extends CrudRepositorySupport {
 
     public void flush() {
+        final DataStore dataStore = getDataStore();
+        if (dataStore instanceof QueueingDataStore) {
+            final QueueingDataStore store = (QueueingDataStore) dataStore;
+            store.flush();
+        }
     }
 
     public Iterable deleteInBatch(Iterable entities) {
-        final List result = new LinkedList();
+        final List<Serializable> keys = new LinkedList<>();
         for (Object entity : entities) {
-            final BeanWrapper wrapper = new BeanWrapperImpl(entity);
-            final Object key = wrapper.getPropertyValue(getRepositoryMetadata().getIdentifierProperty());
+            final Object key = PropertyUtils.getPropertyValue(entity, getRepositoryMetadata().getIdentifierProperty());
             if (key == null) {
                 throw new EntityMissingKeyException(getRepositoryMetadata().getEntityType(), getRepositoryMetadata().getIdentifierProperty());
             }
             final Serializable serializable = (Serializable) key;
-            if (getDataStore().hasKey(serializable)) {
-                result.add(getDataStore().retrieve(serializable));
-                getDataStore().delete(serializable);
-            }
+            keys.add(serializable);
         }
-        return result;
+        return deleteByKeys(keys);
     }
 
     public Iterable deleteAllInBatch() {
-        return deleteInBatch(getDataStore().retrieveAll());
+        return deleteByKeys(getDataStore().keys());
+    }
+
+    private Iterable deleteByKeys(Collection<Serializable> keys) {
+        final List result = new LinkedList();
+        for (Serializable key : keys) {
+            if (getDataStore().hasKey(key)) {
+                result.add(getDataStore().retrieve(key));
+                getDataStore().delete(key);
+            }
+        }
+        return result;
     }
 
     public Object getOne(Serializable serializable) {

@@ -6,6 +6,6 @@ package com.mmnaseri.utils.spring.data.store.mock;
  */
 public enum Operation {
 
-    SAVE, DELETE
+    SAVE, DELETE, READ, FLUSH, CHECK
 
 }

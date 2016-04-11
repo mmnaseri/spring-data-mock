@@ -6,13 +6,13 @@ import com.mmnaseri.utils.spring.data.query.NullHandling;
 import com.mmnaseri.utils.spring.data.query.Order;
 import com.mmnaseri.utils.spring.data.query.SortDirection;
 import com.mmnaseri.utils.spring.data.query.impl.ImmutableOrder;
+import com.mmnaseri.utils.spring.data.query.impl.ImmutableSort;
 import com.mmnaseri.utils.spring.data.store.DataStore;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -27,6 +27,10 @@ public class DefaultPagingAndSortingRepository implements DataStoreAware {
     public List findAll(Sort sort) {
         //noinspection unchecked
         final List list = new LinkedList(dataStore.retrieveAll());
+        if (sort == null) {
+            return list;
+        }
+        final LinkedList<Order> orders = new LinkedList<>();
         for (Sort.Order order : sort) {
             final SortDirection direction = order.getDirection().equals(Sort.Direction.ASC) ? SortDirection.ASCENDING : SortDirection.DESCENDING;
             final NullHandling nullHandling;
@@ -41,13 +45,14 @@ public class DefaultPagingAndSortingRepository implements DataStoreAware {
                     nullHandling = NullHandling.DEFAULT;
             }
             final Order derivedOrder = new ImmutableOrder(direction, order.getProperty(), nullHandling);
-            Collections.sort(list, new PropertyComparator(derivedOrder));
+            orders.add(derivedOrder);
         }
+        PropertyComparator.sort(list, new ImmutableSort(orders));
         return list;
     }
 
     public Page findAll(Pageable pageable) {
-        final List all;
+        final List<?> all;
         if (pageable.getSort() != null) {
             all = findAll(pageable.getSort());
         } else {
@@ -58,7 +63,7 @@ public class DefaultPagingAndSortingRepository implements DataStoreAware {
         int end = start + pageable.getPageSize();
         start = Math.min(start, all.size());
         end = Math.min(end, all.size());
-        final List selection = all.subList(start, end);
+        final List selection = new LinkedList<>(all.subList(start, end));
         //noinspection unchecked
         return new PageImpl(selection, pageable, all.size());
     }

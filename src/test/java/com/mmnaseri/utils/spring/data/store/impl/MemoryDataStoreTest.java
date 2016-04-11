@@ -1,6 +1,7 @@
 package com.mmnaseri.utils.spring.data.store.impl;
 
 import com.mmnaseri.utils.spring.data.domain.model.Person;
+import com.mmnaseri.utils.spring.data.error.DataStoreException;
 import org.hamcrest.Matchers;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -82,6 +83,34 @@ public class MemoryDataStoreTest {
         assertThat(dataStore.hasKey(key1), is(false));
         assertThat(dataStore.hasKey(key2), is(false));
         assertThat(dataStore.retrieveAll(), is(Matchers.<Person>empty()));
+    }
+
+    @Test
+    public void testKeys() throws Exception {
+        dataStore.save("1", new Person());
+        dataStore.save("2", new Person());
+        dataStore.save("3", new Person());
+        assertThat(dataStore.keys(), containsInAnyOrder("1", "2", "3"));
+    }
+
+    @Test(expectedExceptions = DataStoreException.class)
+    public void testSavingWithNullKey() throws Exception {
+        dataStore.save(null, new Person());
+    }
+
+    @Test(expectedExceptions = DataStoreException.class)
+    public void testSavingWithNullEntity() throws Exception {
+        dataStore.save("1", null);
+    }
+
+    @Test(expectedExceptions = DataStoreException.class)
+    public void testDeletingWithNullKey() throws Exception {
+        dataStore.delete(null);
+    }
+
+    @Test(expectedExceptions = DataStoreException.class)
+    public void testRetrievingWithNullKey() throws Exception {
+        dataStore.retrieve(null);
     }
 
 }

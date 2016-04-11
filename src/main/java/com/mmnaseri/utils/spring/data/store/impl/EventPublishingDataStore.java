@@ -73,6 +73,11 @@ public class EventPublishingDataStore<K extends Serializable, E> implements Data
     }
 
     @Override
+    public Collection<K> keys() {
+        return delegate.keys();
+    }
+
+    @Override
     public Collection<E> retrieveAll() {
         return delegate.retrieveAll();
     }

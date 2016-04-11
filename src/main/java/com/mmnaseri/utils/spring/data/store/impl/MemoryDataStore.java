@@ -1,5 +1,6 @@
 package com.mmnaseri.utils.spring.data.store.impl;
 
+import com.mmnaseri.utils.spring.data.error.DataStoreException;
 import com.mmnaseri.utils.spring.data.store.DataStore;
 
 import java.io.Serializable;
@@ -28,11 +29,19 @@ public class MemoryDataStore<K extends Serializable, E> implements DataStore<K, 
 
     @Override
     public boolean save(K key, E entity) {
+        if (key == null) {
+            throw new DataStoreException(entityType, "Cannot save an entity with a null key");
+        } else if (entity == null) {
+            throw new DataStoreException(entityType, "Cannot save a null entity");
+        }
         return store.put(key, entity) == null;
     }
 
     @Override
     public boolean delete(K key) {
+        if (key == null) {
+            throw new DataStoreException(entityType, "Cannot delete an entity with a null key");
+        }
         if (store.containsKey(key)) {
             store.remove(key);
             return true;
@@ -42,10 +51,18 @@ public class MemoryDataStore<K extends Serializable, E> implements DataStore<K, 
 
     @Override
     public E retrieve(K key) {
+        if (key == null) {
+            throw new DataStoreException(entityType, "Cannot retrieve an entity with a null key");
+        }
         if (store.containsKey(key)) {
             return store.get(key);
         }
         return null;
+    }
+
+    @Override
+    public Collection<K> keys() {
+        return new LinkedList<>(store.keySet());
     }
 
     @Override

@@ -2,7 +2,6 @@ package com.mmnaseri.utils.spring.data.domain.impl;
 
 import com.mmnaseri.utils.spring.data.domain.Invocation;
 import com.mmnaseri.utils.spring.data.proxy.RepositoryConfiguration;
-import com.mmnaseri.utils.spring.data.query.Order;
 import com.mmnaseri.utils.spring.data.query.Page;
 import com.mmnaseri.utils.spring.data.query.QueryDescriptor;
 import com.mmnaseri.utils.spring.data.query.Sort;
@@ -45,9 +44,7 @@ public class SelectDataStoreOperation<K extends Serializable, E> implements Data
         final Sort sort = descriptor.getSort(invocation);
         final Page page = descriptor.getPage(invocation);
         if (sort != null) {
-            for (Order order : sort.getOrders()) {
-                Collections.sort(selection, new PropertyComparator(order));
-            }
+            PropertyComparator.sort(selection, sort);
         }
         if (page != null) {
             int start = page.getPageSize() * page.getPageNumber();

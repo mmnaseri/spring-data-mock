@@ -64,8 +64,8 @@ public class SelectDataStoreOperationTest {
 
     @Test
     public void testSorting() throws Exception {
-        final ImmutableOrder second = new ImmutableOrder(SortDirection.ASCENDING, "lastName", NullHandling.DEFAULT);
         final ImmutableOrder first = new ImmutableOrder(SortDirection.ASCENDING, "address.city", NullHandling.DEFAULT);
+        final ImmutableOrder second = new ImmutableOrder(SortDirection.ASCENDING, "lastName", NullHandling.DEFAULT);
         final ImmutableSort sort = new ImmutableSort(Arrays.asList(first, second));
         final WrappedSortParameterExtractor sortExtractor = new WrappedSortParameterExtractor(sort);
         final DefaultQueryDescriptor descriptor = new DefaultQueryDescriptor(false, null, 0, null, sortExtractor, Collections.emptyList(), null, null);
@@ -73,10 +73,10 @@ public class SelectDataStoreOperationTest {
         final List<Person> selected = operation.execute(dataStore, null, new ImmutableInvocation(Sample.class.getMethod("findAll"), new Object[]{}));
         assertThat(selected, hasSize(4));
         assertThat(selected, containsInAnyOrder(dataStore.retrieveAll().toArray()));
-        assertThat(selected.get(0).getId(), is("k3"));
-        assertThat(selected.get(1).getId(), is("k1"));
-        assertThat(selected.get(2).getId(), is("k4"));
-        assertThat(selected.get(3).getId(), is("k2"));
+        assertThat(selected.get(0).getId(), is("k4"));
+        assertThat(selected.get(1).getId(), is("k3"));
+        assertThat(selected.get(2).getId(), is("k2"));
+        assertThat(selected.get(3).getId(), is("k1"));
     }
 
     @Test

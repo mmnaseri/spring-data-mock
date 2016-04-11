@@ -1,8 +1,7 @@
 package com.mmnaseri.utils.spring.data.commons;
 
 import com.mmnaseri.utils.spring.data.error.EntityMissingKeyException;
-import org.springframework.beans.BeanWrapper;
-import org.springframework.beans.BeanWrapperImpl;
+import com.mmnaseri.utils.spring.data.tools.PropertyUtils;
 
 import java.io.Serializable;
 import java.util.LinkedList;
@@ -13,7 +12,7 @@ import java.util.List;
  * @since 1.0 (10/6/15)
  */
 @SuppressWarnings("unchecked")
-public class DefaultCrudRepository extends AbstractCrudRepository {
+public class DefaultCrudRepository extends CrudRepositorySupport {
 
     public Iterable<Object> save(Iterable entities) {
         final List<Object> list = new LinkedList<Object>();
@@ -38,7 +37,10 @@ public class DefaultCrudRepository extends AbstractCrudRepository {
     public Iterable findAll(Iterable ids) {
         final List entities = new LinkedList();
         for (Object id : ids) {
-            entities.add(findOne((Serializable) id));
+            final Object found = findOne((Serializable) id);
+            if (found != null) {
+                entities.add(found);
+            }
         }
         return entities;
     }
@@ -50,8 +52,7 @@ public class DefaultCrudRepository extends AbstractCrudRepository {
     }
 
     public Object delete(Object entity) {
-        final BeanWrapper wrapper = new BeanWrapperImpl(entity);
-        final Object key = wrapper.getPropertyValue(getRepositoryMetadata().getIdentifierProperty());
+        final Object key = PropertyUtils.getPropertyValue(entity, getRepositoryMetadata().getIdentifierProperty());
         if (key == null) {
             throw new EntityMissingKeyException(getRepositoryMetadata().getEntityType(), getRepositoryMetadata().getIdentifierProperty());
         }
@@ -61,13 +62,23 @@ public class DefaultCrudRepository extends AbstractCrudRepository {
     public Iterable delete(Iterable entities) {
         final List list = new LinkedList();
         for (Object entity : entities) {
-            list.add(delete(entity));
+            final Object deleted = delete(entity);
+            if (deleted != null) {
+                list.add(deleted);
+            }
         }
         return list;
     }
 
     public Iterable deleteAll() {
-        return delete(getDataStore().retrieveAll());
+        final List list = new LinkedList();
+        for (Object key : getDataStore().keys()) {
+            final Object deleted = delete(((Serializable) key));
+            if (deleted != null) {
+                list.add(deleted);
+            }
+        }
+        return list;
     }
 
 }
