@@ -8,15 +8,15 @@ import java.util.Iterator;
  * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/28/15)
  */
-public class IteratorResultAdapter extends AbstractIterableResultAdapter<Iterator> {
+public class IteratorIterableResultAdapter extends AbstractIterableResultAdapter<Iterator> {
 
-    public IteratorResultAdapter() {
+    public IteratorIterableResultAdapter() {
         super(-350);
     }
 
     @Override
     public boolean accepts(Invocation invocation, Object originalValue) {
-        return originalValue != null && Iterator.class.equals(invocation.getMethod().getReturnType());
+        return originalValue != null && originalValue instanceof Iterable && Iterator.class.equals(invocation.getMethod().getReturnType());
     }
 
     @Override

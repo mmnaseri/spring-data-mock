@@ -9,9 +9,9 @@ import java.util.concurrent.*;
  * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/28/15)
  */
-public class ListenableFutureResultAdapter extends AbstractIterableResultAdapter<ListenableFuture> {
+public class ListenableFutureIterableResultAdapter extends AbstractIterableResultAdapter<ListenableFuture> {
 
-    public ListenableFutureResultAdapter() {
+    public ListenableFutureIterableResultAdapter() {
         super(-50);
     }
 
@@ -31,7 +31,7 @@ public class ListenableFutureResultAdapter extends AbstractIterableResultAdapter
 
     @Override
     public boolean accepts(Invocation invocation, Object originalValue) {
-        return originalValue != null && invocation.getMethod().getReturnType().equals(ListenableFuture.class);
+        return originalValue != null && originalValue instanceof Iterable && invocation.getMethod().getReturnType().equals(ListenableFuture.class);
     }
 
 }

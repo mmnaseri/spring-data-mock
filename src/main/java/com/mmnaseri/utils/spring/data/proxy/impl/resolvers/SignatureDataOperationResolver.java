@@ -1,9 +1,10 @@
-package com.mmnaseri.utils.spring.data.proxy.impl;
+package com.mmnaseri.utils.spring.data.proxy.impl.resolvers;
 
 import com.mmnaseri.utils.spring.data.domain.impl.MethodInvocationDataStoreOperation;
 import com.mmnaseri.utils.spring.data.proxy.DataOperationResolver;
 import com.mmnaseri.utils.spring.data.proxy.TypeMapping;
 import com.mmnaseri.utils.spring.data.store.DataStoreOperation;
+import com.mmnaseri.utils.spring.data.tools.PropertyUtils;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
@@ -40,13 +41,11 @@ public class SignatureDataOperationResolver implements DataOperationResolver {
             final Method[] methods = searchType.isInterface() ? searchType.getMethods() : searchType.getDeclaredMethods();
             for (Method method : methods) {
                 if (method.getName().equals(name)) {
-                    if (parameterTypes == null) {
-                        return method;
-                    } else if (parameterTypes.length == method.getParameterTypes().length) {
+                    if (parameterTypes.length == method.getParameterTypes().length) {
                         boolean matches = true;
                         for (int i = 0; i < parameterTypes.length; i++) {
                             final Class<?> parameterType = parameterTypes[i];
-                            if (!method.getParameterTypes()[i].isAssignableFrom(parameterType)) {
+                            if (!PropertyUtils.getTypeOf(method.getParameterTypes()[i]).isAssignableFrom(PropertyUtils.getTypeOf(parameterType))) {
                                 matches = false;
                                 break;
                             }

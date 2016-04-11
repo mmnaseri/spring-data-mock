@@ -3,6 +3,7 @@ package com.mmnaseri.utils.spring.data.proxy.impl.adapters;
 import com.mmnaseri.utils.spring.data.domain.impl.ImmutableInvocation;
 import org.testng.annotations.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.concurrent.Future;
@@ -14,7 +15,7 @@ import static org.hamcrest.Matchers.*;
  * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (10/5/15)
  */
-public class FutureResultAdapterTest {
+public class FutureIterableResultAdapterTest {
 
     private interface Sample {
 
@@ -26,7 +27,7 @@ public class FutureResultAdapterTest {
 
     @Test
     public void testAdapting() throws Exception {
-        final FutureResultAdapter adapter = new FutureResultAdapter();
+        final FutureIterableResultAdapter adapter = new FutureIterableResultAdapter();
         final Future<?> value = adapter.adapt(new ImmutableInvocation(Sample.class.getMethod("findFuture"), null), Arrays.asList(1, 2, 3, 4));
         assertThat(value, is(notNullValue()));
         assertThat(value.get(), is(instanceOf((Class) Collection.class)));
@@ -37,10 +38,11 @@ public class FutureResultAdapterTest {
 
     @Test
     public void testAccepting() throws Exception {
-        final FutureResultAdapter adapter = new FutureResultAdapter();
+        final FutureIterableResultAdapter adapter = new FutureIterableResultAdapter();
         assertThat(adapter.accepts(null, null), is(false));
         assertThat(adapter.accepts(new ImmutableInvocation(Sample.class.getMethod("findOther"), new Object[]{}), new Object()), is(false));
-        assertThat(adapter.accepts(new ImmutableInvocation(Sample.class.getMethod("findFuture"), new Object[]{}), new Object()), is(true));
+        assertThat(adapter.accepts(new ImmutableInvocation(Sample.class.getMethod("findFuture"), new Object[]{}), new Object()), is(false));
+        assertThat(adapter.accepts(new ImmutableInvocation(Sample.class.getMethod("findFuture"), new Object[]{}), new ArrayList<>()), is(true));
     }
 
 }

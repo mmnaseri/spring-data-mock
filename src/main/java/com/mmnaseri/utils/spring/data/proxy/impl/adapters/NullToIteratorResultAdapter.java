@@ -24,23 +24,4 @@ public class NullToIteratorResultAdapter extends AbstractResultAdapter<Iterator>
         return new EmptyIterator();
     }
 
-    private static class EmptyIterator implements Iterator {
-
-        @Override
-        public boolean hasNext() {
-            return false;
-        }
-
-        @Override
-        public Object next() {
-            throw new IndexOutOfBoundsException();
-        }
-
-        @Override
-        public void remove() {
-            throw new UnsupportedOperationException();
-        }
-
-    }
-
 }

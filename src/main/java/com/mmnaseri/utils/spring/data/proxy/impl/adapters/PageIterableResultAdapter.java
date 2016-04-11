@@ -11,9 +11,9 @@ import java.util.List;
  * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/28/15)
  */
-public class PageResultAdapter extends AbstractIterableResultAdapter<Page> {
+public class PageIterableResultAdapter extends AbstractIterableResultAdapter<Page> {
 
-    public PageResultAdapter() {
+    public PageIterableResultAdapter() {
         super(-200);
     }
 
@@ -30,7 +30,7 @@ public class PageResultAdapter extends AbstractIterableResultAdapter<Page> {
 
     @Override
     public boolean accepts(Invocation invocation, Object originalValue) {
-        return originalValue != null && invocation.getMethod().getReturnType().equals(Page.class);
+        return originalValue != null && originalValue instanceof Iterable && invocation.getMethod().getReturnType().equals(Page.class);
     }
 
 }

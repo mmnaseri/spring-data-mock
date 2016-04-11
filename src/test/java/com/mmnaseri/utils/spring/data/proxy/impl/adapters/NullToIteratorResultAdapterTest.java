@@ -38,17 +38,4 @@ public class NullToIteratorResultAdapterTest {
         assertThat(value.hasNext(), is(false));
     }
 
-    @Test(expectedExceptions = IndexOutOfBoundsException.class)
-    public void testCallingNextOnAdaptedResult() throws Exception {
-        final NullToIteratorResultAdapter adapter = new NullToIteratorResultAdapter();
-        final Iterator value = adapter.adapt(new ImmutableInvocation(Sample.class.getMethod("findIterator"), new Object[]{}), null);
-        value.next();
-    }
-
-    @Test(expectedExceptions = UnsupportedOperationException.class)
-    public void testCallingRemoveOnAdaptedResult() throws Exception {
-        final NullToIteratorResultAdapter adapter = new NullToIteratorResultAdapter();
-        final Iterator value = adapter.adapt(new ImmutableInvocation(Sample.class.getMethod("findIterator"), new Object[]{}), null);
-        value.remove();
-    }
 }

@@ -10,9 +10,9 @@ import java.util.Iterator;
  * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (10/12/15)
  */
-public class IterableNumberResultAdapter extends AbstractIterableResultAdapter<Object> {
+public class NumberIterableResultAdapter extends AbstractIterableResultAdapter<Object> {
 
-    public IterableNumberResultAdapter() {
+    public NumberIterableResultAdapter() {
         super(-425);
     }
 

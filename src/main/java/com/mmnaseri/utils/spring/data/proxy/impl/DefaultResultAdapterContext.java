@@ -28,17 +28,16 @@ public class DefaultResultAdapterContext implements ResultAdapterContext {
         adapters.add(new NullToSliceResultAdapter());
         adapters.add(new NullToFutureResultAdapter());
         adapters.add(new NullToListenableFutureResultAdapter());
-        adapters.add(new IterableNumberResultAdapter());
-        adapters.add(new SimpleResultAdapter());
-        adapters.add(new IteratorResultAdapter());
-        adapters.add(new CollectionResultAdapter());
-        adapters.add(new IterableSliceResultAdapter());
-        adapters.add(new PageResultAdapter());
-        adapters.add(new GeoPageResultAdapter());
-        adapters.add(new FutureResultAdapter());
-        adapters.add(new ListenableFutureResultAdapter());
+        adapters.add(new NumberIterableResultAdapter());
+        adapters.add(new SimpleIterableResultAdapter());
+        adapters.add(new IteratorIterableResultAdapter());
+        adapters.add(new CollectionIterableResultAdapter());
+        adapters.add(new SliceIterableResultAdapter());
+        adapters.add(new PageIterableResultAdapter());
+        adapters.add(new GeoPageIterableResultAdapter());
+        adapters.add(new FutureIterableResultAdapter());
+        adapters.add(new ListenableFutureIterableResultAdapter());
         Collections.sort(adapters);
-        this.adapters.addAll(adapters);
     }
 
     @Override

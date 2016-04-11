@@ -11,15 +11,15 @@ import java.util.concurrent.Future;
  * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/28/15)
  */
-public class SimpleResultAdapter extends AbstractIterableResultAdapter<Object> {
+public class SimpleIterableResultAdapter extends AbstractIterableResultAdapter<Object> {
 
-    public SimpleResultAdapter() {
+    public SimpleIterableResultAdapter() {
         super(-400);
     }
 
     @Override
     public boolean accepts(Invocation invocation, Object originalValue) {
-        if (originalValue == null) {
+        if (originalValue == null || !(originalValue instanceof Iterable)) {
             return false;
         }
         final Class<?> returnType = invocation.getMethod().getReturnType();

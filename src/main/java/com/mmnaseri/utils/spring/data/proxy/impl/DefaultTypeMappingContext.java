@@ -7,13 +7,16 @@ import com.mmnaseri.utils.spring.data.commons.DefaultPagingAndSortingRepository;
 import com.mmnaseri.utils.spring.data.error.RepositoryDefinitionException;
 import com.mmnaseri.utils.spring.data.proxy.TypeMapping;
 import com.mmnaseri.utils.spring.data.proxy.TypeMappingContext;
-import org.springframework.core.OrderComparator;
+import org.springframework.core.annotation.AnnotationAwareOrderComparator;
 import org.springframework.util.ClassUtils;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
@@ -21,28 +24,8 @@ import java.util.List;
  */
 public class DefaultTypeMappingContext implements TypeMappingContext {
 
-    private static class Mapping {
-
-        private final Class<?> key;
-        private final Class<?> value;
-
-        public Mapping(Class<?> key, Class<?> value) {
-            this.key = key;
-            this.value = value;
-        }
-
-        public Class<?> getKey() {
-            return key;
-        }
-
-        public Class<?> getValue() {
-            return value;
-        }
-
-    }
-
     private final TypeMappingContext parent;
-    private final List<Mapping> mappings = new LinkedList<Mapping>();
+    private ConcurrentMap<Class<?>, List<Class<?>>> mappings = new ConcurrentHashMap<>();
 
     public DefaultTypeMappingContext() {
         this(null);
@@ -62,18 +45,22 @@ public class DefaultTypeMappingContext implements TypeMappingContext {
 
     @Override
     public void register(Class<?> repositoryType, Class<?> implementation) {
-        mappings.add(new Mapping(repositoryType, implementation));
+        if (Modifier.isAbstract(implementation.getModifiers()) || Modifier.isInterface(implementation.getModifiers())) {
+            throw new RepositoryDefinitionException(repositoryType, "Cannot bind a non-concrete class as an implementation for a non-concrete class");
+        }
+        mappings.putIfAbsent(repositoryType, new LinkedList<Class<?>>());
+        mappings.get(repositoryType).add(implementation);
     }
 
     @Override
     public List<Class<?>> getImplementations(Class<?> repositoryType) {
         final List<Class<?>> classes = new LinkedList<Class<?>>();
-        for (Mapping mapping : mappings) {
-            if (mapping.getKey().isAssignableFrom(repositoryType)) {
-                classes.add(mapping.getValue());
+        for (Class<?> repositorySuperType : mappings.keySet()) {
+            if (repositorySuperType.isAssignableFrom(repositoryType)) {
+                classes.addAll(mappings.get(repositorySuperType));
             }
         }
-        Collections.sort(classes, new OrderComparator());
+        Collections.sort(classes, AnnotationAwareOrderComparator.INSTANCE);
         if (parent != null) {
             classes.addAll(parent.getImplementations(repositoryType));
         }
@@ -85,9 +72,6 @@ public class DefaultTypeMappingContext implements TypeMappingContext {
         final List<TypeMapping<?>> typeMappings = new LinkedList<TypeMapping<?>>();
         final List<Class<?>> implementations = getImplementations(repositoryType);
         for (Class<?> implementation : implementations) {
-            if (Modifier.isAbstract(implementation.getModifiers()) || Modifier.isInterface(implementation.getModifiers())) {
-                throw new RepositoryDefinitionException(repositoryType, "Cannot instantiate a non-concrete class");
-            }
             final Object instance;
             try {
                 instance = implementation.newInstance();
@@ -95,9 +79,11 @@ public class DefaultTypeMappingContext implements TypeMappingContext {
                 throw new RepositoryDefinitionException(repositoryType, "Failed to instantiate an object of type " + implementation, e);
             } catch (IllegalAccessException e) {
                 throw new RepositoryDefinitionException(repositoryType, "Failed to access the constructor for " + implementation, e);
+            } catch (Exception e) {
+                throw new RepositoryDefinitionException(repositoryType, "Constructor threw an exception " + implementation, e);
             }
             //noinspection unchecked
-            typeMappings.add(new ImmutableTypeMapping<Object>((Class<Object>) implementation, instance));
+            typeMappings.add(new ImmutableTypeMapping<>((Class<Object>)implementation, instance));
         }
         return typeMappings;
     }

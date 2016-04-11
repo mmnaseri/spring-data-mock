@@ -3,6 +3,7 @@ package com.mmnaseri.utils.spring.data.proxy.impl;
 import com.mmnaseri.utils.spring.data.domain.*;
 import com.mmnaseri.utils.spring.data.domain.impl.QueryDescriptionExtractor;
 import com.mmnaseri.utils.spring.data.proxy.*;
+import com.mmnaseri.utils.spring.data.proxy.impl.resolvers.DefaultDataOperationResolver;
 import com.mmnaseri.utils.spring.data.query.DataFunctionRegistry;
 import com.mmnaseri.utils.spring.data.store.DataStore;
 import com.mmnaseri.utils.spring.data.store.DataStoreOperation;

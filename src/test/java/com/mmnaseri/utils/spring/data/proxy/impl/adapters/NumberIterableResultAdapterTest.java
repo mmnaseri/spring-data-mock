@@ -16,7 +16,7 @@ import static org.hamcrest.Matchers.is;
  * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/10/16)
  */
-public class IterableNumberResultAdapterTest {
+public class NumberIterableResultAdapterTest {
 
     private interface Sample {
 
@@ -42,7 +42,7 @@ public class IterableNumberResultAdapterTest {
 
     @Test
     public void testAccepting() throws Exception {
-        final IterableNumberResultAdapter adapter = new IterableNumberResultAdapter();
+        final NumberIterableResultAdapter adapter = new NumberIterableResultAdapter();
         assertThat(adapter.accepts(null, null), is(false));
         assertThat(adapter.accepts(new ImmutableInvocation(Sample.class.getMethod("findOther"), new Object[]{}), new Object()), is(false));
         assertThat(adapter.accepts(new ImmutableInvocation(Sample.class.getMethod("findInt"), new Object[]{}), new Object()), is(false));
@@ -54,7 +54,7 @@ public class IterableNumberResultAdapterTest {
 
     @Test
     public void testAdapting() throws Exception {
-        final IterableNumberResultAdapter adapter = new IterableNumberResultAdapter();
+        final NumberIterableResultAdapter adapter = new NumberIterableResultAdapter();
         Long value = 100L;
         assertThat(adapter.adapt(new ImmutableInvocation(Sample.class.getMethod("findInt"), new Object[]{}), Collections.singleton(value)), Matchers.<Object>is(value.intValue()));
         assertThat(adapter.adapt(new ImmutableInvocation(Sample.class.getMethod("findLong"), new Object[]{}), Collections.singleton(value)), Matchers.<Object>is(value));
@@ -66,7 +66,7 @@ public class IterableNumberResultAdapterTest {
 
     @Test(expectedExceptions = ResultAdapterFailureException.class)
     public void testAdaptingUnsupportedNumberType() throws Exception {
-        final IterableNumberResultAdapter adapter = new IterableNumberResultAdapter();
+        final NumberIterableResultAdapter adapter = new NumberIterableResultAdapter();
         adapter.adapt(new ImmutableInvocation(Sample.class.getMethod("findBigDecimal"), new Object[]{}), Collections.singletonList(1));
     }
 }

@@ -1,4 +1,4 @@
-package com.mmnaseri.utils.spring.data.proxy.impl;
+package com.mmnaseri.utils.spring.data.proxy.impl.resolvers;
 
 import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
 import com.mmnaseri.utils.spring.data.domain.impl.QueryDescriptionExtractor;

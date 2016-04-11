@@ -1,8 +1,8 @@
 package com.mmnaseri.utils.spring.data.proxy.impl.adapters;
 
 import com.mmnaseri.utils.spring.data.domain.Invocation;
-import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.SliceImpl;
+import org.springframework.data.geo.GeoPage;
+import org.springframework.data.geo.GeoResults;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,26 +11,26 @@ import java.util.List;
  * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/28/15)
  */
-public class IterableSliceResultAdapter extends AbstractIterableResultAdapter<Slice> {
+public class GeoPageIterableResultAdapter extends AbstractIterableResultAdapter<GeoPage> {
 
-    public IterableSliceResultAdapter() {
-        super(-250);
+    public GeoPageIterableResultAdapter() {
+        super(-150);
     }
 
     @Override
-    protected Slice doAdapt(Invocation invocation, Iterable iterable) {
+    protected GeoPage doAdapt(Invocation invocation, Iterable iterable) {
         final List content = new ArrayList();
         for (Object item : iterable) {
             //noinspection unchecked
             content.add(item);
         }
         //noinspection unchecked
-        return new SliceImpl(content);
+        return new GeoPage(new GeoResults(content));
     }
 
     @Override
     public boolean accepts(Invocation invocation, Object originalValue) {
-        return originalValue != null && invocation.getMethod().getReturnType().equals(Slice.class);
+        return originalValue != null && originalValue instanceof Iterable && invocation.getMethod().getReturnType().equals(GeoPage.class);
     }
 
 }

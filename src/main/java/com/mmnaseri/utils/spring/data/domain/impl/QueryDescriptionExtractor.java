@@ -22,11 +22,11 @@ import java.util.regex.Pattern;
  */
 public class QueryDescriptionExtractor {
 
-    public static final String ALL_IGNORE_CASE_SUFFIX = "(AllIgnoreCase|AllIgnoresCase|AllIgnoringCase)$";
-    public static final String IGNORE_CASE_SUFFIX = "(IgnoreCase|IgnoresCase|IgnoringCase)$";
-    public static final String ASC_SUFFIX = "Asc";
-    public static final String DESC_SUFFIX = "Desc";
-    public static final String DEFAULT_OPERATOR_SUFFIX = "Is";
+    private static final String ALL_IGNORE_CASE_SUFFIX = "(AllIgnoreCase|AllIgnoresCase|AllIgnoringCase)$";
+    private static final String IGNORE_CASE_SUFFIX = "(IgnoreCase|IgnoresCase|IgnoringCase)$";
+    private static final String ASC_SUFFIX = "Asc";
+    private static final String DESC_SUFFIX = "Desc";
+    private static final String DEFAULT_OPERATOR_SUFFIX = "Is";
 
     private final OperatorContext operatorContext;
 

@@ -10,9 +10,9 @@ import java.util.concurrent.FutureTask;
  * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/28/15)
  */
-public class FutureResultAdapter extends AbstractIterableResultAdapter<Future> {
+public class FutureIterableResultAdapter extends AbstractIterableResultAdapter<Future> {
 
-    public FutureResultAdapter() {
+    public FutureIterableResultAdapter() {
         super(-100);
     }
 
@@ -31,7 +31,7 @@ public class FutureResultAdapter extends AbstractIterableResultAdapter<Future> {
 
     @Override
     public boolean accepts(Invocation invocation, Object originalValue) {
-        return originalValue != null && invocation.getMethod().getReturnType().equals(Future.class);
+        return originalValue != null && originalValue instanceof Iterable && invocation.getMethod().getReturnType().equals(Future.class);
     }
 
 }

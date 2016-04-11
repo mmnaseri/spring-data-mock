@@ -10,9 +10,9 @@ import java.util.Collection;
  * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/28/15)
  */
-public class CollectionResultAdapter extends AbstractIterableResultAdapter<Collection> {
+public class CollectionIterableResultAdapter extends AbstractIterableResultAdapter<Collection> {
 
-    public CollectionResultAdapter() {
+    public CollectionIterableResultAdapter() {
         super(-300);
     }
 
@@ -33,6 +33,6 @@ public class CollectionResultAdapter extends AbstractIterableResultAdapter<Colle
 
     @Override
     public boolean accepts(Invocation invocation, Object originalValue) {
-        return originalValue != null && Collection.class.isAssignableFrom(invocation.getMethod().getReturnType());
+        return originalValue != null && originalValue instanceof Iterable && Collection.class.isAssignableFrom(invocation.getMethod().getReturnType());
     }
 }
