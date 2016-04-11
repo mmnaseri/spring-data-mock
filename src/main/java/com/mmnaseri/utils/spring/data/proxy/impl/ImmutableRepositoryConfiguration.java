@@ -36,4 +36,5 @@ public class ImmutableRepositoryConfiguration implements RepositoryConfiguration
     public List<Class<?>> getBoundImplementations() {
         return boundImplementations;
     }
+
 }

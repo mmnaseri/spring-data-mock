@@ -2,6 +2,7 @@ package com.mmnaseri.utils.spring.data.proxy.impl.resolvers;
 
 import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
 import com.mmnaseri.utils.spring.data.domain.impl.QueryDescriptionExtractor;
+import com.mmnaseri.utils.spring.data.error.DataOperationDefinitionException;
 import com.mmnaseri.utils.spring.data.error.UnknownDataOperationException;
 import com.mmnaseri.utils.spring.data.proxy.DataOperationResolver;
 import com.mmnaseri.utils.spring.data.proxy.RepositoryFactoryConfiguration;
@@ -30,7 +31,12 @@ public class DefaultDataOperationResolver implements DataOperationResolver {
     @Override
     public DataStoreOperation<?, ?, ?> resolve(Method method) {
         for (DataOperationResolver resolver : resolvers) {
-            final DataStoreOperation<?, ?, ?> resolution = resolver.resolve(method);
+            final DataStoreOperation<?, ?, ?> resolution;
+            try {
+                resolution = resolver.resolve(method);
+            } catch (Exception e) {
+                throw new DataOperationDefinitionException(method, e);
+            }
             if (resolution != null) {
                 return resolution;
             }

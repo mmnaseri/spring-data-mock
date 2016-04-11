@@ -2,6 +2,7 @@ package com.mmnaseri.utils.spring.data.proxy.impl.resolvers;
 
 import com.mmnaseri.utils.spring.data.domain.impl.*;
 import com.mmnaseri.utils.spring.data.domain.model.Person;
+import com.mmnaseri.utils.spring.data.error.DataOperationDefinitionException;
 import com.mmnaseri.utils.spring.data.error.UnknownDataOperationException;
 import com.mmnaseri.utils.spring.data.proxy.TypeMapping;
 import com.mmnaseri.utils.spring.data.proxy.impl.DefaultRepositoryFactoryConfiguration;
@@ -57,6 +58,11 @@ public class DefaultDataOperationResolverTest {
         resolver.resolve(Sample.class.getMethod("nativeMethod"));
     }
 
+    @Test(expectedExceptions = DataOperationDefinitionException.class)
+    public void testLookingForMalformedMethod() throws Exception {
+        resolver.resolve(Sample.class.getMethod("findBy"));
+    }
+
     private interface Sample {
 
         void mappedSignature(String string);
@@ -65,6 +71,8 @@ public class DefaultDataOperationResolverTest {
 
         @Query
         void nativeMethod();
+
+        void findBy();
 
     }
 

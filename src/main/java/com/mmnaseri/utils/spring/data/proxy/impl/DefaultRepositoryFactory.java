@@ -69,6 +69,9 @@ public class DefaultRepositoryFactory implements RepositoryFactory {
                 //noinspection unchecked
                 ((RepositoryAware) typeMapping.getInstance()).setRepository(instance);
             }
+            if (typeMapping.getInstance() instanceof RepositoryConfigurationAware) {
+                ((RepositoryConfigurationAware) typeMapping.getInstance()).setRepositoryConfiguration(repositoryConfiguration);
+            }
         }
         return repositoryInterface.cast(instance);
     }
