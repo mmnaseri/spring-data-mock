@@ -22,7 +22,6 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.testng.Assert.*;
 
 /**
  * @author Milad Naseri (milad.naseri@cdk.com)

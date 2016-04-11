@@ -8,9 +8,8 @@ import com.mmnaseri.utils.spring.data.dsl.factory.RepositoryFactoryBuilder;
 import com.mmnaseri.utils.spring.data.error.QueryParserException;
 import com.mmnaseri.utils.spring.data.proxy.RepositoryFactoryConfiguration;
 import com.mmnaseri.utils.spring.data.query.*;
-import com.mmnaseri.utils.spring.data.query.Page;
-import com.mmnaseri.utils.spring.data.query.Sort;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 

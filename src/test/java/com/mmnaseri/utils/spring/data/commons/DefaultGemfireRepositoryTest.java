@@ -10,9 +10,7 @@ import org.testng.annotations.Test;
 import java.io.Serializable;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.*;
 
 /**
  * @author Milad Naseri (milad.naseri@cdk.com)
