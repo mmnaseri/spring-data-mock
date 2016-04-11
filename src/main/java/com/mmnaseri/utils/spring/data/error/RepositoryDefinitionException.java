@@ -5,6 +5,7 @@ package com.mmnaseri.utils.spring.data.error;
  * @since 1.0 (4/8/16)
  */
 public class RepositoryDefinitionException extends RepositoryMockException {
+
     public RepositoryDefinitionException(Class<?> repositoryInterface, String message) {
         super(repositoryInterface + ": " + message);
     }
@@ -12,4 +13,5 @@ public class RepositoryDefinitionException extends RepositoryMockException {
     public RepositoryDefinitionException(Class<?> repositoryInterface, String message, Throwable cause) {
         super(repositoryInterface + ": " + message, cause);
     }
+
 }

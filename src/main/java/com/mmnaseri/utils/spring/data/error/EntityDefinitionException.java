@@ -10,8 +10,4 @@ public abstract class EntityDefinitionException extends RepositoryMockException 
         super(message);
     }
 
-    public EntityDefinitionException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
 }
