@@ -300,3 +300,30 @@ value, `"User"`.
 
 By default, auditing is disabled. This is to follow in the footprints of Spring. Since Spring Data asks you to explicitly enable
 auditing, this framework, too, pushes for the same requirement.
+
+##### A Note on Distinct Selections
+
+When using the `distinct` modifier for selection, this framework will use the internal `hashCode()` of the object being read
+from the data store abstraction to figure out distinct values.
+
+This is because as opposed to most data stores, we do not have any notion of row-by-row or object-to-object equality relations
+and at the moment we cannot figure out if two objects should be considered as equal, unless they have a `hashCode`.
+
+Having a `hashCode` is good programming practice anyway, so I don't feel too bad about not having implemented this for the moment.
+
+##### Referenced Objects
+
+In this framework referenced objects are not going to be separated out. We have not implemented a full-fledged ORM and that is not
+the plan -- at least for the moment.
+
+Then you save an object such as this:
+
+    public class EntityA {
+
+        @Reference
+        private EntityB referencedObject;
+
+    }
+
+we are not going to automatically create a data store for the `EntityB` class and store the values there. Though it doesn't seem to
+be to complicated to implement, at the moment it is not how we do things.
