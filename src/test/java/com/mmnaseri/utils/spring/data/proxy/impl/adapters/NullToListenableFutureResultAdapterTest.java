@@ -5,9 +5,7 @@ import org.springframework.util.concurrent.ListenableFuture;
 import org.testng.annotations.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.*;
 
 /**
  * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)

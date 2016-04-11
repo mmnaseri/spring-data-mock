@@ -10,7 +10,6 @@ import com.mmnaseri.utils.spring.data.proxy.TypeMappingContext;
 import org.springframework.core.annotation.AnnotationAwareOrderComparator;
 import org.springframework.util.ClassUtils;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.util.Collections;
 import java.util.LinkedList;

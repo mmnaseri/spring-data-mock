@@ -11,7 +11,6 @@ import com.mmnaseri.utils.spring.data.query.QueryDescriptor;
 import com.mmnaseri.utils.spring.data.store.DataStoreOperation;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.data.annotation.QueryAnnotation;
-import org.springframework.data.util.ReflectionUtils;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
