@@ -307,3 +307,21 @@ modified by) you will need to supply an <code>AuditorAware</code> or accept the 
 value, <code><span class="hljs-variable">&amp;quot</span>;User<span class="hljs-variable">&amp;quot</span>;</code>.</p>
 <p>By default, auditing is disabled. This is to follow in the footprints of Spring. Since Spring Data asks you to explicitly enable
 auditing, this framework, too, pushes for the same requirement.</p>
+<h5 id="a-note-on-distinct-selections">A Note on Distinct Selections</h5>
+<p>When using the <code><span class="hljs-keyword">distinct</span></code> modifier for selection, this framework will use the internal <code><span class="hljs-function"><span class="hljs-title">hashCode</span><span class="hljs-params">()</span></span></code> of the object being read
+from the data store abstraction to figure out distinct values.</p>
+<p>This is because as opposed to most data stores, we do not have any notion of row-by-row or object-to-object equality relations
+and at the moment we cannot figure out if two objects should be considered as equal, unless they have a <code><span class="hljs-built_in">hash</span>Code</code>.</p>
+<p>Having a <code><span class="hljs-built_in">hash</span>Code</code> is good programming practice anyway, so I don&#39;t feel too bad about not having implemented this for the moment.</p>
+<h5 id="referenced-objects">Referenced Objects</h5>
+<p>In this framework referenced objects are not going to be separated out. We have not implemented a full-fledged ORM and that is not
+the plan -- at least for the moment.</p>
+<p>Then you save an object such as this:</p>
+<pre><code><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">EntityA</span> {</span>
+
+    <span class="hljs-meta">@Reference</span>
+    <span class="hljs-keyword">private</span> EntityB referencedObject;
+
+}
+</code></pre><p>we are not going to automatically create a data store for the <code>EntityB</code> class and store the values there. Though it doesn&#39;t seem to
+be to complicated to implement, at the moment it is not how we do things.</p>
