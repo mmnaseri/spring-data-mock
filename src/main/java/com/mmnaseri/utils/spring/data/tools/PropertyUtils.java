@@ -39,6 +39,15 @@ public final class PropertyUtils {
     }
 
     public static Object getPropertyValue(Object context, String property) {
+        if (property.contains(".")) {
+            final String[] split = property.split("\\.", 2);
+            final BeanWrapper wrapper = new BeanWrapperImpl(context);
+            final Object propertyValue = wrapper.getPropertyValue(split[0]);
+            if (propertyValue == null) {
+                return null;
+            }
+            return getPropertyValue(propertyValue, split[1]);
+        }
         final BeanWrapper wrapper = new BeanWrapperImpl(context);
         return wrapper.getPropertyValue(property);
     }

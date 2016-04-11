@@ -11,6 +11,7 @@ public class Person {
     private String lastName;
     private Zip addressZip;
     private Address address;
+    private Integer age;
 
     public String getId() {
         return id;
@@ -55,6 +56,32 @@ public class Person {
     public Person setAddress(Address address) {
         this.address = address;
         return this;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public Person setAge(Integer age) {
+        this.age = age;
+        return this;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Person person = (Person) o;
+        return id != null ? id.equals(person.id) : person.id == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
     }
 
 }

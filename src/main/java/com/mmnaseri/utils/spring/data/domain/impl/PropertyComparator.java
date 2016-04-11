@@ -42,10 +42,10 @@ public class PropertyComparator implements Comparator<Object> {
         }
         int comparison = 0;
         if (firstValue == null && secondValue != null) {
-            comparison = nullHandling.equals(NullHandling.NULLS_FIRST) ? -1 : 1;
-        } else if (firstValue != null && secondValue == nullHandling) {
-            comparison = nullHandling.equals(NullHandling.NULLS_FIRST) ? 1 : -1;
-        } else if (firstValue != null && secondValue != null) {
+            comparison = NullHandling.NULLS_FIRST.equals(nullHandling) ? -1 : 1;
+        } else if (firstValue != null && secondValue == null) {
+            comparison = NullHandling.NULLS_FIRST.equals(nullHandling) ? 1 : -1;
+        } else if (firstValue != null) {
             if (!(firstValue instanceof Comparable) || !(secondValue instanceof Comparable)) {
                 throw new InvalidArgumentException("Expected both values to be comparable for property: " + property);
             }
@@ -57,7 +57,7 @@ public class PropertyComparator implements Comparator<Object> {
                 throw new InvalidArgumentException("Values for were not of the same type for property: " + property);
             }
         }
-        return comparison * (direction.equals(SortDirection.DESCENDING) ? -1 : 1);
+        return comparison * (SortDirection.DESCENDING.equals(direction) ? -1 : 1);
     }
 
 }

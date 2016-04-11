@@ -24,9 +24,7 @@ public class KeyGeneratorProvider {
         generators = new ConcurrentHashMap<>();
         for (Class<? extends KeyGenerator> generatorType : discoveredKeyGenerators) {
             final Class<?> keyType = GenericTypeResolver.resolveTypeArgument(generatorType, KeyGenerator.class);
-            if (keyType == null) {
-                continue;
-            }
+            assert keyType != null;
             final Class<? extends Serializable> actualKeyType = keyType.asSubclass(Serializable.class);
             if (!generators.containsKey(actualKeyType)) {
                 generators.put(actualKeyType, new CopyOnWriteArrayList<Class<? extends KeyGenerator>>());

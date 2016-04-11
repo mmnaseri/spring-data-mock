@@ -47,10 +47,6 @@ public class QueryDescriptionExtractor {
         if (function == null) {
             throw new QueryParserException(method.getDeclaringClass(), "Malformed query method name: " + method);
         }
-        //if the method name is one of the following, it is a simple read, and no function is required
-        if (Arrays.asList("read", "find", "query", "get", "load", "select").contains(function)) {
-            function = null;
-        }
         //this is the limit set on the number of items being returned
         int limit = 0;
         //this is the flag that determines whether or not the result should be sifted for distinct values
@@ -66,10 +62,14 @@ public class QueryDescriptionExtractor {
             pageExtractor = null;
             sortExtractor = null;
         } else {
+            //we are still reading the function name if we haven't gotten to `By` and we haven't seen
+            //any of the magic keywords `First`, `Top`, and `Distinct`.
+            boolean stillReadingFunctionName = true;
             //scan for words prior to 'By'
             while (reader.hasMore() && !reader.has("By")) {
                 //if the next word is Top, then we are setting a limit
                 if (reader.has("First")) {
+                    stillReadingFunctionName = false;
                     if (limit > 0) {
                         throw new QueryParserException(method.getDeclaringClass(), "There is already a limit of " + limit + " specified for this query: " + method);
                     }
@@ -81,6 +81,7 @@ public class QueryDescriptionExtractor {
                     }
                     continue;
                 } else if (reader.has("Top")) {
+                    stillReadingFunctionName = false;
                     if (limit > 0) {
                         throw new QueryParserException(method.getDeclaringClass(), "There is already a limit of " + limit + " specified for this query: " + method);
                     }
@@ -88,6 +89,7 @@ public class QueryDescriptionExtractor {
                     limit = Integer.parseInt(reader.expect("\\d+"));
                     continue;
                 } else if (reader.has("Distinct")) {
+                    stillReadingFunctionName = false;
                     //if the next word is 'Distinct', we are saying we should return distinct results
                     if (distinct) {
                         throw new QueryParserException(method.getDeclaringClass(), "You have already stated that this query should return distinct items: " + method);
@@ -95,7 +97,10 @@ public class QueryDescriptionExtractor {
                     distinct = true;
                 }
                 //we read the words until we reach "By".
-                reader.expect("[A-Z][a-z]+");
+                final String word = reader.expect("[A-Z][a-z]+");
+                if (stillReadingFunctionName) {
+                    function += word;
+                }
             }
             try {
                 reader.expect("By");
@@ -214,7 +219,7 @@ public class QueryDescriptionExtractor {
                         throw new QueryParserException(method.getDeclaringClass(), "Failed to get a property descriptor for expression: " + expression, e);
                     }
                     if (!Comparable.class.isAssignableFrom(propertyDescriptor.getType())) {
-                        throw new QueryParserException(method.getDeclaringClass(), "Sort property " + propertyDescriptor.getPath() + " is not comparable " + method);
+                        throw new QueryParserException(method.getDeclaringClass(), "Sort property `" + propertyDescriptor.getPath() + "` is not comparable in `" + method.getName() + "`");
                     }
                     final Order order = new ImmutableOrder(direction, propertyDescriptor.getPath(), NullHandling.DEFAULT);
                     orders.add(order);
@@ -242,6 +247,10 @@ public class QueryDescriptionExtractor {
             } else {
                 throw new QueryParserException(method.getDeclaringClass(), "Too many parameters declared for query method " + method);
             }
+        }
+        //if the method name is one of the following, it is a simple read, and no function is required
+        if (Arrays.asList("read", "find", "query", "get", "load", "select").contains(function)) {
+            function = null;
         }
         return new DefaultQueryDescriptor(distinct, function, limit, pageExtractor, sortExtractor, branches, configuration, repositoryMetadata);
     }
