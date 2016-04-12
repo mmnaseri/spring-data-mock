@@ -1,6 +1,7 @@
 package com.mmnaseri.utils.spring.data.proxy.impl.adapters;
 
 import com.mmnaseri.utils.spring.data.domain.impl.ImmutableInvocation;
+import com.mmnaseri.utils.spring.data.proxy.ResultAdapter;
 import org.testng.annotations.Test;
 
 import java.util.concurrent.Future;
@@ -24,14 +25,14 @@ public class NullToFutureResultAdapterTest {
 
     @Test
     public void testAcceptance() throws Exception {
-        final NullToFutureResultAdapter adapter = new NullToFutureResultAdapter();
+        final ResultAdapter<Future> adapter = new NullToFutureResultAdapter();
         assertThat(adapter.accepts(new ImmutableInvocation(Sample.class.getMethod("findInTheFuture"), new Object[]{}), null), is(true));
         assertThat(adapter.accepts(new ImmutableInvocation(Sample.class.getMethod("findNow"), new Object[]{}), null), is(false));
     }
 
     @Test
     public void testAdaptingFuture() throws Exception {
-        final NullToFutureResultAdapter adapter = new NullToFutureResultAdapter();
+        final ResultAdapter<Future> adapter = new NullToFutureResultAdapter();
         final Future value = adapter.adapt(new ImmutableInvocation(Sample.class.getMethod("findInTheFuture"), new Object[]{}), null);
         assertThat(value, is(notNullValue()));
         assertThat(value.get(), is(nullValue()));

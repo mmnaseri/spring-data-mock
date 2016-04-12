@@ -234,6 +234,7 @@
                             <!-- aggregated reports for multi-module projects -->
                             <aggregate>true</aggregate>
                             <check/>
+                            <outputDirectory>target/cobertura</outputDirectory>
                         </configuration>
                     </plugin>
                     <plugin>

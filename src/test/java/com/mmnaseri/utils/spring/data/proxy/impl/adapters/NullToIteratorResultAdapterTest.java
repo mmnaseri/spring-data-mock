@@ -1,6 +1,7 @@
 package com.mmnaseri.utils.spring.data.proxy.impl.adapters;
 
 import com.mmnaseri.utils.spring.data.domain.impl.ImmutableInvocation;
+import com.mmnaseri.utils.spring.data.proxy.ResultAdapter;
 import org.testng.annotations.Test;
 
 import java.util.Iterator;
@@ -25,14 +26,14 @@ public class NullToIteratorResultAdapterTest {
 
     @Test
     public void testAcceptance() throws Exception {
-        final NullToIteratorResultAdapter adapter = new NullToIteratorResultAdapter();
+        final ResultAdapter<Iterator> adapter = new NullToIteratorResultAdapter();
         assertThat(adapter.accepts(new ImmutableInvocation(Sample.class.getMethod("findIterator"), new Object[]{}), null), is(true));
         assertThat(adapter.accepts(new ImmutableInvocation(Sample.class.getMethod("findObject"), new Object[]{}), null), is(false));
     }
 
     @Test
     public void testAdaptingToIterable() throws Exception {
-        final NullToIteratorResultAdapter adapter = new NullToIteratorResultAdapter();
+        final ResultAdapter<Iterator> adapter = new NullToIteratorResultAdapter();
         final Iterator value = adapter.adapt(new ImmutableInvocation(Sample.class.getMethod("findIterator"), new Object[]{}), null);
         assertThat(value, is(notNullValue()));
         assertThat(value.hasNext(), is(false));
