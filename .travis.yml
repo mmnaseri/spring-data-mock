@@ -2,7 +2,6 @@ language: java
 jdk:
   - oraclejdk8
   - oraclejdk7
-  - openjdk7
 after_success:
   - mvn -P coverage clean cobertura:cobertura coveralls:report
   - '[[ $TRAVIS_BRANCH == "master" && ( "x${TRAVIS_PULL_REQUEST}" == "xfalse" || "x${TRAVIS_PULL_REQUEST}" == "x" ) ]] && sudo apt-get install gnupg2'
