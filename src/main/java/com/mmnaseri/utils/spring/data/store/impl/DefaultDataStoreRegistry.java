@@ -14,7 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class DefaultDataStoreRegistry implements DataStoreRegistry {
 
-    private final Map<Class<?>, DataStore<?, ?>> dataStores = new ConcurrentHashMap<Class<?>, DataStore<?, ?>>();
+    private final Map<Class<?>, DataStore<?, ?>> dataStores = new ConcurrentHashMap<>();
 
     @Override
     public <E, K extends Serializable> void register(DataStore<K, E> dataStore) {

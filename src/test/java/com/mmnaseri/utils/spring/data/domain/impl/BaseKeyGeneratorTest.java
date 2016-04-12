@@ -21,7 +21,7 @@ public abstract class BaseKeyGeneratorTest<S extends Serializable> {
     @Test(invocationCount = 100)
     public void testThatKeysAreUnique() throws Exception {
         final KeyGenerator<S> keyGenerator = getKeyGenerator();
-        final Set<S> keys = new HashSet<S>();
+        final Set<S> keys = new HashSet<>();
         for (int i = 0; i < 200; i++) {
             final S key = keyGenerator.generate();
             assertThat(keys.contains(key), is(false));

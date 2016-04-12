@@ -17,7 +17,7 @@ public class DefaultOperatorContext implements OperatorContext {
     private final Set<Operator> operators;
 
     public DefaultOperatorContext() {
-        operators = new CopyOnWriteArraySet<Operator>();
+        operators = new CopyOnWriteArraySet<>();
         operators.add(new ImmutableOperator("AFTER", 1, new IsGreaterThanMatcher(), "After", "IsAfter"));
         operators.add(new ImmutableOperator("BEFORE", 1, new IsLessThanMatcher(), "Before", "IsBefore"));
         operators.add(new ImmutableOperator("CONTAINING", 1, new ContainingMatcher(), "Containing", "IsContaining", "Contains"));

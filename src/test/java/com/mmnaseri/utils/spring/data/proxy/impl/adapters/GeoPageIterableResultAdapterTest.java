@@ -29,7 +29,7 @@ public class GeoPageIterableResultAdapterTest {
     @Test
     public void testAdapting() throws Exception {
         final GeoPageIterableResultAdapter adapter = new GeoPageIterableResultAdapter();
-        final GeoResult[] geoResults = {new GeoResult<Integer>(1, new Distance(0)), new GeoResult<Integer>(2, new Distance(1)), new GeoResult<Integer>(3, new Distance(1)), new GeoResult<Integer>(4, new Distance(2))};
+        final GeoResult[] geoResults = {new GeoResult<>(1, new Distance(0)), new GeoResult<>(2, new Distance(1)), new GeoResult<>(3, new Distance(1)), new GeoResult<>(4, new Distance(2))};
         final GeoPage<?> value = adapter.adapt(new ImmutableInvocation(Sample.class.getMethod("findGeoPage"), null), Arrays.asList(geoResults));
         assertThat(value, is(notNullValue()));
         assertThat(value.getAverageDistance(), is(new Distance(1)));

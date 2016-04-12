@@ -18,7 +18,7 @@ public class DefaultResultConverter implements ResultConverter {
     private final List<ResultConverter> converters;
 
     public DefaultResultConverter() {
-        converters = new LinkedList<ResultConverter>();
+        converters = new LinkedList<>();
         converters.add(new FutureToIterableConverter());
         converters.add(new IteratorToIterableConverter());
         converters.add(new SingleValueToIterableConverter());

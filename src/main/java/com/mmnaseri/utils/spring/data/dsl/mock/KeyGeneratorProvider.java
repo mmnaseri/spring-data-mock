@@ -46,7 +46,7 @@ class KeyGeneratorProvider {
 
     @SuppressWarnings("unchecked")
     private <S extends Serializable> List<Class<? extends KeyGenerator<S>>> getKeyGenerators(Class<S> keyType) {
-        final LinkedList<Class<? extends KeyGenerator<S>>> keyGenerators = new LinkedList<Class<? extends KeyGenerator<S>>>();
+        final LinkedList<Class<? extends KeyGenerator<S>>> keyGenerators = new LinkedList<>();
         if (generators.containsKey(keyType)) {
             final List<Class<? extends KeyGenerator>> classes = generators.get(keyType);
             for (Class<? extends KeyGenerator> type : classes) {

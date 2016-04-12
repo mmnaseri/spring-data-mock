@@ -12,7 +12,7 @@ import java.util.Set;
  */
 public abstract class AbstractRandomKeyGenerator<S extends Serializable> implements KeyGenerator<S> {
 
-    private final Set<S> used = new HashSet<S>();
+    private final Set<S> used = new HashSet<>();
 
     @Override
     public synchronized S generate() {

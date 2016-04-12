@@ -8,6 +8,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -19,11 +20,10 @@ import static org.hamcrest.Matchers.*;
 public class SignatureDataOperationResolverTest {
 
     private SignatureDataOperationResolver resolver;
-    private ArrayList<TypeMapping<?>> mappings;
 
     @BeforeMethod
     public void setUp() throws Exception {
-        mappings = new ArrayList<>();
+        final List<TypeMapping<?>> mappings = new ArrayList<>();
         mappings.add(new ImmutableTypeMapping<>(SuperInterface.class, new SuperInterfaceImpl()));
         mappings.add(new ImmutableTypeMapping<>(ChildClass.class, new ChildClass()));
         resolver = new SignatureDataOperationResolver(mappings);

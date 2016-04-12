@@ -18,7 +18,7 @@ public class DefaultDataFunctionRegistry implements DataFunctionRegistry {
     private final Map<String, DataFunction<?>> functions;
 
     public DefaultDataFunctionRegistry() {
-        functions = new ConcurrentHashMap<String, DataFunction<?>>();
+        functions = new ConcurrentHashMap<>();
         register("count", new CountDataFunction());
         register("delete", new DeleteDataFunction());
     }

@@ -25,7 +25,7 @@ public class FutureToIterableConverter extends AbstractResultConverter {
                 final Object result = future.get();
                 return converter.convert(invocation, result);
             } catch (Exception e) {
-                throw new ResultConversionFailureException("Failed to retrieve promised result", e);
+                throw new ResultConversionFailureException(e);
             }
         }
         return original;

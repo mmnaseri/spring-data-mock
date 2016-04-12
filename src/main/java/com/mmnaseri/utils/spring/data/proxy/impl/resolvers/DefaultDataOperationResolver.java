@@ -23,7 +23,7 @@ public class DefaultDataOperationResolver implements DataOperationResolver {
     private final List<DataOperationResolver> resolvers;
 
     public DefaultDataOperationResolver(List<TypeMapping<?>> implementations, QueryDescriptionExtractor descriptionExtractor, RepositoryMetadata repositoryMetadata, DataFunctionRegistry functionRegistry, RepositoryFactoryConfiguration configuration) {
-        resolvers = new ArrayList<DataOperationResolver>();
+        resolvers = new ArrayList<>();
         resolvers.add(new SignatureDataOperationResolver(implementations));
         resolvers.add(new QueryMethodDataOperationResolver(descriptionExtractor, repositoryMetadata, functionRegistry, configuration));
     }

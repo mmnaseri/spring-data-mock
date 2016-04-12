@@ -29,7 +29,7 @@ public class DataOperationInvocationHandler<K extends Serializable, E> implement
     private final ResultConverter converter;
     private final RepositoryConfiguration repositoryConfiguration;
     private final List<InvocationMapping<K, E>> mappings;
-    private final Map<Method, InvocationMapping<K, E>> cache = new ConcurrentHashMap<Method, InvocationMapping<K, E>>();
+    private final Map<Method, InvocationMapping<K, E>> cache = new ConcurrentHashMap<>();
     private final Set<Method> misses = new CopyOnWriteArraySet<>();
     private final NonDataOperationInvocationHandler operationInvocationHandler;
 

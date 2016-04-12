@@ -18,7 +18,7 @@ public class AnnotatedFieldIdPropertyResolver implements IdPropertyResolver {
 
     @Override
     public String resolve(final Class<?> entityType, Class<? extends Serializable> idType) {
-        final AtomicReference<Field> found = new AtomicReference<Field>();
+        final AtomicReference<Field> found = new AtomicReference<>();
         ReflectionUtils.doWithFields(entityType, new ReflectionUtils.FieldCallback() {
             @Override
             public void doWith(Field field) throws IllegalArgumentException, IllegalAccessException {

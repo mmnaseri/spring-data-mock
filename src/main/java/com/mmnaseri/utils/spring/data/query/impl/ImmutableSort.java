@@ -16,7 +16,7 @@ public class ImmutableSort implements Sort {
     private final List<Order> orders;
 
     public ImmutableSort(List<Order> orders) {
-        this.orders = new ArrayList<Order>();
+        this.orders = new ArrayList<>();
         if (orders != null) {
             for (Order order : orders) {
                 this.orders.add(new ImmutableOrder(order));

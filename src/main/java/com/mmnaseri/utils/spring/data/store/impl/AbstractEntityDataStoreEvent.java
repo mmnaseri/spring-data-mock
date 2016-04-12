@@ -7,6 +7,7 @@ import com.mmnaseri.utils.spring.data.store.DataStore;
  * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (10/6/15)
  */
+@SuppressWarnings("WeakerAccess")
 public abstract class AbstractEntityDataStoreEvent extends AbstractDataStoreEvent {
 
     private final Object entity;

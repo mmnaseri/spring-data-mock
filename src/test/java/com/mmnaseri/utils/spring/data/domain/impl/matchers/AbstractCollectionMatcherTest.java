@@ -60,7 +60,7 @@ public class AbstractCollectionMatcherTest {
     @Test
     public void testPassingInAnIterable() throws Exception {
         final PreservingCollectionMatcher matcher = new PreservingCollectionMatcher();
-        matcher.matches(null, null, new Object[]{new HashSet<Integer>(Arrays.asList(1, 2, 3, 4))});
+        matcher.matches(null, null, new Object[]{new HashSet<>(Arrays.asList(1, 2, 3, 4))});
         assertThat(matcher.getCollection(), is(notNullValue()));
         assertThat(matcher.getCollection(), hasSize(4));
         assertThat(matcher.getCollection(), containsInAnyOrder((Object) 1, 2, 3, 4));

@@ -63,7 +63,7 @@ public class DefaultPagingAndSortingRepository implements DataStoreAware {
         int end = start + pageable.getPageSize();
         start = Math.min(start, all.size());
         end = Math.min(end, all.size());
-        final List selection = new LinkedList<>(all.subList(start, end));
+        final List<?> selection = new LinkedList<>(all.subList(start, end));
         //noinspection unchecked
         return new PageImpl(selection, pageable, all.size());
     }
