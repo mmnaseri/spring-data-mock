@@ -3,6 +3,7 @@ package com.mmnaseri.utils.spring.data.proxy.impl;
 import com.mmnaseri.utils.spring.data.domain.*;
 import com.mmnaseri.utils.spring.data.domain.impl.QueryDescriptionExtractor;
 import com.mmnaseri.utils.spring.data.proxy.*;
+import com.mmnaseri.utils.spring.data.proxy.impl.resolvers.DefaultDataOperationResolver;
 import com.mmnaseri.utils.spring.data.query.DataFunctionRegistry;
 import com.mmnaseri.utils.spring.data.store.DataStore;
 import com.mmnaseri.utils.spring.data.store.DataStoreOperation;
@@ -67,6 +68,12 @@ public class DefaultRepositoryFactory implements RepositoryFactory {
             if (typeMapping.getInstance() instanceof RepositoryAware<?>) {
                 //noinspection unchecked
                 ((RepositoryAware) typeMapping.getInstance()).setRepository(instance);
+            }
+            if (typeMapping.getInstance() instanceof RepositoryConfigurationAware) {
+                ((RepositoryConfigurationAware) typeMapping.getInstance()).setRepositoryConfiguration(repositoryConfiguration);
+            }
+            if (typeMapping.getInstance() instanceof RepositoryFactoryAware) {
+                ((RepositoryFactoryAware) typeMapping.getInstance()).setRepositoryFactory(this);
             }
         }
         return repositoryInterface.cast(instance);

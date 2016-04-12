@@ -1,11 +1,7 @@
 package com.mmnaseri.utils.spring.data.domain.impl.id;
 
-import com.mmnaseri.utils.spring.data.domain.IdPropertyResolver;
 import com.mmnaseri.utils.spring.data.error.MultipleIdPropertiesException;
-import com.mmnaseri.utils.spring.data.error.PropertyTypeMismatchException;
 import com.mmnaseri.utils.spring.data.tools.GetterMethodFilter;
-import com.mmnaseri.utils.spring.data.tools.PropertyUtils;
-import com.mmnaseri.utils.spring.data.tools.StringUtils;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.data.annotation.Id;
 import org.springframework.util.ReflectionUtils;

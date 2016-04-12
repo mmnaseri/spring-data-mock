@@ -1,5 +1,6 @@
 package com.mmnaseri.utils.spring.data.query.impl;
 
+import com.mmnaseri.utils.spring.data.error.DuplicateFunctionException;
 import com.mmnaseri.utils.spring.data.error.FunctionNotFoundException;
 import com.mmnaseri.utils.spring.data.query.DataFunction;
 import com.mmnaseri.utils.spring.data.query.DataFunctionRegistry;
@@ -24,6 +25,9 @@ public class DefaultDataFunctionRegistry implements DataFunctionRegistry {
 
     @Override
     public void register(String name, DataFunction<?> function) {
+        if (functions.containsKey(name)) {
+            throw new DuplicateFunctionException(name);
+        }
         functions.put(name, function);
     }
 

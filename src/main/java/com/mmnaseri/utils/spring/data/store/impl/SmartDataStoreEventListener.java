@@ -28,4 +28,8 @@ public class SmartDataStoreEventListener<E extends DataStoreEvent> implements Da
         return eventType;
     }
 
+    public DataStoreEventListener<E> getDelegate() {
+        return delegate;
+    }
+
 }

@@ -43,4 +43,8 @@ public class AuditDataEventListener implements DataStoreEventListener<DataStoreE
         }
     }
 
+    public AuditorAware getAuditorAware() {
+        return auditorAware;
+    }
+
 }

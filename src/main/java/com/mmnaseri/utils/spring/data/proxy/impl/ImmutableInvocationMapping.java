@@ -34,4 +34,5 @@ public class ImmutableInvocationMapping<K extends Serializable, E> implements In
     public String toString() {
         return method + " -> " + operation;
     }
+
 }

@@ -1,6 +1,6 @@
 package com.mmnaseri.utils.spring.data.store.impl;
 
-import com.mmnaseri.utils.spring.data.tools.StringUtils;
+import com.mmnaseri.utils.spring.data.tools.PropertyUtils;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.ReflectionUtils;
 
@@ -12,12 +12,12 @@ import java.lang.reflect.Method;
  * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (10/12/15)
  */
-public class PropertyVisitor implements ReflectionUtils.MethodCallback, ReflectionUtils.FieldCallback {
+class PropertyVisitor implements ReflectionUtils.MethodCallback, ReflectionUtils.FieldCallback {
 
     private final Class<? extends Annotation> annotationType;
     private String property;
 
-    public PropertyVisitor(Class<? extends Annotation> annotationType) {
+    PropertyVisitor(Class<? extends Annotation> annotationType) {
         this.annotationType = annotationType;
     }
 
@@ -27,7 +27,7 @@ public class PropertyVisitor implements ReflectionUtils.MethodCallback, Reflecti
             return;
         }
         if (AnnotationUtils.findAnnotation(method, annotationType) != null) {
-            property = StringUtils.uncapitalize(method.getName().substring(3));
+            property = PropertyUtils.getPropertyName(method);
         }
     }
 

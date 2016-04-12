@@ -13,9 +13,4 @@ public class DataStoreException extends RepositoryMockException {
         this.entityType = entityType;
     }
 
-    public DataStoreException(Class<?> entityType, String message, Throwable cause) {
-        super(message, cause);
-        this.entityType = entityType;
-    }
-
 }

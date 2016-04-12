@@ -11,45 +11,77 @@ public class Person {
     private String lastName;
     private Zip addressZip;
     private Address address;
+    private Integer age;
+
+    public String getId() {
+        return id;
+    }
+
+    public Person setId(String id) {
+        this.id = id;
+        return this;
+    }
 
     public String getFirstName() {
         return firstName;
     }
 
-    public void setFirstName(String firstName) {
+    public Person setFirstName(String firstName) {
         this.firstName = firstName;
+        return this;
     }
 
     public String getLastName() {
         return lastName;
     }
 
-    public void setLastName(String lastName) {
+    public Person setLastName(String lastName) {
         this.lastName = lastName;
+        return this;
     }
 
     public Zip getAddressZip() {
         return addressZip;
     }
 
-    public void setAddressZip(Zip addressZip) {
+    public Person setAddressZip(Zip addressZip) {
         this.addressZip = addressZip;
+        return this;
     }
 
     public Address getAddress() {
         return address;
     }
 
-    public void setAddress(Address address) {
+    public Person setAddress(Address address) {
         this.address = address;
+        return this;
     }
 
-    public String getId() {
-        return id;
+    public Integer getAge() {
+        return age;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public Person setAge(Integer age) {
+        this.age = age;
+        return this;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Person person = (Person) o;
+        return id != null ? id.equals(person.id) : person.id == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
     }
 
 }

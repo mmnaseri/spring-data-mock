@@ -40,4 +40,9 @@ public class ImmutableOperator implements Operator {
         return tokens;
     }
 
+    @Override
+    public String toString() {
+        return name;
+    }
+
 }

@@ -2,7 +2,6 @@ package com.mmnaseri.utils.spring.data.dsl.mock;
 
 import com.mmnaseri.utils.spring.data.domain.KeyGenerator;
 import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
-import com.mmnaseri.utils.spring.data.domain.impl.key.KeyGeneratorProvider;
 import com.mmnaseri.utils.spring.data.dsl.factory.RepositoryFactoryBuilder;
 import com.mmnaseri.utils.spring.data.error.MockBuilderException;
 import com.mmnaseri.utils.spring.data.proxy.RepositoryFactory;
@@ -19,12 +18,7 @@ import java.util.List;
  */
 public class RepositoryMockBuilder implements Start, ImplementationAnd, KeyGeneration {
 
-    private static final KeyGenerator<? extends Serializable> NOOP = new KeyGenerator<Serializable>() {
-        @Override
-        public Serializable generate() {
-            return null;
-        }
-    };
+    private static final KeyGenerator<? extends Serializable> NOOP = new NoOpKeyGenerator<>();
     private final RepositoryFactory factory;
     private final List<Class<?>> implementations;
     private final KeyGenerator<? extends Serializable> keyGenerator;
@@ -70,7 +64,7 @@ public class RepositoryMockBuilder implements Start, ImplementationAnd, KeyGener
     public <S extends Serializable, G extends KeyGenerator<S>> Implementation generateKeysUsing(Class<G> generatorType) {
         //noinspection unchecked
         final G instance = (G) createKeyGenerator(generatorType);
-        return new RepositoryMockBuilder(factory, implementations, instance);
+        return generateKeysUsing(instance);
     }
 
     @Override
@@ -106,6 +100,15 @@ public class RepositoryMockBuilder implements Start, ImplementationAnd, KeyGener
         } else {
             return repositoryFactory.getInstance(NOOP.equals(keyGenerator) ? null : keyGenerator, repositoryInterface, implementations.toArray(new Class[implementations.size()]));
         }
+    }
+
+    public static class NoOpKeyGenerator<S extends Serializable> implements KeyGenerator<S> {
+
+        @Override
+        public S generate() {
+            return null;
+        }
+
     }
 
 }

@@ -15,32 +15,36 @@ public class Address {
         return city;
     }
 
-    public void setCity(String city) {
+    public Address setCity(String city) {
         this.city = city;
+        return this;
     }
 
     public String getStreet() {
         return street;
     }
 
-    public void setStreet(String street) {
+    public Address setStreet(String street) {
         this.street = street;
+        return this;
     }
 
     public State getState() {
         return state;
     }
 
-    public void setState(State state) {
+    public Address setState(State state) {
         this.state = state;
+        return this;
     }
 
     public Zip getZip() {
         return zip;
     }
 
-    public void setZip(Zip zip) {
+    public Address setZip(Zip zip) {
         this.zip = zip;
+        return this;
     }
 
 }

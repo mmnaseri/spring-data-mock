@@ -10,7 +10,4 @@ public abstract class EntityStateException extends RepositoryMockException {
         super(message);
     }
 
-    public EntityStateException(String message, Throwable cause) {
-        super(message, cause);
-    }
 }

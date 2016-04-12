@@ -8,6 +8,7 @@ import com.mmnaseri.utils.spring.data.proxy.impl.regular.ToStringNonDataOperatio
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -38,6 +39,10 @@ public class NonDataOperationInvocationHandler implements InvocationHandler {
 
     public void register(NonDataOperationHandler handler) {
         handlers.add(handler);
+    }
+
+    public List<NonDataOperationHandler> getHandlers() {
+        return Collections.unmodifiableList(handlers);
     }
 
 }

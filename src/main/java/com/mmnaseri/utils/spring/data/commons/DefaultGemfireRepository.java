@@ -4,8 +4,7 @@ import com.mmnaseri.utils.spring.data.domain.DataStoreAware;
 import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
 import com.mmnaseri.utils.spring.data.domain.RepositoryMetadataAware;
 import com.mmnaseri.utils.spring.data.store.DataStore;
-import org.springframework.beans.BeanWrapper;
-import org.springframework.beans.BeanWrapperImpl;
+import com.mmnaseri.utils.spring.data.tools.PropertyUtils;
 import org.springframework.data.gemfire.repository.Wrapper;
 
 import java.io.Serializable;
@@ -22,8 +21,9 @@ public class DefaultGemfireRepository implements DataStoreAware, RepositoryMetad
     public Object save(Wrapper<Object, Serializable> wrapper) {
         final Object entity = wrapper.getEntity();
         final Serializable key = wrapper.getKey();
-        final BeanWrapper beanWrapper = new BeanWrapperImpl(entity);
-        beanWrapper.setPropertyValue(repositoryMetadata.getIdentifierProperty(), key);
+        if (repositoryMetadata.getEntityType().isInstance(entity)) {
+            PropertyUtils.setPropertyValue(entity, repositoryMetadata.getIdentifierProperty(), key);
+        }
         //noinspection unchecked
         dataStore.save(key, entity);
         return entity;

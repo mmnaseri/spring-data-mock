@@ -40,4 +40,5 @@ public class DescribedDataStoreOperation<K extends Serializable, E> implements D
     public String toString() {
         return selectOperation.toString();
     }
+
 }

@@ -174,4 +174,124 @@ public class PropertyUtilsTest extends AbstractUtilityClassTest {
         assertThat(PropertyUtils.getPropertyName(ReflectionUtils.findMethod(Person.class, "getAddressZip")), is("addressZip"));
     }
 
+    @Test
+    public void testReadingPropertyValueThroughField() throws Exception {
+        final ClassWithNoGetters object = new ClassWithNoGetters();
+        object.id = "1234";
+        assertThat(PropertyUtils.getPropertyValue(object, "id"), is(object.id));
+    }
+
+    @Test(expectedExceptions = IllegalStateException.class)
+    public void testReadingPropertyValueThroughErrorThrowingGetter() throws Exception {
+        final ClassWithErrorThrowingAccessors object = new ClassWithErrorThrowingAccessors();
+        PropertyUtils.getPropertyValue(object, "id");
+    }
+
+    @Test(expectedExceptions = IllegalStateException.class)
+    public void testReadingNonExistentProperty() throws Exception {
+        final Person person = new Person();
+        PropertyUtils.getPropertyValue(person, "address.xyz");
+    }
+
+    @Test
+    public void testReadingWhenMiddlePropertyIsNull() throws Exception {
+        assertThat(PropertyUtils.getPropertyValue(new Person().setAddress(new Address()), "address.zip.prefix"), is(nullValue()));
+    }
+
+    @Test
+    public void testSettingImmediatePropertyValueUsingField() throws Exception {
+        final ClassWithNoGetters object = new ClassWithNoGetters();
+        final String value = "12345";
+        PropertyUtils.setPropertyValue(object, "id", value);
+        assertThat(object.id, is(value));
+    }
+
+    @Test(expectedExceptions = IllegalStateException.class)
+    public void testSettingImmediatePropertyValueUsingErrorThrowingSetter() throws Exception {
+        PropertyUtils.setPropertyValue(new ClassWithErrorThrowingAccessors(), "id", "");
+    }
+
+    @Test(expectedExceptions = IllegalStateException.class)
+    public void testSettingImmediateFinalField() throws Exception {
+        PropertyUtils.setPropertyValue(new ClassWithFinalId(), "id", "");
+    }
+
+    @Test(expectedExceptions = IllegalStateException.class)
+    public void testSettingUnknownProperty() throws Exception {
+        PropertyUtils.setPropertyValue(new Person(), "xyz", "");
+    }
+
+    @Test
+    public void testSettingPropertyThroughSetters() throws Exception {
+        final Person person = new Person();
+        final String value = "123";
+        final Object changed = PropertyUtils.setPropertyValue(person, "id", value);
+        assertThat(changed, is(person));
+        assertThat(person.getId(), is(value));
+    }
+
+    @Test
+    public void testSettingNestedProperty() throws Exception {
+        final Person person = new Person().setAddress(new Address().setZip(new Zip()));
+        final String value = "Capital";
+        final Object changed = PropertyUtils.setPropertyValue(person, "address.zip.area", value);
+        assertThat(changed, is(person.getAddress().getZip()));
+        assertThat(person.getAddress().getZip().getArea(), is(value));
+    }
+
+    @Test
+    public void testSettingPropertyToNullThroughASetter() throws Exception {
+        final Person person = new Person().setId("1234");
+        PropertyUtils.setPropertyValue(person, "id", null);
+        assertThat(person.getId(), is(nullValue()));
+    }
+
+    @Test(expectedExceptions = IllegalStateException.class, expectedExceptionsMessageRegExp = "Failed to set property value through the field .*")
+    public void testSettingPrimitiveValueToNullThroughSetter() throws Exception {
+        PropertyUtils.setPropertyValue(new ClassWithPrimitiveField(), "position", null);
+    }
+
+    @Test(expectedExceptions = IllegalStateException.class)
+    public void testSettingNestedPropertyWhenParentPropertyIsNull() throws Exception {
+        PropertyUtils.setPropertyValue(new Person(), "address.zip", new Zip());
+    }
+
+    private static class ClassWithNoGetters {
+
+        private String id;
+
+    }
+
+    private static class ClassWithErrorThrowingAccessors {
+
+        public String getId() {
+            throw new RuntimeException();
+        }
+
+        public void setId(String id) {
+            throw new RuntimeException();
+        }
+
+    }
+
+    private static class ClassWithFinalId {
+
+        private final String id = null;
+
+    }
+
+    private static class ClassWithPrimitiveField {
+
+        private int position;
+
+        public int getPosition() {
+            return position;
+        }
+
+        public void setPosition(int position) {
+            this.position = position;
+        }
+
+    }
+
 }

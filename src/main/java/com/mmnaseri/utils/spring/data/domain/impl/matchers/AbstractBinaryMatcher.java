@@ -13,7 +13,7 @@ public abstract class AbstractBinaryMatcher implements Matcher {
     @Override
     public boolean matches(Parameter parameter, Object value, Object... properties) {
         if (properties.length != 2) {
-            throw new InvalidArgumentException("Expected two values to be passed to operator " + parameter.getOperator().getName());
+            throw new InvalidArgumentException("Expected two values to be passed to operator " + parameter.getOperator().getName() + " at " + parameter.getPath());
         }
         return matches(parameter, value, properties[0], properties[1]);
     }

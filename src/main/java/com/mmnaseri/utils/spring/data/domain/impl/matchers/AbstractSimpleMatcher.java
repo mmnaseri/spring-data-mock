@@ -13,7 +13,7 @@ public abstract class AbstractSimpleMatcher implements Matcher {
     @Override
     public boolean matches(Parameter parameter, Object value, Object... properties) {
         if (properties.length != 1) {
-            throw new InvalidArgumentException("Expected exactly one parameter to be passed down");
+            throw new InvalidArgumentException("Expected exactly one parameter to be passed down: " + parameter.getPath());
         }
         return matches(parameter, value, properties[0]);
     }

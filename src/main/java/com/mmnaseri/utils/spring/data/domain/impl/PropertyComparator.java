@@ -3,10 +3,13 @@ package com.mmnaseri.utils.spring.data.domain.impl;
 import com.mmnaseri.utils.spring.data.error.InvalidArgumentException;
 import com.mmnaseri.utils.spring.data.query.NullHandling;
 import com.mmnaseri.utils.spring.data.query.Order;
+import com.mmnaseri.utils.spring.data.query.Sort;
 import com.mmnaseri.utils.spring.data.query.SortDirection;
 import com.mmnaseri.utils.spring.data.tools.PropertyUtils;
 
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 /**
  * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
@@ -42,10 +45,10 @@ public class PropertyComparator implements Comparator<Object> {
         }
         int comparison = 0;
         if (firstValue == null && secondValue != null) {
-            comparison = nullHandling.equals(NullHandling.NULLS_FIRST) ? -1 : 1;
-        } else if (firstValue != null && secondValue == nullHandling) {
-            comparison = nullHandling.equals(NullHandling.NULLS_FIRST) ? 1 : -1;
-        } else if (firstValue != null && secondValue != null) {
+            comparison = NullHandling.NULLS_FIRST.equals(nullHandling) ? -1 : 1;
+        } else if (firstValue != null && secondValue == null) {
+            comparison = NullHandling.NULLS_FIRST.equals(nullHandling) ? 1 : -1;
+        } else if (firstValue != null) {
             if (!(firstValue instanceof Comparable) || !(secondValue instanceof Comparable)) {
                 throw new InvalidArgumentException("Expected both values to be comparable for property: " + property);
             }
@@ -57,7 +60,13 @@ public class PropertyComparator implements Comparator<Object> {
                 throw new InvalidArgumentException("Values for were not of the same type for property: " + property);
             }
         }
-        return comparison * (direction.equals(SortDirection.DESCENDING) ? -1 : 1);
+        return comparison * (SortDirection.DESCENDING.equals(direction) ? -1 : 1);
+    }
+
+    public static void sort(List<?> collection, Sort sort) {
+        for (int i = sort.getOrders().size() - 1; i >= 0; i--) {
+            Collections.sort(collection, new PropertyComparator(sort.getOrders().get(i)));
+        }
     }
 
 }

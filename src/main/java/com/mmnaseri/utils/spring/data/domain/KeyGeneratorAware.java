@@ -8,6 +8,6 @@ import java.io.Serializable;
  */
 public interface KeyGeneratorAware<S extends Serializable> {
 
-    void setKeyGenerator(KeyGenerator<S> keyGenerator);
+    void setKeyGenerator(KeyGenerator<? extends S> keyGenerator);
 
 }

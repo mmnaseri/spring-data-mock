@@ -2,7 +2,6 @@ package com.mmnaseri.utils.spring.data.domain.impl;
 
 import com.mmnaseri.utils.spring.data.domain.Invocation;
 import com.mmnaseri.utils.spring.data.proxy.RepositoryConfiguration;
-import com.mmnaseri.utils.spring.data.query.Order;
 import com.mmnaseri.utils.spring.data.query.Page;
 import com.mmnaseri.utils.spring.data.query.QueryDescriptor;
 import com.mmnaseri.utils.spring.data.query.Sort;
@@ -30,7 +29,7 @@ public class SelectDataStoreOperation<K extends Serializable, E> implements Data
 
     @Override
     public List<E> execute(DataStore<K, E> store, RepositoryConfiguration configuration, Invocation invocation) {
-        List<E> selection = new LinkedList<E>();
+        final List<E> selection = new LinkedList<E>();
         final Collection<E> all = new LinkedList<E>(store.retrieveAll());
         for (E entity : all) {
             if (descriptor.matches(entity, invocation)) {
@@ -38,26 +37,36 @@ public class SelectDataStoreOperation<K extends Serializable, E> implements Data
             }
         }
         if (descriptor.isDistinct()) {
-            selection = new LinkedList<E>(new HashSet<E>(selection));
+            final Set<E> distinctValues = new HashSet<>(selection);
+            selection.clear();
+            selection.addAll(distinctValues);
         }
         final Sort sort = descriptor.getSort(invocation);
         final Page page = descriptor.getPage(invocation);
         if (sort != null) {
-            for (Order order : sort.getOrders()) {
-                Collections.sort(selection, new PropertyComparator(order));
-            }
+            PropertyComparator.sort(selection, sort);
         }
         if (page != null) {
             int start = page.getPageSize() * page.getPageNumber();
             int finish = Math.min(start + page.getPageSize(), selection.size());
             if (start > selection.size()) {
-                selection = new ArrayList<E>();
+                selection.clear();
             } else {
-                selection = selection.subList(start, finish);
+                final List<E> view = new ArrayList<>();
+                for (E item : selection.subList(start, finish)) {
+                    view.add(item);
+                }
+                selection.clear();
+                selection.addAll(view);
             }
         }
         if (descriptor.getLimit() > 0) {
-            selection = selection.subList(0, Math.min(selection.size(), descriptor.getLimit()));
+            final List<E> view = new ArrayList<>();
+            for (E item : selection.subList(0, Math.min(selection.size(), descriptor.getLimit()))) {
+                view.add(item);
+            }
+            selection.clear();
+            selection.addAll(view);
         }
         return selection;
     }
@@ -66,4 +75,5 @@ public class SelectDataStoreOperation<K extends Serializable, E> implements Data
     public String toString() {
         return descriptor.toString();
     }
+
 }

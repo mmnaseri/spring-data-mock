@@ -1,6 +1,7 @@
 package com.mmnaseri.utils.spring.data.domain.impl;
 
 import com.mmnaseri.utils.spring.data.domain.Invocation;
+import com.mmnaseri.utils.spring.data.error.DataOperationExecutionException;
 import com.mmnaseri.utils.spring.data.proxy.RepositoryConfiguration;
 import com.mmnaseri.utils.spring.data.store.DataStore;
 import com.mmnaseri.utils.spring.data.store.DataStoreOperation;
@@ -21,7 +22,6 @@ public class MethodInvocationDataStoreOperation<K extends Serializable, E> imple
     public MethodInvocationDataStoreOperation(Object instance, Method method) {
         this.instance = instance;
         this.method = method;
-        method.setAccessible(true);
     }
 
     @Override
@@ -30,11 +30,19 @@ public class MethodInvocationDataStoreOperation<K extends Serializable, E> imple
         try {
             result = method.invoke(instance, invocation.getArguments());
         } catch (IllegalAccessException e) {
-            throw new IllegalStateException("Failed to access target method: " + method, e);
+            throw new DataOperationExecutionException("Failed to access target method: " + method, e);
         } catch (InvocationTargetException e) {
-            throw new IllegalStateException("Method call resulted in internal error: " + method, e.getTargetException());
+            throw new DataOperationExecutionException("Method call resulted in internal error: " + method, e.getTargetException());
         }
         return result;
+    }
+
+    public Object getInstance() {
+        return instance;
+    }
+
+    public Method getMethod() {
+        return method;
     }
 
     @Override

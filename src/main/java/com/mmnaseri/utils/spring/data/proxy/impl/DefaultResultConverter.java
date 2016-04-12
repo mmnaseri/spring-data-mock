@@ -2,6 +2,9 @@ package com.mmnaseri.utils.spring.data.proxy.impl;
 
 import com.mmnaseri.utils.spring.data.domain.Invocation;
 import com.mmnaseri.utils.spring.data.proxy.ResultConverter;
+import com.mmnaseri.utils.spring.data.proxy.impl.converters.FutureToIterableConverter;
+import com.mmnaseri.utils.spring.data.proxy.impl.converters.IteratorToIterableConverter;
+import com.mmnaseri.utils.spring.data.proxy.impl.converters.SingleValueToIterableConverter;
 
 import java.util.LinkedList;
 import java.util.List;
