@@ -11,10 +11,7 @@ import com.mmnaseri.utils.spring.data.dsl.mock.Implementation;
 import com.mmnaseri.utils.spring.data.dsl.mock.ImplementationAnd;
 import com.mmnaseri.utils.spring.data.dsl.mock.RepositoryMockBuilder;
 import com.mmnaseri.utils.spring.data.proxy.*;
-import com.mmnaseri.utils.spring.data.proxy.impl.DefaultRepositoryFactory;
-import com.mmnaseri.utils.spring.data.proxy.impl.DefaultResultAdapterContext;
-import com.mmnaseri.utils.spring.data.proxy.impl.DefaultTypeMappingContext;
-import com.mmnaseri.utils.spring.data.proxy.impl.NonDataOperationInvocationHandler;
+import com.mmnaseri.utils.spring.data.proxy.impl.*;
 import com.mmnaseri.utils.spring.data.query.DataFunction;
 import com.mmnaseri.utils.spring.data.query.DataFunctionRegistry;
 import com.mmnaseri.utils.spring.data.query.impl.DefaultDataFunctionRegistry;
@@ -33,7 +30,8 @@ import java.io.Serializable;
 public class RepositoryFactoryBuilder implements Start, DataFunctionsAnd, DataStoresAnd, EventListenerAnd, MappingContextAnd, OperatorsAnd, ResultAdaptersAnd, OperationHandlersAnd {
 
     private static RepositoryFactory DEFAULT_FACTORY;
-    private static final String DEFAULT_USER = "User";
+    private static RepositoryFactoryConfiguration DEFAULT_FACTORY_CONFIGURATION;
+    public static final String DEFAULT_USER = "User";
     private RepositoryMetadataResolver metadataResolver;
     private QueryDescriptionExtractor queryDescriptionExtractor;
     private DataFunctionRegistry functionRegistry;
@@ -46,15 +44,27 @@ public class RepositoryFactoryBuilder implements Start, DataFunctionsAnd, DataSt
     public static Start builder() {
         return new RepositoryFactoryBuilder();
     }
-    
+
     public static RepositoryFactoryConfiguration defaultConfiguration() {
-        final RepositoryFactoryBuilder builder = (RepositoryFactoryBuilder) builder();
-        return new ImmutableRepositoryFactoryConfiguration(builder.metadataResolver, builder.queryDescriptionExtractor, builder.functionRegistry, builder.dataStoreRegistry, builder.resultAdapterContext, builder.typeMappingContext, builder.eventListenerContext, builder.operationInvocationHandler);
+        if (DEFAULT_FACTORY_CONFIGURATION == null) {
+            final RepositoryFactoryBuilder builder = (RepositoryFactoryBuilder) builder();
+            DEFAULT_FACTORY_CONFIGURATION = new ImmutableRepositoryFactoryConfiguration(
+                    builder.metadataResolver,
+                    builder.queryDescriptionExtractor,
+                    builder.functionRegistry,
+                    builder.dataStoreRegistry,
+                    builder.resultAdapterContext,
+                    builder.typeMappingContext,
+                    builder.eventListenerContext,
+                    builder.operationInvocationHandler
+            );
+        }
+        return DEFAULT_FACTORY_CONFIGURATION;
     }
-    
+
     public static RepositoryFactory defaultFactory() {
         if (DEFAULT_FACTORY == null) {
-            DEFAULT_FACTORY = builder().build();
+            DEFAULT_FACTORY = new DefaultRepositoryFactory(defaultConfiguration());
         }
         return DEFAULT_FACTORY;
     }
@@ -249,71 +259,7 @@ public class RepositoryFactoryBuilder implements Start, DataFunctionsAnd, DataSt
         return new RepositoryMockBuilder().useFactory(build()).mock(repositoryInterface);
     }
 
-    private static class ImmutableRepositoryFactoryConfiguration implements RepositoryFactoryConfiguration {
-
-        private final RepositoryMetadataResolver metadataResolver;
-        private final QueryDescriptionExtractor queryDescriptionExtractor;
-        private final DataFunctionRegistry functionRegistry;
-        private final DataStoreRegistry dataStoreRegistry;
-        private final ResultAdapterContext resultAdapterContext;
-        private final TypeMappingContext typeMappingContext;
-        private final DataStoreEventListenerContext eventListenerContext;
-        private final NonDataOperationInvocationHandler operationInvocationHandler;
-
-        private ImmutableRepositoryFactoryConfiguration(RepositoryMetadataResolver metadataResolver, QueryDescriptionExtractor queryDescriptionExtractor, DataFunctionRegistry functionRegistry, DataStoreRegistry dataStoreRegistry, ResultAdapterContext resultAdapterContext, TypeMappingContext typeMappingContext, DataStoreEventListenerContext eventListenerContext, NonDataOperationInvocationHandler operationInvocationHandler) {
-            this.metadataResolver = metadataResolver;
-            this.queryDescriptionExtractor = queryDescriptionExtractor;
-            this.functionRegistry = functionRegistry;
-            this.dataStoreRegistry = dataStoreRegistry;
-            this.resultAdapterContext = resultAdapterContext;
-            this.typeMappingContext = typeMappingContext;
-            this.eventListenerContext = eventListenerContext;
-            this.operationInvocationHandler = operationInvocationHandler;
-        }
-
-        @Override
-        public RepositoryMetadataResolver getRepositoryMetadataResolver() {
-            return metadataResolver;
-        }
-
-        @Override
-        public QueryDescriptionExtractor getDescriptionExtractor() {
-            return queryDescriptionExtractor;
-        }
-
-        @Override
-        public DataFunctionRegistry getFunctionRegistry() {
-            return functionRegistry;
-        }
-
-        @Override
-        public DataStoreRegistry getDataStoreRegistry() {
-            return dataStoreRegistry;
-        }
-
-        @Override
-        public ResultAdapterContext getResultAdapterContext() {
-            return resultAdapterContext;
-        }
-
-        @Override
-        public TypeMappingContext getTypeMappingContext() {
-            return typeMappingContext;
-        }
-
-        @Override
-        public DataStoreEventListenerContext getEventListenerContext() {
-            return eventListenerContext;
-        }
-
-        @Override
-        public NonDataOperationInvocationHandler getOperationInvocationHandler() {
-            return operationInvocationHandler;
-        }
-
-    }
-
-    private static class DefaultAuditorAware implements AuditorAware<String> {
+    public static class DefaultAuditorAware implements AuditorAware<String> {
 
         @Override
         public String getCurrentAuditor() {

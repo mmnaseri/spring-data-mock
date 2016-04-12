@@ -4,6 +4,7 @@ import com.mmnaseri.utils.spring.data.store.DataStoreEvent;
 import com.mmnaseri.utils.spring.data.store.DataStoreEventListener;
 import com.mmnaseri.utils.spring.data.store.DataStoreEventListenerContext;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -47,6 +48,23 @@ public class DefaultDataStoreEventListenerContext implements DataStoreEventListe
         if (parent != null) {
             parent.trigger(event);
         }
+    }
+
+    @Override
+    public <E extends DataStoreEvent> List<DataStoreEventListener<? extends E>> getListeners(Class<E> eventType) {
+        final List<DataStoreEventListener<? extends E>> found = new LinkedList<>();
+        for (Class<? extends DataStoreEvent> supportedType : listeners.keySet()) {
+            if (supportedType.isAssignableFrom(eventType)) {
+                for (DataStoreEventListener listener : listeners.get(supportedType)) {
+                    //noinspection unchecked
+                    found.add(((SmartDataStoreEventListener) listener).getDelegate());
+                }
+            }
+        }
+        if (parent != null) {
+            found.addAll(parent.getListeners(eventType));
+        }
+        return found;
     }
 
 }

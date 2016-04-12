@@ -7,6 +7,7 @@ import com.mmnaseri.utils.spring.data.proxy.ResultAdapterContext;
 import com.mmnaseri.utils.spring.data.proxy.impl.adapters.*;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -54,6 +55,11 @@ public class DefaultResultAdapterContext implements ResultAdapterContext {
             }
         }
         throw new ResultAdapterFailureException(originalResult, invocation.getMethod().getReturnType());
+    }
+
+    @Override
+    public Collection<ResultAdapter<?>> getAdapters() {
+        return Collections.unmodifiableCollection(adapters);
     }
 
 }

@@ -6,10 +6,7 @@ import com.mmnaseri.utils.spring.data.domain.impl.DefaultRepositoryMetadataResol
 import com.mmnaseri.utils.spring.data.domain.impl.QueryDescriptionExtractor;
 import com.mmnaseri.utils.spring.data.domain.impl.key.UUIDKeyGenerator;
 import com.mmnaseri.utils.spring.data.domain.model.Person;
-import com.mmnaseri.utils.spring.data.proxy.RepositoryConfiguration;
-import com.mmnaseri.utils.spring.data.proxy.RepositoryConfigurationAware;
-import com.mmnaseri.utils.spring.data.proxy.RepositoryFactoryConfiguration;
-import com.mmnaseri.utils.spring.data.proxy.RepositoryFactoryConfigurationAware;
+import com.mmnaseri.utils.spring.data.proxy.*;
 import com.mmnaseri.utils.spring.data.query.impl.DefaultDataFunctionRegistry;
 import com.mmnaseri.utils.spring.data.store.DataStore;
 import com.mmnaseri.utils.spring.data.store.impl.DefaultDataStoreEventListenerContext;
@@ -80,7 +77,7 @@ public class DefaultRepositoryFactoryTest {
 
     }
 
-    public static class RepositoryClearerMapping implements RepositoryAware<SampleRepository>, RepositoryFactoryConfigurationAware, RepositoryConfigurationAware {
+    public static class RepositoryClearerMapping implements RepositoryAware<SampleRepository>, RepositoryFactoryConfigurationAware, RepositoryConfigurationAware, RepositoryFactoryAware {
 
         private SampleRepository repository;
 
@@ -112,6 +109,10 @@ public class DefaultRepositoryFactoryTest {
             assertThat(repositoryConfiguration.getBoundImplementations(), hasItem(RepositoryClearerMapping.class));
         }
 
+        @Override
+        public void setRepositoryFactory(RepositoryFactory factory) {
+            assertThat(factory, is(notNullValue()));
+        }
     }
 
 }

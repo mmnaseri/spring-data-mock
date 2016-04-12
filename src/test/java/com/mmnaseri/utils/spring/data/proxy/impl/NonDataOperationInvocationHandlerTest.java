@@ -1,11 +1,9 @@
 package com.mmnaseri.utils.spring.data.proxy.impl;
 
 import com.mmnaseri.utils.spring.data.error.UnknownDataOperationException;
-import com.mmnaseri.utils.spring.data.proxy.NonDataOperationHandler;
+import com.mmnaseri.utils.spring.data.proxy.mock.SpyingHandler;
 import org.hamcrest.Matchers;
 import org.testng.annotations.Test;
-
-import java.lang.reflect.Method;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -15,31 +13,6 @@ import static org.hamcrest.Matchers.is;
  * @since 1.0 (4/10/16)
  */
 public class NonDataOperationInvocationHandlerTest {
-
-    private static class SpyingHandler implements NonDataOperationHandler {
-
-        private boolean called;
-
-        private SpyingHandler() {
-            called = false;
-        }
-
-        @Override
-        public boolean handles(Object proxy, Method method, Object... args) {
-            return method.getName().equals("wait");
-        }
-
-        @Override
-        public Object invoke(Object proxy, Object... args) {
-            called = true;
-            return null;
-        }
-
-        public boolean isCalled() {
-            return called;
-        }
-
-    }
 
     @Test
     public void testHandlingKnownMethods() throws Throwable {

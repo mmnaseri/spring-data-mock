@@ -32,6 +32,11 @@ public class SpyingListenerContext implements DataStoreEventListenerContext {
         events.add(new EventTrigger(counter.incrementAndGet(), event));
     }
 
+    @Override
+    public <E extends DataStoreEvent> List<DataStoreEventListener<? extends E>> getListeners(Class<E> eventType) {
+        throw new UnsupportedOperationException();
+    }
+
     public List<EventTrigger> getEvents() {
         return Collections.unmodifiableList(events);
     }
