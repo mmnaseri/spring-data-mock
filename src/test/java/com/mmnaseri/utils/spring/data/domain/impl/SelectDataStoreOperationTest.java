@@ -1,9 +1,11 @@
 package com.mmnaseri.utils.spring.data.domain.impl;
 
+import com.mmnaseri.utils.spring.data.domain.Modifier;
 import com.mmnaseri.utils.spring.data.domain.Parameter;
 import com.mmnaseri.utils.spring.data.domain.model.Address;
 import com.mmnaseri.utils.spring.data.domain.model.Person;
 import com.mmnaseri.utils.spring.data.query.NullHandling;
+import com.mmnaseri.utils.spring.data.query.Order;
 import com.mmnaseri.utils.spring.data.query.PageParameterExtractor;
 import com.mmnaseri.utils.spring.data.query.SortDirection;
 import com.mmnaseri.utils.spring.data.query.impl.*;
@@ -43,15 +45,15 @@ public class SelectDataStoreOperationTest {
     public void testSimpleSelection() throws Exception {
         final List<List<Parameter>> branches = new ArrayList<>();
         final DefaultOperatorContext operatorContext = new DefaultOperatorContext();
-        branches.add(Arrays.asList(
-                new ImmutableParameter("firstName", Collections.emptySet(), new int[]{0}, operatorContext.getBySuffix("Is")),
-                new ImmutableParameter("lastName", Collections.emptySet(), new int[]{1}, operatorContext.getBySuffix("Is"))
+        branches.add(Arrays.<Parameter>asList(
+                new ImmutableParameter("firstName", Collections.<Modifier>emptySet(), new int[]{0}, operatorContext.getBySuffix("Is")),
+                new ImmutableParameter("lastName", Collections.<Modifier>emptySet(), new int[]{1}, operatorContext.getBySuffix("Is"))
         ));
-        branches.add(Collections.singletonList(
-                new ImmutableParameter("address.city", Collections.emptySet(), new int[]{2}, operatorContext.getBySuffix("Is"))
+        branches.add(Collections.<Parameter>singletonList(
+                new ImmutableParameter("address.city", Collections.<Modifier>emptySet(), new int[]{2}, operatorContext.getBySuffix("Is"))
         ));
-        branches.add(Collections.singletonList(
-                new ImmutableParameter("age", Collections.emptySet(), new int[]{3}, operatorContext.getBySuffix("GreaterThan"))
+        branches.add(Collections.<Parameter>singletonList(
+                new ImmutableParameter("age", Collections.<Modifier>emptySet(), new int[]{3}, operatorContext.getBySuffix("GreaterThan"))
         ));
         final DefaultQueryDescriptor descriptor = new DefaultQueryDescriptor(false, null, 0, null, null, branches, null, null);
         final SelectDataStoreOperation<String, Person> operation = new SelectDataStoreOperation<>(descriptor);
@@ -66,9 +68,10 @@ public class SelectDataStoreOperationTest {
     public void testSorting() throws Exception {
         final ImmutableOrder first = new ImmutableOrder(SortDirection.ASCENDING, "address.city", NullHandling.DEFAULT);
         final ImmutableOrder second = new ImmutableOrder(SortDirection.ASCENDING, "lastName", NullHandling.DEFAULT);
-        final ImmutableSort sort = new ImmutableSort(Arrays.asList(first, second));
+        final ImmutableSort sort = new ImmutableSort(Arrays.<Order>asList(first, second));
         final WrappedSortParameterExtractor sortExtractor = new WrappedSortParameterExtractor(sort);
-        final DefaultQueryDescriptor descriptor = new DefaultQueryDescriptor(false, null, 0, null, sortExtractor, Collections.emptyList(), null, null);
+        final List<List<Parameter>> branches = new ArrayList<>();
+        final DefaultQueryDescriptor descriptor = new DefaultQueryDescriptor(false, null, 0, null, sortExtractor, branches, null, null);
         final SelectDataStoreOperation<String, Person> operation = new SelectDataStoreOperation<>(descriptor);
         final List<Person> selected = operation.execute(dataStore, null, new ImmutableInvocation(Sample.class.getMethod("findAll"), new Object[]{}));
         assertThat(selected, hasSize(4));
@@ -92,7 +95,8 @@ public class SelectDataStoreOperationTest {
     @Test
     public void testPagingWhenLastPageIsNotFull() throws Exception {
         final PageParameterExtractor pageExtractor = new PageablePageParameterExtractor(0);
-        final DefaultQueryDescriptor descriptor = new DefaultQueryDescriptor(false, null, 0, pageExtractor, null, Collections.emptyList(), null, null);
+        final List<List<Parameter>> branches = Collections.emptyList();
+        final DefaultQueryDescriptor descriptor = new DefaultQueryDescriptor(false, null, 0, pageExtractor, null, branches, null, null);
         final SelectDataStoreOperation<String, Person> operation = new SelectDataStoreOperation<>(descriptor);
         final List<Person> selected = operation.execute(dataStore, null, new ImmutableInvocation(Sample.class.getMethod("findAll", Pageable.class), new Object[]{new PageRequest(1, 3)}));
         assertThat(selected, hasSize(1));
@@ -101,7 +105,8 @@ public class SelectDataStoreOperationTest {
     @Test
     public void testLimitingTheResult() throws Exception {
         for (int limit = 1; limit < 10; limit++) {
-            final DefaultQueryDescriptor descriptor = new DefaultQueryDescriptor(false, null, limit, null, null, Collections.emptyList(), null, null);
+            final List<List<Parameter>> branches = Collections.emptyList();
+            final DefaultQueryDescriptor descriptor = new DefaultQueryDescriptor(false, null, limit, null, null, branches, null, null);
             final SelectDataStoreOperation<String, Person> operation = new SelectDataStoreOperation<>(descriptor);
             final List<Person> selected = operation.execute(dataStore, null, new ImmutableInvocation(Sample.class.getMethod("findAll"), new Object[]{}));
             assertThat(selected, hasSize(Math.min(limit, dataStore.retrieveAll().size())));
@@ -111,13 +116,14 @@ public class SelectDataStoreOperationTest {
     @Test
     public void testLoadingDistinctValues() throws Exception {
         dataStore.save("k5", new Person().setId("k1"));
+        final List<List<Parameter>> branches = Collections.emptyList();
         //not distinct
-        final DefaultQueryDescriptor descriptor = new DefaultQueryDescriptor(false, null, 0, null, null, Collections.emptyList(), null, null);
+        final DefaultQueryDescriptor descriptor = new DefaultQueryDescriptor(false, null, 0, null, null, branches, null, null);
         final SelectDataStoreOperation<String, Person> operation = new SelectDataStoreOperation<>(descriptor);
         final List<Person> selected = operation.execute(dataStore, null, new ImmutableInvocation(Sample.class.getMethod("findAll"), new Object[]{}));
         assertThat(selected, hasSize(5));
         //distinct
-        final DefaultQueryDescriptor descriptorDistinct = new DefaultQueryDescriptor(true, null, 0, null, null, Collections.emptyList(), null, null);
+        final DefaultQueryDescriptor descriptorDistinct = new DefaultQueryDescriptor(true, null, 0, null, null, branches, null, null);
         final SelectDataStoreOperation<String, Person> operationDistinct = new SelectDataStoreOperation<>(descriptorDistinct);
         final List<Person> selectedDistinct = operationDistinct.execute(dataStore, null, new ImmutableInvocation(Sample.class.getMethod("findAll"), new Object[]{}));
         assertThat(selectedDistinct, hasSize(4));
@@ -125,7 +131,8 @@ public class SelectDataStoreOperationTest {
 
     @Test
     public void testToString() throws Exception {
-        final DefaultQueryDescriptor descriptor = new DefaultQueryDescriptor(false, null, 0, null, null, Collections.emptyList(), null, null);
+        final List<List<Parameter>> branches = Collections.emptyList();
+        final DefaultQueryDescriptor descriptor = new DefaultQueryDescriptor(false, null, 0, null, null, branches, null, null);
         final SelectDataStoreOperation<String, Person> operation = new SelectDataStoreOperation<>(descriptor);
         assertThat(operation.toString(), is(descriptor.toString()));
     }

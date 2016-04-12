@@ -73,10 +73,10 @@ public class DefaultDataStoreEventListenerContextTest {
         parent.register(first);
         child.register(second);
         assertThat(parent.getListeners(AfterInsertDataStoreEvent.class), hasSize(1));
-        assertThat(parent.getListeners(AfterInsertDataStoreEvent.class).get(0), is(first));
+        assertThat(parent.getListeners(AfterInsertDataStoreEvent.class).get(0), Matchers.<DataStoreEventListener>is(first));
         assertThat(child.getListeners(AfterInsertDataStoreEvent.class), hasSize(2));
-        assertThat(child.getListeners(AfterInsertDataStoreEvent.class).get(0), is(second));
-        assertThat(child.getListeners(AfterInsertDataStoreEvent.class).get(1), is(first));
+        assertThat(child.getListeners(AfterInsertDataStoreEvent.class).get(0), Matchers.<DataStoreEventListener>is(second));
+        assertThat(child.getListeners(AfterInsertDataStoreEvent.class).get(1), Matchers.<DataStoreEventListener>is(first));
     }
 
 }

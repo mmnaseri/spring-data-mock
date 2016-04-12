@@ -11,6 +11,7 @@ import com.mmnaseri.utils.spring.data.query.impl.DefaultDataFunctionRegistry;
 import com.mmnaseri.utils.spring.data.store.DataStore;
 import com.mmnaseri.utils.spring.data.store.impl.DefaultDataStoreEventListenerContext;
 import com.mmnaseri.utils.spring.data.store.impl.DefaultDataStoreRegistry;
+import org.hamcrest.Matchers;
 import org.springframework.data.repository.Repository;
 import org.testng.annotations.Test;
 
@@ -40,7 +41,7 @@ public class DefaultRepositoryFactoryTest {
         configuration.setResultAdapterContext(new DefaultResultAdapterContext());
         configuration.setTypeMappingContext(new DefaultTypeMappingContext());
         final DefaultRepositoryFactory factory = new DefaultRepositoryFactory(configuration);
-        assertThat(factory.getConfiguration(), is(configuration));
+        assertThat(factory.getConfiguration(), Matchers.<RepositoryFactoryConfiguration>is(configuration));
         assertThat(dataStoreRegistry.has(Person.class), is(false));
         factory.getInstance(new UUIDKeyGenerator(), SampleRepository.class, RepositoryClearerMapping.class);
         assertThat(dataStoreRegistry.has(Person.class), is(true));
@@ -101,10 +102,10 @@ public class DefaultRepositoryFactoryTest {
             assertThat(repositoryConfiguration.getKeyGenerator(), is(notNullValue()));
             assertThat(repositoryConfiguration.getKeyGenerator(), is(instanceOf(UUIDKeyGenerator.class)));
             assertThat(repositoryConfiguration.getRepositoryMetadata(), is(notNullValue()));
-            assertThat(repositoryConfiguration.getRepositoryMetadata().getEntityType(), is(equalTo(Person.class)));
+            assertThat(repositoryConfiguration.getRepositoryMetadata().getEntityType(), is(Matchers.<Class<?>>equalTo(Person.class)));
             assertThat(repositoryConfiguration.getRepositoryMetadata().getIdentifierProperty(), is("id"));
-            assertThat(repositoryConfiguration.getRepositoryMetadata().getIdentifierType(), is(equalTo(String.class)));
-            assertThat(repositoryConfiguration.getRepositoryMetadata().getRepositoryInterface(), is(equalTo(SampleRepository.class)));
+            assertThat(repositoryConfiguration.getRepositoryMetadata().getIdentifierType(), is(Matchers.<Class<?>>equalTo(String.class)));
+            assertThat(repositoryConfiguration.getRepositoryMetadata().getRepositoryInterface(), is(Matchers.<Class<?>>equalTo(SampleRepository.class)));
             assertThat(repositoryConfiguration.getBoundImplementations(), is(not(empty())));
             assertThat(repositoryConfiguration.getBoundImplementations(), hasItem(RepositoryClearerMapping.class));
         }

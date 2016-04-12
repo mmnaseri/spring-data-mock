@@ -3,6 +3,7 @@ package com.mmnaseri.utils.spring.data.store.impl;
 import com.mmnaseri.utils.spring.data.store.DataStoreEvent;
 import com.mmnaseri.utils.spring.data.store.mock.AllCatchingEventListener;
 import com.mmnaseri.utils.spring.data.store.mock.SpyingEventListener;
+import org.hamcrest.Matchers;
 import org.testng.annotations.Test;
 
 import java.util.List;
@@ -33,8 +34,8 @@ public class SmartDataStoreEventListenerTest {
         listener.onEvent(second);
         final List<DataStoreEvent> events = spy.getEvents();
         assertThat(events, hasSize(2));
-        assertThat(events.get(0), is(first));
-        assertThat(events.get(1), is(second));
+        assertThat(events.get(0), Matchers.<DataStoreEvent>is(first));
+        assertThat(events.get(1), Matchers.<DataStoreEvent>is(second));
     }
     
 }

@@ -1,5 +1,6 @@
 package com.mmnaseri.utils.spring.data.domain.impl;
 
+import com.mmnaseri.utils.spring.data.domain.Modifier;
 import org.testng.annotations.Test;
 
 import java.util.Collections;
@@ -15,7 +16,8 @@ public class ImmutableParameterTest {
 
     @Test
     public void testToString() throws Exception {
-        final ImmutableParameter parameter = new ImmutableParameter("x.y.z", Collections.emptySet(), new int[]{2, 3, 4}, new ImmutableOperator("op", 0, null));
+        final ImmutableParameter parameter = new ImmutableParameter("x.y.z", Collections.<Modifier>emptySet(), new int[]{2, 3, 4}, new ImmutableOperator("op", 0, null));
         assertThat(parameter.toString(), is("(x.y.z,op,[2, 3, 4],[])"));
     }
+
 }

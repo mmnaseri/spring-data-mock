@@ -20,6 +20,7 @@ import com.mmnaseri.utils.spring.data.proxy.sample.InformationExposingRepository
 import com.mmnaseri.utils.spring.data.query.impl.DefaultDataFunctionRegistry;
 import com.mmnaseri.utils.spring.data.store.impl.DefaultDataStoreEventListenerContext;
 import com.mmnaseri.utils.spring.data.store.impl.DefaultDataStoreRegistry;
+import org.hamcrest.Matchers;
 import org.springframework.data.repository.Repository;
 import org.testng.annotations.Test;
 
@@ -125,15 +126,15 @@ public class RepositoryMockBuilderTest {
         assertThat(repository, is(instanceOf(InformationExposingRepository.class)));
         final InformationExposingRepository informationExposingRepository = (InformationExposingRepository) repository;
         assertThat(informationExposingRepository.getFactoryConfiguration(), is(notNullValue()));
-        assertThat(informationExposingRepository.getFactoryConfiguration(), is(configuration));
+        assertThat(informationExposingRepository.getFactoryConfiguration(), Matchers.<RepositoryFactoryConfiguration>is(configuration));
         assertThat(informationExposingRepository.getConfiguration(), is(notNullValue()));
         assertThat(informationExposingRepository.getConfiguration().getBoundImplementations(), is(notNullValue()));
         assertThat(informationExposingRepository.getConfiguration().getBoundImplementations(), is(empty()));
         assertThat(informationExposingRepository.getConfiguration().getKeyGenerator(), is(notNullValue()));
         assertThat(informationExposingRepository.getConfiguration().getRepositoryMetadata(), is(notNullValue()));
-        assertThat(informationExposingRepository.getConfiguration().getRepositoryMetadata().getEntityType(), is(equalTo(Person.class)));
-        assertThat(informationExposingRepository.getConfiguration().getRepositoryMetadata().getIdentifierType(), is(equalTo(String.class)));
-        assertThat(informationExposingRepository.getConfiguration().getRepositoryMetadata().getRepositoryInterface(), is(equalTo(SampleRepository.class)));
+        assertThat(informationExposingRepository.getConfiguration().getRepositoryMetadata().getEntityType(), is(Matchers.<Class<?>>equalTo(Person.class)));
+        assertThat(informationExposingRepository.getConfiguration().getRepositoryMetadata().getIdentifierType(), is(Matchers.<Class<?>>equalTo(String.class)));
+        assertThat(informationExposingRepository.getConfiguration().getRepositoryMetadata().getRepositoryInterface(), is(Matchers.<Class<?>>equalTo(SampleRepository.class)));
         assertThat(informationExposingRepository.getConfiguration().getRepositoryMetadata().getIdentifierProperty(), is("id"));
     }
 
@@ -152,7 +153,7 @@ public class RepositoryMockBuilderTest {
         configuration.setTypeMappingContext(mappingContext);
         final ConfiguredSampleRepository repository = new RepositoryMockBuilder().useConfiguration(configuration).mock(ConfiguredSampleRepository.class);
         assertThat(repository.getConfiguration(), is(notNullValue()));
-        assertThat(repository.getConfiguration(), is(configuration));
+        assertThat(repository.getConfiguration(), Matchers.<RepositoryFactoryConfiguration>is(configuration));
     }
 
     @Test

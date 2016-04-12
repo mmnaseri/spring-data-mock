@@ -1,5 +1,7 @@
 package com.mmnaseri.utils.spring.data.commons;
 
+import com.mmnaseri.utils.spring.data.domain.KeyGenerator;
+import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
 import com.mmnaseri.utils.spring.data.domain.impl.ImmutableRepositoryMetadata;
 import com.mmnaseri.utils.spring.data.domain.impl.key.UUIDKeyGenerator;
 import com.mmnaseri.utils.spring.data.domain.model.Person;
@@ -9,6 +11,7 @@ import com.mmnaseri.utils.spring.data.store.DataStore;
 import com.mmnaseri.utils.spring.data.store.impl.MemoryDataStore;
 import com.mmnaseri.utils.spring.data.store.mock.Operation;
 import com.mmnaseri.utils.spring.data.store.mock.SpyingDataStore;
+import org.hamcrest.Matchers;
 import org.testng.annotations.Test;
 
 import java.io.Serializable;
@@ -32,9 +35,9 @@ public class CrudRepositorySupportTest {
         support.setRepositoryMetadata(repositoryMetadata);
         final UUIDKeyGenerator keyGenerator = new UUIDKeyGenerator();
         support.setKeyGenerator(keyGenerator);
-        assertThat(support.getDataStore(), is(dataStore));
-        assertThat(support.getKeyGenerator(), is(keyGenerator));
-        assertThat(support.getRepositoryMetadata(), is(repositoryMetadata));
+        assertThat(support.getDataStore(), Matchers.<DataStore>is(dataStore));
+        assertThat(support.getKeyGenerator(), Matchers.<KeyGenerator>is(keyGenerator));
+        assertThat(support.getRepositoryMetadata(), Matchers.<RepositoryMetadata>is(repositoryMetadata));
     }
 
     @Test
@@ -46,11 +49,11 @@ public class CrudRepositorySupportTest {
         final Person entity = new Person();
         entity.setId("k1");
         final Object saved = support.save(entity);
-        assertThat(saved, is(entity));
+        assertThat(saved, Matchers.<Object>is(entity));
         assertThat(dataStore.getRequests(), hasSize(1));
-        assertThat(dataStore.getRequests().get(0).getEntity(), is(entity));
+        assertThat(dataStore.getRequests().get(0).getEntity(), Matchers.<Object>is(entity));
         assertThat(dataStore.getRequests().get(0).getOperation(), is(Operation.SAVE));
-        assertThat(dataStore.getRequests().get(0).getKey(), is(entity.getId()));
+        assertThat(dataStore.getRequests().get(0).getKey(), Matchers.<Serializable>is(entity.getId()));
     }
 
     /**
@@ -69,15 +72,16 @@ public class CrudRepositorySupportTest {
     @Test
     public void testPerformingInsertsWhenAKeyGeneratorIsPresent() throws Exception {
         final CrudRepositorySupport support = new CrudRepositorySupport();
-        final SpyingDataStore<String, Person> dataStore = new SpyingDataStore<>(new MemoryDataStore<>(Person.class), new AtomicLong());
+        final MemoryDataStore<String, Person> actualDataStore = new MemoryDataStore<>(Person.class);
+        final SpyingDataStore<String, Person> dataStore = new SpyingDataStore<>(actualDataStore, new AtomicLong());
         support.setDataStore(dataStore);
         support.setRepositoryMetadata(new ImmutableRepositoryMetadata(String.class, Person.class, SimplePersonRepository.class, "id"));
         support.setKeyGenerator(new UUIDKeyGenerator());
         final Person entity = new Person();
         final Object saved = support.save(entity);
-        assertThat(saved, is(entity));
+        assertThat(saved, Matchers.<Object>is(entity));
         assertThat(dataStore.getRequests(), hasSize(1));
-        assertThat(dataStore.getRequests().get(0).getEntity(), is(entity));
+        assertThat(dataStore.getRequests().get(0).getEntity(), Matchers.<Object>is(entity));
         assertThat(dataStore.getRequests().get(0).getOperation(), is(Operation.SAVE));
         assertThat(dataStore.getRequests().get(0).getKey(), is(notNullValue()));
     }

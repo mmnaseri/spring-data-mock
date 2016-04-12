@@ -10,6 +10,7 @@ import com.mmnaseri.utils.spring.data.store.DataStore;
 import com.mmnaseri.utils.spring.data.store.impl.MemoryDataStore;
 import com.mmnaseri.utils.spring.data.store.mock.Operation;
 import com.mmnaseri.utils.spring.data.store.mock.SpyingDataStore;
+import org.hamcrest.Matchers;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -107,7 +108,7 @@ public class DefaultJpaRepositoryTest {
         assertThat(repository.getOne(key), is(nullValue()));
         final Person person = new Person();
         dataStore.save("1234", person);
-        assertThat(repository.getOne(key), is(person));
+        assertThat(repository.getOne(key), Matchers.<Object>is(person));
     }
 
     @Test

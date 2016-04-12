@@ -9,6 +9,7 @@ import com.mmnaseri.utils.spring.data.query.impl.DefaultQueryDescriptor;
 import com.mmnaseri.utils.spring.data.query.mock.SpyingDataFunction;
 import com.mmnaseri.utils.spring.data.store.DataStore;
 import com.mmnaseri.utils.spring.data.store.impl.MemoryDataStore;
+import org.hamcrest.Matchers;
 import org.testng.annotations.Test;
 
 import java.io.Serializable;
@@ -43,7 +44,7 @@ public class DescribedDataStoreOperationTest {
         assertThat(called.get(), is(false));
         final Object result = operation.execute(new MemoryDataStore<>(Object.class), null, null);
         assertThat(called.get(), is(true));
-        assertThat(result, is(selection));
+        assertThat(result, Matchers.<Object>is(selection));
     }
 
     @Test
@@ -74,7 +75,7 @@ public class DescribedDataStoreOperationTest {
         assertThat(called.get(), is(true));
         assertThat(result, is(transformed));
         assertThat(spy.getInvocations(), hasSize(1));
-        assertThat(spy.getInvocations().get(0).getSelection(), is(selection));
+        assertThat(spy.getInvocations().get(0).getSelection(), Matchers.<Object>is(selection));
     }
 
     @Test

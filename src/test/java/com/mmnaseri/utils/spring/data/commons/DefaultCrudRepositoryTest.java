@@ -7,6 +7,7 @@ import com.mmnaseri.utils.spring.data.domain.repository.SimplePersonRepository;
 import com.mmnaseri.utils.spring.data.error.EntityMissingKeyException;
 import com.mmnaseri.utils.spring.data.store.DataStore;
 import com.mmnaseri.utils.spring.data.store.impl.MemoryDataStore;
+import org.hamcrest.Matchers;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -66,7 +67,7 @@ public class DefaultCrudRepositoryTest {
         assertThat(repository.findOne(key), is(nullValue()));
         final Person person = new Person();
         dataStore.save("1234", person);
-        assertThat(repository.findOne(key), is(person));
+        assertThat(repository.findOne(key), Matchers.<Object>is(person));
     }
 
     @Test
@@ -129,7 +130,7 @@ public class DefaultCrudRepositoryTest {
         final Object deleted = repository.delete(new Person().setId("1"));
         assertThat(dataStore.hasKey("1"), is(false));
         assertThat(deleted, is(notNullValue()));
-        assertThat(deleted, is(original));
+        assertThat(deleted, Matchers.<Object>is(original));
     }
 
     @Test(expectedExceptions = EntityMissingKeyException.class)
