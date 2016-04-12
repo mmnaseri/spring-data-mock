@@ -12,7 +12,6 @@ import com.mmnaseri.utils.spring.data.store.DataStoreOperation;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.data.annotation.QueryAnnotation;
 
-import java.io.Serializable;
 import java.lang.reflect.Method;
 
 /**
@@ -40,7 +39,7 @@ public class QueryMethodDataOperationResolver implements DataOperationResolver {
             return null;
         }
         final QueryDescriptor descriptor = descriptionExtractor.extract(repositoryMetadata, method, configuration);
-        return new DescribedDataStoreOperation<Serializable, Object>(new SelectDataStoreOperation<Serializable, Object>(descriptor), functionRegistry);
+        return new DescribedDataStoreOperation<>(new SelectDataStoreOperation<>(descriptor), functionRegistry);
     }
 
 }

@@ -25,12 +25,12 @@ public class DefaultDataStoreEventListenerContext implements DataStoreEventListe
 
     public DefaultDataStoreEventListenerContext(DataStoreEventListenerContext parent) {
         this.parent = parent;
-        listeners = new ConcurrentHashMap<Class<? extends DataStoreEvent>, List<DataStoreEventListener<?>>>();
+        listeners = new ConcurrentHashMap<>();
     }
 
     @Override
     public <E extends DataStoreEvent> void register(DataStoreEventListener<E> listener) {
-        final SmartDataStoreEventListener<E> eventListener = new SmartDataStoreEventListener<E>(listener);
+        final SmartDataStoreEventListener<E> eventListener = new SmartDataStoreEventListener<>(listener);
         listeners.putIfAbsent(eventListener.getEventType(), new CopyOnWriteArrayList<DataStoreEventListener<?>>());
         listeners.get(eventListener.getEventType()).add(eventListener);
     }

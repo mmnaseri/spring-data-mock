@@ -29,7 +29,7 @@ public class InformationExposingRepositoryFactory implements RepositoryFactory {
     public <E> E getInstance(KeyGenerator<? extends Serializable> keyGenerator, Class<E> repositoryInterface, Class... implementations) {
         final E instance = delegate.getInstance(keyGenerator, repositoryInterface, implementations);
         //noinspection unchecked
-        final RepositoryConfiguration configuration = new ImmutableRepositoryConfiguration(this.configuration.getRepositoryMetadataResolver().resolve(repositoryInterface), keyGenerator, Arrays.asList(implementations));
+        final RepositoryConfiguration configuration = new ImmutableRepositoryConfiguration(this.configuration.getRepositoryMetadataResolver().resolve(repositoryInterface), keyGenerator, Arrays.<Class<?>>asList(implementations));
         final DefaultInformationExposingRepository implementation = new DefaultInformationExposingRepository(configuration, getConfiguration());
         final InformationExposingInvocationHandler<E> handler = new InformationExposingInvocationHandler<>(implementation, instance);
         final Object proxyInstance = Proxy.newProxyInstance(instance.getClass().getClassLoader(), new Class[]{

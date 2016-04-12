@@ -56,7 +56,7 @@ public class QueryDescriptionExtractor {
         //this is the extractor used for getting sorting data
         final SortParameterExtractor sortExtractor;
         //these are decision branches, each of which denoting an AND clause
-        final List<List<Parameter>> branches = new ArrayList<List<Parameter>>();
+        final List<List<Parameter>> branches = new ArrayList<>();
         //if the method name simply was the function name, no metadata can be extracted
         if (!reader.hasMore()) {
             pageExtractor = null;
@@ -133,7 +133,7 @@ public class QueryDescriptionExtractor {
                     length -= expression.length();
                     reader.backtrack(length);
                 }
-                final Set<Modifier> modifiers = new HashSet<Modifier>();
+                final Set<Modifier> modifiers = new HashSet<>();
                 if (expression.matches(".*" + IGNORE_CASE_SUFFIX)) {
                     //if the expression ended in IgnoreCase, we need to strip that off
                     modifiers.add(Modifier.IGNORE_CASE);
@@ -201,7 +201,7 @@ public class QueryDescriptionExtractor {
             final com.mmnaseri.utils.spring.data.query.Sort sort;
             //let's figure out if there is a sort requirement embedded in the query definition
             if (reader.read("OrderBy") != null) {
-                final List<Order> orders = new ArrayList<Order>();
+                final List<Order> orders = new ArrayList<>();
                 while (reader.hasMore()) {
                     String expression = reader.expect(".*?(Asc|Desc)");
                     final SortDirection direction;

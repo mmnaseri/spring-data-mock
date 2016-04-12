@@ -178,7 +178,7 @@ public class PropertyUtilsTest extends AbstractUtilityClassTest {
     public void testReadingPropertyValueThroughField() throws Exception {
         final ClassWithNoGetters object = new ClassWithNoGetters();
         object.id = "1234";
-        assertThat(PropertyUtils.getPropertyValue(object, "id"), is(object.id));
+        assertThat(PropertyUtils.getPropertyValue(object, "id"), Matchers.<Object>is(object.id));
     }
 
     @Test(expectedExceptions = IllegalStateException.class)
@@ -226,7 +226,7 @@ public class PropertyUtilsTest extends AbstractUtilityClassTest {
         final Person person = new Person();
         final String value = "123";
         final Object changed = PropertyUtils.setPropertyValue(person, "id", value);
-        assertThat(changed, is(person));
+        assertThat(changed, Matchers.<Object>is(person));
         assertThat(person.getId(), is(value));
     }
 
@@ -235,7 +235,7 @@ public class PropertyUtilsTest extends AbstractUtilityClassTest {
         final Person person = new Person().setAddress(new Address().setZip(new Zip()));
         final String value = "Capital";
         final Object changed = PropertyUtils.setPropertyValue(person, "address.zip.area", value);
-        assertThat(changed, is(person.getAddress().getZip()));
+        assertThat(changed, Matchers.<Object>is(person.getAddress().getZip()));
         assertThat(person.getAddress().getZip().getArea(), is(value));
     }
 

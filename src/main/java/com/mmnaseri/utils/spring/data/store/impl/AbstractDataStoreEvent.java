@@ -8,6 +8,7 @@ import com.mmnaseri.utils.spring.data.store.DataStoreEvent;
  * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (10/6/15)
  */
+@SuppressWarnings("WeakerAccess")
 public abstract class AbstractDataStoreEvent implements DataStoreEvent {
 
     private final RepositoryMetadata repositoryMetadata;

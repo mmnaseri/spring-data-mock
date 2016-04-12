@@ -15,7 +15,7 @@ import java.util.List;
 public class DefaultCrudRepository extends CrudRepositorySupport {
 
     public Iterable<Object> save(Iterable entities) {
-        final List<Object> list = new LinkedList<Object>();
+        final List<Object> list = new LinkedList<>();
         for (Object entity : entities) {
             list.add(save(entity));
         }

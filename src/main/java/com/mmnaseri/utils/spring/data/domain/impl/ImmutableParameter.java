@@ -23,7 +23,7 @@ public class ImmutableParameter implements Parameter {
     public ImmutableParameter(String path, Set<Modifier> modifiers, int[] indices, Operator operator) {
         this.path = path;
         this.operator = operator;
-        this.modifiers = modifiers == null ? Collections.<Modifier>emptySet() : new HashSet<Modifier>(modifiers);
+        this.modifiers = modifiers == null ? Collections.<Modifier>emptySet() : new HashSet<>(modifiers);
         this.indices = indices;
     }
 

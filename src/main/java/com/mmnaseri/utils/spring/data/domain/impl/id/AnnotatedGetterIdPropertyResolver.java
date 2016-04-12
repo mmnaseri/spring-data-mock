@@ -18,7 +18,7 @@ public class AnnotatedGetterIdPropertyResolver extends AnnotatedIdPropertyResolv
 
     @Override
     public String resolve(final Class<?> entityType, Class<? extends Serializable> idType) {
-        final AtomicReference<Method> found = new AtomicReference<Method>();
+        final AtomicReference<Method> found = new AtomicReference<>();
         ReflectionUtils.doWithMethods(entityType, new ReflectionUtils.MethodCallback() {
             @Override
             public void doWith(Method method) throws IllegalArgumentException, IllegalAccessException {

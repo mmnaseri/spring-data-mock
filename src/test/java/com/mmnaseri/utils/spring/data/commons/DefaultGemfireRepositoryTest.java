@@ -26,7 +26,9 @@ public class DefaultGemfireRepositoryTest {
         repository.setDataStore(dataStore);
         repository.setRepositoryMetadata(repositoryMetadata);
         final String id = "12345";
-        final Object saved = repository.save(new Wrapper<>(new Person(), id));
+        final Wrapper<?, ?> wrapper = new Wrapper<>(new Person(), id);
+        //noinspection unchecked
+        final Object saved = repository.save((Wrapper<Object, Serializable>) wrapper);
         assertThat(saved, is(notNullValue()));
         assertThat(saved, is(instanceOf(Person.class)));
         assertThat(((Person) saved).getId(), is(notNullValue()));

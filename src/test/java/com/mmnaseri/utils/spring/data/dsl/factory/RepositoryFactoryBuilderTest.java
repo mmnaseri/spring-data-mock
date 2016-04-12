@@ -1,30 +1,32 @@
 package com.mmnaseri.utils.spring.data.dsl.factory;
 
+import com.mmnaseri.utils.spring.data.domain.KeyGenerator;
+import com.mmnaseri.utils.spring.data.domain.Operator;
+import com.mmnaseri.utils.spring.data.domain.OperatorContext;
+import com.mmnaseri.utils.spring.data.domain.RepositoryMetadataResolver;
 import com.mmnaseri.utils.spring.data.domain.impl.DefaultOperatorContext;
 import com.mmnaseri.utils.spring.data.domain.impl.DefaultRepositoryMetadataResolver;
 import com.mmnaseri.utils.spring.data.domain.impl.ImmutableOperator;
 import com.mmnaseri.utils.spring.data.domain.impl.QueryDescriptionExtractor;
 import com.mmnaseri.utils.spring.data.domain.repository.SimplePersonRepository;
 import com.mmnaseri.utils.spring.data.dsl.mock.RepositoryMockBuilder;
-import com.mmnaseri.utils.spring.data.proxy.RepositoryConfiguration;
-import com.mmnaseri.utils.spring.data.proxy.RepositoryConfigurationAware;
-import com.mmnaseri.utils.spring.data.proxy.RepositoryFactory;
-import com.mmnaseri.utils.spring.data.proxy.RepositoryFactoryConfiguration;
+import com.mmnaseri.utils.spring.data.proxy.*;
 import com.mmnaseri.utils.spring.data.proxy.impl.DefaultResultAdapterContext;
 import com.mmnaseri.utils.spring.data.proxy.impl.DefaultTypeMappingContext;
 import com.mmnaseri.utils.spring.data.proxy.impl.NonDataOperationInvocationHandler;
 import com.mmnaseri.utils.spring.data.proxy.impl.adapters.VoidResultAdapter;
 import com.mmnaseri.utils.spring.data.proxy.mock.SpyingHandler;
+import com.mmnaseri.utils.spring.data.query.DataFunction;
+import com.mmnaseri.utils.spring.data.query.DataFunctionRegistry;
 import com.mmnaseri.utils.spring.data.query.impl.DefaultDataFunctionRegistry;
 import com.mmnaseri.utils.spring.data.query.mock.SpyingDataFunction;
-import com.mmnaseri.utils.spring.data.store.DataStoreEvent;
-import com.mmnaseri.utils.spring.data.store.DataStoreEventListener;
-import com.mmnaseri.utils.spring.data.store.DataStoreEventListenerContext;
+import com.mmnaseri.utils.spring.data.store.*;
 import com.mmnaseri.utils.spring.data.store.impl.AuditDataEventListener;
 import com.mmnaseri.utils.spring.data.store.impl.DefaultDataStoreEventListenerContext;
 import com.mmnaseri.utils.spring.data.store.impl.DefaultDataStoreRegistry;
 import com.mmnaseri.utils.spring.data.store.impl.MemoryDataStore;
 import com.mmnaseri.utils.spring.data.store.mock.AllCatchingEventListener;
+import org.hamcrest.Matchers;
 import org.springframework.data.domain.AuditorAware;
 import org.testng.annotations.Test;
 
@@ -70,7 +72,7 @@ public class RepositoryFactoryBuilderTest {
         assertThat(factory, is(notNullValue()));
         assertThat(factory.getConfiguration(), is(notNullValue()));
         assertThat(factory.getConfiguration().getRepositoryMetadataResolver(), is(notNullValue()));
-        assertThat(factory.getConfiguration().getRepositoryMetadataResolver(), is(resolver));
+        assertThat(factory.getConfiguration().getRepositoryMetadataResolver(), Matchers.<RepositoryMetadataResolver>is(resolver));
     }
 
     @Test
@@ -91,7 +93,7 @@ public class RepositoryFactoryBuilderTest {
         assertThat(factory.getConfiguration(), is(notNullValue()));
         assertThat(factory.getConfiguration().getDescriptionExtractor(), is(notNullValue()));
         assertThat(factory.getConfiguration().getDescriptionExtractor().getOperatorContext(), is(notNullValue()));
-        assertThat(factory.getConfiguration().getDescriptionExtractor().getOperatorContext(), is(operatorContext));
+        assertThat(factory.getConfiguration().getDescriptionExtractor().getOperatorContext(), Matchers.<OperatorContext>is(operatorContext));
     }
 
     @Test
@@ -104,9 +106,9 @@ public class RepositoryFactoryBuilderTest {
         assertThat(factory.getConfiguration().getDescriptionExtractor(), is(notNullValue()));
         assertThat(factory.getConfiguration().getDescriptionExtractor().getOperatorContext(), is(notNullValue()));
         assertThat(factory.getConfiguration().getDescriptionExtractor().getOperatorContext().getBySuffix("X"), is(notNullValue()));
-        assertThat(factory.getConfiguration().getDescriptionExtractor().getOperatorContext().getBySuffix("X"), is(x));
-        assertThat(factory.getConfiguration().getDescriptionExtractor().getOperatorContext().getBySuffix("Y"), is(notNullValue()));
-        assertThat(factory.getConfiguration().getDescriptionExtractor().getOperatorContext().getBySuffix("Y"), is(y));
+        assertThat(factory.getConfiguration().getDescriptionExtractor().getOperatorContext().getBySuffix("X"), Matchers.<Operator>is(x));
+        assertThat(factory.getConfiguration().getDescriptionExtractor().getOperatorContext().getBySuffix("Y"), is(notNullValue(Operator.class)));
+        assertThat(factory.getConfiguration().getDescriptionExtractor().getOperatorContext().getBySuffix("Y"), Matchers.<Operator>is(y));
     }
 
     @Test
@@ -116,7 +118,7 @@ public class RepositoryFactoryBuilderTest {
         assertThat(factory, is(notNullValue()));
         assertThat(factory.getConfiguration(), is(notNullValue()));
         assertThat(factory.getConfiguration().getFunctionRegistry(), is(notNullValue()));
-        assertThat(factory.getConfiguration().getFunctionRegistry(), is(functionRegistry));
+        assertThat(factory.getConfiguration().getFunctionRegistry(), Matchers.<DataFunctionRegistry>is(functionRegistry));
     }
 
     @Test
@@ -129,9 +131,9 @@ public class RepositoryFactoryBuilderTest {
         assertThat(factory.getConfiguration().getFunctionRegistry(), is(notNullValue()));
         assertThat(factory.getConfiguration().getFunctionRegistry(), is(notNullValue()));
         assertThat(factory.getConfiguration().getFunctionRegistry().getFunction("x"), is(notNullValue()));
-        assertThat(factory.getConfiguration().getFunctionRegistry().getFunction("x"), is(x));
+        assertThat(factory.getConfiguration().getFunctionRegistry().getFunction("x"), Matchers.<DataFunction>is(x));
         assertThat(factory.getConfiguration().getFunctionRegistry().getFunction("y"), is(notNullValue()));
-        assertThat(factory.getConfiguration().getFunctionRegistry().getFunction("y"), is(y));
+        assertThat(factory.getConfiguration().getFunctionRegistry().getFunction("y"), Matchers.<DataFunction>is(y));
     }
 
     @Test
@@ -141,7 +143,7 @@ public class RepositoryFactoryBuilderTest {
         assertThat(factory, is(notNullValue()));
         assertThat(factory.getConfiguration(), is(notNullValue()));
         assertThat(factory.getConfiguration().getDataStoreRegistry(), is(notNullValue()));
-        assertThat(factory.getConfiguration().getDataStoreRegistry(), is(registry));
+        assertThat(factory.getConfiguration().getDataStoreRegistry(), Matchers.<DataStoreRegistry>is(registry));
     }
 
     @Test
@@ -153,9 +155,9 @@ public class RepositoryFactoryBuilderTest {
         assertThat(factory.getConfiguration(), is(notNullValue()));
         assertThat(factory.getConfiguration().getDataStoreRegistry(), is(notNullValue()));
         assertThat(factory.getConfiguration().getDataStoreRegistry().getDataStore(Integer.class), is(notNullValue()));
-        assertThat(factory.getConfiguration().getDataStoreRegistry().getDataStore(Integer.class), is(x));
+        assertThat(factory.getConfiguration().getDataStoreRegistry().getDataStore(Integer.class), Matchers.<DataStore>is(x));
         assertThat(factory.getConfiguration().getDataStoreRegistry().getDataStore(String.class), is(notNullValue()));
-        assertThat(factory.getConfiguration().getDataStoreRegistry().getDataStore(String.class), is(y));
+        assertThat(factory.getConfiguration().getDataStoreRegistry().getDataStore(String.class), Matchers.<DataStore>is(y));
     }
 
     @Test
@@ -165,7 +167,7 @@ public class RepositoryFactoryBuilderTest {
         assertThat(factory, is(notNullValue()));
         assertThat(factory.getConfiguration(), is(notNullValue()));
         assertThat(factory.getConfiguration().getResultAdapterContext(), is(notNullValue()));
-        assertThat(factory.getConfiguration().getResultAdapterContext(), is(context));
+        assertThat(factory.getConfiguration().getResultAdapterContext(), Matchers.<ResultAdapterContext>is(context));
     }
 
     @Test
@@ -187,7 +189,7 @@ public class RepositoryFactoryBuilderTest {
         assertThat(factory, is(notNullValue()));
         assertThat(factory.getConfiguration(), is(notNullValue()));
         assertThat(factory.getConfiguration().getTypeMappingContext(), is(notNullValue()));
-        assertThat(factory.getConfiguration().getTypeMappingContext(), is(context));
+        assertThat(factory.getConfiguration().getTypeMappingContext(), Matchers.<TypeMappingContext>is(context));
     }
 
     @Test
@@ -229,7 +231,7 @@ public class RepositoryFactoryBuilderTest {
         assertThat(factory, is(notNullValue()));
         assertThat(factory.getConfiguration(), is(notNullValue()));
         assertThat(factory.getConfiguration().getEventListenerContext(), is(notNullValue()));
-        assertThat(factory.getConfiguration().getEventListenerContext(), is(context));
+        assertThat(factory.getConfiguration().getEventListenerContext(), Matchers.<DataStoreEventListenerContext>is(context));
     }
 
     @Test
@@ -270,7 +272,7 @@ public class RepositoryFactoryBuilderTest {
         final AuditDataEventListener auditDataEventListener = (AuditDataEventListener) listeners.get(0);
         final AuditorAware usedAuditorAware = auditDataEventListener.getAuditorAware();
         assertThat(usedAuditorAware, is(notNullValue()));
-        assertThat(usedAuditorAware, is(auditorAware));
+        assertThat(usedAuditorAware, Matchers.<AuditorAware>is(auditorAware));
     }
 
     @Test
@@ -290,7 +292,7 @@ public class RepositoryFactoryBuilderTest {
         final ExtendedSimplePersonRepository repository = RepositoryFactoryBuilder.builder().usingImplementation(StringMapping.class).and(NumberMapping.class).mock(ExtendedSimplePersonRepository.class);
         assertThat(repository, is(notNullValue()));
         assertThat(repository.getString(), is("Hello!"));
-        assertThat(repository.getNumber(), is(123));
+        assertThat(repository.getNumber(), Matchers.<Number>is(123));
     }
 
     @Test
@@ -306,7 +308,7 @@ public class RepositoryFactoryBuilderTest {
         final ConfiguredSimplePersonRepository repository = RepositoryFactoryBuilder.builder().generateKeysUsing(keyGenerator).usingImplementation(ConfiguredMapping.class).mock(ConfiguredSimplePersonRepository.class);
         assertThat(repository.getRepositoryConfiguration(), is(notNullValue()));
         assertThat(repository.getRepositoryConfiguration().getKeyGenerator(), is(notNullValue()));
-        assertThat(repository.getRepositoryConfiguration().getKeyGenerator(), is(keyGenerator));
+        assertThat(repository.getRepositoryConfiguration().getKeyGenerator(), Matchers.<KeyGenerator<?>>is(keyGenerator));
     }
 
     @Test

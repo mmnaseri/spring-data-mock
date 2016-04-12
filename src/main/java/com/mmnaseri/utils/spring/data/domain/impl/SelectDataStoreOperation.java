@@ -29,8 +29,8 @@ public class SelectDataStoreOperation<K extends Serializable, E> implements Data
 
     @Override
     public List<E> execute(DataStore<K, E> store, RepositoryConfiguration configuration, Invocation invocation) {
-        final List<E> selection = new LinkedList<E>();
-        final Collection<E> all = new LinkedList<E>(store.retrieveAll());
+        final List<E> selection = new LinkedList<>();
+        final Collection<E> all = new LinkedList<>(store.retrieveAll());
         for (E entity : all) {
             if (descriptor.matches(entity, invocation)) {
                 selection.add(entity);

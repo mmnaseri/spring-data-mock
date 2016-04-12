@@ -28,18 +28,15 @@ public class DeleteDataFunctionTest {
 
     private QueryDescriptor query;
     private DeleteDataFunction function;
-    private MemoryDataStore<String, Person> delegate;
-    private AtomicLong counter;
     private SpyingDataStore<String, Person> dataStore;
 
     @BeforeMethod
     public void setUp() throws Exception {
         final RepositoryMetadata repositoryMetadata = new ImmutableRepositoryMetadata(String.class, Person.class, null, "id");
+        final MemoryDataStore<String, Person> delegate = new MemoryDataStore<>(Person.class);
         query = new DefaultQueryDescriptor(false, null, 0, null, null, null, null, repositoryMetadata);
         function = new DeleteDataFunction();
-        delegate = new MemoryDataStore<>(Person.class);
-        counter = new AtomicLong();
-        dataStore = new SpyingDataStore<>(delegate, counter);
+        dataStore = new SpyingDataStore<>(delegate, new AtomicLong());
     }
 
     @Test(expectedExceptions = InvalidArgumentException.class, expectedExceptionsMessageRegExp = "Data store .*")

@@ -1,6 +1,7 @@
 package com.mmnaseri.utils.spring.data.proxy.impl.adapters;
 
 import com.mmnaseri.utils.spring.data.domain.impl.ImmutableInvocation;
+import com.mmnaseri.utils.spring.data.proxy.ResultAdapter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.geo.GeoPage;
@@ -27,7 +28,7 @@ public class NullToSliceResultAdapterTest {
 
     @Test
     public void testAcceptance() throws Exception {
-        final NullToSliceResultAdapter adapter = new NullToSliceResultAdapter();
+        final ResultAdapter<Slice> adapter = new NullToSliceResultAdapter();
         assertThat(adapter.accepts(new ImmutableInvocation(Sample.class.getMethod("findSlice"), new Object[]{}), null), is(true));
         assertThat(adapter.accepts(new ImmutableInvocation(Sample.class.getMethod("findPage"), new Object[]{}), null), is(true));
         assertThat(adapter.accepts(new ImmutableInvocation(Sample.class.getMethod("findGeoPage"), new Object[]{}), null), is(true));
@@ -35,7 +36,7 @@ public class NullToSliceResultAdapterTest {
 
     @Test
     public void testAdaptingToASlice() throws Exception {
-        final NullToSliceResultAdapter adapter = new NullToSliceResultAdapter();
+        final ResultAdapter<Slice> adapter = new NullToSliceResultAdapter();
         final Slice<?> value = adapter.adapt(new ImmutableInvocation(Sample.class.getMethod("findSlice"), new Object[]{}), null);
         assertThat(value, is(notNullValue()));
         assertThat(value.getNumber(), is(0));
@@ -47,7 +48,7 @@ public class NullToSliceResultAdapterTest {
 
     @Test
     public void testAdaptingToAPage() throws Exception {
-        final NullToSliceResultAdapter adapter = new NullToSliceResultAdapter();
+        final ResultAdapter<Slice> adapter = new NullToSliceResultAdapter();
         final Slice<?> value = adapter.adapt(new ImmutableInvocation(Sample.class.getMethod("findPage"), new Object[]{}), null);
         assertThat(value, is(notNullValue()));
         assertThat(value.getNumber(), is(0));
@@ -59,7 +60,7 @@ public class NullToSliceResultAdapterTest {
 
     @Test
     public void testAdaptingToAGeoPage() throws Exception {
-        final NullToSliceResultAdapter adapter = new NullToSliceResultAdapter();
+        final ResultAdapter<Slice> adapter = new NullToSliceResultAdapter();
         final Slice<?> value = adapter.adapt(new ImmutableInvocation(Sample.class.getMethod("findGeoPage"), new Object[]{}), null);
         assertThat(value, is(notNullValue()));
         assertThat(value.getNumber(), is(0));

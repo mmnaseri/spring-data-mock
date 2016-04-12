@@ -6,11 +6,8 @@ package com.mmnaseri.utils.spring.data.error;
  */
 public class DataStoreException extends RepositoryMockException {
 
-    private final Class<?> entityType;
-
     public DataStoreException(Class<?> entityType, String message) {
         super(message);
-        this.entityType = entityType;
     }
 
 }

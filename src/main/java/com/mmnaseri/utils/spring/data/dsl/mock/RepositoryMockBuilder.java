@@ -45,7 +45,7 @@ public class RepositoryMockBuilder implements Start, ImplementationAnd, KeyGener
 
     @Override
     public ImplementationAnd usingImplementation(Class<?> implementation) {
-        final LinkedList<Class<?>> implementations = new LinkedList<Class<?>>(this.implementations);
+        final LinkedList<Class<?>> implementations = new LinkedList<>(this.implementations);
         implementations.add(implementation);
         return new RepositoryMockBuilder(factory, implementations, keyGenerator);
     }

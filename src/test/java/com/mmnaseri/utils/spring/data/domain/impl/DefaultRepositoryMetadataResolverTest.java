@@ -3,12 +3,14 @@ package com.mmnaseri.utils.spring.data.domain.impl;
 import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
 import com.mmnaseri.utils.spring.data.domain.model.Address;
 import com.mmnaseri.utils.spring.data.domain.model.Person;
+import org.hamcrest.Matchers;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.RepositoryDefinition;
 import org.testng.annotations.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 
 /**
  * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
@@ -32,7 +34,7 @@ public class DefaultRepositoryMetadataResolverTest {
     public void testThatAnnotationTakesPrecedenceOverInheritance() throws Exception {
         final RepositoryMetadata metadata = new DefaultRepositoryMetadataResolver().resolveFromInterface(AnnotatedInheritingInterface.class);
         assertThat(metadata, is(notNullValue()));
-        assertThat(metadata.getEntityType(), is(equalTo(Person.class)));
+        assertThat(metadata.getEntityType(), is(Matchers.<Class<?>>equalTo(Person.class)));
     }
 
     @RepositoryDefinition(domainClass = Person.class, idClass = String.class)

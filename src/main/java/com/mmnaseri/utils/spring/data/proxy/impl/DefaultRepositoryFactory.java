@@ -28,7 +28,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class DefaultRepositoryFactory implements RepositoryFactory {
     
     private final RepositoryMetadataResolver repositoryMetadataResolver;
-    private final Map<Class<?>, RepositoryMetadata> metadataMap = new ConcurrentHashMap<Class<?>, RepositoryMetadata>();
+    private final Map<Class<?>, RepositoryMetadata> metadataMap = new ConcurrentHashMap<>();
     private final QueryDescriptionExtractor descriptionExtractor;
     private final DataFunctionRegistry functionRegistry;
     private final DataStoreRegistry dataStoreRegistry;
@@ -56,7 +56,7 @@ public class DefaultRepositoryFactory implements RepositoryFactory {
         final DataOperationResolver operationResolver = new DefaultDataOperationResolver(typeMappings, descriptionExtractor, metadata, functionRegistry, configuration);
         final Method[] methods = repositoryInterface.getMethods();
         final List<InvocationMapping<? extends Serializable, ?>> invocationMappings = getInvocationMappings(operationResolver, methods);
-        final List<Class<?>> boundImplementations = new LinkedList<Class<?>>();
+        final List<Class<?>> boundImplementations = new LinkedList<>();
         for (TypeMapping<?> mapping : typeMappings) {
             boundImplementations.add(mapping.getType());
         }
@@ -85,7 +85,7 @@ public class DefaultRepositoryFactory implements RepositoryFactory {
     }
 
     private List<TypeMapping<?>> getTypeMappings(RepositoryMetadata metadata, DataStore<Serializable, Object> dataStore, KeyGenerator<? extends Serializable> keyGenerator, Class[] implementations) {
-        final List<TypeMapping<?>> typeMappings = new LinkedList<TypeMapping<?>>();
+        final List<TypeMapping<?>> typeMappings = new LinkedList<>();
         final TypeMappingContext localContext = new DefaultTypeMappingContext(typeMappingContext);
         for (Class implementation : implementations) {
             localContext.register(metadata.getRepositoryInterface(), implementation);
@@ -131,21 +131,21 @@ public class DefaultRepositoryFactory implements RepositoryFactory {
             dataStore = (DataStore<Serializable, Object>) dataStoreRegistry.getDataStore(metadata.getEntityType());
         } else {
             //noinspection unchecked
-            dataStore = new MemoryDataStore<Serializable, Object>((Class<Object>) metadata.getEntityType());
+            dataStore = new MemoryDataStore<>((Class<Object>) metadata.getEntityType());
         }
         if (!(dataStore instanceof EventPublishingDataStore)) {
-            dataStore = new EventPublishingDataStore<Serializable, Object>(dataStore, metadata, new DefaultDataStoreEventListenerContext(configuration.getEventListenerContext()));
+            dataStore = new EventPublishingDataStore<>(dataStore, metadata, new DefaultDataStoreEventListenerContext(configuration.getEventListenerContext()));
         }
         dataStoreRegistry.register(dataStore);
         return dataStore;
     }
 
     private List<InvocationMapping<? extends Serializable, ?>> getInvocationMappings(DataOperationResolver operationResolver, Method[] methods) {
-        final List<InvocationMapping<? extends Serializable, ?>> invocationMappings = new LinkedList<InvocationMapping<? extends Serializable, ?>>();
+        final List<InvocationMapping<? extends Serializable, ?>> invocationMappings = new LinkedList<>();
         for (Method method : methods) {
             final DataStoreOperation<?, ?, ?> operation = operationResolver.resolve(method);
             //noinspection unchecked
-            invocationMappings.add(new ImmutableInvocationMapping<Serializable, Object>(method, (DataStoreOperation<?, Serializable, Object>) operation));
+            invocationMappings.add(new ImmutableInvocationMapping<>(method, (DataStoreOperation<?, Serializable, Object>) operation));
         }
         return invocationMappings;
     }

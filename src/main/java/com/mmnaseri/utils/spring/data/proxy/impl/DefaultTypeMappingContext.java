@@ -53,7 +53,7 @@ public class DefaultTypeMappingContext implements TypeMappingContext {
 
     @Override
     public List<Class<?>> getImplementations(Class<?> repositoryType) {
-        final List<Class<?>> classes = new LinkedList<Class<?>>();
+        final List<Class<?>> classes = new LinkedList<>();
         for (Class<?> repositorySuperType : mappings.keySet()) {
             if (repositorySuperType.isAssignableFrom(repositoryType)) {
                 classes.addAll(mappings.get(repositorySuperType));
@@ -68,7 +68,7 @@ public class DefaultTypeMappingContext implements TypeMappingContext {
 
     @Override
     public List<TypeMapping<?>> getMappings(Class<?> repositoryType) {
-        final List<TypeMapping<?>> typeMappings = new LinkedList<TypeMapping<?>>();
+        final List<TypeMapping<?>> typeMappings = new LinkedList<>();
         final List<Class<?>> implementations = getImplementations(repositoryType);
         for (Class<?> implementation : implementations) {
             final Object instance;

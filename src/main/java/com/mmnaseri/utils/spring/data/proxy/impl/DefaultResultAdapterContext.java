@@ -17,7 +17,7 @@ import java.util.List;
  */
 public class DefaultResultAdapterContext implements ResultAdapterContext {
 
-    private final List<ResultAdapter<?>> adapters = new ArrayList<ResultAdapter<?>>();
+    private final List<ResultAdapter<?>> adapters = new ArrayList<>();
 
     public DefaultResultAdapterContext() {
         adapters.add(new VoidResultAdapter());

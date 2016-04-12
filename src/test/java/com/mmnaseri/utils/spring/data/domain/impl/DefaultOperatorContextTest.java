@@ -1,6 +1,8 @@
 package com.mmnaseri.utils.spring.data.domain.impl;
 
+import com.mmnaseri.utils.spring.data.domain.Operator;
 import com.mmnaseri.utils.spring.data.error.DuplicateOperatorException;
+import org.hamcrest.Matchers;
 import org.testng.annotations.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -18,7 +20,7 @@ public class DefaultOperatorContextTest {
         final ImmutableOperator operator = new ImmutableOperator("x", 1, null, "A");
         context.register(operator);
         assertThat(context.getBySuffix("A"), is(notNullValue()));
-        assertThat(context.getBySuffix("A"), is(operator));
+        assertThat(context.getBySuffix("A"), Matchers.<Operator>is(operator));
     }
 
     @Test(expectedExceptions = DuplicateOperatorException.class)

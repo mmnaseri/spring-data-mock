@@ -4,7 +4,6 @@ import com.mmnaseri.utils.spring.data.domain.Modifier;
 import com.mmnaseri.utils.spring.data.domain.Parameter;
 import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
 import com.mmnaseri.utils.spring.data.domain.model.Person;
-import com.mmnaseri.utils.spring.data.dsl.factory.RepositoryFactoryBuilder;
 import com.mmnaseri.utils.spring.data.error.QueryParserException;
 import com.mmnaseri.utils.spring.data.proxy.RepositoryFactoryConfiguration;
 import com.mmnaseri.utils.spring.data.proxy.impl.DefaultRepositoryFactoryConfiguration;
