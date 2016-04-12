@@ -1,6 +1,7 @@
-package com.mmnaseri.utils.spring.data.domain.impl.key;
+package com.mmnaseri.utils.spring.data.dsl.mock;
 
 import com.mmnaseri.utils.spring.data.domain.KeyGenerator;
+import com.mmnaseri.utils.spring.data.domain.impl.key.*;
 import org.springframework.core.GenericTypeResolver;
 
 import java.io.Serializable;
@@ -15,11 +16,11 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (10/12/15)
  */
-public class KeyGeneratorProvider {
+class KeyGeneratorProvider {
 
     private final Map<Class<? extends Serializable>, List<Class<? extends KeyGenerator>>> generators;
 
-    public KeyGeneratorProvider() {
+    KeyGeneratorProvider() {
         final List<Class<? extends KeyGenerator>> discoveredKeyGenerators = getKeyGeneratorTypes();
         generators = new ConcurrentHashMap<>();
         for (Class<? extends KeyGenerator> generatorType : discoveredKeyGenerators) {

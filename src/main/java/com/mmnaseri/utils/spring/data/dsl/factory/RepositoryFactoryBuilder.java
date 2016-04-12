@@ -32,7 +32,7 @@ import java.io.Serializable;
  */
 public class RepositoryFactoryBuilder implements Start, DataFunctionsAnd, DataStoresAnd, EventListenerAnd, MappingContextAnd, OperatorsAnd, ResultAdaptersAnd, OperationHandlersAnd {
 
-    private static final RepositoryFactory DEFAULT_FACTORY = builder().build();
+    private static RepositoryFactory DEFAULT_FACTORY;
     private static final String DEFAULT_USER = "User";
     private RepositoryMetadataResolver metadataResolver;
     private QueryDescriptionExtractor queryDescriptionExtractor;
@@ -53,6 +53,9 @@ public class RepositoryFactoryBuilder implements Start, DataFunctionsAnd, DataSt
     }
     
     public static RepositoryFactory defaultFactory() {
+        if (DEFAULT_FACTORY == null) {
+            DEFAULT_FACTORY = builder().build();
+        }
         return DEFAULT_FACTORY;
     }
 

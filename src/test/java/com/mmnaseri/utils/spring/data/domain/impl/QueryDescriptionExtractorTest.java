@@ -7,6 +7,7 @@ import com.mmnaseri.utils.spring.data.domain.model.Person;
 import com.mmnaseri.utils.spring.data.dsl.factory.RepositoryFactoryBuilder;
 import com.mmnaseri.utils.spring.data.error.QueryParserException;
 import com.mmnaseri.utils.spring.data.proxy.RepositoryFactoryConfiguration;
+import com.mmnaseri.utils.spring.data.proxy.impl.DefaultRepositoryFactoryConfiguration;
 import com.mmnaseri.utils.spring.data.query.*;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -38,7 +39,7 @@ public class QueryDescriptionExtractorTest {
 
     @Test(expectedExceptions = QueryParserException.class, expectedExceptionsMessageRegExp = ".*?: Malformed query method name.*")
     public void testMethodNameNotStartingWithNormalWord() throws Exception {
-        configuration = RepositoryFactoryBuilder.defaultConfiguration();
+        configuration = new DefaultRepositoryFactoryConfiguration();
         extractor.extract(malformedRepositoryMetadata, MalformedRepository.class.getMethod("Malformed"), configuration);
     }
 
