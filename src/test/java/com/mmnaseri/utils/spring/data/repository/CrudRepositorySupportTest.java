@@ -1,4 +1,4 @@
-package com.mmnaseri.utils.spring.data.commons;
+package com.mmnaseri.utils.spring.data.repository;
 
 import com.mmnaseri.utils.spring.data.domain.KeyGenerator;
 import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;

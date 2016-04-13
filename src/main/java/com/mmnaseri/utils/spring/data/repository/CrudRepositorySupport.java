@@ -1,4 +1,4 @@
-package com.mmnaseri.utils.spring.data.commons;
+package com.mmnaseri.utils.spring.data.repository;
 
 import com.mmnaseri.utils.spring.data.domain.*;
 import com.mmnaseri.utils.spring.data.store.DataStore;
@@ -7,6 +7,9 @@ import com.mmnaseri.utils.spring.data.tools.PropertyUtils;
 import java.io.Serializable;
 
 /**
+ * <p>This implementation is used to factor out the commonalities between various Spring interfaces extending the
+ * {@link org.springframework.data.repository.CrudRepository} interface.</p>
+ *
  * @author Milad Naseri (milad.naseri@cdk.com)
  * @since 1.0 (2015/11/09, 21:40)
  */
@@ -18,6 +21,12 @@ public class CrudRepositorySupport implements DataStoreAware, RepositoryMetadata
 
     protected CrudRepositorySupport() {}
 
+    /**
+     * Saves the entity in the underlying data store, creating keys in the process, if necessary.
+     * @param entity    the entity to save
+     * @return the saved entity (the exact same instance, with the difference that if the entity was
+     * newly inserted, it will have a key).
+     */
     public Object save(Object entity) {
         Object key = PropertyUtils.getPropertyValue(entity, repositoryMetadata.getIdentifierProperty());
         if (key == null && keyGenerator != null) {

@@ -2,23 +2,28 @@ package com.mmnaseri.utils.spring.data.sample.mocks;
 
 import com.mmnaseri.utils.spring.data.store.DataStore;
 import com.mmnaseri.utils.spring.data.store.QueueingDataStore;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 
 /**
  * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/10/16)
  */
-public class SpyingDataStore<K extends Serializable, E> implements QueueingDataStore<K, E> {
+public class SpyingDataStore<K extends Serializable, E> implements QueueingDataStore<K, E, Object> {
 
     private final DataStore<K, E> delegate;
     private final List<OperationRequest> requests;
     private final AtomicLong counter;
+    private final Stack<Object> batches = new Stack<>();
 
     public SpyingDataStore(DataStore<K, E> delegate, AtomicLong counter) {
         this.delegate = delegate;
@@ -94,6 +99,20 @@ public class SpyingDataStore<K extends Serializable, E> implements QueueingDataS
     @Override
     public void flush() {
         requests.add(new OperationRequest<>(counter.incrementAndGet(), Operation.FLUSH, null, null));
+    }
+
+    @Override
+    public Object startBatch() {
+        final Object batch = new Object();
+        batches.add(batch);
+        return batch;
+    }
+
+    @Override
+    public void endBatch(Object batch) {
+        assertThat(batches, is(not(empty())));
+        final Object lastBatch = batches.pop();
+        assertThat(batch, is(lastBatch));
     }
 
 }

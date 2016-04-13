@@ -1,4 +1,4 @@
-package com.mmnaseri.utils.spring.data.commons;
+package com.mmnaseri.utils.spring.data.repository;
 
 import com.mmnaseri.utils.spring.data.sample.models.Address;
 import com.mmnaseri.utils.spring.data.sample.models.Person;

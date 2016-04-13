@@ -1,4 +1,4 @@
-package com.mmnaseri.utils.spring.data.commons;
+package com.mmnaseri.utils.spring.data.repository;
 
 import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
 import com.mmnaseri.utils.spring.data.domain.impl.ImmutableRepositoryMetadata;
@@ -101,6 +101,20 @@ public class DefaultJpaRepositoryTest {
         assertThat(dataStore.keys(), hasSize(4));
         repository.deleteAllInBatch();
         assertThat(dataStore.keys(), is(empty()));
+    }
+
+    @Test
+    public void testDeleteInBatchWithQueueing() throws Exception {
+        final SpyingDataStore<String, Person> dataStore = new SpyingDataStore<>(new MemoryDataStore<String, Person>(Person.class), new AtomicLong());
+        dataStore.save("1", new Person());
+        dataStore.save("2", new Person());
+        dataStore.save("3", new Person());
+        dataStore.save("4", new Person());
+        repository.setDataStore(dataStore);
+        assertThat(dataStore.keys(), hasSize(4));
+        repository.deleteAllInBatch();
+        assertThat(dataStore.keys(), is(empty()));
+
     }
 
     @Test
