@@ -21,10 +21,16 @@ public class NonDataOperationInvocationHandler implements InvocationHandler {
     private final List<NonDataOperationHandler> handlers;
 
     public NonDataOperationInvocationHandler() {
+        this(true);
+    }
+
+    public NonDataOperationInvocationHandler(boolean registerDefaults) {
         handlers = new LinkedList<>();
-        handlers.add(new EqualsNonDataOperationHandler());
-        handlers.add(new HashCodeNonDataOperationHandler());
-        handlers.add(new ToStringNonDataOperationHandler());
+        if (registerDefaults) {
+            handlers.add(new EqualsNonDataOperationHandler());
+            handlers.add(new HashCodeNonDataOperationHandler());
+            handlers.add(new ToStringNonDataOperationHandler());
+        }
     }
 
     @Override

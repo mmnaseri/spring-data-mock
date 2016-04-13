@@ -1,12 +1,12 @@
 package com.mmnaseri.utils.spring.data.proxy.impl;
 
+import com.mmnaseri.utils.spring.data.error.RepositoryDefinitionException;
+import com.mmnaseri.utils.spring.data.proxy.TypeMapping;
+import com.mmnaseri.utils.spring.data.proxy.TypeMappingContext;
 import com.mmnaseri.utils.spring.data.repository.DefaultCrudRepository;
 import com.mmnaseri.utils.spring.data.repository.DefaultGemfireRepository;
 import com.mmnaseri.utils.spring.data.repository.DefaultJpaRepository;
 import com.mmnaseri.utils.spring.data.repository.DefaultPagingAndSortingRepository;
-import com.mmnaseri.utils.spring.data.error.RepositoryDefinitionException;
-import com.mmnaseri.utils.spring.data.proxy.TypeMapping;
-import com.mmnaseri.utils.spring.data.proxy.TypeMappingContext;
 import org.springframework.core.annotation.AnnotationAwareOrderComparator;
 import org.springframework.util.ClassUtils;
 
@@ -27,15 +27,21 @@ public class DefaultTypeMappingContext implements TypeMappingContext {
     private ConcurrentMap<Class<?>, List<Class<?>>> mappings = new ConcurrentHashMap<>();
 
     public DefaultTypeMappingContext() {
+        this(true);
+    }
+
+    public DefaultTypeMappingContext(boolean registerDefaults) {
         this(null);
-        if (ClassUtils.isPresent("org.springframework.data.gemfire.repository.GemfireRepository", ClassUtils.getDefaultClassLoader())) {
-            register(Object.class, DefaultGemfireRepository.class);
+        if (registerDefaults) {
+            if (ClassUtils.isPresent("org.springframework.data.gemfire.repository.GemfireRepository", ClassUtils.getDefaultClassLoader())) {
+                register(Object.class, DefaultGemfireRepository.class);
+            }
+            if (ClassUtils.isPresent("org.springframework.data.jpa.repository.JpaRepository", ClassUtils.getDefaultClassLoader())) {
+                register(Object.class, DefaultJpaRepository.class);
+            }
+            register(Object.class, DefaultPagingAndSortingRepository.class);
+            register(Object.class, DefaultCrudRepository.class);
         }
-        if (ClassUtils.isPresent("org.springframework.data.jpa.repository.JpaRepository", ClassUtils.getDefaultClassLoader())) {
-            register(Object.class, DefaultJpaRepository.class);
-        }
-        register(Object.class, DefaultPagingAndSortingRepository.class);
-        register(Object.class, DefaultCrudRepository.class);
     }
 
     public DefaultTypeMappingContext(TypeMappingContext parent) {

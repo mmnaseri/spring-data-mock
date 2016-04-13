@@ -3,6 +3,9 @@ package com.mmnaseri.utils.spring.data.domain.impl.matchers;
 import com.mmnaseri.utils.spring.data.domain.Parameter;
 
 /**
+ * This matcher will return {@literal true} if the argument passed is not equal to the value on the object, even
+ * when their case differences are ignored.
+ *
  * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/29/15)
  */

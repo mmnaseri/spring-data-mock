@@ -18,9 +18,15 @@ public class DefaultDataFunctionRegistry implements DataFunctionRegistry {
     private final Map<String, DataFunction<?>> functions;
 
     public DefaultDataFunctionRegistry() {
+        this(true);
+    }
+
+    public DefaultDataFunctionRegistry(boolean registerDefaults) {
         functions = new ConcurrentHashMap<>();
-        register("count", new CountDataFunction());
-        register("delete", new DeleteDataFunction());
+        if (registerDefaults) {
+            register("count", new CountDataFunction());
+            register("delete", new DeleteDataFunction());
+        }
     }
 
     @Override

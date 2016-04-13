@@ -20,25 +20,31 @@ public class DefaultResultAdapterContext implements ResultAdapterContext {
     private final List<ResultAdapter<?>> adapters = new ArrayList<>();
 
     public DefaultResultAdapterContext() {
-        adapters.add(new VoidResultAdapter());
-        adapters.add(new SameTypeResultAdapter());
-        adapters.add(new NullSimpleResultAdapter());
-        adapters.add(new NullToIteratorResultAdapter());
-        adapters.add(new NullToCollectionResultAdapter());
-        adapters.add(new NullToIterableResultAdapter());
-        adapters.add(new NullToSliceResultAdapter());
-        adapters.add(new NullToFutureResultAdapter());
-        adapters.add(new NullToListenableFutureResultAdapter());
-        adapters.add(new NumberIterableResultAdapter());
-        adapters.add(new SimpleIterableResultAdapter());
-        adapters.add(new IteratorIterableResultAdapter());
-        adapters.add(new CollectionIterableResultAdapter());
-        adapters.add(new SliceIterableResultAdapter());
-        adapters.add(new PageIterableResultAdapter());
-        adapters.add(new GeoPageIterableResultAdapter());
-        adapters.add(new FutureIterableResultAdapter());
-        adapters.add(new ListenableFutureIterableResultAdapter());
-        Collections.sort(adapters);
+        this(true);
+    }
+
+    public DefaultResultAdapterContext(boolean registerDefaults) {
+        if (registerDefaults) {
+            adapters.add(new VoidResultAdapter());
+            adapters.add(new SameTypeResultAdapter());
+            adapters.add(new NullSimpleResultAdapter());
+            adapters.add(new NullToIteratorResultAdapter());
+            adapters.add(new NullToCollectionResultAdapter());
+            adapters.add(new NullToIterableResultAdapter());
+            adapters.add(new NullToSliceResultAdapter());
+            adapters.add(new NullToFutureResultAdapter());
+            adapters.add(new NullToListenableFutureResultAdapter());
+            adapters.add(new NumberIterableResultAdapter());
+            adapters.add(new SimpleIterableResultAdapter());
+            adapters.add(new IteratorIterableResultAdapter());
+            adapters.add(new CollectionIterableResultAdapter());
+            adapters.add(new SliceIterableResultAdapter());
+            adapters.add(new PageIterableResultAdapter());
+            adapters.add(new GeoPageIterableResultAdapter());
+            adapters.add(new FutureIterableResultAdapter());
+            adapters.add(new ListenableFutureIterableResultAdapter());
+            Collections.sort(adapters);
+        }
     }
 
     @Override
