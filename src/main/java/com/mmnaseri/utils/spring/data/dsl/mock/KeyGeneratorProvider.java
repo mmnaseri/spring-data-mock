@@ -13,6 +13,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
+ * This class will provide a key generator for the requested key type, based on the preset list of available
+ * key generators.
+ *
  * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (10/12/15)
  */
@@ -64,7 +67,14 @@ class KeyGeneratorProvider {
         return keyGenerators;
     }
 
-    public <S extends Serializable> Class<? extends KeyGenerator<S>> getKeyGenerator(Class<S> keyType) {
+    /**
+     * Provides a key generator for the specified key type. This is to automate the process of getting
+     * a key generator, when no alternative is provided by the user.
+     * @param keyType    the type of keys for which a generator is required
+     * @param <S>        the type of keys the generator will provide
+     * @return the generator or {@literal null} if none could be found to satisfy the key type
+     */
+    <S extends Serializable> Class<? extends KeyGenerator<S>> getKeyGenerator(Class<S> keyType) {
         final List<Class<? extends KeyGenerator<S>>> generators = getKeyGenerators(keyType);
         return generators.isEmpty() ? null : generators.get(0);
     }
