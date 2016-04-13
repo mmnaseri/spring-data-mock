@@ -11,9 +11,13 @@ import java.lang.reflect.Method;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
+ * This class will resolve ID property name from a getter method that is annotated with
+ * {@link Id @Id}.
+ *
  * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/23/15)
  */
+@SuppressWarnings("WeakerAccess")
 public class AnnotatedGetterIdPropertyResolver extends AnnotatedIdPropertyResolver {
 
     @Override
