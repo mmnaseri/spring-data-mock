@@ -8,7 +8,7 @@ import com.mmnaseri.utils.spring.data.proxy.impl.DefaultResultConverter;
 import java.util.concurrent.Future;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/28/15)
  */
 public class FutureToIterableConverter extends AbstractResultConverter {

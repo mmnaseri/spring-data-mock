@@ -7,7 +7,7 @@ import java.util.UUID;
 /**
  * This class will generate unique UUIDs for use in entities whose keys are loose String values.
  *
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (10/6/15)
  */
 public class UUIDKeyGenerator implements KeyGenerator<String> {

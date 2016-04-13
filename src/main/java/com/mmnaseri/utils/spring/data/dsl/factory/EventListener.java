@@ -6,7 +6,7 @@ import com.mmnaseri.utils.spring.data.store.DataStoreEventListenerContext;
 import org.springframework.data.domain.AuditorAware;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (10/14/15)
  */
 public interface EventListener extends End {

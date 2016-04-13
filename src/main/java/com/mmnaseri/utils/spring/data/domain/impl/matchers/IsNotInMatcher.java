@@ -8,7 +8,7 @@ import java.util.Collection;
  * This matcher checks whether or not the argument passed to the query method (the collection) contains the
  * value on the object itself and fails the check if it does.
  *
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/29/15)
  */
 public class IsNotInMatcher extends AbstractCollectionMatcher {

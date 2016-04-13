@@ -10,7 +10,7 @@ import java.io.Serializable;
  * <p>This implementation is used to factor out the commonalities between various Spring interfaces extending the
  * {@link org.springframework.data.repository.CrudRepository} interface.</p>
  *
- * @author Milad Naseri (milad.naseri@cdk.com)
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (2015/11/09, 21:40)
  */
 public class CrudRepositorySupport implements DataStoreAware, RepositoryMetadataAware, KeyGeneratorAware<Serializable> {

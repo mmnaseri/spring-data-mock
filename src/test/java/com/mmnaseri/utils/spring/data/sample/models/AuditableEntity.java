@@ -4,7 +4,7 @@ import org.joda.time.DateTime;
 import org.springframework.data.domain.Auditable;
 
 /**
- * @author Milad Naseri (milad.naseri@cdk.com)
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (4/12/16, 5:23 PM)
  */
 public class AuditableEntity implements Auditable<String, String> {

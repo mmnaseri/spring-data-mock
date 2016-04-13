@@ -8,7 +8,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import java.util.Date;
 
 /**
- * @author Milad Naseri (milad.naseri@cdk.com)
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (4/12/16, 5:23 PM)
  */
 public class ImplicitlyAuditableEntity {

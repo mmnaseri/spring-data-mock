@@ -7,7 +7,7 @@ import com.mmnaseri.utils.spring.data.error.InvalidArgumentException;
  * This class is the base class used for doing binary operations when both operands are
  * {@link Comparable Comparable} objects
  *
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/29/15)
  */
 public abstract class AbstractBinaryComparableMatcher extends AbstractBinaryMatcher {

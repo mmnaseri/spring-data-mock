@@ -6,7 +6,7 @@ import com.mmnaseri.utils.spring.data.proxy.impl.adapters.AbstractResultAdapter;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
- * @author Milad Naseri (milad.naseri@cdk.com)
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (4/12/16, 6:48 PM)
  */
 public class SpyingResultAdapter extends AbstractResultAdapter {

@@ -5,7 +5,7 @@ import com.mmnaseri.utils.spring.data.store.DataStoreEventListener;
 import org.springframework.core.GenericTypeResolver;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (10/6/15)
  */
 public class SmartDataStoreEventListener<E extends DataStoreEvent> implements DataStoreEventListener<E> {

@@ -3,7 +3,7 @@ package com.mmnaseri.utils.spring.data.proxy.impl.adapters;
 import com.mmnaseri.utils.spring.data.domain.Invocation;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/24/15)
  */
 public class VoidResultAdapter extends AbstractResultAdapter<Object> {

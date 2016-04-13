@@ -1,7 +1,7 @@
 package com.mmnaseri.utils.spring.data.error;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (4/10/16)
  */
 public class DuplicateFunctionException extends FunctionRegistryException {

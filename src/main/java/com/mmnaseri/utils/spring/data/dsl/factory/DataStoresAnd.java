@@ -5,7 +5,7 @@ import com.mmnaseri.utils.spring.data.store.DataStore;
 import java.io.Serializable;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (10/14/15)
  */
 public interface DataStoresAnd extends ResultAdapters {

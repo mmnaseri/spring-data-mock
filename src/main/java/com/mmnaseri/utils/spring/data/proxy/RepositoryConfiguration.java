@@ -6,7 +6,7 @@ import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
 import java.util.List;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (10/12/15)
  */
 public interface RepositoryConfiguration {

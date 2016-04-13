@@ -10,7 +10,7 @@ import com.mmnaseri.utils.spring.data.store.DataStoreEventListenerContext;
 import com.mmnaseri.utils.spring.data.store.DataStoreRegistry;
 
 /**
- * @author Milad Naseri (milad.naseri@cdk.com)
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (4/12/16, 1:49 PM)
  */
 public class ImmutableRepositoryFactoryConfiguration implements RepositoryFactoryConfiguration {

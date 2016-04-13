@@ -21,7 +21,7 @@ import java.io.Serializable;
  * <p>After all the above are considered, if nothing is found, a {@link NoIdPropertyException NoIdPropertyException}
  * is thrown to show that the promised ID property was not found on the entity class.</p>
  *
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/23/15)
  */
 public class EntityIdPropertyResolver implements IdPropertyResolver {

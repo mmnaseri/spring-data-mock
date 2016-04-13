@@ -14,7 +14,7 @@ import java.util.concurrent.atomic.AtomicReference;
  * This class will resolve ID property name from a getter method that is annotated with
  * {@link Id @Id}.
  *
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/23/15)
  */
 @SuppressWarnings("WeakerAccess")

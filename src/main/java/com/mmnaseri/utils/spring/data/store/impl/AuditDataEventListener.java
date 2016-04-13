@@ -8,7 +8,7 @@ import org.springframework.data.domain.Auditable;
 import org.springframework.data.domain.AuditorAware;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (10/12/15)
  */
 public class AuditDataEventListener implements DataStoreEventListener<DataStoreEvent> {

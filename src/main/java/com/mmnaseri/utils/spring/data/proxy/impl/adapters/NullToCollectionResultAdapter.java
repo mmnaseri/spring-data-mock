@@ -6,7 +6,7 @@ import com.mmnaseri.utils.spring.data.tools.CollectionInstanceUtils;
 import java.util.Collection;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/24/15)
  */
 public class NullToCollectionResultAdapter extends AbstractResultAdapter<Collection> {

@@ -5,7 +5,7 @@ import com.mmnaseri.utils.spring.data.sample.models.Person;
 import java.util.List;
 
 /**
- * @author Milad Naseri (milad.naseri@cdk.com)
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (4/12/16, 6:47 PM)
  */
 public interface SimpleCrudPersonRepository extends SimplePersonRepository {

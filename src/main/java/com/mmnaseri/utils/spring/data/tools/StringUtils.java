@@ -3,7 +3,7 @@ package com.mmnaseri.utils.spring.data.tools;
 import java.util.Objects;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/29/15)
  */
 public final class StringUtils {

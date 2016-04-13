@@ -8,7 +8,7 @@ import java.util.Collection;
  * This matcher checks to see if the argument being passed (the collection) contains the value on
  * the object.
  *
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/29/15)
  */
 public class IsInMatcher extends AbstractCollectionMatcher {

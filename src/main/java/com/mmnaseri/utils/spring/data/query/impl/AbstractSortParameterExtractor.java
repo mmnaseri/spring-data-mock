@@ -10,7 +10,7 @@ import static org.springframework.data.domain.Sort.NullHandling.NULLS_FIRST;
 import static org.springframework.data.domain.Sort.NullHandling.NULLS_LAST;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/19/15)
  */
 public abstract class AbstractSortParameterExtractor implements SortParameterExtractor {

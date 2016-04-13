@@ -9,7 +9,7 @@ import org.springframework.data.geo.GeoResults;
 import java.util.Collections;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/24/15)
  */
 public class NullToSliceResultAdapter extends AbstractResultAdapter<Slice> {

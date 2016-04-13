@@ -6,7 +6,7 @@ import com.mmnaseri.utils.spring.data.error.InvalidArgumentException;
 /**
  * This is used to compare two items. One being the value, and the other the sole parameter.
  *
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/29/15)
  */
 public abstract class AbstractSimpleComparableMatcher extends AbstractSimpleMatcher {

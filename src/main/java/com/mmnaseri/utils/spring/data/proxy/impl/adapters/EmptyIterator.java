@@ -3,7 +3,7 @@ package com.mmnaseri.utils.spring.data.proxy.impl.adapters;
 import java.util.Iterator;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (4/10/16)
  */
 public class EmptyIterator implements Iterator {

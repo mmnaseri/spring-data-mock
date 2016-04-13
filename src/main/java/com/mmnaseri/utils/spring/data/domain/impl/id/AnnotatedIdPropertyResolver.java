@@ -10,7 +10,7 @@ import java.lang.reflect.Method;
 /**
  * This class and its children will help resolve the ID property from an annotated element
  *
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (4/8/16)
  */
 @SuppressWarnings("WeakerAccess")

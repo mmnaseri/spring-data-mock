@@ -11,7 +11,7 @@ import java.util.List;
  * <p>This class will provide implementations for the methods introduced by the Spring framework through
  * {@link org.springframework.data.repository.CrudRepository}.</p>
  *
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (10/6/15)
  */
 @SuppressWarnings({"unchecked", "WeakerAccess"})
@@ -46,13 +46,6 @@ public class DefaultCrudRepository extends CrudRepositorySupport {
      */
     public boolean exists(Serializable key) {
         return getDataStore().hasKey(key);
-    }
-
-    /**
-     * @return all the entities of the given type from the underlying data store.
-     */
-    public Iterable findAll() {
-        return getDataStore().retrieveAll();
     }
 
     /**

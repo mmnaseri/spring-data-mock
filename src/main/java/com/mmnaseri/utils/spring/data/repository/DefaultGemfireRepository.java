@@ -10,7 +10,7 @@ import org.springframework.data.gemfire.repository.Wrapper;
 import java.io.Serializable;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (10/13/15)
  */
 public class DefaultGemfireRepository implements DataStoreAware, RepositoryMetadataAware {
