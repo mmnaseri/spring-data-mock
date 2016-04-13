@@ -1,9 +1,10 @@
 package com.mmnaseri.utils.spring.data.domain.impl;
 
 import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
-import com.mmnaseri.utils.spring.data.domain.model.Person;
+import com.mmnaseri.utils.spring.data.sample.models.Person;
 import com.mmnaseri.utils.spring.data.error.RepositoryDefinitionException;
-import org.springframework.data.repository.RepositoryDefinition;
+import com.mmnaseri.utils.spring.data.sample.repositories.SampleAnnotatedRepository;
+import org.springframework.data.repository.Repository;
 import org.testng.annotations.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -15,16 +16,9 @@ import static org.hamcrest.Matchers.*;
  */
 public class AnnotationRepositoryMetadataResolverTest {
 
-    public interface SampleUnannotatedRepository {}
-
-    @RepositoryDefinition(domainClass = Person.class, idClass = String.class)
-    public interface SampleAnnotatedRepository {
-
-    }
-
     @Test(expectedExceptions = RepositoryDefinitionException.class, expectedExceptionsMessageRegExp = ".*?: Expected the repository to be annotated with @RepositoryDefinition")
     public void testResolvingFromRepositoryWithoutAnnotations() throws Exception {
-        new AnnotationRepositoryMetadataResolver().resolve(SampleUnannotatedRepository.class);
+        new AnnotationRepositoryMetadataResolver().resolve(Repository.class);
     }
 
     @Test

@@ -1,11 +1,11 @@
 package com.mmnaseri.utils.spring.data.domain.impl;
 
 import com.mmnaseri.utils.spring.data.domain.KeyGenerator;
+import com.mmnaseri.utils.spring.data.sample.mocks.DuplicatingKeyGenerator;
 import org.testng.annotations.Test;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItem;
@@ -25,23 +25,6 @@ public class AbstractRandomKeyGeneratorTest {
             final Integer key = generator.generate();
             assertThat(generatedKeys, not(hasItem(key)));
             generatedKeys.add(key);
-        }
-    }
-
-    private static class DuplicatingKeyGenerator extends AbstractRandomKeyGenerator<Integer> {
-
-        private boolean repeat = false;
-        private AtomicInteger counter = new AtomicInteger(0);
-
-        @Override
-        protected Integer getNext() {
-            if (!repeat) {
-                counter.incrementAndGet();
-                repeat = true;
-            } else {
-                repeat = false;
-            }
-            return counter.get();
         }
     }
 

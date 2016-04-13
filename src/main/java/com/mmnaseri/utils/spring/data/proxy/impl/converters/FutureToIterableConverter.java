@@ -13,9 +13,6 @@ import java.util.concurrent.Future;
  */
 public class FutureToIterableConverter extends AbstractResultConverter {
 
-    public FutureToIterableConverter() {
-    }
-
     @Override
     protected Object doConvert(Invocation invocation, Object original) {
         if (original instanceof Future) {

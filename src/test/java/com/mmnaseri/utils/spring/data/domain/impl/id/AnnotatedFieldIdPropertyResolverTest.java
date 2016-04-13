@@ -1,7 +1,9 @@
 package com.mmnaseri.utils.spring.data.domain.impl.id;
 
 import com.mmnaseri.utils.spring.data.domain.IdPropertyResolver;
-import org.springframework.data.annotation.Id;
+import com.mmnaseri.utils.spring.data.sample.models.EntityWithAnnotatedIdField;
+import com.mmnaseri.utils.spring.data.sample.models.EntityWithMultipleAnnotatedFields;
+import com.mmnaseri.utils.spring.data.sample.models.EntityWithoutAnnotatedFields;
 
 /**
  * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
@@ -9,25 +11,6 @@ import org.springframework.data.annotation.Id;
  */
 @SuppressWarnings("unused")
 public class AnnotatedFieldIdPropertyResolverTest extends BaseRepeatableIdPropertyResolverTest {
-
-    public static class EntityWithAnnotatedIdField {
-
-        @Id
-        private String id;
-
-    }
-
-    public static class EntityWithMultipleAnnotatedFields {
-
-        @Id
-        private String first;
-
-        @Id
-        private String second;
-
-    }
-
-    public static class EntityWithoutAnnotatedFields {}
 
     @Override
     protected IdPropertyResolver getIdPropertyResolver() {

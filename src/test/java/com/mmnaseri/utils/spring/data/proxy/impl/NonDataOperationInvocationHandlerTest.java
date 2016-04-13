@@ -1,7 +1,7 @@
 package com.mmnaseri.utils.spring.data.proxy.impl;
 
 import com.mmnaseri.utils.spring.data.error.UnknownDataOperationException;
-import com.mmnaseri.utils.spring.data.proxy.mock.SpyingHandler;
+import com.mmnaseri.utils.spring.data.sample.mocks.SpyingHandler;
 import org.hamcrest.Matchers;
 import org.testng.annotations.Test;
 

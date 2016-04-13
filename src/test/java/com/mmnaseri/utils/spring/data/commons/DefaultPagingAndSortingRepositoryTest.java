@@ -1,9 +1,9 @@
 package com.mmnaseri.utils.spring.data.commons;
 
-import com.mmnaseri.utils.spring.data.domain.model.Address;
-import com.mmnaseri.utils.spring.data.domain.model.Person;
-import com.mmnaseri.utils.spring.data.domain.model.State;
-import com.mmnaseri.utils.spring.data.domain.model.Zip;
+import com.mmnaseri.utils.spring.data.sample.models.Address;
+import com.mmnaseri.utils.spring.data.sample.models.Person;
+import com.mmnaseri.utils.spring.data.sample.models.State;
+import com.mmnaseri.utils.spring.data.sample.models.Zip;
 import com.mmnaseri.utils.spring.data.store.DataStore;
 import com.mmnaseri.utils.spring.data.store.impl.MemoryDataStore;
 import org.hamcrest.Matchers;

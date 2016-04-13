@@ -1,6 +1,7 @@
 package com.mmnaseri.utils.spring.data.proxy.impl.adapters;
 
 import com.mmnaseri.utils.spring.data.domain.impl.ImmutableInvocation;
+import com.mmnaseri.utils.spring.data.sample.usecases.proxy.ReturnTypeSampleRepository;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
@@ -17,18 +18,10 @@ import static org.hamcrest.Matchers.*;
  */
 public class FutureIterableResultAdapterTest {
 
-    private interface Sample {
-
-        Future findFuture();
-
-        Object findOther();
-
-    }
-
     @Test
     public void testAdapting() throws Exception {
         final FutureIterableResultAdapter adapter = new FutureIterableResultAdapter();
-        final Future<?> value = adapter.adapt(new ImmutableInvocation(Sample.class.getMethod("findFuture"), null), Arrays.asList(1, 2, 3, 4));
+        final Future<?> value = adapter.adapt(new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findFuture"), null), Arrays.asList(1, 2, 3, 4));
         assertThat(value, is(notNullValue()));
         assertThat(value.get(), is(instanceOf((Class) Collection.class)));
         final Collection<?> collection = (Collection<?>) value.get();
@@ -40,9 +33,9 @@ public class FutureIterableResultAdapterTest {
     public void testAccepting() throws Exception {
         final FutureIterableResultAdapter adapter = new FutureIterableResultAdapter();
         assertThat(adapter.accepts(null, null), is(false));
-        assertThat(adapter.accepts(new ImmutableInvocation(Sample.class.getMethod("findOther"), new Object[]{}), new Object()), is(false));
-        assertThat(adapter.accepts(new ImmutableInvocation(Sample.class.getMethod("findFuture"), new Object[]{}), new Object()), is(false));
-        assertThat(adapter.accepts(new ImmutableInvocation(Sample.class.getMethod("findFuture"), new Object[]{}), new ArrayList<>()), is(true));
+        assertThat(adapter.accepts(new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findOther"), new Object[]{}), new Object()), is(false));
+        assertThat(adapter.accepts(new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findFuture"), new Object[]{}), new Object()), is(false));
+        assertThat(adapter.accepts(new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findFuture"), new Object[]{}), new ArrayList<>()), is(true));
     }
 
 }

@@ -1,8 +1,6 @@
 package com.mmnaseri.utils.spring.data.domain.impl;
 
-import com.mmnaseri.utils.spring.data.domain.model.Address;
-import com.mmnaseri.utils.spring.data.domain.model.Person;
-import com.mmnaseri.utils.spring.data.domain.model.Zip;
+import com.mmnaseri.utils.spring.data.sample.models.*;
 import com.mmnaseri.utils.spring.data.error.InvalidArgumentException;
 import com.mmnaseri.utils.spring.data.query.NullHandling;
 import com.mmnaseri.utils.spring.data.query.SortDirection;
@@ -68,14 +66,6 @@ public class PropertyComparatorTest {
     public void testWhenValuesAreNotOfTheSameType() throws Exception {
         final PropertyComparator comparator = new PropertyComparator(new ImmutableOrder(SortDirection.ASCENDING, "addressZip", NullHandling.NULLS_FIRST));
         comparator.compare(new Person().setAddressZip(new ChildZip().setPrefix("b")), new Person().setAddressZip(new OtherChildZip().setPrefix("a")));
-    }
-
-    private static class ChildZip extends Zip {
-
-    }
-
-    private static class OtherChildZip extends Zip {
-
     }
 
 }

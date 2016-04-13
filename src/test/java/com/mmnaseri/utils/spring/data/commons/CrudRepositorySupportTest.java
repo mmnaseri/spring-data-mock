@@ -4,13 +4,13 @@ import com.mmnaseri.utils.spring.data.domain.KeyGenerator;
 import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
 import com.mmnaseri.utils.spring.data.domain.impl.ImmutableRepositoryMetadata;
 import com.mmnaseri.utils.spring.data.domain.impl.key.UUIDKeyGenerator;
-import com.mmnaseri.utils.spring.data.domain.model.Person;
-import com.mmnaseri.utils.spring.data.domain.repository.SimplePersonRepository;
+import com.mmnaseri.utils.spring.data.sample.models.Person;
+import com.mmnaseri.utils.spring.data.sample.repositories.SimplePersonRepository;
 import com.mmnaseri.utils.spring.data.error.DataStoreException;
 import com.mmnaseri.utils.spring.data.store.DataStore;
 import com.mmnaseri.utils.spring.data.store.impl.MemoryDataStore;
-import com.mmnaseri.utils.spring.data.store.mock.Operation;
-import com.mmnaseri.utils.spring.data.store.mock.SpyingDataStore;
+import com.mmnaseri.utils.spring.data.sample.mocks.Operation;
+import com.mmnaseri.utils.spring.data.sample.mocks.SpyingDataStore;
 import org.hamcrest.Matchers;
 import org.testng.annotations.Test;
 

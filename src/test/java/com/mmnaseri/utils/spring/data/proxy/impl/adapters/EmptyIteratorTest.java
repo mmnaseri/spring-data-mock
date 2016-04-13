@@ -21,7 +21,7 @@ public class EmptyIteratorTest {
         new EmptyIterator().next();
     }
 
-    @Test(expectedExceptions = UnsupportedOperationException.class)
+    @Test(expectedExceptions = IndexOutOfBoundsException.class)
     public void testRemove() throws Exception {
         new EmptyIterator().remove();
     }

@@ -1,11 +1,11 @@
 package com.mmnaseri.utils.spring.data.domain.impl;
 
 import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
-import com.mmnaseri.utils.spring.data.domain.model.Address;
-import com.mmnaseri.utils.spring.data.domain.model.Person;
+import com.mmnaseri.utils.spring.data.sample.models.Person;
+import com.mmnaseri.utils.spring.data.sample.repositories.AnnotatedInheritingRepository;
+import com.mmnaseri.utils.spring.data.sample.repositories.SampleAnnotatedRepository;
+import com.mmnaseri.utils.spring.data.sample.repositories.SimplePersonRepository;
 import org.hamcrest.Matchers;
-import org.springframework.data.repository.Repository;
-import org.springframework.data.repository.RepositoryDefinition;
 import org.testng.annotations.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -20,29 +20,21 @@ public class DefaultRepositoryMetadataResolverTest {
 
     @Test
     public void testThatItResolvesUsingAnnotations() throws Exception {
-        final RepositoryMetadata metadata = new DefaultRepositoryMetadataResolver().resolveFromInterface(AnnotatedInterface.class);
+        final RepositoryMetadata metadata = new DefaultRepositoryMetadataResolver().resolveFromInterface(SampleAnnotatedRepository.class);
         assertThat(metadata, is(notNullValue()));
     }
 
     @Test
     public void testThatItResolvesUsingInheritance() throws Exception {
-        final RepositoryMetadata metadata = new DefaultRepositoryMetadataResolver().resolveFromInterface(InheritingInterface.class);
+        final RepositoryMetadata metadata = new DefaultRepositoryMetadataResolver().resolveFromInterface(SimplePersonRepository.class);
         assertThat(metadata, is(notNullValue()));
     }
 
     @Test
     public void testThatAnnotationTakesPrecedenceOverInheritance() throws Exception {
-        final RepositoryMetadata metadata = new DefaultRepositoryMetadataResolver().resolveFromInterface(AnnotatedInheritingInterface.class);
+        final RepositoryMetadata metadata = new DefaultRepositoryMetadataResolver().resolveFromInterface(AnnotatedInheritingRepository.class);
         assertThat(metadata, is(notNullValue()));
         assertThat(metadata.getEntityType(), is(Matchers.<Class<?>>equalTo(Person.class)));
     }
-
-    @RepositoryDefinition(domainClass = Person.class, idClass = String.class)
-    public interface AnnotatedInterface {}
-
-    public interface InheritingInterface extends Repository<Person, String> {}
-
-    @RepositoryDefinition(domainClass = Person.class, idClass = String.class)
-    public interface AnnotatedInheritingInterface extends Repository<Address, String> {}
 
 }

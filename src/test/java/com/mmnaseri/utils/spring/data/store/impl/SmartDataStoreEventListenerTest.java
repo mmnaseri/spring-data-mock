@@ -1,8 +1,8 @@
 package com.mmnaseri.utils.spring.data.store.impl;
 
 import com.mmnaseri.utils.spring.data.store.DataStoreEvent;
-import com.mmnaseri.utils.spring.data.store.mock.AllCatchingEventListener;
-import com.mmnaseri.utils.spring.data.store.mock.SpyingEventListener;
+import com.mmnaseri.utils.spring.data.sample.mocks.AllCatchingEventListener;
+import com.mmnaseri.utils.spring.data.sample.mocks.SpyingEventListener;
 import org.hamcrest.Matchers;
 import org.testng.annotations.Test;
 

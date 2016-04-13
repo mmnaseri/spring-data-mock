@@ -49,18 +49,29 @@ public class PropertyComparator implements Comparator<Object> {
         } else if (firstValue != null && secondValue == null) {
             comparison = NullHandling.NULLS_FIRST.equals(nullHandling) ? 1 : -1;
         } else if (firstValue != null) {
-            if (!(firstValue instanceof Comparable) || !(secondValue instanceof Comparable)) {
-                throw new InvalidArgumentException("Expected both values to be comparable for property: " + property);
-            }
-            if (firstValue.getClass().isInstance(secondValue)) {
-                comparison = ((Comparable) firstValue).compareTo(secondValue);
-            } else if (secondValue.getClass().isInstance(firstValue)) {
-                comparison = ((Comparable) secondValue).compareTo(firstValue) * -1;
-            } else {
-                throw new InvalidArgumentException("Values for were not of the same type for property: " + property);
-            }
+            checkForComparable(firstValue, secondValue);
+            comparison = compareIfCompatible(firstValue, secondValue);
         }
         return comparison * (SortDirection.DESCENDING.equals(direction) ? -1 : 1);
+    }
+
+    @SuppressWarnings("unchecked")
+    private int compareIfCompatible(Object firstValue, Object secondValue) {
+        int comparison;
+        if (firstValue.getClass().isInstance(secondValue)) {
+            comparison = ((Comparable) firstValue).compareTo(secondValue);
+        } else if (secondValue.getClass().isInstance(firstValue)) {
+            comparison = ((Comparable) secondValue).compareTo(firstValue) * -1;
+        } else {
+            throw new InvalidArgumentException("Values for were not of the same type for property: " + property);
+        }
+        return comparison;
+    }
+
+    private void checkForComparable(Object firstValue, Object secondValue) {
+        if (!(firstValue instanceof Comparable) || !(secondValue instanceof Comparable)) {
+            throw new InvalidArgumentException("Expected both values to be comparable for property: " + property);
+        }
     }
 
     public static void sort(List<?> collection, Sort sort) {

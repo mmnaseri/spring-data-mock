@@ -50,21 +50,22 @@ public class AuditableWrapper implements Auditable {
 
     private static void setProperty(BeanWrapper wrapper, String property, Object value) {
         if (property != null) {
+            Object targetValue = value;
             final PropertyDescriptor descriptor = wrapper.getPropertyDescriptor(property);
-            if (value instanceof DateTime) {
-                DateTime dateTime = (DateTime) value;
+            if (targetValue instanceof DateTime) {
+                DateTime dateTime = (DateTime) targetValue;
                 if (Date.class.equals(descriptor.getPropertyType())) {
-                    value = dateTime.toDate();
+                    targetValue = dateTime.toDate();
                 } else if (java.sql.Date.class.equals(descriptor.getPropertyType())) {
-                    value = new java.sql.Date(dateTime.toDate().getTime());
+                    targetValue = new java.sql.Date(dateTime.toDate().getTime());
                 } else if (java.sql.Timestamp.class.equals(descriptor.getPropertyType())) {
-                    value = new java.sql.Timestamp(dateTime.toDate().getTime());
+                    targetValue = new java.sql.Timestamp(dateTime.toDate().getTime());
                 } else if (java.sql.Time.class.equals(descriptor.getPropertyType())) {
-                    value = new java.sql.Time(dateTime.toDate().getTime());
+                    targetValue = new java.sql.Time(dateTime.toDate().getTime());
                 }
             }
             if (wrapper.isWritableProperty(property)) {
-                wrapper.setPropertyValue(property, value);
+                wrapper.setPropertyValue(property, targetValue);
             }
         }
     }

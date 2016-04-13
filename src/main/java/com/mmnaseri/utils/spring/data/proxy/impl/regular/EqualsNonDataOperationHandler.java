@@ -20,7 +20,7 @@ public class EqualsNonDataOperationHandler implements NonDataOperationHandler {
     @Override
     public Object invoke(Object proxy, Object... args) {
         final Object that = args[0];
-        return proxy == that;
+        return proxy.equals(that);
     }
 
 }

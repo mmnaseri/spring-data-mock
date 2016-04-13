@@ -2,6 +2,7 @@ package com.mmnaseri.utils.spring.data.proxy.impl.converters;
 
 import com.mmnaseri.utils.spring.data.domain.impl.ImmutableInvocation;
 import com.mmnaseri.utils.spring.data.error.ResultConversionFailureException;
+import com.mmnaseri.utils.spring.data.sample.usecases.proxy.ReturnTypeSampleRepository;
 import org.testng.annotations.Test;
 
 import java.util.Iterator;
@@ -17,12 +18,6 @@ import static org.hamcrest.Matchers.*;
  */
 public class FutureToIterableConverterTest {
 
-    private interface Sample {
-
-        Long doSomething();
-
-    }
-
     @Test
     public void testConvertingFutureValueToIterable() throws Exception {
         final FutureToIterableConverter converter = new FutureToIterableConverter();
@@ -35,7 +30,7 @@ public class FutureToIterableConverterTest {
             }
         });
         task.run();
-        final Object converted = converter.convert(new ImmutableInvocation(Sample.class.getMethod("doSomething"), null), task);
+        final Object converted = converter.convert(new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findLong"), null), task);
         assertThat(converted, is(notNullValue()));
         assertThat(converted, is(instanceOf(Iterable.class)));
         final Iterable iterable = (Iterable) converted;
@@ -58,7 +53,7 @@ public class FutureToIterableConverterTest {
             }
         });
         task.run();
-        converter.convert(new ImmutableInvocation(Sample.class.getMethod("doSomething"), null), task);
+        converter.convert(new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findLong"), null), task);
     }
 
 }

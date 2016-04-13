@@ -128,16 +128,17 @@ public final class PropertyUtils {
     }
 
     public static PropertyDescriptor getPropertyDescriptor(Class<?> domainType, String expression) {
+        String search = expression;
         final String followUp;
-        if (expression.contains("_")) {
-            final String[] split = expression.split("_", 2);
-            expression = split[0];
+        if (search.contains("_")) {
+            final String[] split = search.split("_", 2);
+            search = split[0];
             followUp = split[1];
         } else {
             followUp = "";
         }
         Class<?> context = domainType;
-        final DocumentReader reader = new DefaultDocumentReader(expression);
+        final DocumentReader reader = new DefaultDocumentReader(search);
         final List<String> tokens = new ArrayList<>();
         while (reader.hasMore()) {
             tokens.add(reader.expect("[A-Z][a-z]*"));

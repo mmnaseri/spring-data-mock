@@ -2,20 +2,19 @@ package com.mmnaseri.utils.spring.data.store.impl;
 
 import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
 import com.mmnaseri.utils.spring.data.domain.impl.ImmutableRepositoryMetadata;
+import com.mmnaseri.utils.spring.data.sample.models.*;
+import com.mmnaseri.utils.spring.data.sample.usecases.store.SampleAuditorAware;
 import org.hamcrest.Matchers;
 import org.joda.time.DateTime;
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.domain.AuditorAware;
+import org.springframework.util.ReflectionUtils;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.sql.Time;
 import java.sql.Timestamp;
-import java.util.Date;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -26,246 +25,6 @@ import static org.hamcrest.Matchers.*;
  */
 @SuppressWarnings("WeakerAccess, unused")
 public class AuditableWrapperTest {
-
-    private static final String AUDITOR = "AUDITOR";
-
-    private static class SampleAuditorAware implements AuditorAware<String> {
-
-        @Override
-        public String getCurrentAuditor() {
-            return AUDITOR;
-        }
-
-    }
-
-    private static class EntityWithCreatedBy {
-
-        private String id;
-        @CreatedBy
-        private String createdBy;
-
-        public String getId() {
-            return id;
-        }
-
-        public void setId(String id) {
-            this.id = id;
-        }
-
-        public String getCreatedBy() {
-            return createdBy;
-        }
-
-        public void setCreatedBy(String createdBy) {
-            this.createdBy = createdBy;
-        }
-
-    }
-
-    private static class EntityWithLastModifiedBy {
-
-        private String id;
-        @LastModifiedBy
-        private String lastModifiedBy;
-
-        public String getId() {
-            return id;
-        }
-
-        public void setId(String id) {
-            this.id = id;
-        }
-
-        public String getLastModifiedBy() {
-            return lastModifiedBy;
-        }
-
-        public void setLastModifiedBy(String lastModifiedBy) {
-            this.lastModifiedBy = lastModifiedBy;
-        }
-
-    }
-
-    private static class EntityWithCreatedDate {
-
-        private String id;
-        @CreatedDate
-        private Date createdDate;
-
-        public String getId() {
-            return id;
-        }
-
-        public void setId(String id) {
-            this.id = id;
-        }
-
-        public Date getCreatedDate() {
-            return createdDate;
-        }
-
-        public void setCreatedDate(Date createdDate) {
-            this.createdDate = createdDate;
-        }
-
-    }
-
-    private static class EntityWithUtilDateLastModifiedDate {
-
-        private String id;
-        @LastModifiedDate
-        private Date lastModifiedDate;
-
-        public String getId() {
-            return id;
-        }
-
-        public void setId(String id) {
-            this.id = id;
-        }
-
-        public Date getLastModifiedDate() {
-            return lastModifiedDate;
-        }
-
-        public void setLastModifiedDate(Date lastModifiedDate) {
-            this.lastModifiedDate = lastModifiedDate;
-        }
-    }
-
-    private static class EntityWithSqlDateLastModifiedDate {
-
-        private String id;
-        @LastModifiedDate
-        private java.sql.Date lastModifiedDate;
-
-        public String getId() {
-            return id;
-        }
-
-        public void setId(String id) {
-            this.id = id;
-        }
-
-        public java.sql.Date getLastModifiedDate() {
-            return lastModifiedDate;
-        }
-
-        public void setLastModifiedDate(java.sql.Date lastModifiedDate) {
-            this.lastModifiedDate = lastModifiedDate;
-        }
-
-    }
-
-    private static class EntityWithTimestampDateLastModifiedDate {
-
-        private String id;
-        @LastModifiedDate
-        private Timestamp lastModifiedDate;
-
-        public String getId() {
-            return id;
-        }
-
-        public void setId(String id) {
-            this.id = id;
-        }
-
-        public Timestamp getLastModifiedDate() {
-            return lastModifiedDate;
-        }
-
-        public void setLastModifiedDate(Timestamp lastModifiedDate) {
-            this.lastModifiedDate = lastModifiedDate;
-        }
-    }
-
-    private static class EntityWithTimeLastModifiedDate {
-
-        private String id;
-        @LastModifiedDate
-        private Time lastModifiedDate;
-
-        public String getId() {
-            return id;
-        }
-
-        public void setId(String id) {
-            this.id = id;
-        }
-
-        public Time getLastModifiedDate() {
-            return lastModifiedDate;
-        }
-
-        public void setLastModifiedDate(Time lastModifiedDate) {
-            this.lastModifiedDate = lastModifiedDate;
-        }
-
-    }
-
-    private static class EntityWithDateTimeLastModifiedDate {
-
-        private String id;
-        @LastModifiedDate
-        private DateTime lastModifiedDate;
-
-        public String getId() {
-            return id;
-        }
-
-        public void setId(String id) {
-            this.id = id;
-        }
-
-        public DateTime getLastModifiedDate() {
-            return lastModifiedDate;
-        }
-
-        public void setLastModifiedDate(DateTime lastModifiedDate) {
-            this.lastModifiedDate = lastModifiedDate;
-        }
-
-    }
-
-    private static class EntityWithFinalCreatedBy {
-
-        private String id;
-        @CreatedBy
-        private final String createdBy = null;
-
-        public String getId() {
-            return id;
-        }
-
-        public void setId(String id) {
-            this.id = id;
-        }
-
-        public String getCreatedBy() {
-            return createdBy;
-        }
-    }
-
-    private static class EntityWithWriteOnlyCreatedBy {
-
-        private String id;
-        @CreatedBy
-        private String createdBy;
-
-        public String getId() {
-            return id;
-        }
-
-        public void setId(String id) {
-            this.id = id;
-        }
-
-        public void setCreatedBy(String createdBy) {
-            this.createdBy = createdBy;
-        }
-
-    }
 
     private AuditorAware<?> auditorAware;
 
@@ -282,8 +41,8 @@ public class AuditableWrapperTest {
         assertThat(entity.getCreatedBy(), is(nullValue()));
         assertThat(wrapper.getCreatedBy(), is(nullValue()));
         wrapper.setCreatedBy(auditorAware.getCurrentAuditor());
-        assertThat(wrapper.getCreatedBy(), Matchers.<Object>is(AUDITOR));
-        assertThat(entity.getCreatedBy(), is(AUDITOR));
+        assertThat(wrapper.getCreatedBy(), Matchers.<Object>is(SampleAuditorAware.AUDITOR));
+        assertThat(entity.getCreatedBy(), is(SampleAuditorAware.AUDITOR));
     }
 
     @Test
@@ -294,8 +53,8 @@ public class AuditableWrapperTest {
         assertThat(entity.getLastModifiedBy(), is(nullValue()));
         assertThat(wrapper.getLastModifiedBy(), is(nullValue()));
         wrapper.setLastModifiedBy(auditorAware.getCurrentAuditor());
-        assertThat(wrapper.getLastModifiedBy(), Matchers.<Object>is(AUDITOR));
-        assertThat(entity.getLastModifiedBy(), is(AUDITOR));
+        assertThat(wrapper.getLastModifiedBy(), Matchers.<Object>is(SampleAuditorAware.AUDITOR));
+        assertThat(entity.getLastModifiedBy(), is(SampleAuditorAware.AUDITOR));
     }
 
     @Test
@@ -424,13 +183,15 @@ public class AuditableWrapperTest {
         final RepositoryMetadata repositoryMetadata = new ImmutableRepositoryMetadata(String.class, EntityWithWriteOnlyCreatedBy.class, null, "id");
         final EntityWithWriteOnlyCreatedBy entity = new EntityWithWriteOnlyCreatedBy();
         final AuditableWrapper wrapper = new AuditableWrapper(entity, repositoryMetadata);
-        assertThat(entity.createdBy, is(nullValue()));
+        final Field createdBy = ReflectionUtils.findField(EntityWithWriteOnlyCreatedBy.class, "createdBy");
+        createdBy.setAccessible(true);
+        assertThat(createdBy.get(entity), is(nullValue()));
         assertThat(wrapper.getCreatedBy(), is(nullValue()));
         wrapper.setCreatedBy(auditorAware.getCurrentAuditor());
         //the wrapper will not be able to read the value ...
-        assertThat(wrapper.getCreatedBy(), Matchers.is(nullValue()));
+        assertThat(wrapper.getCreatedBy(), is(nullValue()));
         //... but the value is set anyway
-        assertThat(entity.createdBy, is(AUDITOR));
+        assertThat(createdBy.get(entity), Matchers.<Object>is(SampleAuditorAware.AUDITOR));
     }
 
 }

@@ -1,11 +1,12 @@
 package com.mmnaseri.utils.spring.data.tools;
 
-import com.mmnaseri.utils.spring.data.domain.model.Address;
-import com.mmnaseri.utils.spring.data.domain.model.Person;
-import com.mmnaseri.utils.spring.data.domain.model.State;
-import com.mmnaseri.utils.spring.data.domain.model.Zip;
+import com.mmnaseri.utils.spring.data.sample.models.Address;
+import com.mmnaseri.utils.spring.data.sample.models.Person;
+import com.mmnaseri.utils.spring.data.sample.models.State;
+import com.mmnaseri.utils.spring.data.sample.models.Zip;
 import com.mmnaseri.utils.spring.data.error.ParserException;
 import com.mmnaseri.utils.spring.data.query.PropertyDescriptor;
+import com.mmnaseri.utils.spring.data.sample.models.NoAccessorPerson;
 import org.hamcrest.Matchers;
 import org.springframework.util.ReflectionUtils;
 import org.testng.annotations.Test;
@@ -20,16 +21,6 @@ import static org.hamcrest.Matchers.*;
  * @since 1.0 (9/30/15)
  */
 public class PropertyUtilsTest extends AbstractUtilityClassTest {
-
-    private static class NoAccessorPerson {
-
-        private String id;
-        private String firstName;
-        private String lastName;
-        private Zip addressZip;
-        private Address address;
-
-    }
 
     @Override
     protected Class<?> getUtilityClass() {
@@ -123,7 +114,7 @@ public class PropertyUtilsTest extends AbstractUtilityClassTest {
         assertThat(descriptor.getType(), equalTo((Class) String.class));
     }
 
-    @Test(expectedExceptions = IllegalStateException.class, expectedExceptionsMessageRegExp = "Could not find property `xyz` on `class .*?\\$NoAccessorPerson`")
+    @Test(expectedExceptions = IllegalStateException.class, expectedExceptionsMessageRegExp = "Could not find property `xyz` on `class .*?\\.NoAccessorPerson`")
     public void testNonExistingFirstLevelPropertyUsingFields() throws Exception {
         PropertyUtils.getPropertyDescriptor(NoAccessorPerson.class, "Xyz");
     }

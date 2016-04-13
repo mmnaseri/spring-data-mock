@@ -1,8 +1,8 @@
 package com.mmnaseri.utils.spring.data.commons;
 
 import com.mmnaseri.utils.spring.data.domain.impl.ImmutableRepositoryMetadata;
-import com.mmnaseri.utils.spring.data.domain.model.Person;
-import com.mmnaseri.utils.spring.data.domain.repository.SimplePersonRepository;
+import com.mmnaseri.utils.spring.data.sample.models.Person;
+import com.mmnaseri.utils.spring.data.sample.repositories.SimplePersonRepository;
 import com.mmnaseri.utils.spring.data.store.impl.MemoryDataStore;
 import org.springframework.data.gemfire.repository.Wrapper;
 import org.testng.annotations.Test;

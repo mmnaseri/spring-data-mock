@@ -7,7 +7,7 @@ package com.mmnaseri.utils.spring.data.error;
 public class DataStoreException extends RepositoryMockException {
 
     public DataStoreException(Class<?> entityType, String message) {
-        super(message);
+        super(entityType + ": " + message);
     }
 
 }
