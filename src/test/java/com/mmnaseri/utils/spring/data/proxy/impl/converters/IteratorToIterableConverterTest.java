@@ -1,6 +1,7 @@
 package com.mmnaseri.utils.spring.data.proxy.impl.converters;
 
 import com.mmnaseri.utils.spring.data.domain.impl.ImmutableInvocation;
+import com.mmnaseri.utils.spring.data.sample.usecases.proxy.ReturnTypeSampleRepository;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
@@ -15,16 +16,10 @@ import static org.hamcrest.Matchers.*;
  */
 public class IteratorToIterableConverterTest {
 
-    private interface Sample {
-
-        Long findSomething();
-
-    }
-
     @Test
     public void testConvertingIteratorToIterable() throws Exception {
         final IteratorToIterableConverter converter = new IteratorToIterableConverter();
-        final Object converted = converter.convert(new ImmutableInvocation(Sample.class.getMethod("findSomething"), null), Arrays.asList(1, 2, 3, 4).iterator());
+        final Object converted = converter.convert(new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findLong"), null), Arrays.asList(1, 2, 3, 4).iterator());
         assertThat(converted, is(notNullValue()));
         assertThat(converted, is(instanceOf(Iterable.class)));
         final Iterable iterable = (Iterable) converted;

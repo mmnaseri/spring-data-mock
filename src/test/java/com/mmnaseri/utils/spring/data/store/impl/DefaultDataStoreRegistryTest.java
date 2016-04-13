@@ -1,6 +1,6 @@
 package com.mmnaseri.utils.spring.data.store.impl;
 
-import com.mmnaseri.utils.spring.data.domain.model.Person;
+import com.mmnaseri.utils.spring.data.sample.models.Person;
 import com.mmnaseri.utils.spring.data.error.DataStoreNotFoundException;
 import com.mmnaseri.utils.spring.data.store.DataStore;
 import org.hamcrest.Matchers;

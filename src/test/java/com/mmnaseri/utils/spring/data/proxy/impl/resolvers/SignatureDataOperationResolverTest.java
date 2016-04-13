@@ -3,6 +3,7 @@ package com.mmnaseri.utils.spring.data.proxy.impl.resolvers;
 import com.mmnaseri.utils.spring.data.domain.impl.MethodInvocationDataStoreOperation;
 import com.mmnaseri.utils.spring.data.proxy.TypeMapping;
 import com.mmnaseri.utils.spring.data.proxy.impl.ImmutableTypeMapping;
+import com.mmnaseri.utils.spring.data.sample.usecases.proxy.resolvers.*;
 import com.mmnaseri.utils.spring.data.store.DataStoreOperation;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -73,61 +74,6 @@ public class SignatureDataOperationResolverTest {
     public void testLookingForMethodThatDoesNotMatch() throws Exception {
         final DataStoreOperation<?, ?, ?> resolved = resolver.resolve(ProxiedClass.class.getMethod("saySomething", String.class, Boolean.class));
         assertThat(resolved, is(nullValue()));
-    }
-
-    private interface SuperInterface {
-
-        void saySomething(CharSequence sequence, Double number);
-
-        void doSomething();
-
-    }
-
-    private static class SuperInterfaceImpl implements SuperInterface {
-
-        @Override
-        public void saySomething(CharSequence sequence, Double number) {
-
-        }
-
-        @Override
-        public void doSomething() {
-
-        }
-    }
-
-    private static class SuperClass {
-
-        public void saySomething(CharSequence sequence, Number number) {
-
-        }
-
-    }
-
-    private static class ChildClass extends SuperClass {
-
-        public void saySomething(String string, Integer number) {
-
-        }
-
-        public void doSomething() {
-
-        }
-
-    }
-
-    private interface ProxiedClass {
-
-        void saySomething(String something, Double number);
-
-        void saySomething(String something, float number);
-
-        void saySomething(String something, Integer number);
-
-        void saySomething(String something, Boolean flag);
-
-        void doSomething();
-
     }
 
 }

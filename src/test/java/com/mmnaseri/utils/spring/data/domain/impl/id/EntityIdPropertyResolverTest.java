@@ -2,7 +2,7 @@ package com.mmnaseri.utils.spring.data.domain.impl.id;
 
 import com.mmnaseri.utils.spring.data.domain.IdPropertyResolver;
 import com.mmnaseri.utils.spring.data.error.NoIdPropertyException;
-import org.springframework.data.annotation.Id;
+import com.mmnaseri.utils.spring.data.sample.models.*;
 import org.testng.annotations.Test;
 
 import java.io.Serializable;
@@ -17,110 +17,10 @@ import static org.hamcrest.Matchers.notNullValue;
  */
 public class EntityIdPropertyResolverTest {
 
-    public static class FirstEntity {
-
-        private String id;
-        @Id
-        private String annotatedId;
-        private String unannotatedId;
-
-        public String getId() {
-            return id;
-        }
-
-        public void setId(String id) {
-            this.id = id;
-        }
-
-        public String getAnnotatedId() {
-            return annotatedId;
-        }
-
-        public void setAnnotatedId(String annotatedId) {
-            this.annotatedId = annotatedId;
-        }
-
-        @Id
-        public String getUnannotatedId() {
-            return unannotatedId;
-        }
-
-        public void setUnannotatedId(String unannotatedId) {
-            this.unannotatedId = unannotatedId;
-        }
-
-    }
-
-    public static class SecondEntity {
-
-        private String id;
-        @Id
-        private String annotatedId;
-
-        public String getId() {
-            return id;
-        }
-
-        public void setId(String id) {
-            this.id = id;
-        }
-
-        public String getAnnotatedId() {
-            return annotatedId;
-        }
-
-        public void setAnnotatedId(String annotatedId) {
-            this.annotatedId = annotatedId;
-        }
-
-    }
-
-    public static class ThirdEntity {
-
-        private String _id;
-
-        public String getId() {
-            return _id;
-        }
-
-        public void setId(String id) {
-            this._id = id;
-        }
-
-    }
-
-    public static class FourthEntity {
-
-        private String id;
-
-        public String getIdentifier() {
-            return id;
-        }
-
-        public void setIdentifier(String id) {
-            this.id = id;
-        }
-
-    }
-
-    public static class FifthEntity {
-
-        private String identifier;
-
-        public String getIdentifier() {
-            return identifier;
-        }
-
-        public void setIdentifier(String identifier) {
-            this.identifier = identifier;
-        }
-
-    }
-
     @Test
     public void testThatAnnotatedGetterHasPrecedence() throws Exception {
         final IdPropertyResolver resolver = new EntityIdPropertyResolver();
-        final String resolved = resolver.resolve(FirstEntity.class, Serializable.class);
+        final String resolved = resolver.resolve(EntityWithAnnotationOnIdFieldAndGetterAndAnIdField.class, Serializable.class);
         assertThat(resolved, is(notNullValue()));
         assertThat(resolved, is("unannotatedId"));
     }
@@ -128,7 +28,7 @@ public class EntityIdPropertyResolverTest {
     @Test
     public void testThatAnnotatedPropertyIsSecond() throws Exception {
         final IdPropertyResolver resolver = new EntityIdPropertyResolver();
-        final String resolved = resolver.resolve(SecondEntity.class, Serializable.class);
+        final String resolved = resolver.resolve(EntityWithIdFieldAndAnAnnotatedIdField.class, Serializable.class);
         assertThat(resolved, is(notNullValue()));
         assertThat(resolved, is("annotatedId"));
     }
@@ -136,7 +36,7 @@ public class EntityIdPropertyResolverTest {
     @Test
     public void testThatNamedGetterIsThird() throws Exception {
         final IdPropertyResolver resolver = new EntityIdPropertyResolver();
-        final String resolved = resolver.resolve(ThirdEntity.class, Serializable.class);
+        final String resolved = resolver.resolve(EntityWithUnderscorePrecedingIdField.class, Serializable.class);
         assertThat(resolved, is(notNullValue()));
         assertThat(resolved, is("id"));
     }
@@ -144,7 +44,7 @@ public class EntityIdPropertyResolverTest {
     @Test
     public void testThatNamedFieldIsFourth() throws Exception {
         final IdPropertyResolver resolver = new EntityIdPropertyResolver();
-        final String resolved = resolver.resolve(FourthEntity.class, Serializable.class);
+        final String resolved = resolver.resolve(EntityWithIdFieldHiddenBehindDifferentlyNamedAccessors.class, Serializable.class);
         assertThat(resolved, is(notNullValue()));
         assertThat(resolved, is("id"));
     }
@@ -152,7 +52,7 @@ public class EntityIdPropertyResolverTest {
     @Test(expectedExceptions = NoIdPropertyException.class)
     public void testThatNoOtherValueIsHonored() throws Exception {
         final IdPropertyResolver resolver = new EntityIdPropertyResolver();
-        resolver.resolve(FifthEntity.class, Serializable.class);
+        resolver.resolve(EntityWithNoImmediatelyResolvableIdProperty.class, Serializable.class);
     }
 
 }

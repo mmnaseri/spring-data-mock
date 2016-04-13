@@ -1,6 +1,7 @@
 package com.mmnaseri.utils.spring.data.proxy.impl.adapters;
 
 import com.mmnaseri.utils.spring.data.domain.impl.ImmutableInvocation;
+import com.mmnaseri.utils.spring.data.sample.usecases.proxy.ReturnTypeSampleRepository;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
@@ -16,18 +17,10 @@ import static org.hamcrest.Matchers.*;
  */
 public class IteratorIterableResultAdapterTest {
 
-    private interface Sample {
-
-        Iterator findIterator();
-
-        Object findOther();
-
-    }
-
     @Test
     public void testAdapting() throws Exception {
         final IteratorIterableResultAdapter adapter = new IteratorIterableResultAdapter();
-        final Iterator<?> value = adapter.adapt(new ImmutableInvocation(Sample.class.getMethod("findIterator"), null), Arrays.asList(1, 2, 3, 4));
+        final Iterator<?> value = adapter.adapt(new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findIterator"), null), Arrays.asList(1, 2, 3, 4));
         assertThat(value, is(notNullValue()));
         int count = 0;
         while (value.hasNext()) {
@@ -42,9 +35,9 @@ public class IteratorIterableResultAdapterTest {
     public void testAccepting() throws Exception {
         final IteratorIterableResultAdapter adapter = new IteratorIterableResultAdapter();
         assertThat(adapter.accepts(null, null), is(false));
-        assertThat(adapter.accepts(new ImmutableInvocation(Sample.class.getMethod("findOther"), new Object[]{}), new Object()), is(false));
-        assertThat(adapter.accepts(new ImmutableInvocation(Sample.class.getMethod("findIterator"), new Object[]{}), new Object()), is(false));
-        assertThat(adapter.accepts(new ImmutableInvocation(Sample.class.getMethod("findIterator"), new Object[]{}), new ArrayList<>()), is(true));
+        assertThat(adapter.accepts(new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findOther"), new Object[]{}), new Object()), is(false));
+        assertThat(adapter.accepts(new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findIterator"), new Object[]{}), new Object()), is(false));
+        assertThat(adapter.accepts(new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findIterator"), new Object[]{}), new ArrayList<>()), is(true));
     }
 
 }

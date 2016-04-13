@@ -2,13 +2,14 @@ package com.mmnaseri.utils.spring.data.domain.impl;
 
 import com.mmnaseri.utils.spring.data.domain.Modifier;
 import com.mmnaseri.utils.spring.data.domain.Parameter;
-import com.mmnaseri.utils.spring.data.domain.model.Address;
-import com.mmnaseri.utils.spring.data.domain.model.Person;
+import com.mmnaseri.utils.spring.data.sample.models.Address;
+import com.mmnaseri.utils.spring.data.sample.models.Person;
 import com.mmnaseri.utils.spring.data.query.NullHandling;
 import com.mmnaseri.utils.spring.data.query.Order;
 import com.mmnaseri.utils.spring.data.query.PageParameterExtractor;
 import com.mmnaseri.utils.spring.data.query.SortDirection;
 import com.mmnaseri.utils.spring.data.query.impl.*;
+import com.mmnaseri.utils.spring.data.sample.repositories.RepositoryWithValidMethods;
 import com.mmnaseri.utils.spring.data.store.DataStore;
 import com.mmnaseri.utils.spring.data.store.DataStoreOperation;
 import com.mmnaseri.utils.spring.data.store.impl.MemoryDataStore;
@@ -58,7 +59,7 @@ public class SelectDataStoreOperationTest {
         ));
         final DefaultQueryDescriptor descriptor = new DefaultQueryDescriptor(false, null, 0, null, null, branches, null, null);
         final DataStoreOperation<List<Person>, String, Person> operation = new SelectDataStoreOperation<>(descriptor);
-        final List<Person> selected = operation.execute(dataStore, null, new ImmutableInvocation(Sample.class.getMethod("findByFirstNameAndLastNameOrAddressCityOrAgeGreaterThan", String.class, String.class, String.class, Integer.class), new Object[]{"Milad", "Naseri", "Tabriz", 100}));
+        final List<Person> selected = operation.execute(dataStore, null, new ImmutableInvocation(RepositoryWithValidMethods.class.getMethod("findByFirstNameAndLastNameOrAddressCityOrAgeGreaterThan", String.class, String.class, String.class, Integer.class), new Object[]{"Milad", "Naseri", "Tabriz", 100}));
         assertThat(selected, is(notNullValue()));
         assertThat(selected, hasSize(2));
         assertThat(selected.get(0).getId(), isIn(Arrays.asList("k1", "k3")));
@@ -74,7 +75,7 @@ public class SelectDataStoreOperationTest {
         final List<List<Parameter>> branches = new ArrayList<>();
         final DefaultQueryDescriptor descriptor = new DefaultQueryDescriptor(false, null, 0, null, sortExtractor, branches, null, null);
         final DataStoreOperation<List<Person>, String, Person> operation = new SelectDataStoreOperation<>(descriptor);
-        final List<Person> selected = operation.execute(dataStore, null, new ImmutableInvocation(Sample.class.getMethod("findAll"), new Object[]{}));
+        final List<Person> selected = operation.execute(dataStore, null, new ImmutableInvocation(RepositoryWithValidMethods.class.getMethod("findAll"), new Object[]{}));
         assertThat(selected, hasSize(4));
         assertThat(selected, containsInAnyOrder(dataStore.retrieveAll().toArray()));
         assertThat(selected.get(0).getId(), is("k4"));
@@ -89,7 +90,7 @@ public class SelectDataStoreOperationTest {
         final PageParameterExtractor pageExtractor = new PageablePageParameterExtractor(0);
         final DefaultQueryDescriptor descriptor = new DefaultQueryDescriptor(false, null, 0, pageExtractor, null, branches, null, null);
         final SelectDataStoreOperation<String, Person> operation = new SelectDataStoreOperation<>(descriptor);
-        final List<Person> selected = operation.execute(dataStore, null, new ImmutableInvocation(Sample.class.getMethod("findAll", Pageable.class), new Object[]{new PageRequest(2, 10)}));
+        final List<Person> selected = operation.execute(dataStore, null, new ImmutableInvocation(RepositoryWithValidMethods.class.getMethod("findAll", Pageable.class), new Object[]{new PageRequest(2, 10)}));
         assertThat(selected, is(empty()));
     }
 
@@ -99,7 +100,7 @@ public class SelectDataStoreOperationTest {
         final List<List<Parameter>> branches = Collections.emptyList();
         final DefaultQueryDescriptor descriptor = new DefaultQueryDescriptor(false, null, 0, pageExtractor, null, branches, null, null);
         final DataStoreOperation<List<Person>, String, Person> operation = new SelectDataStoreOperation<>(descriptor);
-        final List<Person> selected = operation.execute(dataStore, null, new ImmutableInvocation(Sample.class.getMethod("findAll", Pageable.class), new Object[]{new PageRequest(1, 3)}));
+        final List<Person> selected = operation.execute(dataStore, null, new ImmutableInvocation(RepositoryWithValidMethods.class.getMethod("findAll", Pageable.class), new Object[]{new PageRequest(1, 3)}));
         assertThat(selected, hasSize(1));
     }
 
@@ -109,7 +110,7 @@ public class SelectDataStoreOperationTest {
             final List<List<Parameter>> branches = Collections.emptyList();
             final DefaultQueryDescriptor descriptor = new DefaultQueryDescriptor(false, null, limit, null, null, branches, null, null);
             final DataStoreOperation<List<Person>, String, Person> operation = new SelectDataStoreOperation<>(descriptor);
-            final List<Person> selected = operation.execute(dataStore, null, new ImmutableInvocation(Sample.class.getMethod("findAll"), new Object[]{}));
+            final List<Person> selected = operation.execute(dataStore, null, new ImmutableInvocation(RepositoryWithValidMethods.class.getMethod("findAll"), new Object[]{}));
             assertThat(selected, hasSize(Math.min(limit, dataStore.retrieveAll().size())));
         }
     }
@@ -121,12 +122,12 @@ public class SelectDataStoreOperationTest {
         //not distinct
         final DefaultQueryDescriptor descriptor = new DefaultQueryDescriptor(false, null, 0, null, null, branches, null, null);
         final DataStoreOperation<List<Person>, String, Person> operation = new SelectDataStoreOperation<>(descriptor);
-        final List<Person> selected = operation.execute(dataStore, null, new ImmutableInvocation(Sample.class.getMethod("findAll"), new Object[]{}));
+        final List<Person> selected = operation.execute(dataStore, null, new ImmutableInvocation(RepositoryWithValidMethods.class.getMethod("findAll"), new Object[]{}));
         assertThat(selected, hasSize(5));
         //distinct
         final DefaultQueryDescriptor descriptorDistinct = new DefaultQueryDescriptor(true, null, 0, null, null, branches, null, null);
         final DataStoreOperation<List<Person>, String, Person> operationDistinct = new SelectDataStoreOperation<>(descriptorDistinct);
-        final List<Person> selectedDistinct = operationDistinct.execute(dataStore, null, new ImmutableInvocation(Sample.class.getMethod("findAll"), new Object[]{}));
+        final List<Person> selectedDistinct = operationDistinct.execute(dataStore, null, new ImmutableInvocation(RepositoryWithValidMethods.class.getMethod("findAll"), new Object[]{}));
         assertThat(selectedDistinct, hasSize(4));
     }
 
@@ -136,16 +137,6 @@ public class SelectDataStoreOperationTest {
         final DefaultQueryDescriptor descriptor = new DefaultQueryDescriptor(false, null, 0, null, null, branches, null, null);
         final DataStoreOperation<List<Person>, String, Person> operation = new SelectDataStoreOperation<>(descriptor);
         assertThat(operation.toString(), is(descriptor.toString()));
-    }
-
-    private interface Sample {
-
-        void findByFirstNameAndLastNameOrAddressCityOrAgeGreaterThan(String firstName, String lastName, String city, Integer age);
-
-        void findAll();
-
-        void findAll(Pageable pageable);
-
     }
 
 }

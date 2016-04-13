@@ -3,13 +3,13 @@ package com.mmnaseri.utils.spring.data.commons;
 import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
 import com.mmnaseri.utils.spring.data.domain.impl.ImmutableRepositoryMetadata;
 import com.mmnaseri.utils.spring.data.domain.impl.key.UUIDKeyGenerator;
-import com.mmnaseri.utils.spring.data.domain.model.Person;
-import com.mmnaseri.utils.spring.data.domain.repository.SimplePersonRepository;
+import com.mmnaseri.utils.spring.data.sample.models.Person;
+import com.mmnaseri.utils.spring.data.sample.repositories.SimplePersonRepository;
 import com.mmnaseri.utils.spring.data.error.EntityMissingKeyException;
 import com.mmnaseri.utils.spring.data.store.DataStore;
 import com.mmnaseri.utils.spring.data.store.impl.MemoryDataStore;
-import com.mmnaseri.utils.spring.data.store.mock.Operation;
-import com.mmnaseri.utils.spring.data.store.mock.SpyingDataStore;
+import com.mmnaseri.utils.spring.data.sample.mocks.Operation;
+import com.mmnaseri.utils.spring.data.sample.mocks.SpyingDataStore;
 import org.hamcrest.Matchers;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
+import static com.mmnaseri.utils.spring.data.utils.TestUtils.iterableToList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
@@ -122,14 +123,6 @@ public class DefaultJpaRepositoryTest {
         repository.saveAndFlush(entity);
         assertThat(dataStore.getRequests().get(dataStore.getRequests().size() - 1).getOperation(), is(Operation.FLUSH));
         assertThat(dataStore.retrieve("1"), is(entity));
-    }
-
-    private <E> List<E> iterableToList(Iterable<E> iterable) {
-        final List<E> list = new ArrayList<>();
-        for (E item : iterable) {
-            list.add(item);
-        }
-        return list;
     }
 
 }

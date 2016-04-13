@@ -2,13 +2,13 @@ package com.mmnaseri.utils.spring.data.query.impl;
 
 import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
 import com.mmnaseri.utils.spring.data.domain.impl.ImmutableRepositoryMetadata;
-import com.mmnaseri.utils.spring.data.domain.model.Person;
+import com.mmnaseri.utils.spring.data.sample.models.Person;
 import com.mmnaseri.utils.spring.data.error.DataFunctionException;
 import com.mmnaseri.utils.spring.data.error.InvalidArgumentException;
 import com.mmnaseri.utils.spring.data.query.QueryDescriptor;
 import com.mmnaseri.utils.spring.data.store.impl.MemoryDataStore;
-import com.mmnaseri.utils.spring.data.store.mock.Operation;
-import com.mmnaseri.utils.spring.data.store.mock.SpyingDataStore;
+import com.mmnaseri.utils.spring.data.sample.mocks.Operation;
+import com.mmnaseri.utils.spring.data.sample.mocks.SpyingDataStore;
 import org.hamcrest.Matchers;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;

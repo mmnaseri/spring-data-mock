@@ -43,6 +43,7 @@ public class DefaultPagingAndSortingRepository implements DataStoreAware {
                     break;
                 default:
                     nullHandling = NullHandling.DEFAULT;
+                    break;
             }
             final Order derivedOrder = new ImmutableOrder(direction, order.getProperty(), nullHandling);
             orders.add(derivedOrder);

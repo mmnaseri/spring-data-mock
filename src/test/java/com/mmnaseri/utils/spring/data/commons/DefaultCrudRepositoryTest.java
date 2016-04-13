@@ -2,8 +2,8 @@ package com.mmnaseri.utils.spring.data.commons;
 
 import com.mmnaseri.utils.spring.data.domain.impl.ImmutableRepositoryMetadata;
 import com.mmnaseri.utils.spring.data.domain.impl.key.UUIDKeyGenerator;
-import com.mmnaseri.utils.spring.data.domain.model.Person;
-import com.mmnaseri.utils.spring.data.domain.repository.SimplePersonRepository;
+import com.mmnaseri.utils.spring.data.sample.models.Person;
+import com.mmnaseri.utils.spring.data.sample.repositories.SimplePersonRepository;
 import com.mmnaseri.utils.spring.data.error.EntityMissingKeyException;
 import com.mmnaseri.utils.spring.data.store.DataStore;
 import com.mmnaseri.utils.spring.data.store.impl.MemoryDataStore;
@@ -16,6 +16,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import static com.mmnaseri.utils.spring.data.utils.TestUtils.iterableToList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
@@ -177,14 +178,6 @@ public class DefaultCrudRepositoryTest {
         assertThat(dataStore.keys(), hasSize(4));
         repository.deleteAll();
         assertThat(dataStore.keys(), is(empty()));
-    }
-
-    private <E> List<E> iterableToList(Iterable<E> iterable) {
-        final List<E> list = new ArrayList<>();
-        for (E item : iterable) {
-            list.add(item);
-        }
-        return list;
     }
 
 }

@@ -8,24 +8,24 @@ import com.mmnaseri.utils.spring.data.domain.impl.DefaultOperatorContext;
 import com.mmnaseri.utils.spring.data.domain.impl.DefaultRepositoryMetadataResolver;
 import com.mmnaseri.utils.spring.data.domain.impl.ImmutableOperator;
 import com.mmnaseri.utils.spring.data.domain.impl.QueryDescriptionExtractor;
-import com.mmnaseri.utils.spring.data.domain.repository.SimplePersonRepository;
+import com.mmnaseri.utils.spring.data.sample.repositories.*;
 import com.mmnaseri.utils.spring.data.dsl.mock.RepositoryMockBuilder;
 import com.mmnaseri.utils.spring.data.proxy.*;
 import com.mmnaseri.utils.spring.data.proxy.impl.DefaultResultAdapterContext;
 import com.mmnaseri.utils.spring.data.proxy.impl.DefaultTypeMappingContext;
 import com.mmnaseri.utils.spring.data.proxy.impl.NonDataOperationInvocationHandler;
 import com.mmnaseri.utils.spring.data.proxy.impl.adapters.VoidResultAdapter;
-import com.mmnaseri.utils.spring.data.proxy.mock.SpyingHandler;
+import com.mmnaseri.utils.spring.data.sample.mocks.SpyingHandler;
 import com.mmnaseri.utils.spring.data.query.DataFunction;
 import com.mmnaseri.utils.spring.data.query.DataFunctionRegistry;
 import com.mmnaseri.utils.spring.data.query.impl.DefaultDataFunctionRegistry;
-import com.mmnaseri.utils.spring.data.query.mock.SpyingDataFunction;
+import com.mmnaseri.utils.spring.data.sample.mocks.SpyingDataFunction;
 import com.mmnaseri.utils.spring.data.store.*;
 import com.mmnaseri.utils.spring.data.store.impl.AuditDataEventListener;
 import com.mmnaseri.utils.spring.data.store.impl.DefaultDataStoreEventListenerContext;
 import com.mmnaseri.utils.spring.data.store.impl.DefaultDataStoreRegistry;
 import com.mmnaseri.utils.spring.data.store.impl.MemoryDataStore;
-import com.mmnaseri.utils.spring.data.store.mock.AllCatchingEventListener;
+import com.mmnaseri.utils.spring.data.sample.mocks.AllCatchingEventListener;
 import org.hamcrest.Matchers;
 import org.springframework.data.domain.AuditorAware;
 import org.testng.annotations.Test;
@@ -318,51 +318,6 @@ public class RepositoryFactoryBuilderTest {
         assertThat(repository.getRepositoryConfiguration(), is(notNullValue()));
         assertThat(repository.getRepositoryConfiguration().getKeyGenerator(), is(notNullValue()));
         assertThat(repository.getRepositoryConfiguration().getKeyGenerator(), is(instanceOf(RepositoryMockBuilder.NoOpKeyGenerator.class)));
-    }
-
-    public interface ExtendedSimplePersonRepository extends SimplePersonRepository {
-
-        String getString();
-
-        Number getNumber();
-
-    }
-
-    public interface ConfiguredSimplePersonRepository extends SimplePersonRepository {
-
-        RepositoryConfiguration getRepositoryConfiguration();
-
-    }
-
-    public static class StringMapping {
-
-        public String getString() {
-            return "Hello!";
-        }
-
-    }
-
-    public static class NumberMapping {
-
-        public Integer getNumber() {
-            return 123;
-        }
-
-    }
-
-    public static class ConfiguredMapping implements RepositoryConfigurationAware {
-
-        private RepositoryConfiguration repositoryConfiguration;
-
-        @Override
-        public void setRepositoryConfiguration(RepositoryConfiguration repositoryConfiguration) {
-            this.repositoryConfiguration = repositoryConfiguration;
-        }
-
-        public RepositoryConfiguration getRepositoryConfiguration() {
-            return repositoryConfiguration;
-        }
-
     }
 
 }

@@ -2,12 +2,13 @@ package com.mmnaseri.utils.spring.data.store.impl;
 
 import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
 import com.mmnaseri.utils.spring.data.domain.impl.ImmutableRepositoryMetadata;
-import com.mmnaseri.utils.spring.data.domain.model.Person;
-import com.mmnaseri.utils.spring.data.domain.repository.SimplePersonRepository;
+import com.mmnaseri.utils.spring.data.sample.models.Person;
+import com.mmnaseri.utils.spring.data.sample.repositories.SimplePersonRepository;
 import com.mmnaseri.utils.spring.data.error.CorruptDataException;
+import com.mmnaseri.utils.spring.data.sample.mocks.*;
 import com.mmnaseri.utils.spring.data.store.DataStore;
 import com.mmnaseri.utils.spring.data.store.DataStoreEvent;
-import com.mmnaseri.utils.spring.data.store.mock.*;
+import com.mmnaseri.utils.spring.data.sample.models.DummyEvent;
 import org.hamcrest.Matchers;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -29,20 +30,6 @@ public class EventPublishingDataStoreTest {
 
     private static AtomicLong counter = new AtomicLong(0);
     private RepositoryMetadata repositoryMetadata;
-
-    private static class DummyEvent implements DataStoreEvent {
-        @Override
-        public RepositoryMetadata getRepositoryMetadata() {
-            return null;
-        }
-
-        @Override
-        public DataStore<?, ?> getDataStore() {
-            return null;
-        }
-    }
-
-
     private DataStore<String, Person> delegate;
     private SpyingDataStore<String, Person> delegateSpy;
     private DataStore<String, Person> dataStore;

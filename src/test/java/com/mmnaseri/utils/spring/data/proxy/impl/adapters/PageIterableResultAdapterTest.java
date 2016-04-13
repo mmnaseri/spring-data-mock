@@ -1,7 +1,7 @@
 package com.mmnaseri.utils.spring.data.proxy.impl.adapters;
 
 import com.mmnaseri.utils.spring.data.domain.impl.ImmutableInvocation;
-import org.springframework.data.domain.Page;
+import com.mmnaseri.utils.spring.data.sample.usecases.proxy.ReturnTypeSampleRepository;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
@@ -16,18 +16,10 @@ import static org.hamcrest.Matchers.*;
  */
 public class PageIterableResultAdapterTest {
 
-    private interface Sample {
-
-        Page findPage();
-
-        Object findOther();
-
-    }
-
     @Test
     public void testAdapting() throws Exception {
         final PageIterableResultAdapter adapter = new PageIterableResultAdapter();
-        final org.springframework.data.domain.Page<?> value = adapter.adapt(new ImmutableInvocation(Sample.class.getMethod("findPage"), null), Arrays.asList(1, 2, 3, 4));
+        final org.springframework.data.domain.Page<?> value = adapter.adapt(new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findPage"), null), Arrays.asList(1, 2, 3, 4));
         assertThat(value, is(notNullValue()));
         assertThat(value.getTotalElements(), is(4L));
         assertThat(value.getTotalPages(), is(1));
@@ -43,9 +35,9 @@ public class PageIterableResultAdapterTest {
     public void testAccepting() throws Exception {
         final PageIterableResultAdapter adapter = new PageIterableResultAdapter();
         assertThat(adapter.accepts(null, null), is(false));
-        assertThat(adapter.accepts(new ImmutableInvocation(Sample.class.getMethod("findOther"), new Object[]{}), new Object()), is(false));
-        assertThat(adapter.accepts(new ImmutableInvocation(Sample.class.getMethod("findPage"), new Object[]{}), new Object()), is(false));
-        assertThat(adapter.accepts(new ImmutableInvocation(Sample.class.getMethod("findPage"), new Object[]{}), new ArrayList<>()), is(true));
+        assertThat(adapter.accepts(new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findOther"), new Object[]{}), new Object()), is(false));
+        assertThat(adapter.accepts(new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findPage"), new Object[]{}), new Object()), is(false));
+        assertThat(adapter.accepts(new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findPage"), new Object[]{}), new ArrayList<>()), is(true));
     }
 
 }

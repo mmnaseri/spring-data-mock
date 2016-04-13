@@ -40,19 +40,17 @@ public class SignatureDataOperationResolver implements DataOperationResolver {
         while (searchType != null) {
             final Method[] methods = searchType.isInterface() ? searchType.getMethods() : searchType.getDeclaredMethods();
             for (Method method : methods) {
-                if (method.getName().equals(name)) {
-                    if (parameterTypes.length == method.getParameterTypes().length) {
-                        boolean matches = true;
-                        for (int i = 0; i < parameterTypes.length; i++) {
-                            final Class<?> parameterType = parameterTypes[i];
-                            if (!PropertyUtils.getTypeOf(method.getParameterTypes()[i]).isAssignableFrom(PropertyUtils.getTypeOf(parameterType))) {
-                                matches = false;
-                                break;
-                            }
+                if (method.getName().equals(name) && parameterTypes.length == method.getParameterTypes().length) {
+                    boolean matches = true;
+                    for (int i = 0; i < parameterTypes.length; i++) {
+                        final Class<?> parameterType = parameterTypes[i];
+                        if (!PropertyUtils.getTypeOf(method.getParameterTypes()[i]).isAssignableFrom(PropertyUtils.getTypeOf(parameterType))) {
+                            matches = false;
+                            break;
                         }
-                        if (matches) {
-                            return method;
-                        }
+                    }
+                    if (matches) {
+                        return method;
                     }
                 }
             }

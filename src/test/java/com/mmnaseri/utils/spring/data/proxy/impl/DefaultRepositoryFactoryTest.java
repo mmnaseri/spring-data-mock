@@ -1,23 +1,22 @@
 package com.mmnaseri.utils.spring.data.proxy.impl;
 
-import com.mmnaseri.utils.spring.data.domain.RepositoryAware;
 import com.mmnaseri.utils.spring.data.domain.impl.DefaultOperatorContext;
 import com.mmnaseri.utils.spring.data.domain.impl.DefaultRepositoryMetadataResolver;
 import com.mmnaseri.utils.spring.data.domain.impl.QueryDescriptionExtractor;
 import com.mmnaseri.utils.spring.data.domain.impl.key.UUIDKeyGenerator;
-import com.mmnaseri.utils.spring.data.domain.model.Person;
 import com.mmnaseri.utils.spring.data.proxy.*;
 import com.mmnaseri.utils.spring.data.query.impl.DefaultDataFunctionRegistry;
+import com.mmnaseri.utils.spring.data.sample.models.Person;
+import com.mmnaseri.utils.spring.data.sample.repositories.ClearableSimpleCrudPersonRepository;
+import com.mmnaseri.utils.spring.data.sample.repositories.RepositoryClearerMapping;
 import com.mmnaseri.utils.spring.data.store.DataStore;
 import com.mmnaseri.utils.spring.data.store.impl.DefaultDataStoreEventListenerContext;
 import com.mmnaseri.utils.spring.data.store.impl.DefaultDataStoreRegistry;
 import org.hamcrest.Matchers;
-import org.springframework.data.repository.Repository;
 import org.testng.annotations.Test;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -43,9 +42,9 @@ public class DefaultRepositoryFactoryTest {
         final DefaultRepositoryFactory factory = new DefaultRepositoryFactory(configuration);
         assertThat(factory.getConfiguration(), Matchers.<RepositoryFactoryConfiguration>is(configuration));
         assertThat(dataStoreRegistry.has(Person.class), is(false));
-        factory.getInstance(new UUIDKeyGenerator(), SampleRepository.class, RepositoryClearerMapping.class);
+        factory.getInstance(new UUIDKeyGenerator(), ClearableSimpleCrudPersonRepository.class, RepositoryClearerMapping.class);
         assertThat(dataStoreRegistry.has(Person.class), is(true));
-        final SampleRepository repository = factory.getInstance(new UUIDKeyGenerator(), SampleRepository.class, RepositoryClearerMapping.class);
+        final ClearableSimpleCrudPersonRepository repository = factory.getInstance(new UUIDKeyGenerator(), ClearableSimpleCrudPersonRepository.class, RepositoryClearerMapping.class);
         final DataStore<Serializable, Person> dataStore = dataStoreRegistry.getDataStore(Person.class);
         dataStore.save("k1", new Person().setId("k1").setLastName("Sadeghi"));
         dataStore.save("k2", new Person().setId("k2").setLastName("Naseri"));
@@ -64,56 +63,6 @@ public class DefaultRepositoryFactoryTest {
         assertThat(dataStore.retrieveAll(), hasSize(4));
         repository.clearRepo();
         assertThat(dataStore.retrieveAll(), is(empty()));
-    }
-
-    public interface SampleRepository extends Repository<Person, String> {
-
-        List<Person> findAll();
-
-        List<Person> deleteAll();
-
-        void clearRepo();
-
-        List<Person> findByLastName(String lastName);
-
-    }
-
-    public static class RepositoryClearerMapping implements RepositoryAware<SampleRepository>, RepositoryFactoryConfigurationAware, RepositoryConfigurationAware, RepositoryFactoryAware {
-
-        private SampleRepository repository;
-
-        @Override
-        public void setRepository(SampleRepository repository) {
-            this.repository = repository;
-        }
-
-        public void clearRepo() {
-            repository.deleteAll();
-        }
-
-        @Override
-        public void setRepositoryFactoryConfiguration(RepositoryFactoryConfiguration configuration) {
-            assertThat(configuration, is(notNullValue()));
-        }
-
-        @Override
-        public void setRepositoryConfiguration(RepositoryConfiguration repositoryConfiguration) {
-            assertThat(repositoryConfiguration, is(notNullValue()));
-            assertThat(repositoryConfiguration.getKeyGenerator(), is(notNullValue()));
-            assertThat(repositoryConfiguration.getKeyGenerator(), is(instanceOf(UUIDKeyGenerator.class)));
-            assertThat(repositoryConfiguration.getRepositoryMetadata(), is(notNullValue()));
-            assertThat(repositoryConfiguration.getRepositoryMetadata().getEntityType(), is(Matchers.<Class<?>>equalTo(Person.class)));
-            assertThat(repositoryConfiguration.getRepositoryMetadata().getIdentifierProperty(), is("id"));
-            assertThat(repositoryConfiguration.getRepositoryMetadata().getIdentifierType(), is(Matchers.<Class<?>>equalTo(String.class)));
-            assertThat(repositoryConfiguration.getRepositoryMetadata().getRepositoryInterface(), is(Matchers.<Class<?>>equalTo(SampleRepository.class)));
-            assertThat(repositoryConfiguration.getBoundImplementations(), is(not(empty())));
-            assertThat(repositoryConfiguration.getBoundImplementations(), hasItem(RepositoryClearerMapping.class));
-        }
-
-        @Override
-        public void setRepositoryFactory(RepositoryFactory factory) {
-            assertThat(factory, is(notNullValue()));
-        }
     }
 
 }

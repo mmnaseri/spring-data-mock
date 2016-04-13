@@ -1,5 +1,6 @@
 package com.mmnaseri.utils.spring.data.tools;
 
+import com.mmnaseri.utils.spring.data.sample.models.SampleClass;
 import org.testng.annotations.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -10,43 +11,6 @@ import static org.hamcrest.Matchers.is;
  * @since 1.0 (4/9/16)
  */
 public class GetterMethodFilterTest {
-
-    private static class SampleClass {
-
-        //returns void
-        private void getProperty() {}
-
-        //returns void, has a parameter
-        private void getProperty(int parameter) {}
-
-        //returns void, has a parameter, does not start with get
-        private void hasProperty() {}
-
-        //has a parameter
-        private Object getProperty(String parameter) {
-            return null;
-        }
-
-        //has a parameter, does not start with get
-        private Object hasProperty(String parameter) {
-            return null;
-        }
-
-        //returns void, does not start with get
-        private void hasState() {
-        }
-
-        //does not have get as a single word at the beginning
-        private String getterMethod() {
-            return null;
-        }
-
-        //proper getter
-        private String getValue() {
-            return null;
-        }
-
-    }
 
     @Test
     public void testFailures() throws Exception {

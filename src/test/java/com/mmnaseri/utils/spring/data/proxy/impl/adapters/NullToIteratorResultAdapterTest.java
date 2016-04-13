@@ -2,6 +2,7 @@ package com.mmnaseri.utils.spring.data.proxy.impl.adapters;
 
 import com.mmnaseri.utils.spring.data.domain.impl.ImmutableInvocation;
 import com.mmnaseri.utils.spring.data.proxy.ResultAdapter;
+import com.mmnaseri.utils.spring.data.sample.usecases.proxy.ReturnTypeSampleRepository;
 import org.testng.annotations.Test;
 
 import java.util.Iterator;
@@ -16,25 +17,17 @@ import static org.hamcrest.Matchers.notNullValue;
  */
 public class NullToIteratorResultAdapterTest {
 
-    private interface Sample {
-
-        Iterator findIterator();
-
-        Object findObject();
-
-    }
-
     @Test
     public void testAcceptance() throws Exception {
         final ResultAdapter<Iterator> adapter = new NullToIteratorResultAdapter();
-        assertThat(adapter.accepts(new ImmutableInvocation(Sample.class.getMethod("findIterator"), new Object[]{}), null), is(true));
-        assertThat(adapter.accepts(new ImmutableInvocation(Sample.class.getMethod("findObject"), new Object[]{}), null), is(false));
+        assertThat(adapter.accepts(new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findIterator"), new Object[]{}), null), is(true));
+        assertThat(adapter.accepts(new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findOther"), new Object[]{}), null), is(false));
     }
 
     @Test
     public void testAdaptingToIterable() throws Exception {
         final ResultAdapter<Iterator> adapter = new NullToIteratorResultAdapter();
-        final Iterator value = adapter.adapt(new ImmutableInvocation(Sample.class.getMethod("findIterator"), new Object[]{}), null);
+        final Iterator value = adapter.adapt(new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findIterator"), new Object[]{}), null);
         assertThat(value, is(notNullValue()));
         assertThat(value.hasNext(), is(false));
     }

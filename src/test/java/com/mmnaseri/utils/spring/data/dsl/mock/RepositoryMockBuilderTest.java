@@ -5,7 +5,8 @@ import com.mmnaseri.utils.spring.data.domain.RepositoryAware;
 import com.mmnaseri.utils.spring.data.domain.impl.DefaultOperatorContext;
 import com.mmnaseri.utils.spring.data.domain.impl.DefaultRepositoryMetadataResolver;
 import com.mmnaseri.utils.spring.data.domain.impl.QueryDescriptionExtractor;
-import com.mmnaseri.utils.spring.data.domain.model.Person;
+import com.mmnaseri.utils.spring.data.sample.mocks.CustomStringKeyGenerator;
+import com.mmnaseri.utils.spring.data.sample.models.Person;
 import com.mmnaseri.utils.spring.data.error.CorruptDataException;
 import com.mmnaseri.utils.spring.data.error.DataOperationExecutionException;
 import com.mmnaseri.utils.spring.data.error.MockBuilderException;
@@ -15,8 +16,9 @@ import com.mmnaseri.utils.spring.data.proxy.impl.DefaultRepositoryFactoryConfigu
 import com.mmnaseri.utils.spring.data.proxy.impl.DefaultResultAdapterContext;
 import com.mmnaseri.utils.spring.data.proxy.impl.DefaultTypeMappingContext;
 import com.mmnaseri.utils.spring.data.proxy.impl.NonDataOperationInvocationHandler;
-import com.mmnaseri.utils.spring.data.proxy.sample.InformationExposingRepository;
-import com.mmnaseri.utils.spring.data.proxy.sample.InformationExposingRepositoryFactory;
+import com.mmnaseri.utils.spring.data.sample.repositories.SimpleCrudPersonRepository;
+import com.mmnaseri.utils.spring.data.sample.usecases.proxy.InformationExposingRepository;
+import com.mmnaseri.utils.spring.data.sample.usecases.proxy.InformationExposingRepositoryFactory;
 import com.mmnaseri.utils.spring.data.query.impl.DefaultDataFunctionRegistry;
 import com.mmnaseri.utils.spring.data.store.impl.DefaultDataStoreEventListenerContext;
 import com.mmnaseri.utils.spring.data.store.impl.DefaultDataStoreRegistry;
@@ -26,7 +28,6 @@ import org.testng.annotations.Test;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -39,7 +40,7 @@ public class RepositoryMockBuilderTest {
 
     @Test
     public void testOutOfTheBoxMocking() throws Exception {
-        final SampleRepository repository = new RepositoryMockBuilder().mock(SampleRepository.class);
+        final SimpleCrudPersonRepository repository = new RepositoryMockBuilder().mock(SimpleCrudPersonRepository.class);
         assertThat(repository, is(notNullValue()));
         final Person person = repository.save(new Person());
         assertThat(repository.findAll(), is(notNullValue()));
@@ -51,7 +52,7 @@ public class RepositoryMockBuilderTest {
 
     @Test
     public void testMockingWithoutKeyGeneration() throws Exception {
-        final SampleRepository repository = new RepositoryMockBuilder().withoutGeneratingKeys().mock(SampleRepository.class);
+        final SimpleCrudPersonRepository repository = new RepositoryMockBuilder().withoutGeneratingKeys().mock(SimpleCrudPersonRepository.class);
         assertThat(repository, is(notNullValue()));
         boolean exceptionThrown = false;
         try {
@@ -73,7 +74,7 @@ public class RepositoryMockBuilderTest {
 
     @Test
     public void testCustomKeyGeneration() throws Exception {
-        final SampleRepository repository = new RepositoryMockBuilder().generateKeysUsing(CustomStringKeyGenerator.class).mock(SampleRepository.class);
+        final SimpleCrudPersonRepository repository = new RepositoryMockBuilder().generateKeysUsing(CustomStringKeyGenerator.class).mock(SimpleCrudPersonRepository.class);
         assertThat(repository, is(notNullValue()));
         final Person person = repository.save(new Person());
         assertThat(repository.findAll(), is(notNullValue()));
@@ -90,7 +91,7 @@ public class RepositoryMockBuilderTest {
 
     @Test
     public void testUsingCustomImplementations() throws Exception {
-        final MappedSampleRepository repository = new RepositoryMockBuilder().usingImplementation(ValueHashMapper.class).and(ValueStringMapper.class).mock(MappedSampleRepository.class);
+        final MappedSimpleCrudPersonRepository repository = new RepositoryMockBuilder().usingImplementation(ValueHashMapper.class).and(ValueStringMapper.class).mock(MappedSimpleCrudPersonRepository.class);
         assertThat(repository, is(notNullValue()));
         final Person person = repository.save(new Person());
         assertThat(repository.findAll(), is(notNullValue()));
@@ -122,7 +123,7 @@ public class RepositoryMockBuilderTest {
         configuration.setRepositoryMetadataResolver(new DefaultRepositoryMetadataResolver());
         configuration.setResultAdapterContext(new DefaultResultAdapterContext());
         configuration.setTypeMappingContext(new DefaultTypeMappingContext());
-        final SampleRepository repository = new RepositoryMockBuilder().useFactory(new InformationExposingRepositoryFactory(configuration)).mock(SampleRepository.class);
+        final SimpleCrudPersonRepository repository = new RepositoryMockBuilder().useFactory(new InformationExposingRepositoryFactory(configuration)).mock(SimpleCrudPersonRepository.class);
         assertThat(repository, is(instanceOf(InformationExposingRepository.class)));
         final InformationExposingRepository informationExposingRepository = (InformationExposingRepository) repository;
         assertThat(informationExposingRepository.getFactoryConfiguration(), is(notNullValue()));
@@ -134,14 +135,14 @@ public class RepositoryMockBuilderTest {
         assertThat(informationExposingRepository.getConfiguration().getRepositoryMetadata(), is(notNullValue()));
         assertThat(informationExposingRepository.getConfiguration().getRepositoryMetadata().getEntityType(), is(Matchers.<Class<?>>equalTo(Person.class)));
         assertThat(informationExposingRepository.getConfiguration().getRepositoryMetadata().getIdentifierType(), is(Matchers.<Class<?>>equalTo(String.class)));
-        assertThat(informationExposingRepository.getConfiguration().getRepositoryMetadata().getRepositoryInterface(), is(Matchers.<Class<?>>equalTo(SampleRepository.class)));
+        assertThat(informationExposingRepository.getConfiguration().getRepositoryMetadata().getRepositoryInterface(), is(Matchers.<Class<?>>equalTo(SimpleCrudPersonRepository.class)));
         assertThat(informationExposingRepository.getConfiguration().getRepositoryMetadata().getIdentifierProperty(), is("id"));
     }
 
     @Test
     public void testUsingCustomConfiguration() throws Exception {
         final DefaultTypeMappingContext mappingContext = new DefaultTypeMappingContext();
-        mappingContext.register(ConfiguredSampleRepository.class, ConfigurationAwareMapper.class);
+        mappingContext.register(ConfiguredSimpleCrudPersonRepository.class, ConfigurationAwareMapper.class);
         final DefaultRepositoryFactoryConfiguration configuration = new DefaultRepositoryFactoryConfiguration();
         configuration.setDataStoreRegistry(new DefaultDataStoreRegistry());
         configuration.setDescriptionExtractor(new QueryDescriptionExtractor(new DefaultOperatorContext()));
@@ -151,7 +152,7 @@ public class RepositoryMockBuilderTest {
         configuration.setRepositoryMetadataResolver(new DefaultRepositoryMetadataResolver());
         configuration.setResultAdapterContext(new DefaultResultAdapterContext());
         configuration.setTypeMappingContext(mappingContext);
-        final ConfiguredSampleRepository repository = new RepositoryMockBuilder().useConfiguration(configuration).mock(ConfiguredSampleRepository.class);
+        final ConfiguredSimpleCrudPersonRepository repository = new RepositoryMockBuilder().useConfiguration(configuration).mock(ConfiguredSimpleCrudPersonRepository.class);
         assertThat(repository.getConfiguration(), is(notNullValue()));
         assertThat(repository.getConfiguration(), Matchers.<RepositoryFactoryConfiguration>is(configuration));
     }
@@ -162,28 +163,7 @@ public class RepositoryMockBuilderTest {
         assertThat(generator.generate(), is(nullValue()));
     }
 
-    public static class CustomStringKeyGenerator implements KeyGenerator<String> {
-
-        private final AtomicLong counter = new AtomicLong(0);
-
-        @Override
-        public String generate() {
-            return String.valueOf(counter.incrementAndGet());
-        }
-
-    }
-
-    public interface SampleRepository extends Repository<Person, String> {
-
-        List<Person> findAll();
-
-        void delete(Person person);
-
-        Person save(Person person);
-
-    }
-
-    public interface MappedSampleRepository extends SampleRepository {
+    public interface MappedSimpleCrudPersonRepository extends SimpleCrudPersonRepository {
 
         int getHash();
 
@@ -191,18 +171,18 @@ public class RepositoryMockBuilderTest {
 
     }
 
-    public interface ConfiguredSampleRepository extends SampleRepository {
+    public interface ConfiguredSimpleCrudPersonRepository extends SimpleCrudPersonRepository {
 
         RepositoryFactoryConfiguration getConfiguration();
 
     }
 
-    public static class ValueHashMapper implements RepositoryAware<MappedSampleRepository> {
+    public static class ValueHashMapper implements RepositoryAware<MappedSimpleCrudPersonRepository> {
 
-        private MappedSampleRepository repository;
+        private MappedSimpleCrudPersonRepository repository;
 
         @Override
-        public void setRepository(MappedSampleRepository repository) {
+        public void setRepository(MappedSimpleCrudPersonRepository repository) {
             this.repository = repository;
         }
 
@@ -212,12 +192,12 @@ public class RepositoryMockBuilderTest {
 
     }
 
-    public static class ValueStringMapper implements RepositoryAware<MappedSampleRepository> {
+    public static class ValueStringMapper implements RepositoryAware<MappedSimpleCrudPersonRepository> {
 
-        private MappedSampleRepository repository;
+        private MappedSimpleCrudPersonRepository repository;
 
         @Override
-        public void setRepository(MappedSampleRepository repository) {
+        public void setRepository(MappedSimpleCrudPersonRepository repository) {
             this.repository = repository;
         }
 

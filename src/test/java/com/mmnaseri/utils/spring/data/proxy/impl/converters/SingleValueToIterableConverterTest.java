@@ -1,6 +1,7 @@
 package com.mmnaseri.utils.spring.data.proxy.impl.converters;
 
 import com.mmnaseri.utils.spring.data.domain.impl.ImmutableInvocation;
+import com.mmnaseri.utils.spring.data.sample.usecases.proxy.ReturnTypeSampleRepository;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
@@ -15,17 +16,11 @@ import static org.hamcrest.Matchers.*;
  */
 public class SingleValueToIterableConverterTest {
 
-    private interface Sample {
-
-        Long findSomething();
-
-    }
-
     @Test
     public void testConvertingSingleValueToIterable() throws Exception {
         final SingleValueToIterableConverter converter = new SingleValueToIterableConverter();
         final Object original = new Object();
-        final Object converted = converter.convert(new ImmutableInvocation(Sample.class.getMethod("findSomething"), null), original);
+        final Object converted = converter.convert(new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findLong"), null), original);
         assertThat(converted, is(notNullValue()));
         assertThat(converted, is(instanceOf(Iterable.class)));
         final Iterable<?> iterable = (Iterable<?>) converted;
@@ -39,7 +34,7 @@ public class SingleValueToIterableConverterTest {
     public void testConvertingIterableToIterable() throws Exception {
         final SingleValueToIterableConverter converter = new SingleValueToIterableConverter();
         final Object original = Arrays.asList(1, 2, 3);
-        final Object converted = converter.convert(new ImmutableInvocation(Sample.class.getMethod("findSomething"), null), original);
+        final Object converted = converter.convert(new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findLong"), null), original);
         assertThat(converted, is(original));
     }
 
@@ -47,7 +42,7 @@ public class SingleValueToIterableConverterTest {
     public void testConvertingIteratorToIterable() throws Exception {
         final SingleValueToIterableConverter converter = new SingleValueToIterableConverter();
         final Object original = Arrays.asList(1, 2, 3).iterator();
-        final Object converted = converter.convert(new ImmutableInvocation(Sample.class.getMethod("findSomething"), null), original);
+        final Object converted = converter.convert(new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findLong"), null), original);
         assertThat(converted, is(original));
     }
 

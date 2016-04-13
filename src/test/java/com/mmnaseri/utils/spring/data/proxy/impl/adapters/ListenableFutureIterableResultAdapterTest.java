@@ -1,6 +1,7 @@
 package com.mmnaseri.utils.spring.data.proxy.impl.adapters;
 
 import com.mmnaseri.utils.spring.data.domain.impl.ImmutableInvocation;
+import com.mmnaseri.utils.spring.data.sample.usecases.proxy.ReturnTypeSampleRepository;
 import org.hamcrest.Matchers;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.testng.annotations.Test;
@@ -19,28 +20,20 @@ import static org.hamcrest.Matchers.notNullValue;
  */
 public class ListenableFutureIterableResultAdapterTest {
 
-    private interface Sample {
-
-        ListenableFuture findListenableFuture();
-
-        Object findOther();
-
-    }
-
     @Test
     public void testAccepting() throws Exception {
         final ListenableFutureIterableResultAdapter adapter = new ListenableFutureIterableResultAdapter();
         assertThat(adapter.accepts(null, null), is(false));
-        assertThat(adapter.accepts(new ImmutableInvocation(Sample.class.getMethod("findOther"), new Object[]{}), new Object()), is(false));
-        assertThat(adapter.accepts(new ImmutableInvocation(Sample.class.getMethod("findListenableFuture"), new Object[]{}), new Object()), is(false));
-        assertThat(adapter.accepts(new ImmutableInvocation(Sample.class.getMethod("findListenableFuture"), new Object[]{}), new ArrayList<>()), is(true));
+        assertThat(adapter.accepts(new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findOther"), new Object[]{}), new Object()), is(false));
+        assertThat(adapter.accepts(new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findListenableFuture"), new Object[]{}), new Object()), is(false));
+        assertThat(adapter.accepts(new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findListenableFuture"), new Object[]{}), new ArrayList<>()), is(true));
     }
 
     @Test
     public void testAdapting() throws Exception {
         final ListenableFutureIterableResultAdapter adapter = new ListenableFutureIterableResultAdapter();
         final List<Integer> originalValue = Arrays.asList(1, 2, 3);
-        final ListenableFuture adapted = adapter.adapt(new ImmutableInvocation(Sample.class.getMethod("findListenableFuture"), new Object[]{}), originalValue);
+        final ListenableFuture adapted = adapter.adapt(new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findListenableFuture"), new Object[]{}), originalValue);
         assertThat(adapted, is(notNullValue()));
         final Object result = adapted.get();
         assertThat(result, is(notNullValue()));

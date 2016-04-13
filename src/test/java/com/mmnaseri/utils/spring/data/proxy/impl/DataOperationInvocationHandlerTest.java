@@ -1,18 +1,16 @@
 package com.mmnaseri.utils.spring.data.proxy.impl;
 
-import com.mmnaseri.utils.spring.data.domain.Invocation;
 import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
 import com.mmnaseri.utils.spring.data.domain.impl.ImmutableRepositoryMetadata;
 import com.mmnaseri.utils.spring.data.domain.impl.key.UUIDKeyGenerator;
-import com.mmnaseri.utils.spring.data.domain.model.Person;
-import com.mmnaseri.utils.spring.data.domain.repository.SimplePersonRepository;
 import com.mmnaseri.utils.spring.data.proxy.InvocationMapping;
 import com.mmnaseri.utils.spring.data.proxy.RepositoryConfiguration;
-import com.mmnaseri.utils.spring.data.store.DataStore;
-import com.mmnaseri.utils.spring.data.store.DataStoreOperation;
+import com.mmnaseri.utils.spring.data.sample.mocks.SpyingOperation;
+import com.mmnaseri.utils.spring.data.sample.models.Person;
+import com.mmnaseri.utils.spring.data.sample.repositories.SimplePersonRepository;
+import com.mmnaseri.utils.spring.data.sample.usecases.proxy.ReturnTypeSampleRepository;
 import com.mmnaseri.utils.spring.data.store.impl.MemoryDataStore;
 import org.hamcrest.Matchers;
-import org.springframework.data.repository.Repository;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -24,46 +22,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 public class DataOperationInvocationHandlerTest {
-
-    private interface Sample extends Repository<Person, String> {
-
-        Object doSomething();
-
-    }
-
-    private static class SpyingOperation implements DataStoreOperation<Object, String, Person> {
-
-        private DataStore<String, Person> store;
-
-        private RepositoryConfiguration configuration;
-        private Invocation invocation;
-        private final Object result;
-
-        private SpyingOperation(Object result) {
-            this.result = result;
-        }
-
-        @Override
-        public Object execute(DataStore<String, Person> store, RepositoryConfiguration configuration, Invocation invocation) {
-            this.store = store;
-            this.configuration = configuration;
-            this.invocation = invocation;
-            return result;
-        }
-
-        public DataStore<String, Person> getStore() {
-            return store;
-        }
-
-        public RepositoryConfiguration getConfiguration() {
-            return configuration;
-        }
-
-        public Invocation getInvocation() {
-            return invocation;
-        }
-
-    }
 
     private DataOperationInvocationHandler<String, Person> handler;
     private List<InvocationMapping<String, Person>> mappings;
@@ -137,11 +95,11 @@ public class DataOperationInvocationHandlerTest {
     public void testInvokingBoundMapping() throws Throwable {
         final Object originalValue = new Object();
         final SpyingOperation spy = new SpyingOperation(originalValue);
-        mappings.add(new ImmutableInvocationMapping<>(Sample.class.getMethod("doSomething"), spy));
+        mappings.add(new ImmutableInvocationMapping<>(ReturnTypeSampleRepository.class.getMethod("findOther"), spy));
         final Object[] args = {1, 2, 3};
-        final Object result = handler.invoke(new Object(), Sample.class.getMethod("doSomething"), args);
+        final Object result = handler.invoke(new Object(), ReturnTypeSampleRepository.class.getMethod("findOther"), args);
         assertThat(spy.getInvocation(), is(notNullValue()));
-        assertThat(spy.getInvocation().getMethod(), is(Sample.class.getMethod("doSomething")));
+        assertThat(spy.getInvocation().getMethod(), is(ReturnTypeSampleRepository.class.getMethod("findOther")));
         assertThat(spy.getInvocation().getArguments(), is(args));
         assertThat(result, is(originalValue));
     }
@@ -152,9 +110,9 @@ public class DataOperationInvocationHandlerTest {
         final SpyingOperation spy = new SpyingOperation(originalValue);
         final SpyingOperation otherSpy = new SpyingOperation(originalValue);
         mappings.add(new ImmutableInvocationMapping<>(Object.class.getMethod("hashCode"), otherSpy));
-        mappings.add(new ImmutableInvocationMapping<>(Sample.class.getMethod("doSomething"), spy));
-        assertThat(handler.invoke(new Object(), Sample.class.getMethod("doSomething"), new Object[]{1, 2, 3}), is(originalValue));
-        assertThat(handler.invoke(new Object(), Sample.class.getMethod("doSomething"), new Object[]{4, 5, 6}), is(originalValue));
+        mappings.add(new ImmutableInvocationMapping<>(ReturnTypeSampleRepository.class.getMethod("findOther"), spy));
+        assertThat(handler.invoke(new Object(), ReturnTypeSampleRepository.class.getMethod("findOther"), new Object[]{1, 2, 3}), is(originalValue));
+        assertThat(handler.invoke(new Object(), ReturnTypeSampleRepository.class.getMethod("findOther"), new Object[]{4, 5, 6}), is(originalValue));
         assertThat(otherSpy.getInvocation(), is(nullValue()));
     }
 

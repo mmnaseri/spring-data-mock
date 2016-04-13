@@ -3,11 +3,13 @@ package com.mmnaseri.utils.spring.data.domain.impl;
 import com.mmnaseri.utils.spring.data.domain.Modifier;
 import com.mmnaseri.utils.spring.data.domain.Parameter;
 import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
-import com.mmnaseri.utils.spring.data.domain.model.Person;
+import com.mmnaseri.utils.spring.data.sample.models.Person;
 import com.mmnaseri.utils.spring.data.error.QueryParserException;
 import com.mmnaseri.utils.spring.data.proxy.RepositoryFactoryConfiguration;
 import com.mmnaseri.utils.spring.data.proxy.impl.DefaultRepositoryFactoryConfiguration;
 import com.mmnaseri.utils.spring.data.query.*;
+import com.mmnaseri.utils.spring.data.sample.repositories.MalformedRepository;
+import com.mmnaseri.utils.spring.data.sample.repositories.RepositoryWithValidMethods;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.testng.annotations.BeforeMethod;
@@ -33,7 +35,7 @@ public class QueryDescriptionExtractorTest {
     public void setUp() throws Exception {
         extractor = new QueryDescriptionExtractor(new DefaultOperatorContext());
         malformedRepositoryMetadata = new ImmutableRepositoryMetadata(String.class, Person.class, MalformedRepository.class, "id");
-        sampleRepositoryMetadata = new ImmutableRepositoryMetadata(String.class, Person.class, SampleRepository.class, "id");
+        sampleRepositoryMetadata = new ImmutableRepositoryMetadata(String.class, Person.class, RepositoryWithValidMethods.class, "id");
     }
 
     @Test(expectedExceptions = QueryParserException.class, expectedExceptionsMessageRegExp = ".*?: Malformed query method name.*")
@@ -107,7 +109,7 @@ public class QueryDescriptionExtractorTest {
         extractor.extract(malformedRepositoryMetadata, MalformedRepository.class.getMethod("findByFirstName", String.class, Object.class, Object.class), configuration);
     }
 
-    @Test(expectedExceptions = QueryParserException.class, expectedExceptionsMessageRegExp = ".*?: Could not find property `firstNameOrderBy` on `class com.mmnaseri.utils.spring.data.domain.model.Person`")
+    @Test(expectedExceptions = QueryParserException.class, expectedExceptionsMessageRegExp = ".*?: Could not find property `firstNameOrderBy` on `class com.mmnaseri.utils.spring.data.sample.models.Person`")
     public void testWithTrailingOrderBy() throws Exception {
         extractor.extract(malformedRepositoryMetadata, MalformedRepository.class.getMethod("findByFirstNameOrderBy", String.class), configuration);
     }
@@ -134,7 +136,7 @@ public class QueryDescriptionExtractorTest {
 
     @Test
     public void testReadMethodWithoutAnyCriteria() throws Exception {
-        final QueryDescriptor descriptor = extractor.extract(sampleRepositoryMetadata, SampleRepository.class.getMethod("find"), configuration);
+        final QueryDescriptor descriptor = extractor.extract(sampleRepositoryMetadata, RepositoryWithValidMethods.class.getMethod("find"), configuration);
         assertThat(descriptor, is(notNullValue()));
         assertThat(descriptor.getConfiguration(), is(configuration));
         assertThat(descriptor.getFunction(), is(nullValue()));
@@ -145,7 +147,7 @@ public class QueryDescriptionExtractorTest {
 
     @Test
     public void testCustomFunctionWithoutAnyCriteria() throws Exception {
-        final QueryDescriptor descriptor = extractor.extract(sampleRepositoryMetadata, SampleRepository.class.getMethod("test"), configuration);
+        final QueryDescriptor descriptor = extractor.extract(sampleRepositoryMetadata, RepositoryWithValidMethods.class.getMethod("test"), configuration);
         assertThat(descriptor, is(notNullValue()));
         assertThat(descriptor.getConfiguration(), is(configuration));
         assertThat(descriptor.getFunction(), is("test"));
@@ -156,7 +158,7 @@ public class QueryDescriptionExtractorTest {
 
     @Test
     public void testQueryMethodWithSingleBranch() throws Exception {
-        final QueryDescriptor descriptor = extractor.extract(sampleRepositoryMetadata, SampleRepository.class.getMethod("findByFirstNameAndLastNameEquals", String.class, String.class), configuration);
+        final QueryDescriptor descriptor = extractor.extract(sampleRepositoryMetadata, RepositoryWithValidMethods.class.getMethod("findByFirstNameAndLastNameEquals", String.class, String.class), configuration);
         assertThat(descriptor, is(notNullValue()));
         assertThat(descriptor.getConfiguration(), is(configuration));
         assertThat(descriptor.getFunction(), is(nullValue()));
@@ -179,7 +181,7 @@ public class QueryDescriptionExtractorTest {
 
     @Test
     public void testModifierOnSingleParameter() throws Exception {
-        final QueryDescriptor descriptor = extractor.extract(sampleRepositoryMetadata, SampleRepository.class.getMethod("findByFirstNameAndLastNameIgnoreCase", String.class, String.class), configuration);
+        final QueryDescriptor descriptor = extractor.extract(sampleRepositoryMetadata, RepositoryWithValidMethods.class.getMethod("findByFirstNameAndLastNameIgnoreCase", String.class, String.class), configuration);
         assertThat(descriptor, is(notNullValue()));
         assertThat(descriptor.getConfiguration(), is(configuration));
         assertThat(descriptor.getFunction(), is(nullValue()));
@@ -203,7 +205,7 @@ public class QueryDescriptionExtractorTest {
 
     @Test
     public void testWithOrderBy() throws Exception {
-        final QueryDescriptor descriptor = extractor.extract(sampleRepositoryMetadata, SampleRepository.class.getMethod("findByFirstNameOrderByLastNameDescAgeAsc", String.class), configuration);
+        final QueryDescriptor descriptor = extractor.extract(sampleRepositoryMetadata, RepositoryWithValidMethods.class.getMethod("findByFirstNameOrderByLastNameDescAgeAsc", String.class), configuration);
         assertThat(descriptor, is(notNullValue()));
         assertThat(descriptor.getBranches(), hasSize(1));
         assertThat(descriptor.getBranches().get(0), hasSize(1));
@@ -224,7 +226,7 @@ public class QueryDescriptionExtractorTest {
 
     @Test
     public void testWithMultipleBranches() throws Exception {
-        final QueryDescriptor descriptor = extractor.extract(sampleRepositoryMetadata, SampleRepository.class.getMethod("findByFirstNameOrLastName", String.class, String.class), configuration);
+        final QueryDescriptor descriptor = extractor.extract(sampleRepositoryMetadata, RepositoryWithValidMethods.class.getMethod("findByFirstNameOrLastName", String.class, String.class), configuration);
         assertThat(descriptor, is(notNullValue()));
         assertThat(descriptor.getBranches(), hasSize(2));
         assertThat(descriptor.getBranches().get(0), hasSize(1));
@@ -245,7 +247,7 @@ public class QueryDescriptionExtractorTest {
 
     @Test
     public void testWithStaticSortingAndDynamicPaging() throws Exception {
-        final QueryDescriptor descriptor = extractor.extract(sampleRepositoryMetadata, SampleRepository.class.getMethod("findByFirstNameOrderByLastNameDesc", String.class, Pageable.class), configuration);
+        final QueryDescriptor descriptor = extractor.extract(sampleRepositoryMetadata, RepositoryWithValidMethods.class.getMethod("findByFirstNameOrderByLastNameDesc", String.class, Pageable.class), configuration);
         assertThat(descriptor, is(notNullValue()));
         assertThat(descriptor.getBranches(), hasSize(1));
         assertThat(descriptor.getBranches().get(0), hasSize(1));
@@ -268,7 +270,7 @@ public class QueryDescriptionExtractorTest {
 
     @Test
     public void testWithDynamicSortingAndDynamicPaging() throws Exception {
-        final QueryDescriptor descriptor = extractor.extract(sampleRepositoryMetadata, SampleRepository.class.getMethod("findByFirstName", String.class, Pageable.class), configuration);
+        final QueryDescriptor descriptor = extractor.extract(sampleRepositoryMetadata, RepositoryWithValidMethods.class.getMethod("findByFirstName", String.class, Pageable.class), configuration);
         assertThat(descriptor, is(notNullValue()));
         assertThat(descriptor.getBranches(), hasSize(1));
         assertThat(descriptor.getBranches().get(0), hasSize(1));
@@ -294,7 +296,7 @@ public class QueryDescriptionExtractorTest {
 
     @Test
     public void testWithDynamicSortAndNoPaging() throws Exception {
-        final QueryDescriptor descriptor = extractor.extract(sampleRepositoryMetadata, SampleRepository.class.getMethod("findByFirstName", String.class, org.springframework.data.domain.Sort.class), configuration);
+        final QueryDescriptor descriptor = extractor.extract(sampleRepositoryMetadata, RepositoryWithValidMethods.class.getMethod("findByFirstName", String.class, org.springframework.data.domain.Sort.class), configuration);
         assertThat(descriptor, is(notNullValue()));
         assertThat(descriptor.getBranches(), hasSize(1));
         assertThat(descriptor.getBranches().get(0), hasSize(1));
@@ -318,7 +320,7 @@ public class QueryDescriptionExtractorTest {
 
     @Test
     public void testAllIgnoreCase() throws Exception {
-        final QueryDescriptor descriptor = extractor.extract(sampleRepositoryMetadata, SampleRepository.class.getMethod("findByFirstNameAndLastNameAllIgnoreCase", String.class, String.class), configuration);
+        final QueryDescriptor descriptor = extractor.extract(sampleRepositoryMetadata, RepositoryWithValidMethods.class.getMethod("findByFirstNameAndLastNameAllIgnoreCase", String.class, String.class), configuration);
         assertThat(descriptor, is(notNullValue()));
         assertThat(descriptor.getBranches(), hasSize(1));
         assertThat(descriptor.getBranches().get(0), hasSize(2));
@@ -338,7 +340,7 @@ public class QueryDescriptionExtractorTest {
 
     @Test
     public void testFunction() throws Exception {
-        final QueryDescriptor descriptor = extractor.extract(sampleRepositoryMetadata, SampleRepository.class.getMethod("myFunctionByFirstName", String.class), configuration);
+        final QueryDescriptor descriptor = extractor.extract(sampleRepositoryMetadata, RepositoryWithValidMethods.class.getMethod("myFunctionByFirstName", String.class), configuration);
         assertThat(descriptor, is(notNullValue()));
         assertThat(descriptor.getBranches(), hasSize(1));
         assertThat(descriptor.getBranches().get(0), hasSize(1));
@@ -349,74 +351,6 @@ public class QueryDescriptionExtractorTest {
         assertThat(descriptor.getBranches().get(0).get(0).getPath(), is("firstName"));
         assertThat(descriptor.getFunction(), is("myFunction"));
         assertThat(descriptor.getLimit(), is(0));
-    }
-
-    @SuppressWarnings("unused")
-    private interface MalformedRepository {
-
-        void Malformed();
-
-        void findFirst5First10();
-
-        void findFirstFirst10();
-
-        void findTop10Top5();
-
-        void findDistinctDistinct();
-
-        void findTop10Distinct();
-
-        void findTop10DistinctBy();
-
-        void findByUnknownProperty();
-
-        void findByFirstName();
-
-        void findByFirstNameAnd(String firstName);
-
-        void findByFirstNameOr(String firstName);
-
-        void findByFirstName(Object name);
-
-        void findByFirstName(String name, Object extra);
-
-        void findByFirstName(String name, Object first, Object second);
-
-        void findByFirstNameOrderBy(String firstName);
-
-        void findByFirstNameOrderByAddressAsc(String firstName);
-
-        void findByFirstNameOrderByXyzDesc(String firstName);
-
-        void findByFirstNameOrderByFirstNameAsc(String firstName, org.springframework.data.domain.Sort sort);
-
-    }
-
-    @SuppressWarnings("unused")
-    private interface SampleRepository {
-
-        void find();
-
-        void test();
-
-        void findByFirstNameAndLastNameEquals(String firstName, String lastName);
-
-        void findByFirstNameAndLastNameIgnoreCase(String firstName, String lastName);
-
-        void findByFirstNameOrderByLastNameDescAgeAsc(String firstName);
-
-        void findByFirstNameOrLastName(String firstName, String lastName);
-
-        void findByFirstNameOrderByLastNameDesc(String firstName, Pageable pageable);
-
-        void findByFirstName(String firstName, Pageable pageable);
-
-        void findByFirstName(String firstName, org.springframework.data.domain.Sort sort);
-
-        void findByFirstNameAndLastNameAllIgnoreCase(String firstName, String lastName);
-
-        void myFunctionByFirstName(String firstName);
-
     }
 
 }

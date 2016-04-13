@@ -6,7 +6,7 @@ import java.util.Iterator;
  * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/10/16)
  */
-class EmptyIterator implements Iterator {
+public class EmptyIterator implements Iterator {
 
     @Override
     public boolean hasNext() {
@@ -20,7 +20,7 @@ class EmptyIterator implements Iterator {
 
     @Override
     public void remove() {
-        throw new UnsupportedOperationException();
+        throw new IndexOutOfBoundsException();
     }
 
 }
