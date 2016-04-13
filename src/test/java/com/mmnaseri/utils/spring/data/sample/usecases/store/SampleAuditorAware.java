@@ -1,6 +1,5 @@
 package com.mmnaseri.utils.spring.data.sample.usecases.store;
 
-import com.mmnaseri.utils.spring.data.store.impl.AuditableWrapperTest;
 import org.springframework.data.domain.AuditorAware;
 
 /**

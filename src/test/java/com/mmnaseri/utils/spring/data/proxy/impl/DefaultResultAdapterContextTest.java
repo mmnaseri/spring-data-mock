@@ -1,10 +1,10 @@
 package com.mmnaseri.utils.spring.data.proxy.impl;
 
 import com.mmnaseri.utils.spring.data.domain.impl.ImmutableInvocation;
+import com.mmnaseri.utils.spring.data.error.ResultAdapterFailureException;
 import com.mmnaseri.utils.spring.data.sample.mocks.SpyingResultAdapter;
 import com.mmnaseri.utils.spring.data.sample.models.Address;
 import com.mmnaseri.utils.spring.data.sample.models.Person;
-import com.mmnaseri.utils.spring.data.error.ResultAdapterFailureException;
 import com.mmnaseri.utils.spring.data.sample.usecases.proxy.ReturnTypeSampleRepository;
 import org.hamcrest.Matchers;
 import org.testng.annotations.Test;

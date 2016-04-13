@@ -1,11 +1,10 @@
 package com.mmnaseri.utils.spring.data.domain.impl;
 
 import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
-import com.mmnaseri.utils.spring.data.sample.models.Person;
 import com.mmnaseri.utils.spring.data.error.RepositoryDefinitionException;
+import com.mmnaseri.utils.spring.data.sample.models.Person;
 import com.mmnaseri.utils.spring.data.sample.repositories.MalformedRepository;
 import com.mmnaseri.utils.spring.data.sample.repositories.SimplePersonRepository;
-import org.springframework.data.repository.Repository;
 import org.testng.annotations.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;

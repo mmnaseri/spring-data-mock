@@ -4,7 +4,6 @@ import com.mmnaseri.utils.spring.data.domain.impl.DescribedDataStoreOperation;
 import com.mmnaseri.utils.spring.data.sample.usecases.proxy.resolvers.NoOpQueryDescriptionExtractor;
 import com.mmnaseri.utils.spring.data.sample.usecases.proxy.resolvers.SampleMappedRepository;
 import com.mmnaseri.utils.spring.data.store.DataStoreOperation;
-import org.springframework.data.jpa.repository.Query;
 import org.testng.annotations.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;

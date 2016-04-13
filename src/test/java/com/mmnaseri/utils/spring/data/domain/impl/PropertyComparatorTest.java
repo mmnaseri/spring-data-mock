@@ -1,10 +1,10 @@
 package com.mmnaseri.utils.spring.data.domain.impl;
 
-import com.mmnaseri.utils.spring.data.sample.models.*;
 import com.mmnaseri.utils.spring.data.error.InvalidArgumentException;
 import com.mmnaseri.utils.spring.data.query.NullHandling;
 import com.mmnaseri.utils.spring.data.query.SortDirection;
 import com.mmnaseri.utils.spring.data.query.impl.ImmutableOrder;
+import com.mmnaseri.utils.spring.data.sample.models.*;
 import org.testng.annotations.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;

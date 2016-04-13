@@ -1,12 +1,8 @@
 package com.mmnaseri.utils.spring.data.tools;
 
-import com.mmnaseri.utils.spring.data.sample.models.Address;
-import com.mmnaseri.utils.spring.data.sample.models.Person;
-import com.mmnaseri.utils.spring.data.sample.models.State;
-import com.mmnaseri.utils.spring.data.sample.models.Zip;
 import com.mmnaseri.utils.spring.data.error.ParserException;
 import com.mmnaseri.utils.spring.data.query.PropertyDescriptor;
-import com.mmnaseri.utils.spring.data.sample.models.NoAccessorPerson;
+import com.mmnaseri.utils.spring.data.sample.models.*;
 import org.hamcrest.Matchers;
 import org.springframework.util.ReflectionUtils;
 import org.testng.annotations.Test;

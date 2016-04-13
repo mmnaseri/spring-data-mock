@@ -1,13 +1,13 @@
 package com.mmnaseri.utils.spring.data.proxy.impl.resolvers;
 
 import com.mmnaseri.utils.spring.data.domain.impl.*;
-import com.mmnaseri.utils.spring.data.sample.models.Person;
 import com.mmnaseri.utils.spring.data.error.DataOperationDefinitionException;
 import com.mmnaseri.utils.spring.data.error.UnknownDataOperationException;
 import com.mmnaseri.utils.spring.data.proxy.TypeMapping;
 import com.mmnaseri.utils.spring.data.proxy.impl.DefaultRepositoryFactoryConfiguration;
 import com.mmnaseri.utils.spring.data.proxy.impl.ImmutableTypeMapping;
 import com.mmnaseri.utils.spring.data.query.impl.DefaultDataFunctionRegistry;
+import com.mmnaseri.utils.spring.data.sample.models.Person;
 import com.mmnaseri.utils.spring.data.sample.usecases.proxy.resolvers.MappedType;
 import com.mmnaseri.utils.spring.data.sample.usecases.proxy.resolvers.SampleMappedRepository;
 import com.mmnaseri.utils.spring.data.store.DataStoreOperation;

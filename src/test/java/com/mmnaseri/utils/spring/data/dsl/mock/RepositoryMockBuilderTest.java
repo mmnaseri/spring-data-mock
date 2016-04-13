@@ -5,8 +5,6 @@ import com.mmnaseri.utils.spring.data.domain.RepositoryAware;
 import com.mmnaseri.utils.spring.data.domain.impl.DefaultOperatorContext;
 import com.mmnaseri.utils.spring.data.domain.impl.DefaultRepositoryMetadataResolver;
 import com.mmnaseri.utils.spring.data.domain.impl.QueryDescriptionExtractor;
-import com.mmnaseri.utils.spring.data.sample.mocks.CustomStringKeyGenerator;
-import com.mmnaseri.utils.spring.data.sample.models.Person;
 import com.mmnaseri.utils.spring.data.error.CorruptDataException;
 import com.mmnaseri.utils.spring.data.error.DataOperationExecutionException;
 import com.mmnaseri.utils.spring.data.error.MockBuilderException;
@@ -16,18 +14,18 @@ import com.mmnaseri.utils.spring.data.proxy.impl.DefaultRepositoryFactoryConfigu
 import com.mmnaseri.utils.spring.data.proxy.impl.DefaultResultAdapterContext;
 import com.mmnaseri.utils.spring.data.proxy.impl.DefaultTypeMappingContext;
 import com.mmnaseri.utils.spring.data.proxy.impl.NonDataOperationInvocationHandler;
+import com.mmnaseri.utils.spring.data.query.impl.DefaultDataFunctionRegistry;
+import com.mmnaseri.utils.spring.data.sample.mocks.CustomStringKeyGenerator;
+import com.mmnaseri.utils.spring.data.sample.models.Person;
 import com.mmnaseri.utils.spring.data.sample.repositories.SimpleCrudPersonRepository;
 import com.mmnaseri.utils.spring.data.sample.usecases.proxy.InformationExposingRepository;
 import com.mmnaseri.utils.spring.data.sample.usecases.proxy.InformationExposingRepositoryFactory;
-import com.mmnaseri.utils.spring.data.query.impl.DefaultDataFunctionRegistry;
 import com.mmnaseri.utils.spring.data.store.impl.DefaultDataStoreEventListenerContext;
 import com.mmnaseri.utils.spring.data.store.impl.DefaultDataStoreRegistry;
 import org.hamcrest.Matchers;
-import org.springframework.data.repository.Repository;
 import org.testng.annotations.Test;
 
 import java.io.Serializable;
-import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;

@@ -1,7 +1,7 @@
 package com.mmnaseri.utils.spring.data.store.impl;
 
-import com.mmnaseri.utils.spring.data.sample.models.Person;
 import com.mmnaseri.utils.spring.data.error.DataStoreException;
+import com.mmnaseri.utils.spring.data.sample.models.Person;
 import org.hamcrest.Matchers;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;

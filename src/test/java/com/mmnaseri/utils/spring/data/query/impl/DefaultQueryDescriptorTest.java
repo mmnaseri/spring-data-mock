@@ -6,9 +6,9 @@ import com.mmnaseri.utils.spring.data.domain.Parameter;
 import com.mmnaseri.utils.spring.data.domain.impl.DefaultOperatorContext;
 import com.mmnaseri.utils.spring.data.domain.impl.ImmutableInvocation;
 import com.mmnaseri.utils.spring.data.domain.impl.ImmutableParameter;
+import com.mmnaseri.utils.spring.data.query.QueryDescriptor;
 import com.mmnaseri.utils.spring.data.sample.models.Address;
 import com.mmnaseri.utils.spring.data.sample.models.Person;
-import com.mmnaseri.utils.spring.data.query.QueryDescriptor;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 

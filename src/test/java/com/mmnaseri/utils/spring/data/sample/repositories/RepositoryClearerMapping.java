@@ -3,7 +3,6 @@ package com.mmnaseri.utils.spring.data.sample.repositories;
 import com.mmnaseri.utils.spring.data.domain.RepositoryAware;
 import com.mmnaseri.utils.spring.data.domain.impl.key.UUIDKeyGenerator;
 import com.mmnaseri.utils.spring.data.proxy.*;
-import com.mmnaseri.utils.spring.data.proxy.impl.DefaultRepositoryFactoryTest;
 import com.mmnaseri.utils.spring.data.sample.models.Person;
 import org.hamcrest.Matchers;
 
