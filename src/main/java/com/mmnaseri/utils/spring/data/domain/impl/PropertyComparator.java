@@ -22,7 +22,7 @@ public class PropertyComparator implements Comparator<Object> {
     private final String property;
     private final SortDirection direction;
 
-    public PropertyComparator(Order order) {
+    PropertyComparator(Order order) {
         this.nullHandling = order.getNullHandling() == null || NullHandling.DEFAULT.equals(order.getNullHandling()) ? DEFAULT_NULL_HANDLING : order.getNullHandling();
         property = order.getProperty();
         direction = order.getDirection();
@@ -31,41 +31,47 @@ public class PropertyComparator implements Comparator<Object> {
     @SuppressWarnings("unchecked")
     @Override
     public int compare(Object first, Object second) {
-        final Object firstValue;
-        try {
-            firstValue = PropertyUtils.getPropertyValue(first, property);
-        } catch (Exception e) {
-            throw new InvalidArgumentException("Failed to read property value for " + property + " on " + first, e);
-        }
-        final Object secondValue;
-        try {
-            secondValue = PropertyUtils.getPropertyValue(second, property);
-        } catch (Exception e) {
-            throw new InvalidArgumentException("Failed to read property value for " + property + " on " + second, e);
-        }
-        int comparison = 0;
-        if (firstValue == null && secondValue != null) {
-            comparison = NullHandling.NULLS_FIRST.equals(nullHandling) ? -1 : 1;
-        } else if (firstValue != null && secondValue == null) {
-            comparison = NullHandling.NULLS_FIRST.equals(nullHandling) ? 1 : -1;
-        } else if (firstValue != null) {
-            checkForComparable(firstValue, secondValue);
+        final Object firstValue = safeReadPropertyValue(first);
+        final Object secondValue = safeReadPropertyValue(second);
+        int comparison;
+        if (firstValue == null || secondValue == null) {
+            comparison = compareIfEitherIsNull(firstValue, secondValue);
+        } else {
             comparison = compareIfCompatible(firstValue, secondValue);
         }
         return comparison * (SortDirection.DESCENDING.equals(direction) ? -1 : 1);
     }
 
+    private Object safeReadPropertyValue(Object first) {
+        Object firstValue;
+        try {
+            firstValue = PropertyUtils.getPropertyValue(first, property);
+        } catch (Exception e) {
+            throw new InvalidArgumentException("Failed to read property value for " + property + " on " + first, e);
+        }
+        return firstValue;
+    }
+
+    private int compareIfEitherIsNull(Object firstValue, Object secondValue) {
+        if (firstValue == null && secondValue != null) {
+            return NullHandling.NULLS_FIRST.equals(nullHandling) ? -1 : 1;
+        } else if (firstValue != null) {
+            return NullHandling.NULLS_FIRST.equals(nullHandling) ? 1 : -1;
+        } else {
+            return 0;
+        }
+    }
+
     @SuppressWarnings("unchecked")
     private int compareIfCompatible(Object firstValue, Object secondValue) {
-        int comparison;
+        checkForComparable(firstValue, secondValue);
         if (firstValue.getClass().isInstance(secondValue)) {
-            comparison = ((Comparable) firstValue).compareTo(secondValue);
+            return ((Comparable) firstValue).compareTo(secondValue);
         } else if (secondValue.getClass().isInstance(firstValue)) {
-            comparison = ((Comparable) secondValue).compareTo(firstValue) * -1;
+            return ((Comparable) secondValue).compareTo(firstValue) * -1;
         } else {
             throw new InvalidArgumentException("Values for were not of the same type for property: " + property);
         }
-        return comparison;
     }
 
     private void checkForComparable(Object firstValue, Object secondValue) {

@@ -42,6 +42,12 @@ public class PropertyComparatorTest {
         assertThat(comparator.compare(new Person(), new Person().setAddress(new Address().setCity("A"))), is(1));
     }
 
+    @Test
+    public void testBothAreNull() throws Exception {
+        final PropertyComparator comparator = new PropertyComparator(new ImmutableOrder(SortDirection.ASCENDING, "address.city", NullHandling.NULLS_LAST));
+        assertThat(comparator.compare(new Person(), new Person()), is(0));
+    }
+
     @Test(expectedExceptions = InvalidArgumentException.class)
     public void testWhenValuesAreNotComparable() throws Exception {
         final PropertyComparator comparator = new PropertyComparator(new ImmutableOrder(SortDirection.ASCENDING, "address", NullHandling.NULLS_LAST));
