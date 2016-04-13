@@ -9,9 +9,22 @@ import com.mmnaseri.utils.spring.data.domain.impl.matchers.AbstractSimpleStringM
  */
 public class NotMatchingStringMatcher extends AbstractSimpleStringMatcher {
 
+    private String actual;
+    private String argument;
+
     @Override
     protected boolean matches(Parameter parameter, String actual, String argument) {
+        this.actual = actual;
+        this.argument = argument;
         return false;
+    }
+
+    public String getActual() {
+        return actual;
+    }
+
+    public String getArgument() {
+        return argument;
     }
 
 }
