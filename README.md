@@ -65,15 +65,41 @@ There you can get more information on how to download the framework, as well as 
 incorporate it in your project to have hassle-free data store mocking capabilities added to
 your shiny applications.
 
+FAQ
+-------------
+
+  1. Why did you write this?
+
+  > I was testing some pretty complicated services that relied on Spring Data to provide data. It was a lot of
+  hassle to keep the test environment up-to-date with the test requirements as well as the real world situation.
+  Also, it was pretty darn slow to run the tests, given database connection latency and all. I wanted to be able
+  to isolate my services and test them regardless of the database features. To make it short, I wrote this
+  framework to be able to separate integration/acceptance tests and unit tests.
+
+  2. Why did you make this open source?
+
+  > Because everything I use (or nearly so) in my line of work is open source. It was time I gave something back.
+  Also, the people behind Spring rock. I felt like I was selling tickets to the concert of rockstars by releasing
+  this.
+
+  3. What is the main design decision behind this framework?
+
+  > Make you do as little as possible.
+
+  4. When should I use this?
+
+  > You should only use this to write you *unit* tests. For anything else, you would want the whole application to
+  come alive and work. Using mocks for that is a bad idea.
+
+  5. This is going to be used at the level of code testing. Is it really well written?
+
+  > It is. According to Cobertura, it has **100% code coverage**, and according to Codacy, it has **0 code issues**.
+  It is maintained by myself the best I can. The rest is up to you.
+
 Contribution
 ------------
 
-This is a project that is quite large. Last I checked, according to [OpenHub](https://www.openhub.net)
-this project had more than 6500 lines of code and was worth more than
-[$85k](https://www.openhub.net/p/spring-data-mock/estimated_cost).
-
-This should give you some idea of how big this project is to be maintained as a side project. Since the
-project is aimed at the testing phase of your code, it is paramount that it is written with the best of
+Since this project is aimed at the testing phase of your code, it is paramount that it is written with the best of
 qualities and that it maintains the highest standard.
 
 Contributors are more than welcome. In fact, I flag most of the issues I receive as `help wanted` and
@@ -97,7 +123,7 @@ public use.
 It still has a lot of room for improvement and enhancements. Even though I will continue to develop and
 maintain this framework, receiving donations would make it feel so much more real.
 
-If you feel generous and want to donate, you can use my PayPal link: https://paypal.me/mmnaseri
+If you feel generous and want to buy me a cup of coffee, you can use my PayPal link: https://paypal.me/mmnaseri
 
 Thank you in advance if you choose to donate! And if not, I hope you have some time to explore this framework
 and give me feedback so that I can make it better.
