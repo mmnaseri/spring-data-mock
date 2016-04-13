@@ -189,7 +189,7 @@ public class AuditableWrapperTest {
         assertThat(wrapper.getCreatedBy(), is(nullValue()));
         wrapper.setCreatedBy(auditorAware.getCurrentAuditor());
         //the wrapper will not be able to read the value ...
-        assertThat(wrapper.getCreatedBy(), Matchers.is(nullValue()));
+        assertThat(wrapper.getCreatedBy(), is(nullValue()));
         //... but the value is set anyway
         assertThat(createdBy.get(entity), Matchers.<Object>is(SampleAuditorAware.AUDITOR));
     }
