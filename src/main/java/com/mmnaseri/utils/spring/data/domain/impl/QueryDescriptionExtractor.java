@@ -143,10 +143,8 @@ public class QueryDescriptionExtractor {
                     modifiers.add(Modifier.IGNORE_CASE);
                 }
                 //if the expression ends in And/Or, we expect there to be more
-                if (expression.matches(".*?(And|Or)$")) {
-                    if (!reader.hasMore()) {
-                        throw new QueryParserException(method.getDeclaringClass(), "Expected more tokens to follow AND/OR operator");
-                    }
+                if (expression.matches(".*?(And|Or)$") && !reader.hasMore()) {
+                    throw new QueryParserException(method.getDeclaringClass(), "Expected more tokens to follow AND/OR operator");
                 }
                 expression = expression.replaceFirst("(And|Or)$", "");
                 String property = null;

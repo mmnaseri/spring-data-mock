@@ -1,6 +1,7 @@
 package com.mmnaseri.utils.spring.data.domain.impl;
 
 import com.mmnaseri.utils.spring.data.error.DataOperationExecutionException;
+import com.mmnaseri.utils.spring.data.sample.usecases.domain.MappedClass;
 import org.testng.annotations.Test;
 
 import java.io.Serializable;
@@ -41,26 +42,6 @@ public class MethodInvocationDataStoreOperationTest {
         final MappedClass instance = new MappedClass(null);
         final MethodInvocationDataStoreOperation<Serializable, Object> operation = new MethodInvocationDataStoreOperation<>(instance, method);
         assertThat(operation.toString(), is(method + " on " + instance));
-    }
-
-    public static class MappedClass {
-
-        private final Object value;
-
-        public MappedClass(Object value) {
-            this.value = value;
-        }
-
-        private void privateMethod() {}
-
-        public void errorThrowingMethod() {
-            throw new RuntimeException();
-        }
-
-        public Object validMethod() {
-            return value;
-        }
-
     }
 
 }

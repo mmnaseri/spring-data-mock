@@ -2,6 +2,7 @@ package com.mmnaseri.utils.spring.data.proxy.impl.converters;
 
 import com.mmnaseri.utils.spring.data.domain.impl.ImmutableInvocation;
 import com.mmnaseri.utils.spring.data.error.ResultConversionFailureException;
+import com.mmnaseri.utils.spring.data.sample.usecases.proxy.ErrorThrowingCallable;
 import com.mmnaseri.utils.spring.data.sample.usecases.proxy.ReturnTypeSampleRepository;
 import org.testng.annotations.Test;
 
@@ -46,12 +47,7 @@ public class FutureToIterableConverterTest {
     public void testConvertingFutureError() throws Exception {
         final FutureToIterableConverter converter = new FutureToIterableConverter();
         //noinspection unchecked
-        final FutureTask task = new FutureTask(new Callable() {
-            @Override
-            public Object call() throws Exception {
-                throw new RuntimeException();
-            }
-        });
+        final FutureTask task = new FutureTask(new ErrorThrowingCallable());
         task.run();
         converter.convert(new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findLong"), null), task);
     }

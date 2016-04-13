@@ -6,8 +6,8 @@ import com.mmnaseri.utils.spring.data.commons.DefaultJpaRepository;
 import com.mmnaseri.utils.spring.data.commons.DefaultPagingAndSortingRepository;
 import com.mmnaseri.utils.spring.data.error.RepositoryDefinitionException;
 import com.mmnaseri.utils.spring.data.proxy.TypeMapping;
+import com.mmnaseri.utils.spring.data.sample.usecases.proxy.*;
 import org.hamcrest.Matchers;
-import org.springframework.core.annotation.Order;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -133,43 +133,10 @@ public class DefaultTypeMappingContextTest {
         assertThat(implementation.pi(), is(Math.PI));
     }
 
-    @Order(-1)
-    private static class LowerPriorityMapping {}
-
-    @Order(1)
-    private static class HighPriorityMapping {}
-
     private static abstract class AbstractImplementation {}
 
     private interface InterfaceImplementation {}
 
-    public static class ImplementationWithPrivateConstructor {
-
-        private ImplementationWithPrivateConstructor() {
-        }
-    }
-
     private static class PrivateImplementationClass {}
-
-    public static class ImplementationWithoutADefaultConstructor {
-
-        public ImplementationWithoutADefaultConstructor(String parameter) {
-        }
-    }
-
-    public static class ErrorThrowingImplementation {
-
-        public ErrorThrowingImplementation() {
-            throw new RuntimeException();
-        }
-    }
-
-    public static class ProperImplementation {
-
-        public Double pi() {
-            return Math.PI;
-        }
-
-    }
 
 }

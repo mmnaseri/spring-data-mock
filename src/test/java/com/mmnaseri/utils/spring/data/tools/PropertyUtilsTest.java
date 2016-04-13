@@ -3,10 +3,15 @@ package com.mmnaseri.utils.spring.data.tools;
 import com.mmnaseri.utils.spring.data.error.ParserException;
 import com.mmnaseri.utils.spring.data.query.PropertyDescriptor;
 import com.mmnaseri.utils.spring.data.sample.models.*;
+import com.mmnaseri.utils.spring.data.sample.usecases.tools.ClassWithErrorThrowingAccessors;
+import com.mmnaseri.utils.spring.data.sample.usecases.tools.ClassWithFinalId;
+import com.mmnaseri.utils.spring.data.sample.usecases.tools.ClassWithNoGetters;
+import com.mmnaseri.utils.spring.data.sample.usecases.tools.ClassWithPrimitiveField;
 import org.hamcrest.Matchers;
 import org.springframework.util.ReflectionUtils;
 import org.testng.annotations.Test;
 
+import java.lang.reflect.Field;
 import java.math.BigDecimal;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -132,7 +137,7 @@ public class PropertyUtilsTest extends AbstractUtilityClassTest {
         assertThat(PropertyUtils.getPropertyValue(person, "address.city"), Matchers.<Object>is(person.getAddress().getCity()));
         assertThat(PropertyUtils.getPropertyValue(person, "address.state.name"), Matchers.<Object>is(person.getAddress().getState().getName()));
         assertThat(PropertyUtils.getPropertyValue(person, "address.state.abbreviation"), Matchers.<Object>is(person.getAddress().getState().getAbbreviation()));
-        assertThat(PropertyUtils.getPropertyValue(person, "firstName"), Matchers.is(nullValue()));
+        assertThat(PropertyUtils.getPropertyValue(person, "firstName"), is(nullValue()));
     }
 
     @Test
@@ -164,8 +169,10 @@ public class PropertyUtilsTest extends AbstractUtilityClassTest {
     @Test
     public void testReadingPropertyValueThroughField() throws Exception {
         final ClassWithNoGetters object = new ClassWithNoGetters();
-        object.id = "1234";
-        assertThat(PropertyUtils.getPropertyValue(object, "id"), Matchers.<Object>is(object.id));
+        final Field id = ReflectionUtils.findField(ClassWithNoGetters.class, "id");
+        id.setAccessible(true);
+        id.set(object, "1234");
+        assertThat(PropertyUtils.getPropertyValue(object, "id"), Matchers.<Object>is(id.get(object)));
     }
 
     @Test(expectedExceptions = IllegalStateException.class)
@@ -188,9 +195,11 @@ public class PropertyUtilsTest extends AbstractUtilityClassTest {
     @Test
     public void testSettingImmediatePropertyValueUsingField() throws Exception {
         final ClassWithNoGetters object = new ClassWithNoGetters();
+        final Field id = ReflectionUtils.findField(ClassWithNoGetters.class, "id");
+        id.setAccessible(true);
         final String value = "12345";
         PropertyUtils.setPropertyValue(object, "id", value);
-        assertThat(object.id, is(value));
+        assertThat(id.get(object), Matchers.<Object>is(value));
     }
 
     @Test(expectedExceptions = IllegalStateException.class)
@@ -241,44 +250,6 @@ public class PropertyUtilsTest extends AbstractUtilityClassTest {
     @Test(expectedExceptions = IllegalStateException.class)
     public void testSettingNestedPropertyWhenParentPropertyIsNull() throws Exception {
         PropertyUtils.setPropertyValue(new Person(), "address.zip", new Zip());
-    }
-
-    private static class ClassWithNoGetters {
-
-        private String id;
-
-    }
-
-    private static class ClassWithErrorThrowingAccessors {
-
-        public String getId() {
-            throw new RuntimeException();
-        }
-
-        public void setId(String id) {
-            throw new RuntimeException();
-        }
-
-    }
-
-    private static class ClassWithFinalId {
-
-        private final String id = null;
-
-    }
-
-    private static class ClassWithPrimitiveField {
-
-        private int position;
-
-        public int getPosition() {
-            return position;
-        }
-
-        public void setPosition(int position) {
-            this.position = position;
-        }
-
     }
 
 }
