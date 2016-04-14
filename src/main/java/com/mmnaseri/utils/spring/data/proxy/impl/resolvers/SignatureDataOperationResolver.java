@@ -11,9 +11,18 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 /**
+ * <p>This class will resolve methods to the equivalent methods of the mapped implementations.</p>
+ *
+ * <p>The process of equating methods to their implementation finds methods on the nearest implementation
+ * that can handle the given parameters, and whose name is the exact same as the invoked method.</p>
+ *
+ * <p>Since the return value of the method can and will be adapted to the return value of the invoked method,
+ * return values are not considered to be so important, and they are not checked or considered.</p>
+ *
  * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/29/15)
  */
+@SuppressWarnings("WeakerAccess")
 public class SignatureDataOperationResolver implements DataOperationResolver {
 
     private final List<TypeMapping<?>> mappings;
