@@ -7,6 +7,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
+ * This value will convert an iterator to an iterable.
+ *
  * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/28/15)
  */

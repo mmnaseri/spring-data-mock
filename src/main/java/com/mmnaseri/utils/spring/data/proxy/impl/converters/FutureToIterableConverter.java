@@ -8,6 +8,10 @@ import com.mmnaseri.utils.spring.data.proxy.impl.DefaultResultConverter;
 import java.util.concurrent.Future;
 
 /**
+ * This converter will convert a value that is of type {@link Future} to an iterable. Furthermore, it will convert
+ * that value one more level to get to the final value, if required. Also, the conversion will be a blocking statement
+ * that waits for the future value to be resolved via {@link Future#get()}.
+ *
  * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/28/15)
  */

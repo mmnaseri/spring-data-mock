@@ -4,6 +4,10 @@ import com.mmnaseri.utils.spring.data.domain.Invocation;
 import com.mmnaseri.utils.spring.data.proxy.ResultConverter;
 
 /**
+ * This class will let us convert non-{@literal null} values if the invocation is not of
+ * type {@literal void}.
+ *
+ * @see #doConvert(Invocation, Object)
  * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/28/15)
  */
@@ -20,6 +24,12 @@ public abstract class AbstractResultConverter implements ResultConverter {
         return doConvert(invocation, original);
     }
 
+    /**
+     * Called to invoke a conversion of the given value to the desired result value.
+     * @param invocation    the invocation
+     * @param original      the original value
+     * @return the converted value
+     */
     protected abstract Object doConvert(Invocation invocation, Object original);
 
 }
