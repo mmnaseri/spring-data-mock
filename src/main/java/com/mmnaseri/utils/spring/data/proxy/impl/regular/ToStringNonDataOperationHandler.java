@@ -5,6 +5,8 @@ import com.mmnaseri.utils.spring.data.proxy.NonDataOperationHandler;
 import java.lang.reflect.Method;
 
 /**
+ * This class will handle the {@link Object#toString()} method.
+ *
  * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (4/8/16)
  */
