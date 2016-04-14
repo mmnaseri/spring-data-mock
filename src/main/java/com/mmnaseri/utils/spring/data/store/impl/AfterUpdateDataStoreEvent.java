@@ -4,9 +4,12 @@ import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
 import com.mmnaseri.utils.spring.data.store.DataStore;
 
 /**
+ * This class indicates that an entity was successfully updated in the data store
+ *
  * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (10/6/15)
  */
+@SuppressWarnings("WeakerAccess")
 public class AfterUpdateDataStoreEvent extends AbstractEntityDataStoreEvent {
 
     public AfterUpdateDataStoreEvent(RepositoryMetadata repositoryMetadata, DataStore<?, ?> dataStore, Object entity) {

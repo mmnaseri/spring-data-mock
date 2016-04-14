@@ -11,6 +11,9 @@ import java.io.Serializable;
 import java.util.Collection;
 
 /**
+ * This implementation relies on a delegate data store to handling the actual storage/retrieval. It decorates the
+ * delegate with event triggering capabilities and some additional data integrity checks (null checking).
+ *
  * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (10/6/15)
  */
