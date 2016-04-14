@@ -6,9 +6,9 @@
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.mmnaseri.utils/spring-data-mock/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.mmnaseri.utils/spring-data-mock)
 [![Dependency Status](https://www.versioneye.com/user/projects/5709ee7dfcd19a00415b101a/badge.svg?style=flat)](https://www.versioneye.com/user/projects/5709ee7dfcd19a00415b101a)
 [![Open Issues](https://badge.waffle.io/mmnaseri/spring-data-mock.svg?label=ready&title=issues)](http://waffle.io/mmnaseri/spring-data-mock)
-[![Build Status](https://travis-ci.org/mmnaseri/spring-data-mock.svg?branch=master)](https://travis-ci.org/mmnaseri/spring-data-mock)
+[![Build Status](https://travis-ci.org/mmnaseri/spring-data-mock.svg?branch=development)](https://travis-ci.org/mmnaseri/spring-data-mock)
 [![Codacy Badge](https://api.codacy.com/project/badge/grade/ad9f174fa0654a2b8c925b86973f272d)](https://www.codacy.com/app/mmnaseri/spring-data-mock)
-[![Coverage Status](https://coveralls.io/repos/github/mmnaseri/spring-data-mock/badge.svg?branch=master)](https://coveralls.io/github/mmnaseri/spring-data-mock?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/mmnaseri/spring-data-mock/badge.svg?branch=development)](https://coveralls.io/github/mmnaseri/spring-data-mock?branch=master)
 
 -----------
 
