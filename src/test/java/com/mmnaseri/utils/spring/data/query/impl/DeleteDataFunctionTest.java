@@ -4,6 +4,7 @@ import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
 import com.mmnaseri.utils.spring.data.domain.impl.ImmutableRepositoryMetadata;
 import com.mmnaseri.utils.spring.data.error.DataFunctionException;
 import com.mmnaseri.utils.spring.data.error.InvalidArgumentException;
+import com.mmnaseri.utils.spring.data.query.DataFunction;
 import com.mmnaseri.utils.spring.data.query.QueryDescriptor;
 import com.mmnaseri.utils.spring.data.sample.mocks.Operation;
 import com.mmnaseri.utils.spring.data.sample.mocks.SpyingDataStore;
@@ -21,7 +22,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (4/10/16)
  */
 public class DeleteDataFunctionTest {
@@ -41,11 +42,13 @@ public class DeleteDataFunctionTest {
 
     @Test(expectedExceptions = InvalidArgumentException.class, expectedExceptionsMessageRegExp = "Data store .*")
     public void testPassingNullDataStore() throws Exception {
+        final DataFunction<List<?>> function = new DeleteDataFunction();
         function.apply(null, query, null, new LinkedList<>());
     }
 
     @Test(expectedExceptions = InvalidArgumentException.class, expectedExceptionsMessageRegExp = "Query .*")
     public void testPassingNullQuery() throws Exception {
+        final DataFunction<List<?>> function = new DeleteDataFunction();
         function.apply(dataStore, null, null, new LinkedList<Person>());
     }
 
@@ -56,6 +59,7 @@ public class DeleteDataFunctionTest {
 
     @Test(expectedExceptions = DataFunctionException.class, expectedExceptionsMessageRegExp = "Failed to read .*")
     public void testWrongIdentifierProperty() throws Exception {
+        final DataFunction<List<?>> function = new DeleteDataFunction();
         final RepositoryMetadata repositoryMetadata = new ImmutableRepositoryMetadata(String.class, Person.class, null, "xyz");
         final QueryDescriptor descriptor = new DefaultQueryDescriptor(false, null, 0, null, null, null, null, repositoryMetadata);
         function.apply(dataStore, descriptor, null, Collections.singletonList(new Person()));
@@ -63,6 +67,7 @@ public class DeleteDataFunctionTest {
 
     @Test(expectedExceptions = DataFunctionException.class, expectedExceptionsMessageRegExp = "Cannot delete an entity without the key property being set: id")
     public void testNullIdentifierValue() throws Exception {
+        final DataFunction<List<?>> function = new DeleteDataFunction();
         function.apply(dataStore, query, null, Collections.singletonList(new Person()));
     }
 

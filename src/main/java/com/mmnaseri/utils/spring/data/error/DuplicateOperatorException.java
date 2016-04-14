@@ -3,7 +3,7 @@ package com.mmnaseri.utils.spring.data.error;
 import com.mmnaseri.utils.spring.data.domain.Operator;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (4/8/16)
  */
 public class DuplicateOperatorException extends OperatorContextException {

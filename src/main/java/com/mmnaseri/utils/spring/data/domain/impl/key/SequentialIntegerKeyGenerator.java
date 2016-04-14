@@ -5,7 +5,9 @@ import com.mmnaseri.utils.spring.data.domain.KeyGenerator;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * This class will generate sequential numbers.
+ *
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (10/6/15)
  */
 public class SequentialIntegerKeyGenerator implements KeyGenerator<Integer> {

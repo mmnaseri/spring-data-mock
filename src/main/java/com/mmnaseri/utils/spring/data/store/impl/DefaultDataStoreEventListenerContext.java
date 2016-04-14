@@ -11,7 +11,15 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * <p>This is the default implementation for the {@link DataStoreEventListenerContext} interface.
+ * This implementation comes with support for parent context lookup, meaning that you can register event
+ * listeners with another context, set that as the parent for this context, and have appropriate events
+ * triggered in that context as well.</p>
+ *
+ * <p>It should be noted that listeners registered in the current context always take precedence over the
+ * listeners found on a possible parent context.</p>
+ *
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (10/12/15)
  */
 public class DefaultDataStoreEventListenerContext implements DataStoreEventListenerContext {

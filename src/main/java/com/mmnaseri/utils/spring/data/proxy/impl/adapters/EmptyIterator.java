@@ -3,10 +3,17 @@ package com.mmnaseri.utils.spring.data.proxy.impl.adapters;
 import java.util.Iterator;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * This class is an iterator over an empty collection.
+ *
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (4/10/16)
  */
 public class EmptyIterator implements Iterator {
+
+    /**
+     * This is the shared instance of the empty iterator
+     */
+    public static final EmptyIterator INSTANCE = new EmptyIterator();
 
     @Override
     public boolean hasNext() {

@@ -8,7 +8,16 @@ import java.util.Iterator;
 import java.util.concurrent.Future;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * <p>This adapter accepts all invocations wherein the original value is an {@link Iterable} object and
+ * the requested method type is a simple value. Simple types are types that are not a subtype of
+ * {@link Iterable}, {@link Iterator}, or {@link Future}.</p>
+ *
+ * <p>While adapting, the adapter will also check that the iterable yields only one item and that it is
+ * of the same type or of a child type of the type requested by the invoked method.</p>
+ *
+ * <p>This adapter runs at the priority {@literal -400}.</p>
+ *
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/28/15)
  */
 public class SimpleIterableResultAdapter extends AbstractIterableResultAdapter<Object> {

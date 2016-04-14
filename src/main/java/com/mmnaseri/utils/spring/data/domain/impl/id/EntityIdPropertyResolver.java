@@ -6,7 +6,22 @@ import com.mmnaseri.utils.spring.data.error.NoIdPropertyException;
 import java.io.Serializable;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * <p>This class will use all the magic implemented in the other ID property resolvers to find out the ID property
+ * for an entity.</p>
+ *
+ * <p>The order in which conditions are considered is:</p>
+ *
+ * <ol>
+ *     <li>{@link AnnotatedGetterIdPropertyResolver Annotated getter}</li>
+ *     <li>{@link AnnotatedFieldIdPropertyResolver Annotated field}</li>
+ *     <li>{@link NamedGetterIdPropertyResolver Getter for ID property using name}</li>
+ *     <li>{@link NamedFieldIdPropertyResolver Field having proper name}</li>
+ * </ol>
+ *
+ * <p>After all the above are considered, if nothing is found, a {@link NoIdPropertyException NoIdPropertyException}
+ * is thrown to show that the promised ID property was not found on the entity class.</p>
+ *
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/23/15)
  */
 public class EntityIdPropertyResolver implements IdPropertyResolver {

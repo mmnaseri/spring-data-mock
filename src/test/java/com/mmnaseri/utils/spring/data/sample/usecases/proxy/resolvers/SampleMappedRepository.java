@@ -3,7 +3,7 @@ package com.mmnaseri.utils.spring.data.sample.usecases.proxy.resolvers;
 import org.springframework.data.jpa.repository.Query;
 
 /**
- * @author Milad Naseri (milad.naseri@cdk.com)
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (4/12/16, 6:31 PM)
  */
 public interface SampleMappedRepository {
@@ -15,6 +15,6 @@ public interface SampleMappedRepository {
     @Query
     void nativeMethod();
 
-    void normalMethod();
+    void normalMethodBy();
 
 }

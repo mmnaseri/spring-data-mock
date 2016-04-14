@@ -5,7 +5,9 @@ import com.mmnaseri.utils.spring.data.proxy.NonDataOperationHandler;
 import java.lang.reflect.Method;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * This class will handle the {@link Object#equals(Object)} method.
+ *
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (4/8/16)
  */
 public class EqualsNonDataOperationHandler implements NonDataOperationHandler {

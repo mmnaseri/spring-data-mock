@@ -6,7 +6,9 @@ import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * This class will help with generating unique, random integers.
+ *
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (10/6/15)
  */
 public class RandomIntegerKeyGenerator extends AbstractRandomKeyGenerator<Integer> {

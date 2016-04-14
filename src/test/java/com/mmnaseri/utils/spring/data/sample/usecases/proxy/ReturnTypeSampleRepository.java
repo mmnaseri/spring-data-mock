@@ -11,7 +11,7 @@ import java.util.*;
 import java.util.concurrent.Future;
 
 /**
- * @author Milad Naseri (milad.naseri@cdk.com)
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (4/12/16, 5:31 PM)
  */
 public interface ReturnTypeSampleRepository {

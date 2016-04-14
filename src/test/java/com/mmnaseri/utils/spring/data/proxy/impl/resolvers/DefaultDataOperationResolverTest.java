@@ -20,7 +20,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (4/10/16)
  */
 public class DefaultDataOperationResolverTest {
@@ -61,7 +61,7 @@ public class DefaultDataOperationResolverTest {
 
     @Test(expectedExceptions = DataOperationDefinitionException.class)
     public void testLookingForMalformedMethod() throws Exception {
-        resolver.resolve(SampleMappedRepository.class.getMethod("normalMethod"));
+        resolver.resolve(SampleMappedRepository.class.getMethod("normalMethodBy"));
     }
 
 }

@@ -12,7 +12,10 @@ import java.util.Comparator;
 import java.util.List;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * This is a comparator that will compare two objects based on a common property. The property should be defined as an
+ * expression such as "x.y.z".
+ *
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/17/15)
  */
 public class PropertyComparator implements Comparator<Object> {
@@ -42,44 +45,77 @@ public class PropertyComparator implements Comparator<Object> {
         return comparison * (SortDirection.DESCENDING.equals(direction) ? -1 : 1);
     }
 
-    private Object safeReadPropertyValue(Object first) {
+    /**
+     * Returns the value of the specified {@link #property property} from the object, given that it exists.
+     * Otherwise, it throws an {@link InvalidArgumentException}.
+     * @param object    the object to read the property from
+     * @return the value of the property
+     * @throws InvalidArgumentException
+     */
+    private Object safeReadPropertyValue(Object object) {
         Object firstValue;
         try {
-            firstValue = PropertyUtils.getPropertyValue(first, property);
+            firstValue = PropertyUtils.getPropertyValue(object, property);
         } catch (Exception e) {
-            throw new InvalidArgumentException("Failed to read property value for " + property + " on " + first, e);
+            throw new InvalidArgumentException("Failed to read property value for " + property + " on " + object, e);
         }
         return firstValue;
     }
 
-    private int compareIfEitherIsNull(Object firstValue, Object secondValue) {
-        if (firstValue == null && secondValue != null) {
+    /**
+     * If either of the two values is {@literal null}, this will compare them by taking {@link NullHandling} into account.
+     * @param first     the first value
+     * @param second    the second value
+     * @return comparison results as defined by {@link Comparable#compareTo(Object)}
+     */
+    private int compareIfEitherIsNull(Object first, Object second) {
+        if (first == null && second != null) {
             return NullHandling.NULLS_FIRST.equals(nullHandling) ? -1 : 1;
-        } else if (firstValue != null) {
+        } else if (first != null) {
             return NullHandling.NULLS_FIRST.equals(nullHandling) ? 1 : -1;
         } else {
             return 0;
         }
     }
 
+    /**
+     * This will compare the two values if their are <em>compatible</em>, meaning one of them is of a type that is a
+     * super type or is the same type as the other one.
+     *
+     * @param first     the first item
+     * @param second    the second item
+     * @return comparison results as defined by {@link Comparable#compareTo(Object)}
+     * @throws InvalidArgumentException
+     */
     @SuppressWarnings("unchecked")
-    private int compareIfCompatible(Object firstValue, Object secondValue) {
-        checkForComparable(firstValue, secondValue);
-        if (firstValue.getClass().isInstance(secondValue)) {
-            return ((Comparable) firstValue).compareTo(secondValue);
-        } else if (secondValue.getClass().isInstance(firstValue)) {
-            return ((Comparable) secondValue).compareTo(firstValue) * -1;
+    private int compareIfCompatible(Object first, Object second) {
+        checkForComparable(first, second);
+        if (first.getClass().isInstance(second)) {
+            return ((Comparable) first).compareTo(second);
+        } else if (second.getClass().isInstance(first)) {
+            return ((Comparable) second).compareTo(first) * -1;
         } else {
             throw new InvalidArgumentException("Values for were not of the same type for property: " + property);
         }
     }
 
-    private void checkForComparable(Object firstValue, Object secondValue) {
-        if (!(firstValue instanceof Comparable) || !(secondValue instanceof Comparable)) {
+    /**
+     * This method checks to make sure both values are of type {@link Comparable}
+     * @param first     the first value
+     * @param second    the second value
+     * @throws InvalidArgumentException if they are not
+     */
+    private void checkForComparable(Object first, Object second) {
+        if (!(first instanceof Comparable) || !(second instanceof Comparable)) {
             throw new InvalidArgumentException("Expected both values to be comparable for property: " + property);
         }
     }
 
+    /**
+     * Given a collection of objects, will sort them by taking the sort property into account.
+     * @param collection    the collection of items
+     * @param sort          the sort specification
+     */
     public static void sort(List<?> collection, Sort sort) {
         for (int i = sort.getOrders().size() - 1; i >= 0; i--) {
             Collections.sort(collection, new PropertyComparator(sort.getOrders().get(i)));

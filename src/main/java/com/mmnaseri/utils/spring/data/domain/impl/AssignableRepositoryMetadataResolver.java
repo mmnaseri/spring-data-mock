@@ -8,7 +8,11 @@ import org.springframework.data.repository.Repository;
 import java.io.Serializable;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * This class will try to determine the repository metadata from the generic arguments defined by the
+ * repository interface, assuming that it has extended the {@link Repository Repository} interface from
+ * Spring Data Commons.
+ *
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/23/15)
  */
 public class AssignableRepositoryMetadataResolver extends AbstractRepositoryMetadataResolver {

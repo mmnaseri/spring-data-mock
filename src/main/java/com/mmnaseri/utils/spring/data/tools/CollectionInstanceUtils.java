@@ -4,7 +4,7 @@ import java.util.*;
 import java.util.concurrent.*;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/24/15)
  */
 public final class CollectionInstanceUtils {
@@ -13,6 +13,11 @@ public final class CollectionInstanceUtils {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * Given any of the known collection types, this method will return an instance of the collection.
+     * @param collectionType    the type of the collection
+     * @return the collection instance
+     */
     public static Collection<?> getCollection(Class<?> collectionType) {
         if (HashSet.class.equals(collectionType)) {
             return new HashSet<Object>();

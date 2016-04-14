@@ -13,7 +13,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * This class implements the interfaces used to define a DSL for mocking a repository.
+ *
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (10/14/15)
  */
 public class RepositoryMockBuilder implements Start, ImplementationAnd, KeyGeneration {
@@ -102,6 +104,13 @@ public class RepositoryMockBuilder implements Start, ImplementationAnd, KeyGener
         }
     }
 
+    /**
+     * This class is used to indicate that we don't want key generation. Whenever the singleton instance
+     * {@link #NOOP} is used for key generation, the builder will set the underlying key generator to
+     * {@literal null}, thus signifying to the various implementing classes that no key generator has been
+     * provided
+     * @param <S>    the type of the keys this class generates
+     */
     public static class NoOpKeyGenerator<S extends Serializable> implements KeyGenerator<S> {
 
         @Override

@@ -10,7 +10,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (4/10/16)
  */
 public class QueryMethodDataOperationResolverTest {
@@ -20,7 +20,7 @@ public class QueryMethodDataOperationResolverTest {
         final NoOpQueryDescriptionExtractor extractor = new NoOpQueryDescriptionExtractor();
         final QueryMethodDataOperationResolver resolver = new QueryMethodDataOperationResolver(extractor, null, null, null);
         assertThat(extractor.isCalled(), is(false));
-        final DataStoreOperation<?, ?, ?> operation = resolver.resolve(SampleMappedRepository.class.getMethod("normalMethod"));
+        final DataStoreOperation<?, ?, ?> operation = resolver.resolve(SampleMappedRepository.class.getMethod("normalMethodBy"));
         assertThat(operation, is(notNullValue()));
         assertThat(operation, is(instanceOf(DescribedDataStoreOperation.class)));
         assertThat(extractor.isCalled(), is(true));

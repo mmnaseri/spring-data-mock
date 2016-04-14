@@ -1,4 +1,4 @@
-package com.mmnaseri.utils.spring.data.commons;
+package com.mmnaseri.utils.spring.data.repository;
 
 import com.mmnaseri.utils.spring.data.domain.DataStoreAware;
 import com.mmnaseri.utils.spring.data.domain.impl.PropertyComparator;
@@ -17,13 +17,19 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (10/12/15)
  */
+@SuppressWarnings("WeakerAccess")
 public class DefaultPagingAndSortingRepository implements DataStoreAware {
 
     private DataStore dataStore;
 
+    /**
+     * Finds everything and sorts it using the given sort property
+     * @param sort    how to sort the data
+     * @return sorted entries, unless sort is null.
+     */
     public List findAll(Sort sort) {
         //noinspection unchecked
         final List list = new LinkedList(dataStore.retrieveAll());
@@ -52,6 +58,11 @@ public class DefaultPagingAndSortingRepository implements DataStoreAware {
         return list;
     }
 
+    /**
+     * Loads everything, sorts them, and pages the according to the spec.
+     * @param pageable    the pagination and sort spec
+     * @return the specified view of the data
+     */
     public Page findAll(Pageable pageable) {
         final List<?> all;
         if (pageable.getSort() != null) {

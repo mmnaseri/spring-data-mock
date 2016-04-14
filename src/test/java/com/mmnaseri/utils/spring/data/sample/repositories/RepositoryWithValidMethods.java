@@ -3,7 +3,7 @@ package com.mmnaseri.utils.spring.data.sample.repositories;
 import org.springframework.data.domain.Pageable;
 
 /**
- * @author Milad Naseri (milad.naseri@cdk.com)
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (4/12/16, 7:08 PM)
  */
 @SuppressWarnings("unused")
@@ -29,7 +29,7 @@ public interface RepositoryWithValidMethods {
 
     void findByFirstNameAndLastNameAllIgnoreCase(String firstName, String lastName);
 
-    void myFunctionByFirstName(String firstName);
+    void functionNameByFirstName(String firstName);
 
     void findByFirstNameAndLastNameOrAddressCityOrAgeGreaterThan(String firstName, String lastName, String city, Integer age);
 

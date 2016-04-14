@@ -1,9 +1,9 @@
 package com.mmnaseri.utils.spring.data.proxy.impl;
 
-import com.mmnaseri.utils.spring.data.commons.DefaultCrudRepository;
-import com.mmnaseri.utils.spring.data.commons.DefaultGemfireRepository;
-import com.mmnaseri.utils.spring.data.commons.DefaultJpaRepository;
-import com.mmnaseri.utils.spring.data.commons.DefaultPagingAndSortingRepository;
+import com.mmnaseri.utils.spring.data.repository.DefaultCrudRepository;
+import com.mmnaseri.utils.spring.data.repository.DefaultGemfireRepository;
+import com.mmnaseri.utils.spring.data.repository.DefaultJpaRepository;
+import com.mmnaseri.utils.spring.data.repository.DefaultPagingAndSortingRepository;
 import com.mmnaseri.utils.spring.data.error.RepositoryDefinitionException;
 import com.mmnaseri.utils.spring.data.proxy.TypeMapping;
 import com.mmnaseri.utils.spring.data.sample.usecases.proxy.*;
@@ -17,7 +17,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (4/10/16)
  */
 public class DefaultTypeMappingContextTest {

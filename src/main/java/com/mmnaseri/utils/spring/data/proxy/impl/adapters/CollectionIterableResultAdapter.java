@@ -7,7 +7,13 @@ import com.mmnaseri.utils.spring.data.tools.CollectionInstanceUtils;
 import java.util.Collection;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * <p>This adapter will adapt results from an iterable to the appropriate collection type. It will accept
+ * adaptations if the original value is an iterable object and the target result is some sort
+ * {@link java.util.Collection collection}.</p>
+ *
+ * <p>This adapter will execute at priority {@literal -300}.</p>
+ *
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/28/15)
  */
 public class CollectionIterableResultAdapter extends AbstractIterableResultAdapter<Collection> {

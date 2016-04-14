@@ -1,4 +1,4 @@
-package com.mmnaseri.utils.spring.data.commons;
+package com.mmnaseri.utils.spring.data.repository;
 
 import com.mmnaseri.utils.spring.data.domain.DataStoreAware;
 import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
@@ -10,7 +10,7 @@ import org.springframework.data.gemfire.repository.Wrapper;
 import java.io.Serializable;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (10/13/15)
  */
 public class DefaultGemfireRepository implements DataStoreAware, RepositoryMetadataAware {
@@ -18,6 +18,12 @@ public class DefaultGemfireRepository implements DataStoreAware, RepositoryMetad
     private DataStore dataStore;
     private RepositoryMetadata repositoryMetadata;
 
+    /**
+     * Saves the wrapped data object into the data store. If the wrapped object is also an instance of
+     * the type bound to this data store, it will set the key on the object
+     * @param wrapper    the wrapper for the key and the object
+     * @return the saved entity
+     */
     public Object save(Wrapper<Object, Serializable> wrapper) {
         final Object entity = wrapper.getEntity();
         final Serializable key = wrapper.getKey();
