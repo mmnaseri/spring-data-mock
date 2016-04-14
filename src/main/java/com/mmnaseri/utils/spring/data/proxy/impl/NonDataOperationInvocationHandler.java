@@ -13,7 +13,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * This class will handle invocations that are strictly non-data-related.
+ *
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (4/8/16)
  */
 public class NonDataOperationInvocationHandler implements InvocationHandler {
@@ -21,10 +23,16 @@ public class NonDataOperationInvocationHandler implements InvocationHandler {
     private final List<NonDataOperationHandler> handlers;
 
     public NonDataOperationInvocationHandler() {
+        this(true);
+    }
+
+    public NonDataOperationInvocationHandler(boolean registerDefaults) {
         handlers = new LinkedList<>();
-        handlers.add(new EqualsNonDataOperationHandler());
-        handlers.add(new HashCodeNonDataOperationHandler());
-        handlers.add(new ToStringNonDataOperationHandler());
+        if (registerDefaults) {
+            handlers.add(new EqualsNonDataOperationHandler());
+            handlers.add(new HashCodeNonDataOperationHandler());
+            handlers.add(new ToStringNonDataOperationHandler());
+        }
     }
 
     @Override

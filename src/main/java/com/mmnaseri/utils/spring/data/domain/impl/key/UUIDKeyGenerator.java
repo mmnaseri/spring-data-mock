@@ -5,7 +5,9 @@ import com.mmnaseri.utils.spring.data.domain.KeyGenerator;
 import java.util.UUID;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * This class will generate unique UUIDs for use in entities whose keys are loose String values.
+ *
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (10/6/15)
  */
 public class UUIDKeyGenerator implements KeyGenerator<String> {

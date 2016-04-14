@@ -5,7 +5,9 @@ import com.mmnaseri.utils.spring.data.domain.Invocation;
 import java.lang.reflect.Method;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * This is an immutable invocation.
+ *
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/23/15)
  */
 public class ImmutableInvocation implements Invocation {

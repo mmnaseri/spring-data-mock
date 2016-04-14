@@ -7,7 +7,10 @@ import com.mmnaseri.utils.spring.data.query.PageParameterExtractor;
 import org.springframework.data.domain.Pageable;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * This extractor will expect to see a {@link Pageable} as the last parameter passed to a query method
+ * invocation, and converts that to a valid page.
+ *
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/19/15)
  */
 public class PageablePageParameterExtractor implements PageParameterExtractor {

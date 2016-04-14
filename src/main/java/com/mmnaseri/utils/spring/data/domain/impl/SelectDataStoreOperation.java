@@ -12,7 +12,11 @@ import java.io.Serializable;
 import java.util.*;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * This is a data store operation that will read values from the underlying data store and match them up against the
+ * query description's different decision branches. Once all the values are loaded and filtered, it will then sort them
+ * according to the sort instruction, and then paginate them if necessary.
+ *
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/17/15)
  */
 public class SelectDataStoreOperation<K extends Serializable, E> implements DataStoreOperation<List<E>, K, E> {

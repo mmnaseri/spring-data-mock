@@ -3,11 +3,18 @@ package com.mmnaseri.utils.spring.data.domain;
 import java.io.Serializable;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * This interface encapsulates the process of keys being generated when we need a solid key generation scheme to be in place
+ * prior to entities being written to the data store.
+ *
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (10/6/15)
  */
 public interface KeyGenerator<S extends Serializable> {
 
+    /**
+     * Generates a new key and returns the value
+     * @return the generated key
+     */
     S generate();
 
 }

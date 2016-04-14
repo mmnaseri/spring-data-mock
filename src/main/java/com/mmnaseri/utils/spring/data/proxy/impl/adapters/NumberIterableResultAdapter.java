@@ -7,7 +7,27 @@ import com.mmnaseri.utils.spring.data.tools.PropertyUtils;
 import java.util.Iterator;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * <p>This class will adapt results from an iterable object to a number. The future task returned will have already
+ * executed with the results available.</p>
+ *
+ * <p>It will accept adaptations wherein the original value is some sort of iterable and the required return type
+ * is an instance of {@link Number}. Additionally, it will check to see if the iterable yields only one item and
+ * also that the item is a number.</p>
+ *
+ * <p>Here is a list of supported number types:</p>
+ *
+ * <ul>
+ *     <li>{@link Long}</li>
+ *     <li>{@link Short}</li>
+ *     <li>{@link Integer}</li>
+ *     <li>{@link Byte}</li>
+ *     <li>{@link Double}</li>
+ *     <li>{@link Float}</li>
+ * </ul>
+ *
+ * <p>This adapter will execute at priority {@literal -425}.</p>
+ *
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (10/12/15)
  */
 public class NumberIterableResultAdapter extends AbstractIterableResultAdapter<Object> {

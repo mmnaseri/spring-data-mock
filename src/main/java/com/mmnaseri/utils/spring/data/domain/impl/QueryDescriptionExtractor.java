@@ -17,7 +17,68 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * <p>This class will parse a query method's name and extract a {@link com.mmnaseri.utils.spring.data.dsl.factory.QueryDescription query description}
+ * from that name.</p>
+ *
+ * <p>In parsing the name, words are considered as being tokens in a camel case name.</p>
+ *
+ * <p>Here is how a query method's name is parsed:</p>
+ *
+ * <ol>
+ *     <li>We will look at the first word in the name until we reach one of the keywords that says we are specifying a limit, or
+ *     we are going over the criteria defined by the method. This prefix will be called the "function name" for the operation
+ *     defined by the query method. If the function name is one of "read", "find", "query", "get", "load", or "select", we will
+ *     set the function name to {@literal null} to indicate that no special function should be applied to the result set. We
+ *     are only looking at the first word to let you be more verbose about the purpose of your query (e.g.
+ *     {@literal findAllGreatPeopleByGreatnessGreaterThan(Integer greatness)} will still resolve to the function
+ *     {@literal find}, which will ultimately be returned as {@literal null}</li>
+ *     <li>We will then look for any of these patterns:
+ *     <ul>
+ *         <li>The word {@literal By}, signifying that we are ready to start parsing the query criteria</li>
+ *         <li>One of the words {@literal First} or {@literal Top}, signifying that we should look for a limit on the number
+ *         of results returned.</li>
+ *         <li>The word {@literal Distinct}, signifying that the results should include no duplicates.</li>
+ *     </ul>
+ *     </li>
+ *     <li>If the word {@literal First} had appeared, we will see if it is followed by an integer. If it is, that will be the limit.
+ *     If not, a limit of {@literal 1} is assumed.</li>
+ *     <li>If the word {@literal Top} had appeared, we will look for the limit number, which should be an integer value.</li>
+ *     <li>At this point, we will continue until we see 'By'. In the above, steps, we will look for the keywords in any order,
+ *     and there can be any words in between. So, {@literal getTop5StudentsWhoAreAwesomeDistinct} is the same as {@literal getTop5Distinct}</li>
+ *     <li>Once we reach the word "By", we will read the query in terms of "decision branches". Branches are separated using the keyword
+ *     "Or", and each branch is a series of conjunctions. So, while you are separating your conditions with "And", you are in the same branch.</li>
+ *     <li>A single branch consists of the pattern: "(Property)(Operator)?((And)(Property)(Operator)?)*". If the operator is missing, "Is" is assumed.
+ *     Properties must match a proper property in the domain object. So, if you have "AddressZipPrefix" in your query method name, there must be a property
+ *     reachable by one of the following paths in your domain class (in the given order):
+ *     <ul>
+ *         <li>{@literal addressZipPrefix}</li>
+ *         <li>{@literal addressZip.prefix}</li>
+ *         <li>{@literal address.zipPrefix}</li>
+ *         <li>{@literal address.zip.prefix}</li>
+ *     </ul>
+ *     Note that if you have both the "addressZip" and "address.zip" in your entity, the first will be taken up. To force the parser to choose the former, use
+ *     the underscore character ({@literal _}) in place of the dot, like so: "{@literal Address_Zip}"<br>
+ *     Depending on the operator that was matched to the suffix provided (e.g. GreaterThan, Is, etc.), a given number of method parameters will be matched
+ *     as the operands to that operator. For instance, "Is" requires two values to determine equality, one if the property found on the domain object, and
+ *     the other must be provided by the query method.<br>
+ *     The operators themselves are scanned eagerly and based on the set of operators defined in the {@link OperatorContext}.
+ *     </li>
+ *     <li>We continue the pattern indicated above, until we reach the end of the method name, or we reach the "OrderBy" pattern. Once we see "OrderBy"
+ *     we expect the following pattern: "((Property)(Direction))+", wherein "Property" must follow the same rule as above, and "Direction" is one of
+ *     "Asc" and "Desc" to indicate "ascending" and "descending" ordering, respectively.</li>
+ *     <li>Finally, we look to see if the keyword "AllIgnoreCase" or {@link #ALL_IGNORE_CASE_SUFFIX one of its variations} is present at the end of the
+ *     query name, which will indicate all applicable comparisons should be case-insensitive.</li>
+ *     <li>At the end, we allow one additional parameter for the query method, which can be of either of these types:
+ *     <ul>
+ *         <li>{@link Sort Sort}: to indicate a dynamic sort defined at runtime. If a static sort is already indicated via the pattern above, this will
+ *         result in an error.</li>
+ *         <li>{@link Pageable Pageable}: to indicate a paging (and, possibly, sorting) at runtime. If a static sort is already indicated via the pattern
+ *         above, the sort portion of this parameter will be always ignored.</li>
+ *     </ul>
+ *     </li>
+ * </ol>
+ *
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/17/15)
  */
 public class QueryDescriptionExtractor {
@@ -34,6 +95,15 @@ public class QueryDescriptionExtractor {
         this.operatorContext = operatorContext;
     }
 
+    /**
+     * Extracts query description from a method's name. This will be done according to {@link QueryDescriptionExtractor the parsing rules}
+     * for this extractor.
+     *
+     * @param repositoryMetadata    the repository metadata for this method.
+     * @param method                the query method
+     * @param configuration         the repository factory configuration. This will be passed down through the description.
+     * @return the description for the query
+     */
     public QueryDescriptor extract(RepositoryMetadata repositoryMetadata, Method method, RepositoryFactoryConfiguration configuration) {
         String methodName = method.getName();
         //check to see if the AllIgnoreCase flag is set
@@ -42,15 +112,8 @@ public class QueryDescriptionExtractor {
         methodName = allIgnoreCase ? methodName.replaceFirst(ALL_IGNORE_CASE_SUFFIX, "") : methodName;
         //create a document reader for processing method name
         final DocumentReader reader = new DefaultDocumentReader(methodName);
-        //the first word in the method name is the function name
-        String function = reader.read(Pattern.compile("^[a-z]+"));
-        if (function == null) {
-            throw new QueryParserException(method.getDeclaringClass(), "Malformed query method name: " + method);
-        }
-        //this is the limit set on the number of items being returned
-        int limit = 0;
-        //this is the flag that determines whether or not the result should be sifted for distinct values
-        boolean distinct = false;
+        String function = parseFunctionName(method, reader);
+        final QueryModifiers queryModifiers = parseQueryModifiers(method, reader);
         //this is the extractor used for getting paging data
         final PageParameterExtractor pageExtractor;
         //this is the extractor used for getting sorting data
@@ -62,54 +125,11 @@ public class QueryDescriptionExtractor {
             pageExtractor = null;
             sortExtractor = null;
         } else {
-            //we are still reading the function name if we haven't gotten to `By` and we haven't seen
-            //any of the magic keywords `First`, `Top`, and `Distinct`.
-            boolean stillReadingFunctionName = true;
-            //scan for words prior to 'By'
-            while (reader.hasMore() && !reader.has("By")) {
-                //if the next word is Top, then we are setting a limit
-                if (reader.has("First")) {
-                    stillReadingFunctionName = false;
-                    if (limit > 0) {
-                        throw new QueryParserException(method.getDeclaringClass(), "There is already a limit of " + limit + " specified for this query: " + method);
-                    }
-                    reader.expect("First");
-                    if (reader.has("\\d+")) {
-                        limit = Integer.parseInt(reader.expect("\\d+"));
-                    } else {
-                        limit = 1;
-                    }
-                    continue;
-                } else if (reader.has("Top")) {
-                    stillReadingFunctionName = false;
-                    if (limit > 0) {
-                        throw new QueryParserException(method.getDeclaringClass(), "There is already a limit of " + limit + " specified for this query: " + method);
-                    }
-                    reader.expect("Top");
-                    limit = Integer.parseInt(reader.expect("\\d+"));
-                    continue;
-                } else if (reader.has("Distinct")) {
-                    stillReadingFunctionName = false;
-                    //if the next word is 'Distinct', we are saying we should return distinct results
-                    if (distinct) {
-                        throw new QueryParserException(method.getDeclaringClass(), "You have already stated that this query should return distinct items: " + method);
-                    }
-                    distinct = true;
-                }
-                //we read the words until we reach "By".
-                final String word = reader.expect("[A-Z][a-z]+");
-                if (stillReadingFunctionName) {
-                    function += word;
-                }
-            }
-            try {
-                reader.expect("By");
-            } catch (Exception e) {
-                throw new QueryParserException(method.getDeclaringClass(), "Expected pattern 'By' was not encountered in " + method.getName(), e);
-            }
+            reader.read("By");
             if (!reader.hasMore()) {
                 throw new QueryParserException(method.getDeclaringClass(), "Query method name cannot end with `By`");
             }
+            //current parameter index
             int index = 0;
             branches.add(new LinkedList<Parameter>());
             while (reader.hasMore()) {
@@ -201,26 +221,7 @@ public class QueryDescriptionExtractor {
             if (reader.read("OrderBy") != null) {
                 final List<Order> orders = new ArrayList<>();
                 while (reader.hasMore()) {
-                    String expression = reader.expect(".*?(Asc|Desc)");
-                    final SortDirection direction;
-                    if (expression.endsWith(ASC_SUFFIX)) {
-                        direction = SortDirection.ASCENDING;
-                        expression = expression.substring(0, expression.length() - ASC_SUFFIX.length());
-                    } else {
-                        direction = SortDirection.DESCENDING;
-                        expression = expression.substring(0, expression.length() - DESC_SUFFIX.length());
-                    }
-                    final PropertyDescriptor propertyDescriptor;
-                    try {
-                        propertyDescriptor = PropertyUtils.getPropertyDescriptor(repositoryMetadata.getEntityType(), expression);
-                    } catch (Exception e) {
-                        throw new QueryParserException(method.getDeclaringClass(), "Failed to get a property descriptor for expression: " + expression, e);
-                    }
-                    if (!Comparable.class.isAssignableFrom(propertyDescriptor.getType())) {
-                        throw new QueryParserException(method.getDeclaringClass(), "Sort property `" + propertyDescriptor.getPath() + "` is not comparable in `" + method.getName() + "`");
-                    }
-                    final Order order = new ImmutableOrder(direction, propertyDescriptor.getPath(), NullHandling.DEFAULT);
-                    orders.add(order);
+                    orders.add(parseOrder(method, reader, repositoryMetadata));
                 }
                 sort = new ImmutableSort(orders);
             } else {
@@ -246,11 +247,83 @@ public class QueryDescriptionExtractor {
                 throw new QueryParserException(method.getDeclaringClass(), "Too many parameters declared for query method " + method);
             }
         }
+        return new DefaultQueryDescriptor(queryModifiers.isDistinct(), function, queryModifiers.getLimit(), pageExtractor, sortExtractor, branches, configuration, repositoryMetadata);
+    }
+
+    private Order parseOrder(Method method, DocumentReader reader, RepositoryMetadata repositoryMetadata) {
+        String expression = reader.expect(".*?(Asc|Desc)");
+        final SortDirection direction;
+        if (expression.endsWith(ASC_SUFFIX)) {
+            direction = SortDirection.ASCENDING;
+            expression = expression.substring(0, expression.length() - ASC_SUFFIX.length());
+        } else {
+            direction = SortDirection.DESCENDING;
+            expression = expression.substring(0, expression.length() - DESC_SUFFIX.length());
+        }
+        final PropertyDescriptor propertyDescriptor;
+        try {
+            propertyDescriptor = PropertyUtils.getPropertyDescriptor(repositoryMetadata.getEntityType(), expression);
+        } catch (Exception e) {
+            throw new QueryParserException(method.getDeclaringClass(), "Failed to get a property descriptor for expression: " + expression, e);
+        }
+        if (!Comparable.class.isAssignableFrom(propertyDescriptor.getType())) {
+            throw new QueryParserException(method.getDeclaringClass(), "Sort property `" + propertyDescriptor.getPath() + "` is not comparable in `" + method.getName() + "`");
+        }
+        return new ImmutableOrder(direction, propertyDescriptor.getPath(), NullHandling.DEFAULT);
+    }
+
+    private String parseFunctionName(Method method, DocumentReader reader) {
+        //the first word in the method name is the function name
+        String function = reader.read(Pattern.compile("^[a-z]+"));
+        if (function == null) {
+            throw new QueryParserException(method.getDeclaringClass(), "Malformed query method name: " + method);
+        }
         //if the method name is one of the following, it is a simple read, and no function is required
         if (Arrays.asList("read", "find", "query", "get", "load", "select").contains(function)) {
             function = null;
         }
-        return new DefaultQueryDescriptor(distinct, function, limit, pageExtractor, sortExtractor, branches, configuration, repositoryMetadata);
+        return function;
+    }
+
+    private QueryModifiers parseQueryModifiers(Method method, DocumentReader reader) {
+        //this is the limit set on the number of items being returned
+        int limit = 0;
+        //this is the flag that determines whether or not the result should be sifted for distinct values
+        boolean distinct = false;
+        //we are still reading the function name if we haven't gotten to `By` and we haven't seen
+        //any of the magic keywords `First`, `Top`, and `Distinct`.
+        //scan for words prior to 'By'
+        while (reader.hasMore() && !reader.has("By")) {
+            //if the next word is Top, then we are setting a limit
+            if (reader.has("First")) {
+                if (limit > 0) {
+                    throw new QueryParserException(method.getDeclaringClass(), "There is already a limit of " + limit + " specified for this query: " + method);
+                }
+                reader.expect("First");
+                if (reader.has("\\d+")) {
+                    limit = Integer.parseInt(reader.expect("\\d+"));
+                } else {
+                    limit = 1;
+                }
+                continue;
+            } else if (reader.has("Top")) {
+                if (limit > 0) {
+                    throw new QueryParserException(method.getDeclaringClass(), "There is already a limit of " + limit + " specified for this query: " + method);
+                }
+                reader.expect("Top");
+                limit = Integer.parseInt(reader.expect("\\d+"));
+                continue;
+            } else if (reader.has("Distinct")) {
+                //if the next word is 'Distinct', we are saying we should return distinct results
+                if (distinct) {
+                    throw new QueryParserException(method.getDeclaringClass(), "You have already stated that this query should return distinct items: " + method);
+                }
+                distinct = true;
+            }
+            //we read the words until we reach "By".
+            reader.expect("[A-Z][a-z]+");
+        }
+        return new QueryModifiers(limit, distinct);
     }
 
     public OperatorContext getOperatorContext() {

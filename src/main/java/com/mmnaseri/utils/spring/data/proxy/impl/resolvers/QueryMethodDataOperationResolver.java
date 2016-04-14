@@ -15,9 +15,16 @@ import org.springframework.data.annotation.QueryAnnotation;
 import java.lang.reflect.Method;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * <p>This class will resolve methods to their query method equivalent by parsing their names and parameters.</p>
+ *
+ * <p>Even though, technically speaking, a class annotated with {@link QueryAnnotation} <em>is</em> a
+ * query method, this class will ignore such methods since it doesn't know how to respond to native
+ * queries.</p>
+ *
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/29/15)
  */
+@SuppressWarnings("WeakerAccess")
 public class QueryMethodDataOperationResolver implements DataOperationResolver {
 
     private final QueryDescriptionExtractor descriptionExtractor;

@@ -1,4 +1,4 @@
-package com.mmnaseri.utils.spring.data.commons;
+package com.mmnaseri.utils.spring.data.repository;
 
 import com.mmnaseri.utils.spring.data.domain.impl.ImmutableRepositoryMetadata;
 import com.mmnaseri.utils.spring.data.domain.impl.key.UUIDKeyGenerator;
@@ -13,7 +13,6 @@ import org.testng.annotations.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
 import static com.mmnaseri.utils.spring.data.utils.TestUtils.iterableToList;
@@ -21,7 +20,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 /**
- * @author Milad Naseri (milad.naseri@cdk.com)
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (4/11/16, 10:15 AM)
  */
 public class DefaultCrudRepositoryTest {
@@ -77,21 +76,6 @@ public class DefaultCrudRepositoryTest {
         assertThat(repository.exists(key), is(false));
         dataStore.save("1234", new Person());
         assertThat(repository.exists(key), is(true));
-    }
-
-    @Test
-    public void testFindAll() throws Exception {
-        dataStore.save("1", new Person());
-        dataStore.save("2", new Person());
-        dataStore.save("3", new Person());
-        dataStore.save("4", new Person());
-        final List<?> list = iterableToList(repository.findAll());
-        final Collection<Person> people = dataStore.retrieveAll();
-        assertThat(list, hasSize(people.size()));
-        for (Object item : list) {
-            //noinspection unchecked
-            assertThat(item, isIn((Collection) people));
-        }
     }
 
     @Test

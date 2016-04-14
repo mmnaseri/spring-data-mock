@@ -5,7 +5,13 @@ import com.mmnaseri.utils.spring.data.domain.Invocation;
 import java.util.Collections;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * <p>This adapter will try to adapt a {@literal null} value to an iterable.</p>
+ *
+ * <p>It adapts results if the return type is of type {@link Iterable} and the original value is {@literal null}.</p>
+ *
+ * <p>This adapter runs at the priority of {@literal -250}.</p>
+ *
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/24/15)
  */
 public class NullToIterableResultAdapter extends AbstractResultAdapter<Iterable> {

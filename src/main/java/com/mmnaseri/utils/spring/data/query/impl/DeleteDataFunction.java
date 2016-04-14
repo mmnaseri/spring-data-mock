@@ -13,9 +13,13 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * This function provides support for the delete data operation, by issueing a delete request for every
+ * selected entity to the underlying data store.
+ *
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/29/15)
  */
+@SuppressWarnings("ALL")
 public class DeleteDataFunction implements DataFunction<List<?>> {
 
     @Override

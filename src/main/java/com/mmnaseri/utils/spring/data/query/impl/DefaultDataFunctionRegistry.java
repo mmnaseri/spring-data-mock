@@ -10,17 +10,27 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * This class provides support for registering data functions. Also, it comes with the option to register
+ * the default functions out-of-the-box.
+ *
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/29/15)
  */
+@SuppressWarnings("WeakerAccess")
 public class DefaultDataFunctionRegistry implements DataFunctionRegistry {
 
     private final Map<String, DataFunction<?>> functions;
 
     public DefaultDataFunctionRegistry() {
+        this(true);
+    }
+
+    public DefaultDataFunctionRegistry(boolean registerDefaults) {
         functions = new ConcurrentHashMap<>();
-        register("count", new CountDataFunction());
-        register("delete", new DeleteDataFunction());
+        if (registerDefaults) {
+            register("count", new CountDataFunction());
+            register("delete", new DeleteDataFunction());
+        }
     }
 
     @Override

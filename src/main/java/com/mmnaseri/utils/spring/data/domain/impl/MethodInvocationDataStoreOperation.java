@@ -11,7 +11,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * This is a data store operation that delivers the operation by calling to a delegate method. This means that the results
+ * of the operation are the same as what was returned by the method itself.
+ *
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/29/15)
  */
 public class MethodInvocationDataStoreOperation<K extends Serializable, E> implements DataStoreOperation<Object, K, E> {

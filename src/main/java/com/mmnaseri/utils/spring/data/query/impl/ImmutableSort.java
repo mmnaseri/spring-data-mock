@@ -8,7 +8,9 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * This is an immutable sort
+ *
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/17/15)
  */
 public class ImmutableSort implements Sort {

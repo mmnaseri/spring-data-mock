@@ -21,7 +21,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/21/15)
  */
 public class QueryDescriptionExtractorTest {
@@ -62,11 +62,6 @@ public class QueryDescriptionExtractorTest {
     @Test(expectedExceptions = QueryParserException.class, expectedExceptionsMessageRegExp = ".*?: You have already stated that this query should return distinct items:.*")
     public void testMultipleDistinctFlags() throws Exception {
         extractor.extract(malformedRepositoryMetadata, MalformedRepository.class.getMethod("findDistinctDistinct"), configuration);
-    }
-
-    @Test(expectedExceptions = QueryParserException.class, expectedExceptionsMessageRegExp = ".*?: Expected pattern 'By' was not encountered.*")
-    public void testNonSimpleQueryWithoutBy() throws Exception {
-        extractor.extract(malformedRepositoryMetadata, MalformedRepository.class.getMethod("findTop10Distinct"), configuration);
     }
 
     @Test(expectedExceptions = QueryParserException.class, expectedExceptionsMessageRegExp = ".*?: Query method name cannot end with `By`")
@@ -340,7 +335,7 @@ public class QueryDescriptionExtractorTest {
 
     @Test
     public void testFunction() throws Exception {
-        final QueryDescriptor descriptor = extractor.extract(sampleRepositoryMetadata, RepositoryWithValidMethods.class.getMethod("myFunctionByFirstName", String.class), configuration);
+        final QueryDescriptor descriptor = extractor.extract(sampleRepositoryMetadata, RepositoryWithValidMethods.class.getMethod("functionNameByFirstName", String.class), configuration);
         assertThat(descriptor, is(notNullValue()));
         assertThat(descriptor.getBranches(), hasSize(1));
         assertThat(descriptor.getBranches().get(0), hasSize(1));
@@ -349,7 +344,8 @@ public class QueryDescriptionExtractorTest {
         assertThat(descriptor.getBranches().get(0).get(0).getModifiers(), is(empty()));
         assertThat(descriptor.getBranches().get(0).get(0).getOperator().getName(), is("IS"));
         assertThat(descriptor.getBranches().get(0).get(0).getPath(), is("firstName"));
-        assertThat(descriptor.getFunction(), is("myFunction"));
+        //because we are only looking at the first "word".
+        assertThat(descriptor.getFunction(), is("function"));
         assertThat(descriptor.getLimit(), is(0));
     }
 

@@ -7,7 +7,11 @@ import org.springframework.data.repository.RepositoryDefinition;
 import java.io.Serializable;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * This class will try to resolve metadata from a repository interface that has been annotated with
+ * Spring's {@link RepositoryDefinition @RepositoryDefinition}. If the annotation is not found, it will
+ * throw a {@link RepositoryDefinitionException RepositoryDefinitionException}.
+ *
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/23/15)
  */
 public class AnnotationRepositoryMetadataResolver extends AbstractRepositoryMetadataResolver {

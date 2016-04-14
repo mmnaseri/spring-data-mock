@@ -5,11 +5,15 @@ import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.util.concurrent.ListenableFutureTask;
 
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * <p>This adapter will try to adapt a {@literal null} value to a listenable future.</p>
+ *
+ * <p>It adapts results if the return type is of type {@link ListenableFuture} and the original value is {@literal null}.</p>
+ *
+ * <p>This adapter runs at the priority of {@literal -100}.</p>
+ *
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/28/15)
  */
 public class NullToListenableFutureResultAdapter extends AbstractResultAdapter<ListenableFuture> {
@@ -32,8 +36,7 @@ public class NullToListenableFutureResultAdapter extends AbstractResultAdapter<L
                 return null;
             }
         });
-        final ExecutorService service = Executors.newSingleThreadExecutor();
-        service.submit(task);
+        task.run();
         return task;
     }
 

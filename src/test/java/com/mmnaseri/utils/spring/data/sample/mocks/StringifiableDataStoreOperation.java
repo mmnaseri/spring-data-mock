@@ -8,7 +8,7 @@ import com.mmnaseri.utils.spring.data.store.DataStoreOperation;
 import java.io.Serializable;
 
 /**
- * @author Milad Naseri (milad.naseri@cdk.com)
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (4/12/16, 6:50 PM)
  */
 public class StringifiableDataStoreOperation<R, K extends Serializable, E> implements DataStoreOperation<R, K, E> {

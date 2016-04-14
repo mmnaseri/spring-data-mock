@@ -7,7 +7,16 @@ import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * <p>This class will adapt results from an iterable object to a future. The future task returned will have already
+ * executed with the results available.</p>
+ *
+ * <p>It will accept adaptations wherein the original value is some sort of iterable and the required return type
+ * is an instance of {@link Future}. Remember that it does <em>not</em> check for individual object type
+ * compatibility.</p>
+ *
+ * <p>This adapter will execute at priority {@literal -100}.</p>
+ *
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/28/15)
  */
 public class FutureIterableResultAdapter extends AbstractIterableResultAdapter<Future> {

@@ -24,9 +24,12 @@ import org.springframework.data.domain.AuditorAware;
 import java.io.Serializable;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * This class implements the DSL used to configure and build a repository factory object.
+ *
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (10/14/15)
  */
+@SuppressWarnings("WeakerAccess")
 public class RepositoryFactoryBuilder implements Start, DataFunctionsAnd, DataStoresAnd, EventListenerAnd, MappingContextAnd, OperatorsAnd, ResultAdaptersAnd, OperationHandlersAnd {
 
     private static RepositoryFactory DEFAULT_FACTORY;
@@ -41,10 +44,18 @@ public class RepositoryFactoryBuilder implements Start, DataFunctionsAnd, DataSt
     private DataStoreEventListenerContext eventListenerContext;
     private NonDataOperationInvocationHandler operationInvocationHandler;
 
+    /**
+     * Starting point for writing code in the builder's DSL
+     *
+     * @return an instance of the builder
+     */
     public static Start builder() {
         return new RepositoryFactoryBuilder();
     }
 
+    /**
+     * @return the default configuration (always the same instance)
+     */
     public static RepositoryFactoryConfiguration defaultConfiguration() {
         if (DEFAULT_FACTORY_CONFIGURATION == null) {
             final RepositoryFactoryBuilder builder = (RepositoryFactoryBuilder) builder();
@@ -62,6 +73,9 @@ public class RepositoryFactoryBuilder implements Start, DataFunctionsAnd, DataSt
         return DEFAULT_FACTORY_CONFIGURATION;
     }
 
+    /**
+     * @return the default factory (always the same instance)
+     */
     public static RepositoryFactory defaultFactory() {
         if (DEFAULT_FACTORY == null) {
             DEFAULT_FACTORY = new DefaultRepositoryFactory(defaultConfiguration());
@@ -259,8 +273,15 @@ public class RepositoryFactoryBuilder implements Start, DataFunctionsAnd, DataSt
         return new RepositoryMockBuilder().useFactory(build()).mock(repositoryInterface);
     }
 
+    /**
+     * An auditor aware that returns the static value of {@link #DEFAULT_USER}
+     */
+    @SuppressWarnings("WeakerAccess")
     public static class DefaultAuditorAware implements AuditorAware<String> {
 
+        /**
+         * @return {@link #DEFAULT_USER}
+         */
         @Override
         public String getCurrentAuditor() {
             return DEFAULT_USER;

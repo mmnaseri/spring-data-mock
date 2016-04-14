@@ -10,7 +10,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * This is an immutable parameter.
+ *
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/17/15)
  */
 public class ImmutableParameter implements Parameter {

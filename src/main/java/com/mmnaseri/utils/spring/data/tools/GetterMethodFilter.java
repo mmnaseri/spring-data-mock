@@ -5,7 +5,10 @@ import org.springframework.util.ReflectionUtils;
 import java.lang.reflect.Method;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * This filter will only accept methods that can be getters for properties (excluding the `is...` format usually
+ * used for {@literal boolean} types).
+ *
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/23/15)
  */
 public class GetterMethodFilter implements ReflectionUtils.MethodFilter {

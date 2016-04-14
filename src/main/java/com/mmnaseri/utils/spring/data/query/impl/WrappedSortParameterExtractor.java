@@ -7,7 +7,9 @@ import com.mmnaseri.utils.spring.data.query.Sort;
 import com.mmnaseri.utils.spring.data.query.SortParameterExtractor;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * This extractor will return the statically defined sort metadata for a query method (as parsed from the method name).
+ *
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/20/15)
  */
 public class WrappedSortParameterExtractor implements SortParameterExtractor {

@@ -3,7 +3,9 @@ package com.mmnaseri.utils.spring.data.domain.impl.matchers;
 import com.mmnaseri.utils.spring.data.domain.Parameter;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * This will check to see if the value on the entity object is {@literal false}.
+ *
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/29/15)
  */
 public class IsFalseMatcher extends AbstractStateMatcher {

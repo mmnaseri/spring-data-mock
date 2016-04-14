@@ -4,7 +4,7 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
 /**
- * @author Milad Naseri (milad.naseri@cdk.com)
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (4/12/16, 11:15 AM)
  */
 public class InformationExposingInvocationHandler<E> implements InvocationHandler {

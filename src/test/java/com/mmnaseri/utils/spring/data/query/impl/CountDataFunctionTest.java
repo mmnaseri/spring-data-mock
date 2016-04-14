@@ -10,7 +10,7 @@ import java.util.List;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (4/10/16)
  */
 public class CountDataFunctionTest {
