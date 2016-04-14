@@ -5,13 +5,34 @@ import com.mmnaseri.utils.spring.data.domain.KeyGenerator;
 import java.io.Serializable;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * <p>This interface encapsulates the process of instantiating a repository. A repository factory is needed to
+ * properly set up a repository instance.</p>
+ *
+ * <p>A default implementation is provided via {@link com.mmnaseri.utils.spring.data.proxy.impl.DefaultRepositoryFactory default
+ * repositor factory}.</p>
+ *
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/29/15)
  */
 public interface RepositoryFactory {
 
+    /**
+     * Creates an instance of the repository as per the provided configuration.
+     *
+     * @param keyGenerator           the key generator to use when inserting items (if auto generation is required).
+     *                               You can specify a {@literal null} key generator to signify that while inserting
+     *                               items, we don't need key generation.
+     * @param repositoryInterface    the repository interface which we want to mock
+     * @param implementations        all the concrete classes that can be used to figure out method mappings
+     * @param <E>                    the type of the interface
+     * @return a prepared instance of the repository
+     * @throws com.mmnaseri.utils.spring.data.error.RepositoryMockException should anything go wrong
+     */
     <E> E getInstance(KeyGenerator<? extends Serializable> keyGenerator, Class<E> repositoryInterface, Class... implementations);
 
+    /**
+     * @return the configuration bound to this repository factory
+     */
     RepositoryFactoryConfiguration getConfiguration();
 
 }

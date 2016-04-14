@@ -10,13 +10,17 @@ import static org.springframework.data.domain.Sort.NullHandling.NULLS_FIRST;
 import static org.springframework.data.domain.Sort.NullHandling.NULLS_LAST;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * This class will provide support for converting {@link org.springframework.data.domain.Sort Spring Data sort objects}
+ * into {@link Sort sort objects} defined within this framework.
+ *
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/19/15)
  */
+@SuppressWarnings("WeakerAccess")
 public abstract class AbstractSortParameterExtractor implements SortParameterExtractor {
 
     protected Sort getSort(org.springframework.data.domain.Sort sort) {
-        final List<Order> orders = new ArrayList<Order>();
+        final List<Order> orders = new ArrayList<>();
         for (org.springframework.data.domain.Sort.Order order : sort) {
             final SortDirection sortDirection = order.getDirection().equals(ASC) ? SortDirection.ASCENDING : SortDirection.DESCENDING;
             final NullHandling nullHandling = order.getNullHandling().equals(NULLS_FIRST) ? NullHandling.NULLS_FIRST : (order.getNullHandling().equals(NULLS_LAST) ? NullHandling.NULLS_LAST : NullHandling.DEFAULT);

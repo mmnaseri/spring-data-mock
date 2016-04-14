@@ -5,7 +5,9 @@ import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
 import java.io.Serializable;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * This is an immutable repository metadata.
+ *
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/19/15)
  */
 public class ImmutableRepositoryMetadata implements RepositoryMetadata {

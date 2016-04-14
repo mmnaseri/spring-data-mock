@@ -5,9 +5,14 @@ import com.mmnaseri.utils.spring.data.store.DataStoreEventListener;
 import org.springframework.core.GenericTypeResolver;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * This implementation of the data store event listener wraps a given delegate listener and reads the supported
+ * event type from the generic type arguments on the original listener. This lets us interact with the listener
+ * without having to read its generic type arguments every time.
+ *
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (10/6/15)
  */
+@SuppressWarnings("WeakerAccess")
 public class SmartDataStoreEventListener<E extends DataStoreEvent> implements DataStoreEventListener<E> {
 
     private final DataStoreEventListener<E> delegate;
@@ -26,6 +31,10 @@ public class SmartDataStoreEventListener<E extends DataStoreEvent> implements Da
 
     public Class<E> getEventType() {
         return eventType;
+    }
+
+    public DataStoreEventListener<E> getDelegate() {
+        return delegate;
     }
 
 }

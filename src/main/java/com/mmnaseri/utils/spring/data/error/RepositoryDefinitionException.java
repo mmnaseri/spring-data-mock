@@ -1,10 +1,11 @@
 package com.mmnaseri.utils.spring.data.error;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (4/8/16)
  */
 public class RepositoryDefinitionException extends RepositoryMockException {
+
     public RepositoryDefinitionException(Class<?> repositoryInterface, String message) {
         super(repositoryInterface + ": " + message);
     }
@@ -12,4 +13,5 @@ public class RepositoryDefinitionException extends RepositoryMockException {
     public RepositoryDefinitionException(Class<?> repositoryInterface, String message, Throwable cause) {
         super(repositoryInterface + ": " + message, cause);
     }
+
 }

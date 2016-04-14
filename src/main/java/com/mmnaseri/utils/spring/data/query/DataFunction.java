@@ -7,7 +7,13 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * <p>This interface encapsulates a data function. A data function is a function that applies to an already aggregated
+ * selection of entities, and can return any value.</p>
+ *
+ * <p>An example for a data function would be returning the number of items from a selection (count function) or
+ * duplicating all the selected entities.</p>
+ *
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/29/15)
  */
 public interface DataFunction<R> {

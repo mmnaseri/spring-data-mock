@@ -3,9 +3,12 @@ package com.mmnaseri.utils.spring.data.query.impl;
 import com.mmnaseri.utils.spring.data.query.Page;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * This is an immutable page
+ *
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/17/15)
  */
+@SuppressWarnings("WeakerAccess")
 public class ImmutablePage implements Page {
 
     private final int pageSize;

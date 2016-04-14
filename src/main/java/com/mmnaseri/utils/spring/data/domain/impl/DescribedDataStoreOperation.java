@@ -12,7 +12,10 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * This is a data store operation that has a description attached to it. This means that it is a select operation that is
+ * capable of taking care of applying a function to a given selection of objects.
+ *
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/29/15)
  */
 public class DescribedDataStoreOperation<K extends Serializable, E> implements DataStoreOperation<Object, K, E> {
@@ -40,4 +43,5 @@ public class DescribedDataStoreOperation<K extends Serializable, E> implements D
     public String toString() {
         return selectOperation.toString();
     }
+
 }

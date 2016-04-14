@@ -6,6 +6,7 @@ import com.mmnaseri.utils.spring.data.proxy.InvocationMapping;
 import com.mmnaseri.utils.spring.data.proxy.RepositoryConfiguration;
 import com.mmnaseri.utils.spring.data.proxy.ResultAdapterContext;
 import com.mmnaseri.utils.spring.data.proxy.ResultConverter;
+import com.mmnaseri.utils.spring.data.proxy.impl.converters.DefaultResultConverter;
 import com.mmnaseri.utils.spring.data.store.DataStore;
 import com.mmnaseri.utils.spring.data.store.DataStoreOperation;
 
@@ -14,12 +15,21 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * <p>This class is in charge of handling a data operation that was triggered by invoking a repository method.</p>
+ *
+ * <p>The invocation is first considered by trying to find a data operation handler. If such a handler cannot be
+ * found, we will try to handle it by finding the appropriate {@link com.mmnaseri.utils.spring.data.proxy.NonDataOperationHandler non-data
+ * operation handler}.</p>
+ *
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/23/15)
  */
+@SuppressWarnings("WeakerAccess")
 public class DataOperationInvocationHandler<K extends Serializable, E> implements InvocationHandler {
 
     private final DataStore<K, E> dataStore;
@@ -27,11 +37,13 @@ public class DataOperationInvocationHandler<K extends Serializable, E> implement
     private final ResultConverter converter;
     private final RepositoryConfiguration repositoryConfiguration;
     private final List<InvocationMapping<K, E>> mappings;
-    private final Map<Method, InvocationMapping<K, E>> cache = new ConcurrentHashMap<Method, InvocationMapping<K, E>>();
+    private final Map<Method, InvocationMapping<K, E>> cache = new ConcurrentHashMap<>();
+    private final Set<Method> misses = new CopyOnWriteArraySet<>();
     private final NonDataOperationInvocationHandler operationInvocationHandler;
 
-    public DataOperationInvocationHandler(RepositoryConfiguration repositoryConfiguration,
-                                          List<InvocationMapping<K, E>> mappings, DataStore<K, E> dataStore, ResultAdapterContext adapterContext, NonDataOperationInvocationHandler operationInvocationHandler) {
+    public DataOperationInvocationHandler(RepositoryConfiguration repositoryConfiguration, List<InvocationMapping<K, E>> mappings,
+                                          DataStore<K, E> dataStore, ResultAdapterContext adapterContext,
+                                          NonDataOperationInvocationHandler operationInvocationHandler) {
         this.repositoryConfiguration = repositoryConfiguration;
         this.mappings = mappings;
         this.dataStore = dataStore;
@@ -44,18 +56,21 @@ public class DataOperationInvocationHandler<K extends Serializable, E> implement
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         final Invocation methodInvocation = new ImmutableInvocation(method, args);
         InvocationMapping<K, E> targetMapping = null;
-        if (cache.containsKey(method)) {
-            targetMapping = cache.get(method);
-        } else {
-            for (InvocationMapping<K, E> mapping : mappings) {
-                if (mapping.getMethod().equals(method)) {
-                    targetMapping = mapping;
-                    cache.put(method, targetMapping);
-                    break;
+        if (!misses.contains(method)) {
+            if (cache.containsKey(method)) {
+                targetMapping = cache.get(method);
+            } else {
+                for (InvocationMapping<K, E> mapping : mappings) {
+                    if (mapping.getMethod().equals(method)) {
+                        targetMapping = mapping;
+                        cache.put(method, targetMapping);
+                        break;
+                    }
                 }
             }
         }
         if (targetMapping == null) {
+            misses.add(method);
             return operationInvocationHandler.invoke(proxy, method, args);
         }
         final DataStoreOperation<?, K, E> operation = targetMapping.getOperation();

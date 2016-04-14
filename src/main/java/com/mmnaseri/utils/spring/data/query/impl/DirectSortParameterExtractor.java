@@ -4,10 +4,11 @@ import com.mmnaseri.utils.spring.data.domain.Invocation;
 import com.mmnaseri.utils.spring.data.error.InvalidArgumentException;
 import com.mmnaseri.utils.spring.data.query.Sort;
 
-import java.util.Objects;
-
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * This extractor will expect to receive a {@link org.springframework.data.domain.Sort} object via
+ * the very last parameter of a query method invocation.
+ *
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/19/15)
  */
 public class DirectSortParameterExtractor extends AbstractSortParameterExtractor {
@@ -20,6 +21,9 @@ public class DirectSortParameterExtractor extends AbstractSortParameterExtractor
 
     @Override
     public Sort extract(Invocation invocation) {
+        if (invocation == null) {
+            throw new InvalidArgumentException("Invocation cannot be null");
+        }
         final Object value = invocation.getArguments()[index];
         if (value == null) {
             throw new InvalidArgumentException("Page value should not be empty");

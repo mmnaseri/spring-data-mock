@@ -2,7 +2,6 @@ package com.mmnaseri.utils.spring.data.dsl.mock;
 
 import com.mmnaseri.utils.spring.data.domain.KeyGenerator;
 import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
-import com.mmnaseri.utils.spring.data.domain.impl.key.KeyGeneratorProvider;
 import com.mmnaseri.utils.spring.data.dsl.factory.RepositoryFactoryBuilder;
 import com.mmnaseri.utils.spring.data.error.MockBuilderException;
 import com.mmnaseri.utils.spring.data.proxy.RepositoryFactory;
@@ -14,17 +13,14 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * This class implements the interfaces used to define a DSL for mocking a repository.
+ *
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (10/14/15)
  */
 public class RepositoryMockBuilder implements Start, ImplementationAnd, KeyGeneration {
 
-    private static final KeyGenerator<? extends Serializable> NOOP = new KeyGenerator<Serializable>() {
-        @Override
-        public Serializable generate() {
-            return null;
-        }
-    };
+    private static final KeyGenerator<? extends Serializable> NOOP = new NoOpKeyGenerator<>();
     private final RepositoryFactory factory;
     private final List<Class<?>> implementations;
     private final KeyGenerator<? extends Serializable> keyGenerator;
@@ -51,7 +47,7 @@ public class RepositoryMockBuilder implements Start, ImplementationAnd, KeyGener
 
     @Override
     public ImplementationAnd usingImplementation(Class<?> implementation) {
-        final LinkedList<Class<?>> implementations = new LinkedList<Class<?>>(this.implementations);
+        final LinkedList<Class<?>> implementations = new LinkedList<>(this.implementations);
         implementations.add(implementation);
         return new RepositoryMockBuilder(factory, implementations, keyGenerator);
     }
@@ -70,7 +66,7 @@ public class RepositoryMockBuilder implements Start, ImplementationAnd, KeyGener
     public <S extends Serializable, G extends KeyGenerator<S>> Implementation generateKeysUsing(Class<G> generatorType) {
         //noinspection unchecked
         final G instance = (G) createKeyGenerator(generatorType);
-        return new RepositoryMockBuilder(factory, implementations, instance);
+        return generateKeysUsing(instance);
     }
 
     @Override
@@ -106,6 +102,22 @@ public class RepositoryMockBuilder implements Start, ImplementationAnd, KeyGener
         } else {
             return repositoryFactory.getInstance(NOOP.equals(keyGenerator) ? null : keyGenerator, repositoryInterface, implementations.toArray(new Class[implementations.size()]));
         }
+    }
+
+    /**
+     * This class is used to indicate that we don't want key generation. Whenever the singleton instance
+     * {@link #NOOP} is used for key generation, the builder will set the underlying key generator to
+     * {@literal null}, thus signifying to the various implementing classes that no key generator has been
+     * provided
+     * @param <S>    the type of the keys this class generates
+     */
+    public static class NoOpKeyGenerator<S extends Serializable> implements KeyGenerator<S> {
+
+        @Override
+        public S generate() {
+            return null;
+        }
+
     }
 
 }

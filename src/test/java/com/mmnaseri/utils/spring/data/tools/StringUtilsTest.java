@@ -6,10 +6,15 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (10/5/15)
  */
-public class StringUtilsTest {
+public class StringUtilsTest extends AbstractUtilityClassTest {
+
+    @Override
+    protected Class<?> getUtilityClass() {
+        return StringUtils.class;
+    }
 
     @Test(expectedExceptions = NullPointerException.class, expectedExceptionsMessageRegExp = "String value cannot be null")
     public void testCapitalizingNullValue() throws Exception {
@@ -50,5 +55,4 @@ public class StringUtilsTest {
     public void testUncapitalizingCapitalizedString() throws Exception {
         assertThat(StringUtils.uncapitalize("Hello"), is("hello"));
     }
-
 }

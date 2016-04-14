@@ -4,7 +4,9 @@ import com.mmnaseri.utils.spring.data.domain.Matcher;
 import com.mmnaseri.utils.spring.data.domain.Operator;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * This is an immutable operator.
+ *
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/29/15)
  */
 public class ImmutableOperator implements Operator {
@@ -38,6 +40,11 @@ public class ImmutableOperator implements Operator {
     @Override
     public String[] getTokens() {
         return tokens;
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 
 }

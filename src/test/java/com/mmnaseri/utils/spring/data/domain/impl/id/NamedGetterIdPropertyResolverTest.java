@@ -1,9 +1,11 @@
 package com.mmnaseri.utils.spring.data.domain.impl.id;
 
 import com.mmnaseri.utils.spring.data.domain.IdPropertyResolver;
+import com.mmnaseri.utils.spring.data.sample.models.EmptyEntity;
+import com.mmnaseri.utils.spring.data.sample.models.EntityWithoutAnnotatedIdGetter;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/29/15)
  */
 @SuppressWarnings("unused")
@@ -16,40 +18,12 @@ public class NamedGetterIdPropertyResolverTest extends BaseIdPropertyResolverTes
 
     @Override
     protected Class<?> properEntity() {
-        return EntityWithIdGetter.class;
+        return EntityWithoutAnnotatedIdGetter.class;
     }
 
     @Override
     protected Class<?> entityWithNoProperty() {
-        return EntityWithoutIdGetter.class;
-    }
-
-    public static class EntityWithIdGetter {
-
-        private String id;
-
-        public String getId() {
-            return id;
-        }
-
-        public void setId(String id) {
-            this.id = id;
-        }
-
-    }
-
-    public static class EntityWithoutIdGetter {
-
-        private String name;
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
+        return EmptyEntity.class;
     }
 
 }

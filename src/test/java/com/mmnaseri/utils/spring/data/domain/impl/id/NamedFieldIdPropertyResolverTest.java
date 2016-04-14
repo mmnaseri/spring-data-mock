@@ -1,12 +1,13 @@
 package com.mmnaseri.utils.spring.data.domain.impl.id;
 
 import com.mmnaseri.utils.spring.data.domain.IdPropertyResolver;
+import com.mmnaseri.utils.spring.data.sample.models.EmptyEntity;
+import com.mmnaseri.utils.spring.data.sample.models.EntityWithIdField;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/29/15)
  */
-@SuppressWarnings("unused")
 public class NamedFieldIdPropertyResolverTest extends BaseIdPropertyResolverTest {
 
     @Override
@@ -21,20 +22,8 @@ public class NamedFieldIdPropertyResolverTest extends BaseIdPropertyResolverTest
 
     @Override
     protected Class<?> entityWithNoProperty() {
-        return EntityWithoutIdField.class;
+        return EmptyEntity.class;
     }
 
-    public static class EntityWithIdField {
-
-        private String id;
-
-    }
-
-
-    public static class EntityWithoutIdField {
-
-        private String name;
-
-    }
 
 }

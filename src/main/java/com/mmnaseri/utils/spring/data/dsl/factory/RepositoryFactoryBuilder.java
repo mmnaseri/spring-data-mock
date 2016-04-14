@@ -11,10 +11,7 @@ import com.mmnaseri.utils.spring.data.dsl.mock.Implementation;
 import com.mmnaseri.utils.spring.data.dsl.mock.ImplementationAnd;
 import com.mmnaseri.utils.spring.data.dsl.mock.RepositoryMockBuilder;
 import com.mmnaseri.utils.spring.data.proxy.*;
-import com.mmnaseri.utils.spring.data.proxy.impl.DefaultRepositoryFactory;
-import com.mmnaseri.utils.spring.data.proxy.impl.DefaultResultAdapterContext;
-import com.mmnaseri.utils.spring.data.proxy.impl.DefaultTypeMappingContext;
-import com.mmnaseri.utils.spring.data.proxy.impl.NonDataOperationInvocationHandler;
+import com.mmnaseri.utils.spring.data.proxy.impl.*;
 import com.mmnaseri.utils.spring.data.query.DataFunction;
 import com.mmnaseri.utils.spring.data.query.DataFunctionRegistry;
 import com.mmnaseri.utils.spring.data.query.impl.DefaultDataFunctionRegistry;
@@ -27,13 +24,17 @@ import org.springframework.data.domain.AuditorAware;
 import java.io.Serializable;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * This class implements the DSL used to configure and build a repository factory object.
+ *
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (10/14/15)
  */
+@SuppressWarnings("WeakerAccess")
 public class RepositoryFactoryBuilder implements Start, DataFunctionsAnd, DataStoresAnd, EventListenerAnd, MappingContextAnd, OperatorsAnd, ResultAdaptersAnd, OperationHandlersAnd {
 
-    private static final RepositoryFactory DEFAULT_FACTORY = builder().build();
-    private static final String DEFAULT_USER = "User";
+    private static RepositoryFactory DEFAULT_FACTORY;
+    private static RepositoryFactoryConfiguration DEFAULT_FACTORY_CONFIGURATION;
+    public static final String DEFAULT_USER = "User";
     private RepositoryMetadataResolver metadataResolver;
     private QueryDescriptionExtractor queryDescriptionExtractor;
     private DataFunctionRegistry functionRegistry;
@@ -43,16 +44,42 @@ public class RepositoryFactoryBuilder implements Start, DataFunctionsAnd, DataSt
     private DataStoreEventListenerContext eventListenerContext;
     private NonDataOperationInvocationHandler operationInvocationHandler;
 
+    /**
+     * Starting point for writing code in the builder's DSL
+     *
+     * @return an instance of the builder
+     */
     public static Start builder() {
         return new RepositoryFactoryBuilder();
     }
-    
+
+    /**
+     * @return the default configuration (always the same instance)
+     */
     public static RepositoryFactoryConfiguration defaultConfiguration() {
-        final RepositoryFactoryBuilder builder = (RepositoryFactoryBuilder) builder();
-        return new ImmutableRepositoryFactoryConfiguration(builder.metadataResolver, builder.queryDescriptionExtractor, builder.functionRegistry, builder.dataStoreRegistry, builder.resultAdapterContext, builder.typeMappingContext, builder.eventListenerContext, builder.operationInvocationHandler);
+        if (DEFAULT_FACTORY_CONFIGURATION == null) {
+            final RepositoryFactoryBuilder builder = (RepositoryFactoryBuilder) builder();
+            DEFAULT_FACTORY_CONFIGURATION = new ImmutableRepositoryFactoryConfiguration(
+                    builder.metadataResolver,
+                    builder.queryDescriptionExtractor,
+                    builder.functionRegistry,
+                    builder.dataStoreRegistry,
+                    builder.resultAdapterContext,
+                    builder.typeMappingContext,
+                    builder.eventListenerContext,
+                    builder.operationInvocationHandler
+            );
+        }
+        return DEFAULT_FACTORY_CONFIGURATION;
     }
-    
+
+    /**
+     * @return the default factory (always the same instance)
+     */
     public static RepositoryFactory defaultFactory() {
+        if (DEFAULT_FACTORY == null) {
+            DEFAULT_FACTORY = new DefaultRepositoryFactory(defaultConfiguration());
+        }
         return DEFAULT_FACTORY;
     }
 
@@ -171,12 +198,7 @@ public class RepositoryFactoryBuilder implements Start, DataFunctionsAnd, DataSt
 
     @Override
     public EventListener enableAuditing() {
-        return enableAuditing(new AuditorAware() {
-            @Override
-            public Object getCurrentAuditor() {
-                return DEFAULT_USER;
-            }
-        });
+        return enableAuditing(new DefaultAuditorAware());
     }
 
     @Override
@@ -251,66 +273,18 @@ public class RepositoryFactoryBuilder implements Start, DataFunctionsAnd, DataSt
         return new RepositoryMockBuilder().useFactory(build()).mock(repositoryInterface);
     }
 
-    private static class ImmutableRepositoryFactoryConfiguration implements RepositoryFactoryConfiguration {
+    /**
+     * An auditor aware that returns the static value of {@link #DEFAULT_USER}
+     */
+    @SuppressWarnings("WeakerAccess")
+    public static class DefaultAuditorAware implements AuditorAware<String> {
 
-        private final RepositoryMetadataResolver metadataResolver;
-        private final QueryDescriptionExtractor queryDescriptionExtractor;
-        private final DataFunctionRegistry functionRegistry;
-        private final DataStoreRegistry dataStoreRegistry;
-        private final ResultAdapterContext resultAdapterContext;
-        private final TypeMappingContext typeMappingContext;
-        private final DataStoreEventListenerContext eventListenerContext;
-        private final NonDataOperationInvocationHandler operationInvocationHandler;
-
-        private ImmutableRepositoryFactoryConfiguration(RepositoryMetadataResolver metadataResolver, QueryDescriptionExtractor queryDescriptionExtractor, DataFunctionRegistry functionRegistry, DataStoreRegistry dataStoreRegistry, ResultAdapterContext resultAdapterContext, TypeMappingContext typeMappingContext, DataStoreEventListenerContext eventListenerContext, NonDataOperationInvocationHandler operationInvocationHandler) {
-            this.metadataResolver = metadataResolver;
-            this.queryDescriptionExtractor = queryDescriptionExtractor;
-            this.functionRegistry = functionRegistry;
-            this.dataStoreRegistry = dataStoreRegistry;
-            this.resultAdapterContext = resultAdapterContext;
-            this.typeMappingContext = typeMappingContext;
-            this.eventListenerContext = eventListenerContext;
-            this.operationInvocationHandler = operationInvocationHandler;
-        }
-
+        /**
+         * @return {@link #DEFAULT_USER}
+         */
         @Override
-        public RepositoryMetadataResolver getRepositoryMetadataResolver() {
-            return metadataResolver;
-        }
-
-        @Override
-        public QueryDescriptionExtractor getDescriptionExtractor() {
-            return queryDescriptionExtractor;
-        }
-
-        @Override
-        public DataFunctionRegistry getFunctionRegistry() {
-            return functionRegistry;
-        }
-
-        @Override
-        public DataStoreRegistry getDataStoreRegistry() {
-            return dataStoreRegistry;
-        }
-
-        @Override
-        public ResultAdapterContext getResultAdapterContext() {
-            return resultAdapterContext;
-        }
-
-        @Override
-        public TypeMappingContext getTypeMappingContext() {
-            return typeMappingContext;
-        }
-
-        @Override
-        public DataStoreEventListenerContext getEventListenerContext() {
-            return eventListenerContext;
-        }
-
-        @Override
-        public NonDataOperationInvocationHandler getOperationInvocationHandler() {
-            return operationInvocationHandler;
+        public String getCurrentAuditor() {
+            return DEFAULT_USER;
         }
 
     }

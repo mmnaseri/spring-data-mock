@@ -11,7 +11,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (10/8/15)
  */
 public abstract class BaseKeyGeneratorTest<S extends Serializable> {
@@ -21,7 +21,7 @@ public abstract class BaseKeyGeneratorTest<S extends Serializable> {
     @Test(invocationCount = 100)
     public void testThatKeysAreUnique() throws Exception {
         final KeyGenerator<S> keyGenerator = getKeyGenerator();
-        final Set<S> keys = new HashSet<S>();
+        final Set<S> keys = new HashSet<>();
         for (int i = 0; i < 200; i++) {
             final S key = keyGenerator.generate();
             assertThat(keys.contains(key), is(false));

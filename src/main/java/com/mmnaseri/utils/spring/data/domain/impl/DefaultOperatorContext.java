@@ -9,7 +9,10 @@ import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * This class is used to store the operators used in the name of a query method. Operators are matched by
+ * the "suffixes" eagerly (meaning that "EqualTo" will precede over "To").
+ *
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/29/15)
  */
 public class DefaultOperatorContext implements OperatorContext {
@@ -17,7 +20,7 @@ public class DefaultOperatorContext implements OperatorContext {
     private final Set<Operator> operators;
 
     public DefaultOperatorContext() {
-        operators = new CopyOnWriteArraySet<Operator>();
+        operators = new CopyOnWriteArraySet<>();
         operators.add(new ImmutableOperator("AFTER", 1, new IsGreaterThanMatcher(), "After", "IsAfter"));
         operators.add(new ImmutableOperator("BEFORE", 1, new IsLessThanMatcher(), "Before", "IsBefore"));
         operators.add(new ImmutableOperator("CONTAINING", 1, new ContainingMatcher(), "Containing", "IsContaining", "Contains"));

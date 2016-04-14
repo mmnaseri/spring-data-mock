@@ -1,6 +1,7 @@
 package com.mmnaseri.utils.spring.data.domain.impl;
 
 import com.mmnaseri.utils.spring.data.domain.Invocation;
+import com.mmnaseri.utils.spring.data.error.DataOperationExecutionException;
 import com.mmnaseri.utils.spring.data.proxy.RepositoryConfiguration;
 import com.mmnaseri.utils.spring.data.store.DataStore;
 import com.mmnaseri.utils.spring.data.store.DataStoreOperation;
@@ -10,7 +11,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * This is a data store operation that delivers the operation by calling to a delegate method. This means that the results
+ * of the operation are the same as what was returned by the method itself.
+ *
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/29/15)
  */
 public class MethodInvocationDataStoreOperation<K extends Serializable, E> implements DataStoreOperation<Object, K, E> {
@@ -21,7 +25,6 @@ public class MethodInvocationDataStoreOperation<K extends Serializable, E> imple
     public MethodInvocationDataStoreOperation(Object instance, Method method) {
         this.instance = instance;
         this.method = method;
-        method.setAccessible(true);
     }
 
     @Override
@@ -30,11 +33,19 @@ public class MethodInvocationDataStoreOperation<K extends Serializable, E> imple
         try {
             result = method.invoke(instance, invocation.getArguments());
         } catch (IllegalAccessException e) {
-            throw new IllegalStateException("Failed to access target method: " + method, e);
+            throw new DataOperationExecutionException("Failed to access target method: " + method, e);
         } catch (InvocationTargetException e) {
-            throw new IllegalStateException("Method call resulted in internal error: " + method, e.getTargetException());
+            throw new DataOperationExecutionException("Method call resulted in internal error: " + method, e.getTargetException());
         }
         return result;
+    }
+
+    public Object getInstance() {
+        return instance;
+    }
+
+    public Method getMethod() {
+        return method;
     }
 
     @Override

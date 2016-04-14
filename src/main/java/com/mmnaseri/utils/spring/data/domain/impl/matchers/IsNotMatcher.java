@@ -5,7 +5,9 @@ import com.mmnaseri.utils.spring.data.domain.Parameter;
 import java.util.Objects;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * This matcher will determine if the two values are not equal.
+ *
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/17/15)
  */
 public class IsNotMatcher extends AbstractSimpleMatcher {

@@ -11,14 +11,19 @@ import java.lang.reflect.Field;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * This class will help resolve ID property name if the entity has a field that is annotated with
+ * {@link Id @Id}
+ *
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/23/15)
  */
+@SuppressWarnings("WeakerAccess")
 public class AnnotatedFieldIdPropertyResolver implements IdPropertyResolver {
 
     @Override
     public String resolve(final Class<?> entityType, Class<? extends Serializable> idType) {
-        final AtomicReference<Field> found = new AtomicReference<Field>();
+        final AtomicReference<Field> found = new AtomicReference<>();
+        //try to find the ID field
         ReflectionUtils.doWithFields(entityType, new ReflectionUtils.FieldCallback() {
             @Override
             public void doWith(Field field) throws IllegalArgumentException, IllegalAccessException {
@@ -32,6 +37,7 @@ public class AnnotatedFieldIdPropertyResolver implements IdPropertyResolver {
             }
         });
         final Field idAnnotatedField = found.get();
+        //if a field was found, try to get the ID property name
         if (idAnnotatedField != null) {
             if (!idType.isAssignableFrom(idAnnotatedField.getType())) {
                 throw new PropertyTypeMismatchException(entityType, idAnnotatedField.getName(), idType, idAnnotatedField.getType());

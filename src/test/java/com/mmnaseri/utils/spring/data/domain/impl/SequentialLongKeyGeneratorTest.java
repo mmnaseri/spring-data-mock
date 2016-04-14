@@ -8,7 +8,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (10/8/15)
  */
 public class SequentialLongKeyGeneratorTest extends BaseKeyGeneratorTest<Long> {
@@ -21,7 +21,7 @@ public class SequentialLongKeyGeneratorTest extends BaseKeyGeneratorTest<Long> {
     @Test
     public void testKeysBeingSequential() throws Exception {
         final KeyGenerator<Long> keyGenerator = getKeyGenerator();
-        Long last = 0l;
+        Long last = 0L;
         for (int i = 0; i < 100; i++) {
             final Long key = keyGenerator.generate();
             assertThat(key, is(last + 1));

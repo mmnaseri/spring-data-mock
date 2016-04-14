@@ -3,7 +3,9 @@ package com.mmnaseri.utils.spring.data.proxy.impl;
 import com.mmnaseri.utils.spring.data.proxy.TypeMapping;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * This is an immutable type mapping.
+ *
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/29/15)
  */
 public class ImmutableTypeMapping<E> implements TypeMapping<E> {

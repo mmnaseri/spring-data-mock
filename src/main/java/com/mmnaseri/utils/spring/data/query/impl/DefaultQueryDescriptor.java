@@ -12,7 +12,9 @@ import org.springframework.beans.BeanWrapperImpl;
 import java.util.List;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * This is a mutable query descriptor that you can use to describe what a query does.
+ *
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/20/15)
  */
 public class DefaultQueryDescriptor implements QueryDescriptor {
@@ -81,7 +83,7 @@ public class DefaultQueryDescriptor implements QueryDescriptor {
     public boolean matches(Object entity, Invocation invocation) {
         final List<List<Parameter>> branches = getBranches();
         if (branches.isEmpty()) {
-            return true;
+            return entity != null;
         }
         final BeanWrapper wrapper = new BeanWrapperImpl(entity);
         for (List<Parameter> branch : branches) {
@@ -107,7 +109,7 @@ public class DefaultQueryDescriptor implements QueryDescriptor {
 
     @Override
     public String toString() {
-        return (function != null ? function + " " : "") + (distinct ? "distinct " : "") + branches;
+        return (getFunction() != null ? getFunction() + " " : "") + (isDistinct() ? "distinct " : "") + getBranches();
     }
 
 }

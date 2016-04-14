@@ -1,8 +1,11 @@
 language: java
+jdk:
+  - oraclejdk8
+  - oraclejdk7
 after_success:
-- mvn -P coverage clean cobertura:cobertura coveralls:report
-- '[[ $TRAVIS_BRANCH == "master" ]] && sudo apt-get install gnupg2'
-- '[[ $TRAVIS_BRANCH == "master" ]] && bash deploy.sh eb1a6f34f056 key.asc.enc settings.xml'
+  - mvn -P coverage clean cobertura:cobertura coveralls:report
+  - '[[ $TRAVIS_BRANCH == "master" && ( "x${TRAVIS_PULL_REQUEST}" == "xfalse" || "x${TRAVIS_PULL_REQUEST}" == "x" ) ]] && sudo apt-get install gnupg2'
+  - '[[ $TRAVIS_BRANCH == "master" && ( "x${TRAVIS_PULL_REQUEST}" == "xfalse" || "x${TRAVIS_PULL_REQUEST}" == "x" ) ]] && bash depoy.sh eb1a6f34f056 key.asc.enc settings.xml'
 sudo: true
 env:
   global:

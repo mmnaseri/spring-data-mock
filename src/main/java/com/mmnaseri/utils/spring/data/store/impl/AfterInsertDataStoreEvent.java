@@ -4,9 +4,12 @@ import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
 import com.mmnaseri.utils.spring.data.store.DataStore;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * This class indicates that an entity was successfully inserted into a data store.
+ *
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (10/6/15)
  */
+@SuppressWarnings("WeakerAccess")
 public class AfterInsertDataStoreEvent extends AbstractEntityDataStoreEvent {
 
     public AfterInsertDataStoreEvent(RepositoryMetadata repositoryMetadata, DataStore<?, ?> dataStore, Object entity) {

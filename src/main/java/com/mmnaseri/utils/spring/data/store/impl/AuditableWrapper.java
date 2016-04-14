@@ -18,9 +18,16 @@ import java.lang.annotation.Annotation;
 import java.util.Date;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * This class is used to wrap a normal entity in an entity that supports {@link Auditable auditing}. If the underlying
+ * entity does not exhibit auditable behavior (either by implementing {@link Auditable} or by having properties that are
+ * annotated with one of the audit annotations provided by Spring Data Commons) this class will simply ignore audit
+ * requests. Otherwise, it will convert the values to their appropriate types and sets and gets the appropriate
+ * properties.
+ *
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (10/12/15)
  */
+@SuppressWarnings("WeakerAccess")
 public class AuditableWrapper implements Auditable {
 
     private final BeanWrapper wrapper;
@@ -37,6 +44,14 @@ public class AuditableWrapper implements Auditable {
         return visitor.getProperty();
     }
 
+    /**
+     * Returns the property value for a given audit property.
+     * @param type        the type of the property
+     * @param wrapper     the bean wrapper
+     * @param property    actual property to read
+     * @param <E>         the object type for the value
+     * @return the property value
+     */
     private static <E> E getProperty(Class<E> type, BeanWrapper wrapper, String property) {
         if (property == null || !wrapper.isReadableProperty(property)) {
             return null;
@@ -48,23 +63,30 @@ public class AuditableWrapper implements Auditable {
         return type.cast(propertyValue);
     }
 
+    /**
+     * Sets an audit property on the given entity
+     * @param wrapper     the bean wrapper for the entity
+     * @param property    the property for which the value is being set
+     * @param value       the original value of the property
+     */
     private static void setProperty(BeanWrapper wrapper, String property, Object value) {
         if (property != null) {
+            Object targetValue = value;
             final PropertyDescriptor descriptor = wrapper.getPropertyDescriptor(property);
-            if (value instanceof DateTime) {
-                DateTime dateTime = (DateTime) value;
+            if (targetValue instanceof DateTime) {
+                DateTime dateTime = (DateTime) targetValue;
                 if (Date.class.equals(descriptor.getPropertyType())) {
-                    value = dateTime.toDate();
+                    targetValue = dateTime.toDate();
                 } else if (java.sql.Date.class.equals(descriptor.getPropertyType())) {
-                    value = new java.sql.Date(dateTime.toDate().getTime());
+                    targetValue = new java.sql.Date(dateTime.toDate().getTime());
                 } else if (java.sql.Timestamp.class.equals(descriptor.getPropertyType())) {
-                    value = new java.sql.Timestamp(dateTime.toDate().getTime());
+                    targetValue = new java.sql.Timestamp(dateTime.toDate().getTime());
                 } else if (java.sql.Time.class.equals(descriptor.getPropertyType())) {
-                    value = new java.sql.Time(dateTime.toDate().getTime());
+                    targetValue = new java.sql.Time(dateTime.toDate().getTime());
                 }
             }
             if (wrapper.isWritableProperty(property)) {
-                wrapper.setPropertyValue(property, value);
+                wrapper.setPropertyValue(property, targetValue);
             }
         }
     }

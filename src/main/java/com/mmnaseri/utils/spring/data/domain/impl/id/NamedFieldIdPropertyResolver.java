@@ -8,9 +8,12 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * This class is for finding a field with the name {@literal "id"}.
+ *
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/23/15)
  */
+@SuppressWarnings("WeakerAccess")
 public class NamedFieldIdPropertyResolver implements IdPropertyResolver {
 
     @Override

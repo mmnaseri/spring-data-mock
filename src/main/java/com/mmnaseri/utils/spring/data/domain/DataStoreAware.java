@@ -5,7 +5,10 @@ import com.mmnaseri.utils.spring.data.store.DataStore;
 import java.io.Serializable;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * This interface is used to inject {@link DataStore the data store} into a concrete class aiming to provide method mapping
+ * for a repository.
+ *
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/29/15)
  */
 public interface DataStoreAware<E, K extends Serializable> {

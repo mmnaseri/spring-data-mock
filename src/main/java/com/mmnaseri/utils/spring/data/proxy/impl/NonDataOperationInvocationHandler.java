@@ -8,11 +8,14 @@ import com.mmnaseri.utils.spring.data.proxy.impl.regular.ToStringNonDataOperatio
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * This class will handle invocations that are strictly non-data-related.
+ *
+ * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (4/8/16)
  */
 public class NonDataOperationInvocationHandler implements InvocationHandler {
@@ -20,10 +23,16 @@ public class NonDataOperationInvocationHandler implements InvocationHandler {
     private final List<NonDataOperationHandler> handlers;
 
     public NonDataOperationInvocationHandler() {
-        handlers = new LinkedList<NonDataOperationHandler>();
-        handlers.add(new EqualsNonDataOperationHandler());
-        handlers.add(new HashCodeNonDataOperationHandler());
-        handlers.add(new ToStringNonDataOperationHandler());
+        this(true);
+    }
+
+    public NonDataOperationInvocationHandler(boolean registerDefaults) {
+        handlers = new LinkedList<>();
+        if (registerDefaults) {
+            handlers.add(new EqualsNonDataOperationHandler());
+            handlers.add(new HashCodeNonDataOperationHandler());
+            handlers.add(new ToStringNonDataOperationHandler());
+        }
     }
 
     @Override
@@ -38,6 +47,10 @@ public class NonDataOperationInvocationHandler implements InvocationHandler {
 
     public void register(NonDataOperationHandler handler) {
         handlers.add(handler);
+    }
+
+    public List<NonDataOperationHandler> getHandlers() {
+        return Collections.unmodifiableList(handlers);
     }
 
 }
