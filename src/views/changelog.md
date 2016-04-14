@@ -7,6 +7,28 @@ in a given release.
 Where applicable, an issue number and a link to the appropriate
 issue is provided as well.
 
+
+[v1.0.2](https://github.com/mmnaseri/spring-data-mock/releases/tag/v1.0.2)
+------------------------------------------------
+
+##### Enhancements
+
+  * [#17](https://github.com/mmnaseri/spring-data-mock/issues/17):
+  Add more JavaDoc to classes so that published sources and documentation
+  at Maven Central make more sense and are more helpful.
+
+  * [#18](https://github.com/mmnaseri/spring-data-mock/issues/18):
+  Increase test coverage so that future development can be done with more
+  certainty and users feel better about the source code they use.
+
+  * [#27](https://github.com/mmnaseri/spring-data-mock/issues/27):
+  Increase code quality metrics
+
+  * [#28](https://github.com/mmnaseri/spring-data-mock/issues/28):
+   Update project dependencies
+
+
+
 [v1.0.1](https://github.com/mmnaseri/spring-data-mock/releases/tag/v1.0.1)
 ------------------------------------------------
 

@@ -10,20 +10,13 @@ Roadmap
 Trivial
 -------
 
-  * [#17](https://github.com/mmnaseri/spring-data-mock/issues/17):
-  Add more JavaDoc to classes so that published sources and documentation
-  at Maven Central make more sense and are more helpful.
+Nothing is at the works right now.
 
 Minor
 -----
 
-  * [#18](https://github.com/mmnaseri/spring-data-mock/issues/18):
-  Increase test coverage so that future development can be done with more
-  certainty and users feel better about the source code they use.
-  * [#27](https://github.com/mmnaseri/spring-data-mock/issues/27):
-  Increase code quality metrics
-  * [#28](https://github.com/mmnaseri/spring-data-mock/issues/28):
-   Update project dependencies
+  * [#29](https://github.com/mmnaseri/spring-data-mock/issues/29):
+  Add logging to operations
 
 Major
 -----
@@ -32,3 +25,6 @@ Major
   Restructure the project to allow for a more sophisticated build reactor
   that would let us extend the project by adding optional artifacts that
   are used alongside the original artifact.
+
+  * [#3](https://github.com/mmnaseri/spring-data-mock/issues/3):
+   Add support for `QueryDslPredicateExecutor`

@@ -125,4 +125,8 @@ gulp.task("views", function () {
         .pipe(refresh())
 });
 
-gulp.task("default", ["watch", "lib", "scripts", "sass", "views", "index", "git-site"]);
+gulp.task("default", ["generate", "watch"]);
+
+gulp.task("generate", ["lib", "scripts", "sass", "views", "index", "git-site"]);
+
+gulp.task("regenerate", ["clean", "generate"]);
