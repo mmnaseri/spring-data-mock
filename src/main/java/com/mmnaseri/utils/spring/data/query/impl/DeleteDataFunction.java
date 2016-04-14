@@ -19,7 +19,7 @@ import java.util.List;
  * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/29/15)
  */
-@SuppressWarnings("ALL")
+@SuppressWarnings("WeakerAccess")
 public class DeleteDataFunction implements DataFunction<List<?>> {
 
     @Override
