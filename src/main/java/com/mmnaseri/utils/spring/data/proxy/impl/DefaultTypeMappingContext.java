@@ -18,18 +18,29 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 /**
+ * <p>This is the default type mapping context that is also capable of registering the default mappings
+ * for the interfaces provided through Spring Data.</p>
+ *
  * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (10/8/15)
  */
+@SuppressWarnings("WeakerAccess")
 public class DefaultTypeMappingContext implements TypeMappingContext {
 
     private final TypeMappingContext parent;
     private ConcurrentMap<Class<?>, List<Class<?>>> mappings = new ConcurrentHashMap<>();
 
+    /**
+     * Instantiates the context and registers all the default converters
+     */
     public DefaultTypeMappingContext() {
         this(true);
     }
 
+    /**
+     * Instantiates the context
+     * @param registerDefaults    whether or not the default mappings should be registered.
+     */
     public DefaultTypeMappingContext(boolean registerDefaults) {
         this(null);
         if (registerDefaults) {

@@ -10,6 +10,8 @@ import com.mmnaseri.utils.spring.data.store.DataStoreEventListenerContext;
 import com.mmnaseri.utils.spring.data.store.DataStoreRegistry;
 
 /**
+ * This is a configurable (mutable) repository factory configuration
+ *
  * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (10/27/15)
  */

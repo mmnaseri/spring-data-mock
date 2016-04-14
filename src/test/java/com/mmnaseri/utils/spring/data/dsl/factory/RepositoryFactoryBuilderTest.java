@@ -263,7 +263,7 @@ public class RepositoryFactoryBuilderTest {
 
     @Test
     public void testEnablingAuditingWithCustomAuditorAware() throws Exception {
-        final RepositoryFactoryBuilder.DefaultAuditorAware auditorAware = new RepositoryFactoryBuilder.DefaultAuditorAware();
+        final AuditorAware auditorAware = new RepositoryFactoryBuilder.DefaultAuditorAware();
         final RepositoryFactory factory = RepositoryFactoryBuilder.builder().enableAuditing(auditorAware).build();
         assertThat(factory, is(notNullValue()));
         assertThat(factory.getConfiguration(), is(notNullValue()));
@@ -280,7 +280,7 @@ public class RepositoryFactoryBuilderTest {
 
     @Test
     public void testDefaultAuditorAware() throws Exception {
-        final RepositoryFactoryBuilder.DefaultAuditorAware auditorAware = new RepositoryFactoryBuilder.DefaultAuditorAware();
+        final AuditorAware<String> auditorAware = new RepositoryFactoryBuilder.DefaultAuditorAware();
         assertThat(auditorAware.getCurrentAuditor(), is(RepositoryFactoryBuilder.DEFAULT_USER));
     }
 

@@ -6,6 +6,7 @@ import com.mmnaseri.utils.spring.data.proxy.InvocationMapping;
 import com.mmnaseri.utils.spring.data.proxy.RepositoryConfiguration;
 import com.mmnaseri.utils.spring.data.proxy.ResultAdapterContext;
 import com.mmnaseri.utils.spring.data.proxy.ResultConverter;
+import com.mmnaseri.utils.spring.data.proxy.impl.converters.DefaultResultConverter;
 import com.mmnaseri.utils.spring.data.store.DataStore;
 import com.mmnaseri.utils.spring.data.store.DataStoreOperation;
 
@@ -19,9 +20,16 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
+ * <p>This class is in charge of handling a data operation that was triggered by invoking a repository method.</p>
+ *
+ * <p>The invocation is first considered by trying to find a data operation handler. If such a handler cannot be
+ * found, we will try to handle it by finding the appropriate {@link com.mmnaseri.utils.spring.data.proxy.NonDataOperationHandler non-data
+ * operation handler}.</p>
+ *
  * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/23/15)
  */
+@SuppressWarnings("WeakerAccess")
 public class DataOperationInvocationHandler<K extends Serializable, E> implements InvocationHandler {
 
     private final DataStore<K, E> dataStore;

@@ -7,6 +7,8 @@ import com.mmnaseri.utils.spring.data.proxy.RepositoryConfiguration;
 import java.util.List;
 
 /**
+ * <p>This class is an immutable repository configuration.</p>
+ *
  * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (10/12/15)
  */

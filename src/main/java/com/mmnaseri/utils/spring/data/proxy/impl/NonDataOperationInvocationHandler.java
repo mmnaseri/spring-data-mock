@@ -13,6 +13,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
+ * This class will handle invocations that are strictly non-data-related.
+ *
  * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (4/8/16)
  */

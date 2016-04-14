@@ -10,9 +10,13 @@ import com.mmnaseri.utils.spring.data.store.DataStoreEventListenerContext;
 import com.mmnaseri.utils.spring.data.store.DataStoreRegistry;
 
 /**
+ * <p>This class is an immutable repository factory configuration insofar as the configuration itself is
+ * considered. The properties themselves won't be protected and are open to external change.</p>
+ *
  * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (4/12/16, 1:49 PM)
  */
+@SuppressWarnings("WeakerAccess")
 public class ImmutableRepositoryFactoryConfiguration implements RepositoryFactoryConfiguration {
 
     private final RepositoryMetadataResolver metadataResolver;

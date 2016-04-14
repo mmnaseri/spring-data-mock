@@ -3,6 +3,8 @@ package com.mmnaseri.utils.spring.data.proxy.impl;
 import com.mmnaseri.utils.spring.data.proxy.TypeMapping;
 
 /**
+ * This is an immutable type mapping.
+ *
  * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/29/15)
  */

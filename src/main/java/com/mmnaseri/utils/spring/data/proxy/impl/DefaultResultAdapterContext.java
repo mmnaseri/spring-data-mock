@@ -12,18 +12,29 @@ import java.util.Collections;
 import java.util.List;
 
 /**
+ * This is the default implementation for registering and containing result adapters.
+ *
  * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/24/15)
  */
+@SuppressWarnings("WeakerAccess")
 public class DefaultResultAdapterContext implements ResultAdapterContext {
 
-    private final List<ResultAdapter<?>> adapters = new ArrayList<>();
+    private final List<ResultAdapter<?>> adapters;
 
+    /**
+     * Instantiates the context and registers all the default adapters.
+     */
     public DefaultResultAdapterContext() {
         this(true);
     }
 
+    /**
+     * Instantiates the context
+     * @param registerDefaults    whether default adapters should be registered by default.
+     */
     public DefaultResultAdapterContext(boolean registerDefaults) {
+        adapters = new ArrayList<>();
         if (registerDefaults) {
             adapters.add(new VoidResultAdapter());
             adapters.add(new SameTypeResultAdapter());

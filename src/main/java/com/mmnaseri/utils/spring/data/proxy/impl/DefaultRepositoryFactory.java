@@ -22,6 +22,9 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
+ * <p>This class is the entry point to this framework as a whole. Using this class, you can mock a repository
+ * interface by passing the proper set of configurations and parameters.</p>
+ *
  * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/29/15)
  */
@@ -50,20 +53,31 @@ public class DefaultRepositoryFactory implements RepositoryFactory {
 
     @Override
     public <E> E getInstance(KeyGenerator<? extends Serializable> keyGenerator, Class<E> repositoryInterface, Class... implementations) {
+        //figure out the repository metadata
         final RepositoryMetadata metadata = getRepositoryMetadata(repositoryInterface);
+        //get the underlying data store
         final DataStore<Serializable, Object> dataStore = getDataStore(metadata);
+        //figure out type mappings
         final List<TypeMapping<?>> typeMappings = getTypeMappings(metadata, dataStore, keyGenerator, implementations);
+        //set up the data operation resolver
         final DataOperationResolver operationResolver = new DefaultDataOperationResolver(typeMappings, descriptionExtractor, metadata, functionRegistry, configuration);
+        //get all of this repository's methods
         final Method[] methods = repositoryInterface.getMethods();
+        //get mappings for the repository methods
         final List<InvocationMapping<? extends Serializable, ?>> invocationMappings = getInvocationMappings(operationResolver, methods);
+        //extract the bound implementation types
         final List<Class<?>> boundImplementations = new LinkedList<>();
         for (TypeMapping<?> mapping : typeMappings) {
             boundImplementations.add(mapping.getType());
         }
+        //set up the repository configuration
         final RepositoryConfiguration repositoryConfiguration = new ImmutableRepositoryConfiguration(metadata, keyGenerator, boundImplementations);
+        //create the interceptor
         //noinspection unchecked
         final InvocationHandler interceptor = new DataOperationInvocationHandler(repositoryConfiguration, invocationMappings, dataStore, adapterContext, operationInvocationHandler);
+        //create a proxy for the repository
         final Object instance = Proxy.newProxyInstance(getClass().getClassLoader(), new Class[]{repositoryInterface}, interceptor);
+        //for each type mapping, inject proper dependencies
         for (TypeMapping<?> typeMapping : typeMappings) {
             if (typeMapping.getInstance() instanceof RepositoryAware<?>) {
                 //noinspection unchecked
@@ -76,6 +90,7 @@ public class DefaultRepositoryFactory implements RepositoryFactory {
                 ((RepositoryFactoryAware) typeMapping.getInstance()).setRepositoryFactory(this);
             }
         }
+        //return the repository instance
         return repositoryInterface.cast(instance);
     }
 
@@ -84,6 +99,20 @@ public class DefaultRepositoryFactory implements RepositoryFactory {
         return configuration;
     }
 
+    /**
+     * <p>Given a repository metadata, it will find out all the proper type mappings bound as implementations to the repository. These will come from the
+     * {@link TypeMappingContext}, overridden by the implementations provided by the user for this specific case.</p>
+     *
+     * <p>If the mapped concrete class needs to know anything from the current mocking context, it can implement one of the
+     * various {@link org.springframework.beans.factory.Aware aware} interfaces to be given the proper piece of contextual
+     * information.</p>
+     *
+     * @param metadata           the repository metadata
+     * @param dataStore          the data store
+     * @param keyGenerator       the key generator
+     * @param implementations    the implementations specified by the user
+     * @return the resolved list of type mappings
+     */
     private List<TypeMapping<?>> getTypeMappings(RepositoryMetadata metadata, DataStore<Serializable, Object> dataStore, KeyGenerator<? extends Serializable> keyGenerator, Class[] implementations) {
         final List<TypeMapping<?>> typeMappings = new LinkedList<>();
         final TypeMappingContext localContext = new DefaultTypeMappingContext(typeMappingContext);
@@ -113,6 +142,13 @@ public class DefaultRepositoryFactory implements RepositoryFactory {
         return typeMappings;
     }
 
+    /**
+     * Given a repository interface, it will resolve the metadata for that interface.
+     *
+     * @param repositoryInterface    the interface
+     * @param <E>                    the type of the interface
+     * @return the repository metadata associated with the interface
+     */
     private <E> RepositoryMetadata getRepositoryMetadata(Class<E> repositoryInterface) {
         final RepositoryMetadata metadata;
         if (metadataMap.containsKey(repositoryInterface)) {
@@ -124,6 +160,17 @@ public class DefaultRepositoryFactory implements RepositoryFactory {
         return metadata;
     }
 
+    /**
+     * <p>Given a repository metadata, it will return the data store instance associated with the entity type for that repository.</p>
+     *
+     * <p>If the data store is not an instance of {@link EventPublishingDataStore} it will wrap it in one, thus enabling event processing
+     * for this repository.</p>
+     *
+     * <p>It will also register the data store instance to let the user access the data store, as well as cache it for future use.</p>
+     *
+     * @param metadata    the metadata
+     * @return the data store
+     */
     private DataStore<Serializable, Object> getDataStore(RepositoryMetadata metadata) {
         DataStore<Serializable, Object> dataStore;
         if (dataStoreRegistry.has(metadata.getEntityType())) {
@@ -140,6 +187,12 @@ public class DefaultRepositoryFactory implements RepositoryFactory {
         return dataStore;
     }
 
+    /**
+     * Given a set of methods, it will rely on a {@link DataOperationResolver} to find the mappings for each of the methods.
+     * @param operationResolver    the resolver to use
+     * @param methods              the array of methods
+     * @return resolved invocations
+     */
     private List<InvocationMapping<? extends Serializable, ?>> getInvocationMappings(DataOperationResolver operationResolver, Method[] methods) {
         final List<InvocationMapping<? extends Serializable, ?>> invocationMappings = new LinkedList<>();
         for (Method method : methods) {

@@ -3,7 +3,6 @@ package com.mmnaseri.utils.spring.data.proxy.impl.converters;
 import com.mmnaseri.utils.spring.data.domain.Invocation;
 import com.mmnaseri.utils.spring.data.error.ResultConversionFailureException;
 import com.mmnaseri.utils.spring.data.proxy.ResultConverter;
-import com.mmnaseri.utils.spring.data.proxy.impl.DefaultResultConverter;
 
 import java.util.concurrent.Future;
 
@@ -15,6 +14,7 @@ import java.util.concurrent.Future;
  * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/28/15)
  */
+@SuppressWarnings("WeakerAccess")
 public class FutureToIterableConverter extends AbstractResultConverter {
 
     @Override
