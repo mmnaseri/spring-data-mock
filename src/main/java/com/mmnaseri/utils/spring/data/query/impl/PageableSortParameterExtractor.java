@@ -6,6 +6,9 @@ import com.mmnaseri.utils.spring.data.query.Sort;
 import org.springframework.data.domain.Pageable;
 
 /**
+ * This extractor expects to see a {@link Pageable} passed as the last argument to a query method call and
+ * tries to ask the pageable for the sort metadata.
+ *
  * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/19/15)
  */

@@ -12,6 +12,8 @@ import org.springframework.beans.BeanWrapperImpl;
 import java.util.List;
 
 /**
+ * This is a mutable query descriptor that you can use to describe what a query does.
+ *
  * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/20/15)
  */

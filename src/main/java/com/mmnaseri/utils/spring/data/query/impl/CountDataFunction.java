@@ -10,9 +10,12 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
+ * This data function provides support for the {@literal count} aggregator over a selection.
+ *
  * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/29/15)
  */
+@SuppressWarnings("WeakerAccess")
 public class CountDataFunction implements DataFunction<Long> {
 
     @Override
