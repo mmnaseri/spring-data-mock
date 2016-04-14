@@ -6,7 +6,7 @@ after_success:
   - mvn -P coverage clean cobertura:cobertura coveralls:report
   - '[[ $TRAVIS_BRANCH == "master" && ( "x${TRAVIS_PULL_REQUEST}" == "xfalse" || "x${TRAVIS_PULL_REQUEST}" == "x" ) ]] && sudo apt-get install gnupg2'
   - '[[ $TRAVIS_BRANCH == "master" && ( "x${TRAVIS_PULL_REQUEST}" == "xfalse" || "x${TRAVIS_PULL_REQUEST}" == "x" ) ]] && bash depoy.sh eb1a6f34f056 key.asc.enc settings.xml'
-sudo: false
+sudo: true
 env:
   global:
   - secure: DPkao3yJ4hhEsUOfs2VQJ8WCV3VdR3ToFiGB1l461PUstjaytTeXYK3bW2PmZqYJs6Hxxwyl8UHFvgBvWLb/yQV/dqyyJAV8XRb9UC37e4ddLoi8HE7NSGQIiXq0tySiMaOTyd2NtRTepfNAMEMDP746Nrox1giPEq1FPv+K98o=

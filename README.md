@@ -96,6 +96,25 @@ FAQ
   > It is. According to Cobertura, it has **100% code coverage**, and according to Codacy, it has **0 code issues**.
   It is maintained by myself the best I can. The rest is up to you.
 
+Some Numbers and Facts
+----------------------
+
+  * This project has *1000+* individual unit tests.
+
+  * This project has **100%** [code coverage](https://coveralls.io/github/mmnaseri/spring-data-mock)
+
+  * This project has **95%** branch coverage rate.
+
+  * The project issue response turn around is an average of 2 days.
+
+  * It covers *all* the repository specifications in Spring Data Commons (except predicates -- support is planned).
+
+  * It has more than 6k lines of code, a lot of which is unit tests.
+
+  * Every public class or method has JavaDoc
+
+  * There is a dedicated documentation website for this project at https://mmnaseri.github.io/spring-data-mock/
+
 Contribution
 ------------
 
