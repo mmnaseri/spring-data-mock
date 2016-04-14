@@ -8,6 +8,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * <p>This class will adapt results from an iterable object to a geo page.</p>
+ *
+ * <p>It will accept adaptations wherein the original value is some sort of iterable and the required return type
+ * is an instance of {@link GeoPage}. Remember that it does <em>not</em> check for individual object type
+ * compatibility.</p>
+ *
+ * <p>This adapter will execute at priority {@literal -150}.</p>
+ *
  * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/28/15)
  */

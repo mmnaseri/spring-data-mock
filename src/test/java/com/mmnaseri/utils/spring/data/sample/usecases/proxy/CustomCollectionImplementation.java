@@ -13,7 +13,7 @@ class CustomCollectionImplementation extends AbstractCollection {
 
     @Override
     public Iterator iterator() {
-        return new EmptyIterator();
+        return EmptyIterator.INSTANCE;
     }
 
     @Override

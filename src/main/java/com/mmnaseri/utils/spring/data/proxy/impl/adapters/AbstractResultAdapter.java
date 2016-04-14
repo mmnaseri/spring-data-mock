@@ -3,6 +3,9 @@ package com.mmnaseri.utils.spring.data.proxy.impl.adapters;
 import com.mmnaseri.utils.spring.data.proxy.ResultAdapter;
 
 /**
+ * <p>This is the base class for all result adapters that adds comparison capabilities to teh adapters.
+ * This basically means that now adapters can be compared using their assigned priorities.</p>
+ *
  * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/24/15)
  */

@@ -7,6 +7,13 @@ import java.util.Iterator;
 import java.util.concurrent.Future;
 
 /**
+ * <p>This adapter will try to adapt a {@literal null} value to a simple value. Simple here is defined as anything
+ * that is not an iterable, an iterator, or a future promise.</p>
+ *
+ * <p>It adapts results if the return type is simple and the original value is {@literal null}.</p>
+ *
+ * <p>This adapter runs at the priority of {@literal -400}.</p>
+ *
  * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/24/15)
  */

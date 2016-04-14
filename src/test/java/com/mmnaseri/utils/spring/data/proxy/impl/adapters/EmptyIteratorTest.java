@@ -13,17 +13,17 @@ public class EmptyIteratorTest {
 
     @Test
     public void testHasNext() throws Exception {
-        assertThat(new EmptyIterator().hasNext(), is(false));
+        assertThat(EmptyIterator.INSTANCE.hasNext(), is(false));
     }
 
     @Test(expectedExceptions = IndexOutOfBoundsException.class)
     public void testNext() throws Exception {
-        new EmptyIterator().next();
+        EmptyIterator.INSTANCE.next();
     }
 
     @Test(expectedExceptions = IndexOutOfBoundsException.class)
     public void testRemove() throws Exception {
-        new EmptyIterator().remove();
+        EmptyIterator.INSTANCE.remove();
     }
 
 }
