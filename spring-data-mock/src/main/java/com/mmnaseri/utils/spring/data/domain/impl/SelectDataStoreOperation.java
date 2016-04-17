@@ -7,6 +7,8 @@ import com.mmnaseri.utils.spring.data.query.QueryDescriptor;
 import com.mmnaseri.utils.spring.data.query.Sort;
 import com.mmnaseri.utils.spring.data.store.DataStore;
 import com.mmnaseri.utils.spring.data.store.DataStoreOperation;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.io.Serializable;
 import java.util.*;
@@ -21,6 +23,7 @@ import java.util.*;
  */
 public class SelectDataStoreOperation<K extends Serializable, E> implements DataStoreOperation<List<E>, K, E> {
 
+    private static final Log log = LogFactory.getLog(SelectDataStoreOperation.class);
     private final QueryDescriptor descriptor;
 
     public SelectDataStoreOperation(QueryDescriptor descriptor) {
@@ -33,6 +36,7 @@ public class SelectDataStoreOperation<K extends Serializable, E> implements Data
 
     @Override
     public List<E> execute(DataStore<K, E> store, RepositoryConfiguration configuration, Invocation invocation) {
+        log.info("Selecting the data according to the provided selection descriptor: " + descriptor);
         final List<E> selection = new LinkedList<>();
         final Collection<E> all = new LinkedList<>(store.retrieveAll());
         for (E entity : all) {
@@ -40,17 +44,21 @@ public class SelectDataStoreOperation<K extends Serializable, E> implements Data
                 selection.add(entity);
             }
         }
+        log.info("Matched " + selection.size() + " items from the data store");
         if (descriptor.isDistinct()) {
             final Set<E> distinctValues = new HashSet<>(selection);
             selection.clear();
             selection.addAll(distinctValues);
+            log.info("After clearing up duplicates, " + selection.size() + " items remained");
         }
         final Sort sort = descriptor.getSort(invocation);
         final Page page = descriptor.getPage(invocation);
         if (sort != null) {
+            log.info("Sorting the selected items according to the provided ordering");
             PropertyComparator.sort(selection, sort);
         }
         if (page != null) {
+            log.info("We need to paginate the selection to fit the selection criteria");
             int start = page.getPageSize() * page.getPageNumber();
             int finish = Math.min(start + page.getPageSize(), selection.size());
             if (start > selection.size()) {
@@ -65,6 +73,7 @@ public class SelectDataStoreOperation<K extends Serializable, E> implements Data
             }
         }
         if (descriptor.getLimit() > 0) {
+            log.info("Going to limit the result to " + descriptor.getLimit() + " items");
             final List<E> view = new ArrayList<>();
             for (E item : selection.subList(0, Math.min(selection.size(), descriptor.getLimit()))) {
                 view.add(item);

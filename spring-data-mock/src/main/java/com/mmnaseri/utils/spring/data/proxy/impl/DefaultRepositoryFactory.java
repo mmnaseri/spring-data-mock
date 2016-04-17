@@ -11,11 +11,14 @@ import com.mmnaseri.utils.spring.data.store.DataStoreRegistry;
 import com.mmnaseri.utils.spring.data.store.impl.DefaultDataStoreEventListenerContext;
 import com.mmnaseri.utils.spring.data.store.impl.EventPublishingDataStore;
 import com.mmnaseri.utils.spring.data.store.impl.MemoryDataStore;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -29,7 +32,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * @since 1.0 (9/29/15)
  */
 public class DefaultRepositoryFactory implements RepositoryFactory {
-    
+
+    private static final Log log = LogFactory.getLog(DefaultRepositoryFactory.class);
     private final RepositoryMetadataResolver repositoryMetadataResolver;
     private final Map<Class<?>, RepositoryMetadata> metadataMap = new ConcurrentHashMap<>();
     private final QueryDescriptionExtractor descriptionExtractor;
@@ -53,17 +57,22 @@ public class DefaultRepositoryFactory implements RepositoryFactory {
 
     @Override
     public <E> E getInstance(KeyGenerator<? extends Serializable> keyGenerator, Class<E> repositoryInterface, Class... implementations) {
+        log.info("We are going to create a proxy instance of type " + repositoryInterface + " using key generator " + keyGenerator + " and binding the implementations to " + Arrays.toString(implementations));
         //figure out the repository metadata
+        log.info("Resolving repository metadata for " + repositoryInterface);
         final RepositoryMetadata metadata = getRepositoryMetadata(repositoryInterface);
         //get the underlying data store
+        log.info("Resolving the data store for " + repositoryInterface);
         final DataStore<Serializable, Object> dataStore = getDataStore(metadata);
         //figure out type mappings
+        log.info("Trying to find all the proper type mappings for entity repository " + repositoryInterface);
         final List<TypeMapping<?>> typeMappings = getTypeMappings(metadata, dataStore, keyGenerator, implementations);
         //set up the data operation resolver
         final DataOperationResolver operationResolver = new DefaultDataOperationResolver(typeMappings, descriptionExtractor, metadata, functionRegistry, configuration);
         //get all of this repository's methods
         final Method[] methods = repositoryInterface.getMethods();
         //get mappings for the repository methods
+        log.info("Trying to find all the invocation mappings for methods declared on " + repositoryInterface);
         final List<InvocationMapping<? extends Serializable, ?>> invocationMappings = getInvocationMappings(operationResolver, methods);
         //extract the bound implementation types
         final List<Class<?>> boundImplementations = new LinkedList<>();
@@ -76,9 +85,11 @@ public class DefaultRepositoryFactory implements RepositoryFactory {
         //noinspection unchecked
         final InvocationHandler interceptor = new DataOperationInvocationHandler(repositoryConfiguration, invocationMappings, dataStore, adapterContext, operationInvocationHandler);
         //create a proxy for the repository
+        log.info("Instantiating the proxy using the provided configuration");
         final Object instance = Proxy.newProxyInstance(getClass().getClassLoader(), new Class[]{repositoryInterface}, interceptor);
         //for each type mapping, inject proper dependencies
         for (TypeMapping<?> typeMapping : typeMappings) {
+            log.info("Injecting all the required dependencies into the repository mapping implementations");
             if (typeMapping.getInstance() instanceof RepositoryAware<?>) {
                 //noinspection unchecked
                 ((RepositoryAware) typeMapping.getInstance()).setRepository(instance);

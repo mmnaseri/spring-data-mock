@@ -7,6 +7,8 @@ import com.mmnaseri.utils.spring.data.query.DataFunctionRegistry;
 import com.mmnaseri.utils.spring.data.query.QueryDescriptor;
 import com.mmnaseri.utils.spring.data.store.DataStore;
 import com.mmnaseri.utils.spring.data.store.DataStoreOperation;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.io.Serializable;
 import java.util.List;
@@ -19,7 +21,8 @@ import java.util.List;
  * @since 1.0 (9/29/15)
  */
 public class DescribedDataStoreOperation<K extends Serializable, E> implements DataStoreOperation<Object, K, E> {
-    
+
+    private static final Log log = LogFactory.getLog(DescribedDataStoreOperation.class);
     private final SelectDataStoreOperation<K, E> selectOperation;
     private final DataFunctionRegistry functionRegistry;
 
@@ -30,11 +33,14 @@ public class DescribedDataStoreOperation<K extends Serializable, E> implements D
 
     @Override
     public Object execute(DataStore<K, E> store, RepositoryConfiguration configuration, Invocation invocation) {
+        log.info("Trying to select the data from the data store");
         final List<E> selection = selectOperation.execute(store, configuration, invocation);
         final QueryDescriptor descriptor = selectOperation.getDescriptor();
         if (descriptor.getFunction() == null) {
+            log.info("No function was specified for the current selection");
             return selection;
         }
+        log.info("Executing function " + descriptor.getFunction() + " on the selected items");
         final DataFunction<?> function = functionRegistry.getFunction(descriptor.getFunction());
         return function.apply(store, descriptor, configuration, selection);
     }

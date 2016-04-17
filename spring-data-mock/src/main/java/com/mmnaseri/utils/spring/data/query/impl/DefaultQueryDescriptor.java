@@ -1,11 +1,10 @@
 package com.mmnaseri.utils.spring.data.query.impl;
 
-import com.mmnaseri.utils.spring.data.domain.Invocation;
-import com.mmnaseri.utils.spring.data.domain.Operator;
-import com.mmnaseri.utils.spring.data.domain.Parameter;
-import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
+import com.mmnaseri.utils.spring.data.domain.*;
 import com.mmnaseri.utils.spring.data.proxy.RepositoryFactoryConfiguration;
 import com.mmnaseri.utils.spring.data.query.*;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 
@@ -18,7 +17,9 @@ import java.util.List;
  * @since 1.0 (9/20/15)
  */
 public class DefaultQueryDescriptor implements QueryDescriptor {
-    
+
+    private static final Log log = LogFactory.getLog(InvocationMatcher.class);
+
     private final boolean distinct;
     private final String function;
     private final int limit;
@@ -81,6 +82,7 @@ public class DefaultQueryDescriptor implements QueryDescriptor {
 
     @Override
     public boolean matches(Object entity, Invocation invocation) {
+        log.info("Matching " + entity + " against " + invocation);
         final List<List<Parameter>> branches = getBranches();
         if (branches.isEmpty()) {
             return entity != null;

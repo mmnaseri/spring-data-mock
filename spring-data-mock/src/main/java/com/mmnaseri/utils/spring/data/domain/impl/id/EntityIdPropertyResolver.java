@@ -2,6 +2,8 @@ package com.mmnaseri.utils.spring.data.domain.impl.id;
 
 import com.mmnaseri.utils.spring.data.domain.IdPropertyResolver;
 import com.mmnaseri.utils.spring.data.error.NoIdPropertyException;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.io.Serializable;
 
@@ -26,6 +28,7 @@ import java.io.Serializable;
  */
 public class EntityIdPropertyResolver implements IdPropertyResolver {
 
+    private static final Log log = LogFactory.getLog(EntityIdPropertyResolver.class);
     private final AnnotatedGetterIdPropertyResolver annotatedGetterIdPropertyResolver = new AnnotatedGetterIdPropertyResolver();
     private final AnnotatedFieldIdPropertyResolver annotatedFieldIdPropertyResolver = new AnnotatedFieldIdPropertyResolver();
     private final NamedGetterIdPropertyResolver namedGetterIdPropertyResolver = new NamedGetterIdPropertyResolver();
@@ -33,17 +36,22 @@ public class EntityIdPropertyResolver implements IdPropertyResolver {
 
     @Override
     public String resolve(Class<?> entityType, Class<? extends Serializable> idType) {
+        log.info("Trying to resolve the ID property for entity " + entityType + " using the annotated getter method");
         String idProperty = annotatedGetterIdPropertyResolver.resolve(entityType, idType);
         if (idProperty == null) {
+            log.info("Trying to resolve the ID property for entity " + entityType + " using the annotated ID field");
             idProperty = annotatedFieldIdPropertyResolver.resolve(entityType, idType);
         }
         if (idProperty == null) {
+            log.info("Trying to resolve the ID property for entity " + entityType + " using the getter method");
             idProperty = namedGetterIdPropertyResolver.resolve(entityType, idType);
         }
         if (idProperty == null) {
+            log.info("Trying to resolve the ID property for entity " + entityType + " using the field");
             idProperty = namedFieldIdPropertyResolver.resolve(entityType, idType);
         }
         if (idProperty == null) {
+            log.error("No ID property was found for entity " + entityType);
             throw new NoIdPropertyException(entityType);
         }
         return idProperty;

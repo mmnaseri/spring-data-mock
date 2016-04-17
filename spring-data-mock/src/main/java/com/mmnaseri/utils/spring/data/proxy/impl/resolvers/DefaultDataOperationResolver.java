@@ -9,6 +9,8 @@ import com.mmnaseri.utils.spring.data.proxy.RepositoryFactoryConfiguration;
 import com.mmnaseri.utils.spring.data.proxy.TypeMapping;
 import com.mmnaseri.utils.spring.data.query.DataFunctionRegistry;
 import com.mmnaseri.utils.spring.data.store.DataStoreOperation;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -22,6 +24,7 @@ import java.util.List;
  */
 public class DefaultDataOperationResolver implements DataOperationResolver {
 
+    private static final Log log = LogFactory.getLog(DefaultDataOperationResolver.class);
     private final List<DataOperationResolver> resolvers;
 
     public DefaultDataOperationResolver(List<TypeMapping<?>> implementations, QueryDescriptionExtractor descriptionExtractor, RepositoryMetadata repositoryMetadata, DataFunctionRegistry functionRegistry, RepositoryFactoryConfiguration configuration) {
@@ -32,7 +35,9 @@ public class DefaultDataOperationResolver implements DataOperationResolver {
 
     @Override
     public DataStoreOperation<?, ?, ?> resolve(Method method) {
+        log.info("Resolving the data operation for method " + method);
         for (DataOperationResolver resolver : resolvers) {
+            log.debug("Attempting to resolve the method call using resolver " + resolver);
             final DataStoreOperation<?, ?, ?> resolution;
             try {
                 resolution = resolver.resolve(method);
@@ -43,6 +48,7 @@ public class DefaultDataOperationResolver implements DataOperationResolver {
                 return resolution;
             }
         }
+        log.error("No suitable data operation could be found for method " + method);
         throw new UnknownDataOperationException(method);
     }
 

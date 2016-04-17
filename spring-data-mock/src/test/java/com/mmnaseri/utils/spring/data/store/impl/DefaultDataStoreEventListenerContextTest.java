@@ -1,5 +1,6 @@
 package com.mmnaseri.utils.spring.data.store.impl;
 
+import com.mmnaseri.utils.spring.data.error.InvalidArgumentException;
 import com.mmnaseri.utils.spring.data.sample.mocks.AfterInsertEventListener;
 import com.mmnaseri.utils.spring.data.sample.mocks.AllCatchingEventListener;
 import com.mmnaseri.utils.spring.data.store.DataStoreEvent;
@@ -15,6 +16,12 @@ import static org.hamcrest.Matchers.*;
  * @since 1.0 (4/9/16)
  */
 public class DefaultDataStoreEventListenerContextTest {
+
+    @Test(expectedExceptions = InvalidArgumentException.class)
+    public void testTriggeringNullEvent() throws Exception {
+        DefaultDataStoreEventListenerContext context = new DefaultDataStoreEventListenerContext();
+        context.trigger(null);
+    }
 
     @Test
     public void testExactEventType() throws Exception {

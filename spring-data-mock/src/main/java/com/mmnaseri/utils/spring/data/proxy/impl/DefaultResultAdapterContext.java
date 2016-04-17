@@ -5,6 +5,8 @@ import com.mmnaseri.utils.spring.data.error.ResultAdapterFailureException;
 import com.mmnaseri.utils.spring.data.proxy.ResultAdapter;
 import com.mmnaseri.utils.spring.data.proxy.ResultAdapterContext;
 import com.mmnaseri.utils.spring.data.proxy.impl.adapters.*;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -20,6 +22,7 @@ import java.util.List;
 @SuppressWarnings("WeakerAccess")
 public class DefaultResultAdapterContext implements ResultAdapterContext {
 
+    private static final Log log = LogFactory.getLog(DefaultResultAdapterContext.class);
     private final List<ResultAdapter<?>> adapters;
 
     /**
@@ -60,17 +63,20 @@ public class DefaultResultAdapterContext implements ResultAdapterContext {
 
     @Override
     public synchronized void register(ResultAdapter<?> adapter) {
+        log.info("Registering adapter " + adapter + " with the registry");
         adapters.add(adapter);
         Collections.sort(adapters);
     }
 
     @Override
     public Object adapt(Invocation invocation, Object originalResult) {
+        log.info("Adapting the result of invocation to type " + invocation.getMethod().getReturnType());
         for (ResultAdapter<?> adapter : adapters) {
             if (adapter.accepts(invocation, originalResult)) {
                 return adapter.adapt(invocation, originalResult);
             }
         }
+        log.error("Could not find any result adapter that was capable of adapting the result of the invocation to type " + invocation.getMethod().getReturnType());
         throw new ResultAdapterFailureException(originalResult, invocation.getMethod().getReturnType());
     }
 
