@@ -30,6 +30,7 @@
     <name>Spring Data Mock: Build Aggregator</name>
     <description>This is the build module that will aggregate alreactors for the spring-data-mock project</description>
     <url>https://mmnaseri.github.io/spring-data-mock</url>
+    <packaging>pom</packaging>
 
     <licenses>
         <license>
@@ -73,5 +74,11 @@
 	<modules>
 		<module>../spring-data-mock/</module>
 	</modules>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven-compiler-plugin.version>3.5.1</maven-compiler-plugin.version>
+        <target-jdk.version>1.7</target-jdk.version>
+    </properties>
 
 </project>
