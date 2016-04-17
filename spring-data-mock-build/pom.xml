@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2016 Milad Naseri
+  ~
+  ~ Permission is hereby granted, free of charge, to any person obtaining a copy of this
+  ~ software and associated documentation files (the "Software"), to deal in the Software
+  ~ without restriction, including without limitation the rights to use, copy, modify, merge,
+  ~ publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons
+  ~ to whom the Software is furnished to do so, subject to the following conditions:
+  ~
+  ~ The above copyright notice and this permission notice shall be included in all copies or
+  ~ substantial portions of the Software.
+  ~
+  ~ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+  ~ INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+  ~ PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
+  ~ FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+  ~ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  ~ SOFTWARE.
+  -->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.mmnaseri.utils</groupId>
+    <artifactId>spring-data-mock-build</artifactId>
+    <version>1.0.2</version>
+    <name>Spring Data Mock: Build Aggregator</name>
+    <description>This is the build module that will aggregate all reactors for the spring-data-mock project</description>
+    <url>https://mmnaseri.github.io/spring-data-mock</url>
+    <packaging>pom</packaging>
+
+    <licenses>
+        <license>
+            <name>MIT</name>
+            <url>http://mit-license.org</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Milad Naseri</name>
+            <email>mmnaseri@programmer.net</email>
+            <url>http://www.mmnaseri.com</url>
+            <roles>
+                <role>designer</role>
+                <role>developer</role>
+            </roles>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git@github.com:mmnaseri/spring-data-mock.git</connection>
+        <developerConnection>scm:git:git@github.com:mmnaseri/spring-data-mock.git</developerConnection>
+        <url>git@github.com:mmnaseri/spring-data-mock.git</url>
+    </scm>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler-plugin.version}</version>
+                <configuration>
+                    <source>${target-jdk.version}</source>
+                    <target>${target-jdk.version}</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+	<modules>
+		<module>../spring-data-mock/</module>
+	</modules>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven-compiler-plugin.version>3.5.1</maven-compiler-plugin.version>
+        <target-jdk.version>1.7</target-jdk.version>
+    </properties>
+
+</project>
