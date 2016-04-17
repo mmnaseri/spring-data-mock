@@ -2,10 +2,14 @@ language: java
 jdk:
   - oraclejdk8
   - oraclejdk7
+test:
+  - cd spring-data-mock
+  - mvn test -B
 after_success:
+  - cd spring-data-mock
   - mvn -P coverage clean cobertura:cobertura coveralls:report
   - '[[ $TRAVIS_BRANCH == "master" && ( "x${TRAVIS_PULL_REQUEST}" == "xfalse" || "x${TRAVIS_PULL_REQUEST}" == "x" ) && ( "x$(echo $JAVA_HOME | grep -o 8)" == "x8" ) ]] && sudo apt-get install gnupg2'
-  - '[[ $TRAVIS_BRANCH == "master" && ( "x${TRAVIS_PULL_REQUEST}" == "xfalse" || "x${TRAVIS_PULL_REQUEST}" == "x" ) && ( "x$(echo $JAVA_HOME | grep -o 8)" == "x8" ) ]] && bash deploy.sh eb1a6f34f056 key.asc.enc settings.xml'
+  - '[[ $TRAVIS_BRANCH == "master" && ( "x${TRAVIS_PULL_REQUEST}" == "xfalse" || "x${TRAVIS_PULL_REQUEST}" == "x" ) && ( "x$(echo $JAVA_HOME | grep -o 8)" == "x8" ) ]] && bash deployment/deploy.sh eb1a6f34f056 deployment/key.asc.enc deployment/settings.xml'
 sudo: true
 env:
   global:
