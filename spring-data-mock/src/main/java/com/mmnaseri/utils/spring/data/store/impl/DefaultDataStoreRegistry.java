@@ -3,6 +3,8 @@ package com.mmnaseri.utils.spring.data.store.impl;
 import com.mmnaseri.utils.spring.data.error.DataStoreNotFoundException;
 import com.mmnaseri.utils.spring.data.store.DataStore;
 import com.mmnaseri.utils.spring.data.store.DataStoreRegistry;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.io.Serializable;
 import java.util.Map;
@@ -17,16 +19,20 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class DefaultDataStoreRegistry implements DataStoreRegistry {
 
+    private static final Log log = LogFactory.getLog(DefaultDataStoreRegistry.class);
     private final Map<Class<?>, DataStore<?, ?>> dataStores = new ConcurrentHashMap<>();
 
     @Override
     public <E, K extends Serializable> void register(DataStore<K, E> dataStore) {
+        log.info("Registering a data store for type " + dataStore.getEntityType());
         dataStores.put(dataStore.getEntityType(), dataStore);
     }
 
     @Override
     public <E, K extends Serializable> DataStore<K, E> getDataStore(Class<E> entityType) {
         if (!dataStores.containsKey(entityType)) {
+            log.error("There is no data store registered for entity type " + entityType);
+            log.debug("Registered data types are " + dataStores.keySet());
             throw new DataStoreNotFoundException(entityType);
         }
         //noinspection unchecked

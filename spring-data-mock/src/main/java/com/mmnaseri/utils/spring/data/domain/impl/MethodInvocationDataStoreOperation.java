@@ -5,6 +5,8 @@ import com.mmnaseri.utils.spring.data.error.DataOperationExecutionException;
 import com.mmnaseri.utils.spring.data.proxy.RepositoryConfiguration;
 import com.mmnaseri.utils.spring.data.store.DataStore;
 import com.mmnaseri.utils.spring.data.store.DataStoreOperation;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
@@ -19,6 +21,7 @@ import java.lang.reflect.Method;
  */
 public class MethodInvocationDataStoreOperation<K extends Serializable, E> implements DataStoreOperation<Object, K, E> {
 
+    private static final Log log = LogFactory.getLog(MethodInvocationDataStoreOperation.class);
     private final Object instance;
     private final Method method;
 
@@ -31,6 +34,7 @@ public class MethodInvocationDataStoreOperation<K extends Serializable, E> imple
     public Object execute(DataStore<K, E> store, RepositoryConfiguration configuration, Invocation invocation) {
         final Object result;
         try {
+            log.info("Invoking method " + method + " to handle invocation " + invocation);
             result = method.invoke(instance, invocation.getArguments());
         } catch (IllegalAccessException e) {
             throw new DataOperationExecutionException("Failed to access target method: " + method, e);

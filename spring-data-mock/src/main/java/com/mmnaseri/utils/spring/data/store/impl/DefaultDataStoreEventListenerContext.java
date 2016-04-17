@@ -1,8 +1,11 @@
 package com.mmnaseri.utils.spring.data.store.impl;
 
+import com.mmnaseri.utils.spring.data.error.InvalidArgumentException;
 import com.mmnaseri.utils.spring.data.store.DataStoreEvent;
 import com.mmnaseri.utils.spring.data.store.DataStoreEventListener;
 import com.mmnaseri.utils.spring.data.store.DataStoreEventListenerContext;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -24,6 +27,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class DefaultDataStoreEventListenerContext implements DataStoreEventListenerContext {
 
+    private static final Log log = LogFactory.getLog(DefaultDataStoreEventListenerContext.class);
     private final ConcurrentMap<Class<? extends DataStoreEvent>, List<DataStoreEventListener<?>>> listeners;
     private final DataStoreEventListenerContext parent;
 
@@ -40,20 +44,28 @@ public class DefaultDataStoreEventListenerContext implements DataStoreEventListe
     public <E extends DataStoreEvent> void register(DataStoreEventListener<E> listener) {
         final SmartDataStoreEventListener<E> eventListener = new SmartDataStoreEventListener<>(listener);
         listeners.putIfAbsent(eventListener.getEventType(), new CopyOnWriteArrayList<DataStoreEventListener<?>>());
+        log.info("Registering an event listener for type " + eventListener.getEventType());
         listeners.get(eventListener.getEventType()).add(eventListener);
     }
 
     @Override
     public void trigger(DataStoreEvent event) {
+        if (event == null) {
+            log.error("The data store event that was triggered was a null value");
+            throw new InvalidArgumentException("Cannot raise a null event");
+        }
+        log.info("Triggering data store event of type " + event.getClass());
         for (Class<? extends DataStoreEvent> eventType : listeners.keySet()) {
             if (eventType.isInstance(event)) {
                 for (DataStoreEventListener listener : listeners.get(eventType)) {
+                    log.debug("Triggering event on listener " + ((SmartDataStoreEventListener) listener).getDelegate());
                     //noinspection unchecked
                     listener.onEvent(event);
                 }
             }
         }
         if (parent != null) {
+            log.info("Going to trigger the same event on the parent context");
             parent.trigger(event);
         }
     }

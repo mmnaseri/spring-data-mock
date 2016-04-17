@@ -1,6 +1,8 @@
 package com.mmnaseri.utils.spring.data.domain.impl;
 
 import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.data.repository.RepositoryDefinition;
 
 /**
@@ -18,14 +20,17 @@ import org.springframework.data.repository.RepositoryDefinition;
  */
 public class DefaultRepositoryMetadataResolver extends AbstractRepositoryMetadataResolver {
 
+    private static final Log log = LogFactory.getLog(DefaultRepositoryMetadataResolver.class);
     private final AssignableRepositoryMetadataResolver assignableRepositoryMetadataResolver = new AssignableRepositoryMetadataResolver();
     private final AnnotationRepositoryMetadataResolver annotationRepositoryMetadataResolver = new AnnotationRepositoryMetadataResolver();
 
     @Override
     protected RepositoryMetadata resolveFromInterface(Class<?> repositoryInterface) {
         if (repositoryInterface.isAnnotationPresent(RepositoryDefinition.class)) {
+            log.info("Since the repository interface was annotated with @RepositoryDefinition we will try to resolve the metadata using the provided annotation");
             return annotationRepositoryMetadataResolver.resolve(repositoryInterface);
         }
+        log.info("Since no annotation was found on the repository, we will try to read the metadata from the generic type parameters derived from the Repository interface");
         return assignableRepositoryMetadataResolver.resolve(repositoryInterface);
     }
 

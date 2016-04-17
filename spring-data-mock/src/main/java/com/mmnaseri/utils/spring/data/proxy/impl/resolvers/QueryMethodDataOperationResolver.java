@@ -9,6 +9,8 @@ import com.mmnaseri.utils.spring.data.proxy.RepositoryFactoryConfiguration;
 import com.mmnaseri.utils.spring.data.query.DataFunctionRegistry;
 import com.mmnaseri.utils.spring.data.query.QueryDescriptor;
 import com.mmnaseri.utils.spring.data.store.DataStoreOperation;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.data.annotation.QueryAnnotation;
 
@@ -27,6 +29,7 @@ import java.lang.reflect.Method;
 @SuppressWarnings("WeakerAccess")
 public class QueryMethodDataOperationResolver implements DataOperationResolver {
 
+    private static final Log log = LogFactory.getLog(QueryMethodDataOperationResolver.class);
     private final QueryDescriptionExtractor descriptionExtractor;
     private final RepositoryMetadata repositoryMetadata;
     private final DataFunctionRegistry functionRegistry;
@@ -42,9 +45,11 @@ public class QueryMethodDataOperationResolver implements DataOperationResolver {
     @Override
     public DataStoreOperation<?, ?, ?> resolve(Method method) {
         if (AnnotationUtils.findAnnotation(method, QueryAnnotation.class) != null) {
+            log.info("Found a @Query annotation on the method " + method);
             //we don't know how to handle vendor-specific query methods
             return null;
         }
+        log.info("Extracting query description from the method by parsing the method");
         final QueryDescriptor descriptor = descriptionExtractor.extract(repositoryMetadata, method, configuration);
         return new DescribedDataStoreOperation<>(new SelectDataStoreOperation<>(descriptor), functionRegistry);
     }

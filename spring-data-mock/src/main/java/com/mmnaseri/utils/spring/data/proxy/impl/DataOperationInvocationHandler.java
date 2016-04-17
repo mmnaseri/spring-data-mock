@@ -9,6 +9,8 @@ import com.mmnaseri.utils.spring.data.proxy.ResultConverter;
 import com.mmnaseri.utils.spring.data.proxy.impl.converters.DefaultResultConverter;
 import com.mmnaseri.utils.spring.data.store.DataStore;
 import com.mmnaseri.utils.spring.data.store.DataStoreOperation;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;
@@ -32,6 +34,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 @SuppressWarnings("WeakerAccess")
 public class DataOperationInvocationHandler<K extends Serializable, E> implements InvocationHandler {
 
+    private static final Log log = LogFactory.getLog(DataOperationInvocationHandler.class);
     private final DataStore<K, E> dataStore;
     private final ResultAdapterContext adapterContext;
     private final ResultConverter converter;
@@ -54,6 +57,7 @@ public class DataOperationInvocationHandler<K extends Serializable, E> implement
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+        log.info("A method call to " + method + " has been intercepted. We will now try to find an appropriate invocation.");
         final Invocation methodInvocation = new ImmutableInvocation(method, args);
         InvocationMapping<K, E> targetMapping = null;
         if (!misses.contains(method)) {
@@ -70,11 +74,14 @@ public class DataOperationInvocationHandler<K extends Serializable, E> implement
             }
         }
         if (targetMapping == null) {
+            log.info("The invocation cannot be resolved using a data operation. We will try to handle this as a non-data operation");
             misses.add(method);
             return operationInvocationHandler.invoke(proxy, method, args);
         }
         final DataStoreOperation<?, K, E> operation = targetMapping.getOperation();
+        log.info("Executing the operation for method " + method);
         final Object operationResult = operation.execute(dataStore, repositoryConfiguration, methodInvocation);
+        log.info("Trying to see if any conversion is necessary on the object");
         final Object convertedResult = converter.convert(methodInvocation, operationResult);
         return adapterContext.adapt(methodInvocation, convertedResult);
     }

@@ -42,4 +42,9 @@ public class ImmutableOrder implements Order {
         return nullHandling;
     }
 
+    @Override
+    public String toString() {
+        return property + " " + direction;
+    }
+
 }

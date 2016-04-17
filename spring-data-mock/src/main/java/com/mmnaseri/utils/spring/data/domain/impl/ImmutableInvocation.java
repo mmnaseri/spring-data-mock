@@ -3,6 +3,7 @@ package com.mmnaseri.utils.spring.data.domain.impl;
 import com.mmnaseri.utils.spring.data.domain.Invocation;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
 
 /**
  * This is an immutable invocation.
@@ -29,4 +30,10 @@ public class ImmutableInvocation implements Invocation {
     public Object[] getArguments() {
         return arguments;
     }
+
+    @Override
+    public String toString() {
+        return method + ", " + Arrays.toString(arguments);
+    }
+
 }
