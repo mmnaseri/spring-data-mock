@@ -25,7 +25,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.mmnaseri.utils</groupId>
-    <artifactId>spring-data-mock-parent</artifactId>
+    <artifactId>spring-data-mock-build</artifactId>
     <version>1.0.2</version>
     <name>Spring Data Mock: Build Aggregator</name>
     <description>This is the build module that will aggregate alreactors for the spring-data-mock project</description>
@@ -71,7 +71,7 @@
     </build>
 
 	<modules>
-		<module>../spring-data-mock
+		<module>../spring-data-mock/</module>
 	</modules>
 
 </project>
