@@ -28,7 +28,7 @@
     <artifactId>spring-data-mock-build</artifactId>
     <version>1.0.2</version>
     <name>Spring Data Mock: Build Aggregator</name>
-    <description>This is the build module that will aggregate alreactors for the spring-data-mock project</description>
+    <description>This is the build module that will aggregate all reactors for the spring-data-mock project</description>
     <url>https://mmnaseri.github.io/spring-data-mock</url>
     <packaging>pom</packaging>
 
