@@ -172,7 +172,7 @@ public class PropertyUtilsTest extends AbstractUtilityClassTest {
         final Field id = ReflectionUtils.findField(ClassWithNoGetters.class, "id");
         id.setAccessible(true);
         id.set(object, "1234");
-        assertThat(PropertyUtils.getPropertyValue(object, "id"), Matchers.<Object>is(id.get(object)));
+        assertThat(PropertyUtils.getPropertyValue(object, "id"), Matchers.is(id.get(object)));
     }
 
     @Test(expectedExceptions = IllegalStateException.class)

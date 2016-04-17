@@ -7,6 +7,7 @@ package com.mmnaseri.utils.spring.data.domain.impl;
  * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (4/13/16, 9:25 AM)
  */
+@SuppressWarnings("WeakerAccess")
 class QueryModifiers {
 
     private final int limit;
@@ -17,11 +18,11 @@ class QueryModifiers {
         this.distinct = distinct;
     }
 
-    int getLimit() {
+    public int getLimit() {
         return limit;
     }
 
-    boolean isDistinct() {
+    public boolean isDistinct() {
         return distinct;
     }
 

@@ -19,6 +19,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (10/12/15)
  */
+@SuppressWarnings("WeakerAccess")
 class KeyGeneratorProvider {
 
     private final Map<Class<? extends Serializable>, List<Class<? extends KeyGenerator>>> generators;
@@ -74,7 +75,7 @@ class KeyGeneratorProvider {
      * @param <S>        the type of keys the generator will provide
      * @return the generator or {@literal null} if none could be found to satisfy the key type
      */
-    <S extends Serializable> Class<? extends KeyGenerator<S>> getKeyGenerator(Class<S> keyType) {
+    public <S extends Serializable> Class<? extends KeyGenerator<S>> getKeyGenerator(Class<S> keyType) {
         final List<Class<? extends KeyGenerator<S>>> generators = getKeyGenerators(keyType);
         return generators.isEmpty() ? null : generators.get(0);
     }

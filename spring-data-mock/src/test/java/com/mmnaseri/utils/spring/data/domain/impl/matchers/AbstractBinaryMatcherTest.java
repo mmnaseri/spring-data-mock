@@ -27,6 +27,8 @@ public class AbstractBinaryMatcherTest {
     @Test
     public void testWhenHasTwoParameters() throws Exception {
         final NotMatchingBinaryMatcher matcher = new NotMatchingBinaryMatcher();
+        //we are creating the varargs array explicitly to call to the proper method signature
+        //noinspection RedundantArrayCreation
         matcher.matches(new ImmutableParameter("x.y.z", null, null, new ImmutableOperator("sample", 2, null)), new Object(), new Object[]{new Object(), new Object()});
     }
 

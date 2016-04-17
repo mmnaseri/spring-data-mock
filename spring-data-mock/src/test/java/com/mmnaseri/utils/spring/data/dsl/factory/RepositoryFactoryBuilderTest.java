@@ -275,7 +275,7 @@ public class RepositoryFactoryBuilderTest {
         final AuditDataEventListener auditDataEventListener = (AuditDataEventListener) listeners.get(0);
         final AuditorAware usedAuditorAware = auditDataEventListener.getAuditorAware();
         assertThat(usedAuditorAware, is(notNullValue()));
-        assertThat(usedAuditorAware, Matchers.<AuditorAware>is(auditorAware));
+        assertThat(usedAuditorAware, Matchers.is(auditorAware));
     }
 
     @Test

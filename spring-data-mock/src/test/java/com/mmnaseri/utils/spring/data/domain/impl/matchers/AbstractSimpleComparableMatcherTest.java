@@ -26,7 +26,7 @@ public class AbstractSimpleComparableMatcherTest {
     @Test
     public void testWhenBothAreComparable() throws Exception {
         final NotMatchingSimpleComparableMatcher matcher = new NotMatchingSimpleComparableMatcher();
-        matcher.matches(new ImmutableParameter("x.y.z", null, null, null), 1, (Object) 2);
+        matcher.matches(new ImmutableParameter("x.y.z", null, null, null), 1, 2);
     }
 
 }

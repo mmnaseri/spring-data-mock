@@ -32,7 +32,7 @@ public class AbstractBinaryComparableMatcherTest {
     @Test
     public void testWhenAllAreComparable() throws Exception {
         final NotMatchingBinaryComparableMatcher matcher = new NotMatchingBinaryComparableMatcher();
-        matcher.matches(new ImmutableParameter("x.y.z", null, null, null), 1, (Object) 2, 3);
+        matcher.matches(new ImmutableParameter("x.y.z", null, null, null), 1, 2, 3);
     }
 
 }
