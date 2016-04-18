@@ -117,7 +117,7 @@ public class QueryDescriptionExtractor {
         //this is the extractor used for getting paging data
         final PageParameterExtractor pageExtractor;
         //this is the extractor used for getting sorting data
-        final SortParameterExtractor sortExtractor;
+        SortParameterExtractor sortExtractor = null;
         //these are decision branches, each of which denoting an AND clause
         final List<List<Parameter>> branches = new ArrayList<>();
         //if the method name simply was the function name, no metadata can be extracted
@@ -125,129 +125,194 @@ public class QueryDescriptionExtractor {
             pageExtractor = null;
             sortExtractor = null;
         } else {
-            reader.read("By");
+            reader.expect("By");
             if (!reader.hasMore()) {
                 throw new QueryParserException(method.getDeclaringClass(), "Query method name cannot end with `By`");
             }
             //current parameter index
-            int index = 0;
-            branches.add(new LinkedList<Parameter>());
-            while (reader.hasMore()) {
-                //read a full expression
-                final Parameter parameter;
-                String expression = reader.expect("(.*?)(And[A-Z]|Or[A-Z]|$)");
-                if (expression.matches(".*?(And|Or)[A-Z]")) {
-                    //if the expression ended in And/Or, we need to put the one extra character we scanned back
-                    //we scan one extra character because we don't want anything like "Order" to be mistaken for "Or"
-                    reader.backtrack(1);
-                    expression = expression.substring(0, expression.length() - 1);
-                }
-                //if the expression ended in Or, this is the end of this branch
-                boolean branchEnd = expression.endsWith("Or");
-                //if the expression contains an OrderBy, it is not only the end of the branch, but also the end of the query
-                boolean expressionEnd = expression.matches(".+[a-z]OrderBy[A-Z].+");
-                if (expressionEnd) {
-                    //if that is the case, we need to put back the entirety of the order by clause
-                    int length = expression.length();
-                    expression = expression.replaceFirst("^(.+[a-z])OrderBy[A-Z].+$", "$1");
-                    length -= expression.length();
-                    reader.backtrack(length);
-                }
-                final Set<Modifier> modifiers = new HashSet<>();
-                if (expression.matches(".*" + IGNORE_CASE_SUFFIX)) {
-                    //if the expression ended in IgnoreCase, we need to strip that off
-                    modifiers.add(Modifier.IGNORE_CASE);
-                    expression = expression.replaceFirst(IGNORE_CASE_SUFFIX, "");
-                } else if (allIgnoreCase) {
-                    //if we had already set "AllIgnoreCase", we will still add the modifier
-                    modifiers.add(Modifier.IGNORE_CASE);
-                }
-                //if the expression ends in And/Or, we expect there to be more
-                if (expression.matches(".*?(And|Or)$") && !reader.hasMore()) {
-                    throw new QueryParserException(method.getDeclaringClass(), "Expected more tokens to follow AND/OR operator");
-                }
-                expression = expression.replaceFirst("(And|Or)$", "");
-                String property = null;
-                Operator operator = null;
-                //let's find out the operator that covers the longest suffix of the operation
-                for (int i = 1; i < expression.length(); i++) {
-                    operator = operatorContext.getBySuffix(expression.substring(i));
-                    if (operator != null) {
-                        property = expression.substring(0, i);
-                        break;
-                    }
-                }
-                //if no operator was found, it is the implied "IS" operator
-                if (operator == null || property.isEmpty()) {
-                    property = expression;
-                    operator = operatorContext.getBySuffix(DEFAULT_OPERATOR_SUFFIX);
-                }
-                //let's get the property descriptor
-                final PropertyDescriptor propertyDescriptor;
-                try {
-                    propertyDescriptor = PropertyUtils.getPropertyDescriptor(repositoryMetadata.getEntityType(), property);
-                } catch (Exception e) {
-                    throw new QueryParserException(method.getDeclaringClass(), "Could not find property `" + StringUtils.uncapitalize(property) + "` on `" + repositoryMetadata.getEntityType() + "`", e);
-                }
-                property = propertyDescriptor.getPath();
-                //we need to match the method parameters with the operands for the designated operator
-                final int[] indices = new int[operator.getOperands()];
-                for (int i = 0; i < operator.getOperands(); i++) {
-                    if (index >= method.getParameterTypes().length) {
-                        throw new QueryParserException(method.getDeclaringClass(), "Expected to see parameter with index " + index);
-                    }
-                    if (!propertyDescriptor.getType().isAssignableFrom(method.getParameterTypes()[index])) {
-                        throw new QueryParserException(method.getDeclaringClass(), "Expected parameter " + index + " on method " + methodName + " to be a descendant of " + propertyDescriptor.getType());
-                    }
-                    indices[i] = index ++;
-                }
-                //create a parameter definition for the given expression
-                parameter = new ImmutableParameter(property, modifiers, indices, operator);
-                //get the current branch
-                final List<Parameter> currentBranch = branches.get(branches.size() - 1);
-                //add this parameter to the latest branch
-                currentBranch.add(parameter);
-                //if the branch has ended with "OR", we set up a new branch
-                if (branchEnd) {
-                    branches.add(new LinkedList<Parameter>());
-                }
-                //if this is the end of expression, so we need to jump out
-                if (expressionEnd) {
-                    break;
-                }
-            }
-            final com.mmnaseri.utils.spring.data.query.Sort sort;
-            //let's figure out if there is a sort requirement embedded in the query definition
-            if (reader.read("OrderBy") != null) {
-                final List<Order> orders = new ArrayList<>();
-                while (reader.hasMore()) {
-                    orders.add(parseOrder(method, reader, repositoryMetadata));
-                }
-                sort = new ImmutableSort(orders);
-            } else {
-                sort = null;
-            }
-            if (method.getParameterTypes().length == index) {
-                pageExtractor = null;
-                sortExtractor = sort == null ? null : new WrappedSortParameterExtractor(sort);
-            } else if (method.getParameterTypes().length == index + 1) {
-                if (Pageable.class.isAssignableFrom(method.getParameterTypes()[index])) {
-                    pageExtractor = new PageablePageParameterExtractor(index);
-                    sortExtractor = sort == null ? new PageableSortParameterExtractor(index) : new WrappedSortParameterExtractor(sort);
-                } else if (Sort.class.isAssignableFrom(method.getParameterTypes()[index])) {
-                    if (sort != null) {
-                        throw new QueryParserException(method.getDeclaringClass(), "You cannot specify both an order-by clause and a dynamic ordering");
-                    }
-                    pageExtractor = null;
-                    sortExtractor = new DirectSortParameterExtractor(index);
-                } else {
-                    throw new QueryParserException(method.getDeclaringClass(), "Invalid last argument: expected paging or sorting " + method);
-                }
-            } else {
-                throw new QueryParserException(method.getDeclaringClass(), "Too many parameters declared for query method " + method);
-            }
+            int index = parseExpression(repositoryMetadata, method, methodName, allIgnoreCase, reader, branches);
+            final com.mmnaseri.utils.spring.data.query.Sort sort = parseSort(repositoryMetadata, method, reader);
+            pageExtractor = getPageParameterExtractor(method, index, sort);
+            sortExtractor = getSortParameterExtractor(method, index, sort);
         }
         return new DefaultQueryDescriptor(queryModifiers.isDistinct(), function, queryModifiers.getLimit(), pageExtractor, sortExtractor, branches, configuration, repositoryMetadata);
+    }
+
+    private SortParameterExtractor getSortParameterExtractor(Method method, int index, com.mmnaseri.utils.spring.data.query.Sort sort) {
+        SortParameterExtractor sortExtractor = null;
+        if (method.getParameterTypes().length == index) {
+            sortExtractor = sort == null ? null : new WrappedSortParameterExtractor(sort);
+        } else if (method.getParameterTypes().length == index + 1) {
+            if (Pageable.class.isAssignableFrom(method.getParameterTypes()[index])) {
+                sortExtractor = sort == null ? new PageableSortParameterExtractor(index) : new WrappedSortParameterExtractor(sort);
+            } else if (Sort.class.isAssignableFrom(method.getParameterTypes()[index])) {
+                sortExtractor = new DirectSortParameterExtractor(index);
+            }
+        }
+        return sortExtractor;
+    }
+
+    private PageParameterExtractor getPageParameterExtractor(Method method, int index, com.mmnaseri.utils.spring.data.query.Sort sort) {
+        PageParameterExtractor pageExtractor;
+        if (method.getParameterTypes().length == index) {
+            pageExtractor = null;
+        } else if (method.getParameterTypes().length == index + 1) {
+            if (Pageable.class.isAssignableFrom(method.getParameterTypes()[index])) {
+                pageExtractor = new PageablePageParameterExtractor(index);
+            } else if (Sort.class.isAssignableFrom(method.getParameterTypes()[index])) {
+                if (sort != null) {
+                    throw new QueryParserException(method.getDeclaringClass(), "You cannot specify both an order-by clause and a dynamic ordering");
+                }
+                pageExtractor = null;
+            } else {
+                throw new QueryParserException(method.getDeclaringClass(), "Invalid last argument: expected paging or sorting " + method);
+            }
+        } else {
+            throw new QueryParserException(method.getDeclaringClass(), "Too many parameters declared for query method " + method);
+        }
+        return pageExtractor;
+    }
+
+    private int parseExpression(RepositoryMetadata repositoryMetadata, Method method, String methodName, boolean allIgnoreCase, DocumentReader reader, List<List<Parameter>> branches) {
+        int index = 0;
+        branches.add(new LinkedList<Parameter>());
+        while (reader.hasMore()) {
+            final Parameter parameter;
+            //read a full expression
+            String expression = parseInitialExpression(reader);
+            //if the expression ended in Or, this is the end of this branch
+            boolean branchEnd = expression.endsWith("Or");
+            //if the expression contains an OrderBy, it is not only the end of the branch, but also the end of the query
+            boolean expressionEnd = expression.matches(".+[a-z]OrderBy[A-Z].+");
+            expression = handleExpressionEnd(reader, expression, expressionEnd);
+            final Set<Modifier> modifiers = new HashSet<>();
+            expression = parseModifiers(allIgnoreCase, expression, modifiers);
+            //if the expression ends in And/Or, we expect there to be more
+            if (expression.matches(".*?(And|Or)$") && !reader.hasMore()) {
+                throw new QueryParserException(method.getDeclaringClass(), "Expected more tokens to follow AND/OR operator");
+            }
+            expression = expression.replaceFirst("(And|Or)$", "");
+            String foundProperty = null;
+            Operator operator = parseOperator(expression);
+            if (operator != null) {
+                foundProperty = expression.substring(0, expression.length() - ((MatchedOperator) operator).getMatchedToken().length());
+            }
+            //if no operator was found, it is the implied "IS" operator
+            if (operator == null || foundProperty.isEmpty()) {
+                foundProperty = expression;
+                operator = operatorContext.getBySuffix(DEFAULT_OPERATOR_SUFFIX);
+            }
+            final PropertyDescriptor propertyDescriptor = getPropertyDescriptor(repositoryMetadata, method, foundProperty);
+            final String property = propertyDescriptor.getPath();
+            //we need to match the method parameters with the operands for the designated operator
+            final int[] indices = new int[operator.getOperands()];
+            index = parseParameterIndices(method, methodName, index, operator, propertyDescriptor, indices);
+            //create a parameter definition for the given expression
+            parameter = new ImmutableParameter(property, modifiers, indices, operator);
+            //get the current branch
+            final List<Parameter> currentBranch = branches.get(branches.size() - 1);
+            //add this parameter to the latest branch
+            currentBranch.add(parameter);
+            //if the branch has ended with "OR", we set up a new branch
+            if (branchEnd) {
+                branches.add(new LinkedList<Parameter>());
+            }
+            //if this is the end of expression, so we need to jump out
+            if (expressionEnd) {
+                break;
+            }
+        }
+        return index;
+    }
+
+    private com.mmnaseri.utils.spring.data.query.Sort parseSort(RepositoryMetadata repositoryMetadata, Method method, DocumentReader reader) {
+        final com.mmnaseri.utils.spring.data.query.Sort sort;
+        //let's figure out if there is a sort requirement embedded in the query definition
+        if (reader.read("OrderBy") != null) {
+            final List<Order> orders = new ArrayList<>();
+            while (reader.hasMore()) {
+                orders.add(parseOrder(method, reader, repositoryMetadata));
+            }
+            sort = new ImmutableSort(orders);
+        } else {
+            sort = null;
+        }
+        return sort;
+    }
+
+    private int parseParameterIndices(Method method, String methodName, int index, Operator operator, PropertyDescriptor propertyDescriptor, int[] indices) {
+        int parameterIndex = index;
+        for (int i = 0; i < operator.getOperands(); i++) {
+            if (parameterIndex >= method.getParameterTypes().length) {
+                throw new QueryParserException(method.getDeclaringClass(), "Expected to see parameter with index " + parameterIndex);
+            }
+            if (!propertyDescriptor.getType().isAssignableFrom(method.getParameterTypes()[parameterIndex])) {
+                throw new QueryParserException(method.getDeclaringClass(), "Expected parameter " + parameterIndex + " on method " + methodName + " to be a descendant of " + propertyDescriptor.getType());
+            }
+            indices[i] = parameterIndex ++;
+        }
+        return parameterIndex;
+    }
+
+    private PropertyDescriptor getPropertyDescriptor(RepositoryMetadata repositoryMetadata, Method method, String property) {
+        //let's get the property descriptor
+        final PropertyDescriptor propertyDescriptor;
+        try {
+            propertyDescriptor = PropertyUtils.getPropertyDescriptor(repositoryMetadata.getEntityType(), property);
+        } catch (Exception e) {
+            throw new QueryParserException(method.getDeclaringClass(), "Could not find property `" + StringUtils.uncapitalize(property) + "` on `" + repositoryMetadata.getEntityType() + "`", e);
+        }
+        return propertyDescriptor;
+    }
+
+    private Operator parseOperator(String expression) {
+        Operator operator = null;
+        //let's find out the operator that covers the longest suffix of the operation
+        for (int i = 1; i < expression.length(); i++) {
+            final String suffix = expression.substring(i);
+            operator = operatorContext.getBySuffix(suffix);
+            if (operator != null) {
+                operator = new ImmutableMatchedOperator(operator, suffix);
+                break;
+            }
+        }
+        return operator;
+    }
+
+    private String parseModifiers(boolean allIgnoreCase, String originalExpression, Set<Modifier> modifiers) {
+        String expression = originalExpression;
+        if (expression.matches(".*" + IGNORE_CASE_SUFFIX)) {
+            //if the expression ended in IgnoreCase, we need to strip that off
+            modifiers.add(Modifier.IGNORE_CASE);
+            expression = expression.replaceFirst(IGNORE_CASE_SUFFIX, "");
+        } else if (allIgnoreCase) {
+            //if we had already set "AllIgnoreCase", we will still add the modifier
+            modifiers.add(Modifier.IGNORE_CASE);
+        }
+        return expression;
+    }
+
+    private String handleExpressionEnd(DocumentReader reader, String originalExpression, boolean expressionEnd) {
+        String expression = originalExpression;
+        if (expressionEnd) {
+            //if that is the case, we need to put back the entirety of the order by clause
+            int length = expression.length();
+            expression = expression.replaceFirst("^(.+[a-z])OrderBy[A-Z].+$", "$1");
+            length -= expression.length();
+            reader.backtrack(length);
+        }
+        return expression;
+    }
+
+    private String parseInitialExpression(DocumentReader reader) {
+        String expression = reader.expect("(.*?)(And[A-Z]|Or[A-Z]|$)");
+        if (expression.matches(".*?(And|Or)[A-Z]")) {
+            //if the expression ended in And/Or, we need to put the one extra character we scanned back
+            //we scan one extra character because we don't want anything like "Order" to be mistaken for "Or"
+            reader.backtrack(1);
+            expression = expression.substring(0, expression.length() - 1);
+        }
+        return expression;
     }
 
     private Order parseOrder(Method method, DocumentReader reader, RepositoryMetadata repositoryMetadata) {

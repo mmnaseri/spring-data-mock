@@ -3,7 +3,6 @@ package com.mmnaseri.utils.spring.data.dsl.factory;
 import com.mmnaseri.utils.spring.data.store.DataStoreEvent;
 import com.mmnaseri.utils.spring.data.store.DataStoreEventListener;
 import com.mmnaseri.utils.spring.data.store.DataStoreEventListenerContext;
-import org.springframework.data.domain.AuditorAware;
 
 /**
  * Lets us define the various listener configurations used when data operations are taking place

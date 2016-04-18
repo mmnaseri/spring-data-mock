@@ -2,17 +2,13 @@ package com.mmnaseri.utils.spring.data.sample.mocks;
 
 import com.mmnaseri.utils.spring.data.store.DataStore;
 import com.mmnaseri.utils.spring.data.store.QueueingDataStore;
-import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
 
 import java.io.Serializable;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.*;
 
 /**
  * @author Milad Naseri (mmnaseri@programmer.net)

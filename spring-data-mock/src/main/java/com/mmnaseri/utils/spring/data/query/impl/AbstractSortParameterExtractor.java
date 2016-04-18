@@ -19,6 +19,12 @@ import static org.springframework.data.domain.Sort.NullHandling.NULLS_LAST;
 @SuppressWarnings("WeakerAccess")
 public abstract class AbstractSortParameterExtractor implements SortParameterExtractor {
 
+    /**
+     * Given a sort parameter from the Spring Data framework, will determine the appropriate sort metadata compatible
+     * with this framework
+     * @param sort    the sort specification
+     * @return converted sort metadata
+     */
     protected Sort getSort(org.springframework.data.domain.Sort sort) {
         final List<Order> orders = new ArrayList<>();
         for (org.springframework.data.domain.Sort.Order order : sort) {
