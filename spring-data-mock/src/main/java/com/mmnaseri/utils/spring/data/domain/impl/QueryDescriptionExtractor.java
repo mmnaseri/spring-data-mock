@@ -241,16 +241,17 @@ public class QueryDescriptionExtractor {
     }
 
     private int parseParameterIndices(Method method, String methodName, int index, Operator operator, PropertyDescriptor propertyDescriptor, int[] indices) {
+        int parameterIndex = index;
         for (int i = 0; i < operator.getOperands(); i++) {
-            if (index >= method.getParameterTypes().length) {
-                throw new QueryParserException(method.getDeclaringClass(), "Expected to see parameter with index " + index);
+            if (parameterIndex >= method.getParameterTypes().length) {
+                throw new QueryParserException(method.getDeclaringClass(), "Expected to see parameter with index " + parameterIndex);
             }
-            if (!propertyDescriptor.getType().isAssignableFrom(method.getParameterTypes()[index])) {
-                throw new QueryParserException(method.getDeclaringClass(), "Expected parameter " + index + " on method " + methodName + " to be a descendant of " + propertyDescriptor.getType());
+            if (!propertyDescriptor.getType().isAssignableFrom(method.getParameterTypes()[parameterIndex])) {
+                throw new QueryParserException(method.getDeclaringClass(), "Expected parameter " + parameterIndex + " on method " + methodName + " to be a descendant of " + propertyDescriptor.getType());
             }
-            indices[i] = index ++;
+            indices[i] = parameterIndex ++;
         }
-        return index;
+        return parameterIndex;
     }
 
     private PropertyDescriptor getPropertyDescriptor(RepositoryMetadata repositoryMetadata, Method method, String property) {
@@ -278,7 +279,8 @@ public class QueryDescriptionExtractor {
         return operator;
     }
 
-    private String parseModifiers(boolean allIgnoreCase, String expression, Set<Modifier> modifiers) {
+    private String parseModifiers(boolean allIgnoreCase, String originalExpression, Set<Modifier> modifiers) {
+        String expression = originalExpression;
         if (expression.matches(".*" + IGNORE_CASE_SUFFIX)) {
             //if the expression ended in IgnoreCase, we need to strip that off
             modifiers.add(Modifier.IGNORE_CASE);
@@ -290,7 +292,8 @@ public class QueryDescriptionExtractor {
         return expression;
     }
 
-    private String handleExpressionEnd(DocumentReader reader, String expression, boolean expressionEnd) {
+    private String handleExpressionEnd(DocumentReader reader, String originalExpression, boolean expressionEnd) {
+        String expression = originalExpression;
         if (expressionEnd) {
             //if that is the case, we need to put back the entirety of the order by clause
             int length = expression.length();
