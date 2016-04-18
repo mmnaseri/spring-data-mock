@@ -8,6 +8,19 @@ Where applicable, an issue number and a link to the appropriate
 issue is provided as well.
 
 
+[v1.0.3](https://github.com/mmnaseri/spring-data-mock/releases/tag/v1.0.3)
+------------------------------------------------
+
+##### Enhancements
+
+  * [#29](https://github.com/mmnaseri/spring-data-mock/issues/29):
+  Add logging to operations
+
+  * [#25](https://github.com/mmnaseri/spring-data-mock/issues/25):
+  Restructure the project to allow for a more sophisticated build reactor
+  that would let us extend the project by adding optional artifacts that
+  are used alongside the original artifact.
+
 [v1.0.2](https://github.com/mmnaseri/spring-data-mock/releases/tag/v1.0.2)
 ------------------------------------------------
 
