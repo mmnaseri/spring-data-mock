@@ -3,10 +3,7 @@ package com.mmnaseri.utils.spring.data.proxy.impl;
 import com.mmnaseri.utils.spring.data.error.RepositoryDefinitionException;
 import com.mmnaseri.utils.spring.data.proxy.TypeMapping;
 import com.mmnaseri.utils.spring.data.proxy.TypeMappingContext;
-import com.mmnaseri.utils.spring.data.repository.DefaultCrudRepository;
-import com.mmnaseri.utils.spring.data.repository.DefaultGemfireRepository;
-import com.mmnaseri.utils.spring.data.repository.DefaultJpaRepository;
-import com.mmnaseri.utils.spring.data.repository.DefaultPagingAndSortingRepository;
+import com.mmnaseri.utils.spring.data.repository.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.core.annotation.AnnotationAwareOrderComparator;
@@ -55,6 +52,10 @@ public class DefaultTypeMappingContext implements TypeMappingContext {
             if (ClassUtils.isPresent("org.springframework.data.jpa.repository.JpaRepository", ClassUtils.getDefaultClassLoader())) {
                 log.debug("JPA support is enabled in this project, so we need to support the methods");
                 register(Object.class, DefaultJpaRepository.class);
+            }
+            if (ClassUtils.isPresent("org.springframework.data.querydsl.QueryDslPredicateExecutor", ClassUtils.getDefaultClassLoader())) {
+                log.debug("QueryDSL support is enabled. We will add the proper method implementations.");
+                register(Object.class, DefaultQueryDslPredicateExecutor.class);
             }
             register(Object.class, DefaultPagingAndSortingRepository.class);
             register(Object.class, DefaultCrudRepository.class);
