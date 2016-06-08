@@ -4,7 +4,7 @@
 [![Donae](https://img.shields.io/badge/paypal-donate-yellow.svg)](https://paypal.me/mmnaseri)
 [![MIT license](http://img.shields.io/badge/license-MIT-brightgreen.svg)](http://opensource.org/licenses/MIT)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.mmnaseri.utils/spring-data-mock/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.mmnaseri.utils/spring-data-mock)
-[![Dependency Status](https://www.versioneye.com/user/projects/5709ee7dfcd19a00415b101a/badge.svg?style=flat)](https://www.versioneye.com/user/projects/5709ee7dfcd19a00415b101a)
+[![Dependency Status](https://www.versioneye.com/user/projects/5722a8f5ba37ce0031fc17f0/badge.svg?style=flat)](https://www.versioneye.com/user/projects/5722a8f5ba37ce0031fc17f0)
 [![Build Status](https://travis-ci.org/mmnaseri/spring-data-mock.svg?branch=master)](https://travis-ci.org/mmnaseri/spring-data-mock)
 [![Codacy Badge](https://api.codacy.com/project/badge/grade/ad9f174fa0654a2b8c925b86973f272d)](https://www.codacy.com/app/mmnaseri/spring-data-mock)
 [![Coverage Status](https://coveralls.io/repos/github/mmnaseri/spring-data-mock/badge.svg?branch=master)](https://coveralls.io/github/mmnaseri/spring-data-mock?branch=master)
@@ -41,6 +41,27 @@ or you can add a maven dependency since it is now available in Maven central:
         <version>${latest-version}</version>
         <scope>test</scope>
     </dependency>
+
+#### Note on Dependencies
+
+*Spring Data Mock* depends on [Apache Commons Logging](https://commons.apache.org/proper/commons-logging/) to log
+all the interactions with the framework. If you need to, you can exclude this dependency from the framework by
+using [Maven exclusions](https://maven.apache.org/guides/introduction/introduction-to-optional-and-excludes-dependencies.html#Dependency_Exclusions):
+
+```xml
+    <dependency>
+        <groupId>com.mmnaseri.utils</groupId>
+        <artifactId>spring-data-mock</artifactId>
+        <version>${latest-version}</version>
+        <scope>test</scope>
+        <exclusions>
+            <exclusion>
+                <groupId>commons-logging</groupId>
+                <artifactId>commons-logging</artifactId>
+            </exclusion>
+        </exclusions>
+    </dependency>
+```
 
 ## Quick Start
 
