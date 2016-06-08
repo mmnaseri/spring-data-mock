@@ -39,6 +39,7 @@ or you can add a maven dependency since it is now available in Maven central:
         <groupId>com.mmnaseri.utils</groupId>
         <artifactId>spring-data-mock</artifactId>
         <version>${latest-version}</version>
+        <scope>test</scope>
     </dependency>
 
 ## Quick Start
