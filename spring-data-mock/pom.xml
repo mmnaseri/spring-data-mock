@@ -153,6 +153,13 @@
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
             <version>${joda-time.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.persistence</groupId>
+            <artifactId>persistence-api</artifactId>
+            <version>${persistence-api.version}</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
@@ -310,6 +317,7 @@
         <cobertura-maven-plugin.version>2.7</cobertura-maven-plugin.version>
         <querydsl.version>4.1.0</querydsl.version>
         <cglib.version>3.2.2</cglib.version>
+        <persistence-api.version>1.0.2</persistence-api.version>
     </properties>
 
 </project>

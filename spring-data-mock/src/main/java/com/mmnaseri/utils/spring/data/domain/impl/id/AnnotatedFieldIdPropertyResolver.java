@@ -10,6 +10,8 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.concurrent.atomic.AtomicReference;
 
+import static com.mmnaseri.utils.spring.data.domain.impl.id.IdPropertyResolverUtils.isAnnotated;
+
 /**
  * This class will help resolve ID property name if the entity has a field that is annotated with
  * {@link Id @Id}
@@ -27,11 +29,11 @@ public class AnnotatedFieldIdPropertyResolver implements IdPropertyResolver {
         ReflectionUtils.doWithFields(entityType, new ReflectionUtils.FieldCallback() {
             @Override
             public void doWith(Field field) throws IllegalArgumentException, IllegalAccessException {
-                if (field.isAnnotationPresent(Id.class)) {
+                if (isAnnotated(field)) {
                     if (found.get() == null) {
                         found.set(field);
                     } else {
-                        throw new MultipleIdPropertiesException(entityType, Id.class);
+                        throw new MultipleIdPropertiesException(entityType);
                     }
                 }
             }
