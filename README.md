@@ -50,6 +50,20 @@ Regardless of how you add the necessary dependency to your project, mocking a re
     
 where `builder()` is a static method of the `RepositoryFactoryBuilder` class under package `com.mmnaseri.utils.spring.data.dsl.factory`.
 
+Example:
+
+```java
+import com.mmnaseri.utils.spring.data.dsl.factory.RepositoryFactoryBuilder;
+
+public class CustomerRepositoryTest {
+
+    @Test
+    public void testDemo() {
+
+        final CustomerRepository repository = RepositoryFactoryBuilder.builder().mock(CustomerRepository.class);
+        repository.save(new Customer());
+```
+
 An alternate way of mocking a repository would be by using the `RepositoryMockBuilder` class under the `com.mmnaseri.utils.spring.data.dsl.mock`
 package:
 
