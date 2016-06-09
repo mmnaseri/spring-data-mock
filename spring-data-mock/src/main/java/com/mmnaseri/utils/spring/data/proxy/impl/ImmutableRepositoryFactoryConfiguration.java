@@ -1,7 +1,7 @@
 package com.mmnaseri.utils.spring.data.proxy.impl;
 
 import com.mmnaseri.utils.spring.data.domain.RepositoryMetadataResolver;
-import com.mmnaseri.utils.spring.data.domain.impl.QueryDescriptionExtractor;
+import com.mmnaseri.utils.spring.data.domain.impl.MethodQueryDescriptionExtractor;
 import com.mmnaseri.utils.spring.data.proxy.RepositoryFactoryConfiguration;
 import com.mmnaseri.utils.spring.data.proxy.ResultAdapterContext;
 import com.mmnaseri.utils.spring.data.proxy.TypeMappingContext;
@@ -20,7 +20,7 @@ import com.mmnaseri.utils.spring.data.store.DataStoreRegistry;
 public class ImmutableRepositoryFactoryConfiguration implements RepositoryFactoryConfiguration {
 
     private final RepositoryMetadataResolver metadataResolver;
-    private final QueryDescriptionExtractor queryDescriptionExtractor;
+    private final MethodQueryDescriptionExtractor queryDescriptionExtractor;
     private final DataFunctionRegistry functionRegistry;
     private final DataStoreRegistry dataStoreRegistry;
     private final ResultAdapterContext resultAdapterContext;
@@ -34,7 +34,7 @@ public class ImmutableRepositoryFactoryConfiguration implements RepositoryFactor
                 configuration.getEventListenerContext(), configuration.getOperationInvocationHandler());
     }
 
-    public ImmutableRepositoryFactoryConfiguration(RepositoryMetadataResolver metadataResolver, QueryDescriptionExtractor queryDescriptionExtractor, DataFunctionRegistry functionRegistry, DataStoreRegistry dataStoreRegistry, ResultAdapterContext resultAdapterContext, TypeMappingContext typeMappingContext, DataStoreEventListenerContext eventListenerContext, NonDataOperationInvocationHandler operationInvocationHandler) {
+    public ImmutableRepositoryFactoryConfiguration(RepositoryMetadataResolver metadataResolver, MethodQueryDescriptionExtractor queryDescriptionExtractor, DataFunctionRegistry functionRegistry, DataStoreRegistry dataStoreRegistry, ResultAdapterContext resultAdapterContext, TypeMappingContext typeMappingContext, DataStoreEventListenerContext eventListenerContext, NonDataOperationInvocationHandler operationInvocationHandler) {
         this.metadataResolver = metadataResolver;
         this.queryDescriptionExtractor = queryDescriptionExtractor;
         this.functionRegistry = functionRegistry;
@@ -51,7 +51,7 @@ public class ImmutableRepositoryFactoryConfiguration implements RepositoryFactor
     }
 
     @Override
-    public QueryDescriptionExtractor getDescriptionExtractor() {
+    public MethodQueryDescriptionExtractor getDescriptionExtractor() {
         return queryDescriptionExtractor;
     }
 

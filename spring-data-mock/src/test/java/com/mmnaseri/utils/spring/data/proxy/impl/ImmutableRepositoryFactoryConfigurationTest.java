@@ -2,7 +2,7 @@ package com.mmnaseri.utils.spring.data.proxy.impl;
 
 import com.mmnaseri.utils.spring.data.domain.impl.DefaultOperatorContext;
 import com.mmnaseri.utils.spring.data.domain.impl.DefaultRepositoryMetadataResolver;
-import com.mmnaseri.utils.spring.data.domain.impl.QueryDescriptionExtractor;
+import com.mmnaseri.utils.spring.data.domain.impl.MethodQueryDescriptionExtractor;
 import com.mmnaseri.utils.spring.data.query.impl.DefaultDataFunctionRegistry;
 import com.mmnaseri.utils.spring.data.store.impl.DefaultDataStoreEventListenerContext;
 import com.mmnaseri.utils.spring.data.store.impl.DefaultDataStoreRegistry;
@@ -20,7 +20,7 @@ public class ImmutableRepositoryFactoryConfigurationTest {
     @Test
     public void testCopyConstructor() throws Exception {
         final DefaultRepositoryFactoryConfiguration original = new DefaultRepositoryFactoryConfiguration();
-        original.setDescriptionExtractor(new QueryDescriptionExtractor(new DefaultOperatorContext()));
+        original.setDescriptionExtractor(new MethodQueryDescriptionExtractor(new DefaultOperatorContext()));
         original.setEventListenerContext(new DefaultDataStoreEventListenerContext());
         original.setFunctionRegistry(new DefaultDataFunctionRegistry());
         original.setRepositoryMetadataResolver(new DefaultRepositoryMetadataResolver());

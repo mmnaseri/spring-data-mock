@@ -1,5 +1,6 @@
 package com.mmnaseri.utils.spring.data.domain.impl.id;
 
+import com.mmnaseri.utils.spring.data.domain.IdPropertyResolver;
 import com.mmnaseri.utils.spring.data.tools.GetterMethodFilter;
 import com.mmnaseri.utils.spring.data.tools.PropertyUtils;
 import org.springframework.util.ReflectionUtils;
@@ -7,6 +8,8 @@ import org.springframework.util.ReflectionUtils;
 import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.concurrent.atomic.AtomicReference;
+
+import static com.mmnaseri.utils.spring.data.domain.impl.id.IdPropertyResolverUtils.getPropertyNameFromAnnotatedMethod;
 
 /**
  * This class is for resolving an ID based on the getter. It will try to find a getter for a property named
@@ -16,7 +19,7 @@ import java.util.concurrent.atomic.AtomicReference;
  * @since 1.0 (9/23/15)
  */
 @SuppressWarnings("WeakerAccess")
-public class NamedGetterIdPropertyResolver extends AnnotatedIdPropertyResolver {
+public class NamedGetterIdPropertyResolver implements IdPropertyResolver {
 
     @Override
     public String resolve(Class<?> entityType, final Class<? extends Serializable> idType) {

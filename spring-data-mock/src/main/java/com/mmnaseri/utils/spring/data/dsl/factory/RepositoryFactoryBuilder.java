@@ -6,7 +6,7 @@ import com.mmnaseri.utils.spring.data.domain.OperatorContext;
 import com.mmnaseri.utils.spring.data.domain.RepositoryMetadataResolver;
 import com.mmnaseri.utils.spring.data.domain.impl.DefaultOperatorContext;
 import com.mmnaseri.utils.spring.data.domain.impl.DefaultRepositoryMetadataResolver;
-import com.mmnaseri.utils.spring.data.domain.impl.QueryDescriptionExtractor;
+import com.mmnaseri.utils.spring.data.domain.impl.MethodQueryDescriptionExtractor;
 import com.mmnaseri.utils.spring.data.dsl.mock.Implementation;
 import com.mmnaseri.utils.spring.data.dsl.mock.ImplementationAnd;
 import com.mmnaseri.utils.spring.data.dsl.mock.RepositoryMockBuilder;
@@ -36,7 +36,7 @@ public class RepositoryFactoryBuilder implements Start, DataFunctionsAnd, DataSt
     private static RepositoryFactoryConfiguration DEFAULT_FACTORY_CONFIGURATION;
     public static final String DEFAULT_USER = "User";
     private RepositoryMetadataResolver metadataResolver;
-    private QueryDescriptionExtractor queryDescriptionExtractor;
+    private MethodQueryDescriptionExtractor queryDescriptionExtractor;
     private DataFunctionRegistry functionRegistry;
     private DataStoreRegistry dataStoreRegistry;
     private ResultAdapterContext resultAdapterContext;
@@ -85,7 +85,7 @@ public class RepositoryFactoryBuilder implements Start, DataFunctionsAnd, DataSt
 
     private RepositoryFactoryBuilder() {
         metadataResolver = new DefaultRepositoryMetadataResolver();
-        queryDescriptionExtractor = new QueryDescriptionExtractor(new DefaultOperatorContext());
+        queryDescriptionExtractor = new MethodQueryDescriptionExtractor(new DefaultOperatorContext());
         functionRegistry = new DefaultDataFunctionRegistry();
         dataStoreRegistry = new DefaultDataStoreRegistry();
         resultAdapterContext = new DefaultResultAdapterContext();
@@ -102,7 +102,7 @@ public class RepositoryFactoryBuilder implements Start, DataFunctionsAnd, DataSt
 
     @Override
     public DataFunctions withOperators(OperatorContext context) {
-        queryDescriptionExtractor = new QueryDescriptionExtractor(context);
+        queryDescriptionExtractor = new MethodQueryDescriptionExtractor(context);
         return this;
     }
 
@@ -113,7 +113,7 @@ public class RepositoryFactoryBuilder implements Start, DataFunctionsAnd, DataSt
     }
 
     @Override
-    public DataFunctions extractQueriesUsing(QueryDescriptionExtractor extractor) {
+    public DataFunctions extractQueriesUsing(MethodQueryDescriptionExtractor extractor) {
         queryDescriptionExtractor = extractor;
         return this;
     }

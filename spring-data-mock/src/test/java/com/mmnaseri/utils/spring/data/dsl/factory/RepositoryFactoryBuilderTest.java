@@ -7,7 +7,7 @@ import com.mmnaseri.utils.spring.data.domain.RepositoryMetadataResolver;
 import com.mmnaseri.utils.spring.data.domain.impl.DefaultOperatorContext;
 import com.mmnaseri.utils.spring.data.domain.impl.DefaultRepositoryMetadataResolver;
 import com.mmnaseri.utils.spring.data.domain.impl.ImmutableOperator;
-import com.mmnaseri.utils.spring.data.domain.impl.QueryDescriptionExtractor;
+import com.mmnaseri.utils.spring.data.domain.impl.MethodQueryDescriptionExtractor;
 import com.mmnaseri.utils.spring.data.dsl.mock.RepositoryMockBuilder;
 import com.mmnaseri.utils.spring.data.proxy.RepositoryFactory;
 import com.mmnaseri.utils.spring.data.proxy.RepositoryFactoryConfiguration;
@@ -80,7 +80,7 @@ public class RepositoryFactoryBuilderTest {
 
     @Test
     public void testUsingCustomQueryDescriptor() throws Exception {
-        final QueryDescriptionExtractor queryDescriptionExtractor = new QueryDescriptionExtractor(new DefaultOperatorContext());
+        final MethodQueryDescriptionExtractor queryDescriptionExtractor = new MethodQueryDescriptionExtractor(new DefaultOperatorContext());
         final RepositoryFactory factory = RepositoryFactoryBuilder.builder().extractQueriesUsing(queryDescriptionExtractor).build();
         assertThat(factory, is(notNullValue()));
         assertThat(factory.getConfiguration(), is(notNullValue()));

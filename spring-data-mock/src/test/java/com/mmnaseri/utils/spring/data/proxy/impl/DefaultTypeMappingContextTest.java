@@ -2,10 +2,7 @@ package com.mmnaseri.utils.spring.data.proxy.impl;
 
 import com.mmnaseri.utils.spring.data.error.RepositoryDefinitionException;
 import com.mmnaseri.utils.spring.data.proxy.TypeMapping;
-import com.mmnaseri.utils.spring.data.repository.DefaultCrudRepository;
-import com.mmnaseri.utils.spring.data.repository.DefaultGemfireRepository;
-import com.mmnaseri.utils.spring.data.repository.DefaultJpaRepository;
-import com.mmnaseri.utils.spring.data.repository.DefaultPagingAndSortingRepository;
+import com.mmnaseri.utils.spring.data.repository.*;
 import com.mmnaseri.utils.spring.data.sample.usecases.proxy.*;
 import org.hamcrest.Matchers;
 import org.testng.annotations.BeforeMethod;
@@ -26,7 +23,14 @@ public class DefaultTypeMappingContextTest {
 
     @BeforeMethod
     public void setUp() throws Exception {
-        defaultImplementations = new Class[]{DefaultGemfireRepository.class, DefaultJpaRepository.class, DefaultPagingAndSortingRepository.class, DefaultCrudRepository.class};
+        defaultImplementations = new Class[]{
+                DefaultGemfireRepository.class,
+                DefaultJpaRepository.class,
+                DefaultPagingAndSortingRepository.class,
+                DefaultCrudRepository.class,
+                DefaultQueryDslPredicateExecutor.class,
+                DefaultQueryByExampleExecutor.class
+        };
     }
 
     @Test

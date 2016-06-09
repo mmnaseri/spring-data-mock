@@ -1,7 +1,7 @@
 package com.mmnaseri.utils.spring.data.proxy;
 
 import com.mmnaseri.utils.spring.data.domain.RepositoryMetadataResolver;
-import com.mmnaseri.utils.spring.data.domain.impl.QueryDescriptionExtractor;
+import com.mmnaseri.utils.spring.data.domain.impl.MethodQueryDescriptionExtractor;
 import com.mmnaseri.utils.spring.data.proxy.impl.NonDataOperationInvocationHandler;
 import com.mmnaseri.utils.spring.data.query.DataFunctionRegistry;
 import com.mmnaseri.utils.spring.data.store.DataStoreEventListenerContext;
@@ -23,7 +23,7 @@ public interface RepositoryFactoryConfiguration {
     /**
      * @return the description extractor used to extract query metadata from a query method
      */
-    QueryDescriptionExtractor getDescriptionExtractor();
+    MethodQueryDescriptionExtractor getDescriptionExtractor();
 
     /**
      * @return the function registry containing all the functions used when executing the queries

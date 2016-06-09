@@ -4,7 +4,7 @@ import com.mmnaseri.utils.spring.data.domain.KeyGenerator;
 import com.mmnaseri.utils.spring.data.domain.RepositoryAware;
 import com.mmnaseri.utils.spring.data.domain.impl.DefaultOperatorContext;
 import com.mmnaseri.utils.spring.data.domain.impl.DefaultRepositoryMetadataResolver;
-import com.mmnaseri.utils.spring.data.domain.impl.QueryDescriptionExtractor;
+import com.mmnaseri.utils.spring.data.domain.impl.MethodQueryDescriptionExtractor;
 import com.mmnaseri.utils.spring.data.error.CorruptDataException;
 import com.mmnaseri.utils.spring.data.error.DataOperationExecutionException;
 import com.mmnaseri.utils.spring.data.error.MockBuilderException;
@@ -114,7 +114,7 @@ public class RepositoryMockBuilderTest {
     public void testUsingCustomFactory() throws Exception {
         final DefaultRepositoryFactoryConfiguration configuration = new DefaultRepositoryFactoryConfiguration();
         configuration.setDataStoreRegistry(new DefaultDataStoreRegistry());
-        configuration.setDescriptionExtractor(new QueryDescriptionExtractor(new DefaultOperatorContext()));
+        configuration.setDescriptionExtractor(new MethodQueryDescriptionExtractor(new DefaultOperatorContext()));
         configuration.setEventListenerContext(new DefaultDataStoreEventListenerContext());
         configuration.setFunctionRegistry(new DefaultDataFunctionRegistry());
         configuration.setOperationInvocationHandler(new NonDataOperationInvocationHandler());
@@ -143,7 +143,7 @@ public class RepositoryMockBuilderTest {
         mappingContext.register(ConfiguredSimpleCrudPersonRepository.class, ConfigurationAwareMapper.class);
         final DefaultRepositoryFactoryConfiguration configuration = new DefaultRepositoryFactoryConfiguration();
         configuration.setDataStoreRegistry(new DefaultDataStoreRegistry());
-        configuration.setDescriptionExtractor(new QueryDescriptionExtractor(new DefaultOperatorContext()));
+        configuration.setDescriptionExtractor(new MethodQueryDescriptionExtractor(new DefaultOperatorContext()));
         configuration.setEventListenerContext(new DefaultDataStoreEventListenerContext());
         configuration.setFunctionRegistry(new DefaultDataFunctionRegistry());
         configuration.setOperationInvocationHandler(new NonDataOperationInvocationHandler());
