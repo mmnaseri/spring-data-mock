@@ -24,16 +24,18 @@ public class DefaultPagingAndSortingRepository extends PagingAndSortingSupport i
 
     /**
      * Finds everything and sorts it using the given sort property
-     * @param sort    how to sort the data
+     *
+     * @param sort how to sort the data
      * @return sorted entries, unless sort is null.
      */
     public List findAll(Sort sort) {
-        return sort(retrieveAll(), sort);
+        return PagingAndSortingUtils.sort(retrieveAll(), sort);
     }
 
     /**
      * Loads everything, sorts them, and pages the according to the spec.
-     * @param pageable    the pagination and sort spec
+     *
+     * @param pageable the pagination and sort spec
      * @return the specified view of the data
      */
     public Page findAll(Pageable pageable) {

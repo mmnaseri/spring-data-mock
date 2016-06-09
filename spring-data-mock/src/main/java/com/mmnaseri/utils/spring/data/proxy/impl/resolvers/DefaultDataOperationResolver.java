@@ -1,7 +1,7 @@
 package com.mmnaseri.utils.spring.data.proxy.impl.resolvers;
 
 import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
-import com.mmnaseri.utils.spring.data.domain.impl.QueryDescriptionExtractor;
+import com.mmnaseri.utils.spring.data.domain.impl.MethodQueryDescriptionExtractor;
 import com.mmnaseri.utils.spring.data.error.DataOperationDefinitionException;
 import com.mmnaseri.utils.spring.data.error.UnknownDataOperationException;
 import com.mmnaseri.utils.spring.data.proxy.DataOperationResolver;
@@ -27,7 +27,7 @@ public class DefaultDataOperationResolver implements DataOperationResolver {
     private static final Log log = LogFactory.getLog(DefaultDataOperationResolver.class);
     private final List<DataOperationResolver> resolvers;
 
-    public DefaultDataOperationResolver(List<TypeMapping<?>> implementations, QueryDescriptionExtractor descriptionExtractor, RepositoryMetadata repositoryMetadata, DataFunctionRegistry functionRegistry, RepositoryFactoryConfiguration configuration) {
+    public DefaultDataOperationResolver(List<TypeMapping<?>> implementations, MethodQueryDescriptionExtractor descriptionExtractor, RepositoryMetadata repositoryMetadata, DataFunctionRegistry functionRegistry, RepositoryFactoryConfiguration configuration) {
         resolvers = new ArrayList<>();
         resolvers.add(new SignatureDataOperationResolver(implementations));
         resolvers.add(new QueryMethodDataOperationResolver(descriptionExtractor, repositoryMetadata, functionRegistry, configuration));

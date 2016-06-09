@@ -1,6 +1,6 @@
 package com.mmnaseri.utils.spring.data.dsl.factory;
 
-import com.mmnaseri.utils.spring.data.domain.impl.QueryDescriptionExtractor;
+import com.mmnaseri.utils.spring.data.domain.impl.MethodQueryDescriptionExtractor;
 
 /**
  * This interface lets us define the query description extractor
@@ -15,6 +15,6 @@ public interface QueryDescription extends DataFunctions {
      * @param extractor    the extractor
      * @return the rest of the configuration
      */
-    DataFunctions extractQueriesUsing(QueryDescriptionExtractor extractor);
+    DataFunctions extractQueriesUsing(MethodQueryDescriptionExtractor extractor);
 
 }

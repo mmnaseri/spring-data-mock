@@ -29,7 +29,7 @@ public class DefaultQueryDslPredicateExecutor extends PagingAndSortingSupport im
     }
 
     public Iterable findAll(Predicate predicate, Sort sort) {
-        return sort(((CollQuery) CollQueryFactory.from(alias, dataStore.retrieveAll()).where(predicate)).fetch(), sort);
+        return PagingAndSortingUtils.sort(((CollQuery) CollQueryFactory.from(alias, dataStore.retrieveAll()).where(predicate)).fetch(), sort);
     }
 
     public Page findAll(Predicate predicate, Pageable pageable) {

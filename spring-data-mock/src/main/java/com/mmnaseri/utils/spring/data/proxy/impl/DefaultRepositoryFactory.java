@@ -1,7 +1,7 @@
 package com.mmnaseri.utils.spring.data.proxy.impl;
 
 import com.mmnaseri.utils.spring.data.domain.*;
-import com.mmnaseri.utils.spring.data.domain.impl.QueryDescriptionExtractor;
+import com.mmnaseri.utils.spring.data.domain.impl.MethodQueryDescriptionExtractor;
 import com.mmnaseri.utils.spring.data.proxy.*;
 import com.mmnaseri.utils.spring.data.proxy.impl.resolvers.DefaultDataOperationResolver;
 import com.mmnaseri.utils.spring.data.query.DataFunctionRegistry;
@@ -36,7 +36,7 @@ public class DefaultRepositoryFactory implements RepositoryFactory {
     private static final Log log = LogFactory.getLog(DefaultRepositoryFactory.class);
     private final RepositoryMetadataResolver repositoryMetadataResolver;
     private final Map<Class<?>, RepositoryMetadata> metadataMap = new ConcurrentHashMap<>();
-    private final QueryDescriptionExtractor descriptionExtractor;
+    private final MethodQueryDescriptionExtractor descriptionExtractor;
     private final DataFunctionRegistry functionRegistry;
     private final DataStoreRegistry dataStoreRegistry;
     private final ResultAdapterContext adapterContext;

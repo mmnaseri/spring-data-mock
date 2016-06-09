@@ -2,8 +2,9 @@ package com.mmnaseri.utils.spring.data.domain.impl.id;
 
 import com.mmnaseri.utils.spring.data.error.PropertyTypeMismatchException;
 import com.mmnaseri.utils.spring.data.tools.PropertyUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.core.annotation.AnnotationUtils;
-import org.springframework.data.annotation.Id;
 import org.springframework.util.ClassUtils;
 
 import java.io.Serializable;
@@ -19,7 +20,13 @@ import java.util.List;
  */
 final class IdPropertyResolverUtils {
 
-    private static final String JAVAX_PERSISTENCE_ID = "javax.persistence.Id";
+    private static final List<String> ID_ANNOTATIONS = new ArrayList<>();
+    private static final Log log = LogFactory.getLog(IdPropertyResolverUtils.class);
+
+    static {
+        ID_ANNOTATIONS.add("org.springframework.data.annotation.Id");
+        ID_ANNOTATIONS.add("javax.persistence.Id");
+    }
 
     private IdPropertyResolverUtils() {
         throw new UnsupportedOperationException();
@@ -67,14 +74,15 @@ final class IdPropertyResolverUtils {
      */
     private static List<Class<? extends Annotation>> getIdAnnotations() {
         final List<Class<? extends Annotation>> annotations = new ArrayList<>();
-        annotations.add(Id.class);
         final ClassLoader classLoader = ClassUtils.getDefaultClassLoader();
-        if (ClassUtils.isPresent(JAVAX_PERSISTENCE_ID, classLoader)) {
-            final Class<?> loadedClass;
+        for (String idAnnotation : ID_ANNOTATIONS) {
             try {
-                loadedClass = ClassUtils.forName(JAVAX_PERSISTENCE_ID, classLoader);
-                annotations.add(loadedClass.asSubclass(Annotation.class));
+                final Class<?> type = ClassUtils.forName(idAnnotation, classLoader);
+                final Class<? extends Annotation> annotationType = type.asSubclass(Annotation.class);
+                annotations.add(annotationType);
             } catch (ClassNotFoundException ignored) {
+                //if the class for the annotation wasn't found, we just ignore it
+                log.debug("Requested ID annotation type " + idAnnotation + " is not present in the classpath");
             }
         }
         return annotations;
