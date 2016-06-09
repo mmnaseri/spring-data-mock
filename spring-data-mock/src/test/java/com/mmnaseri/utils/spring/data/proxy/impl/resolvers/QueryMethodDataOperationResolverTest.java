@@ -1,7 +1,7 @@
 package com.mmnaseri.utils.spring.data.proxy.impl.resolvers;
 
 import com.mmnaseri.utils.spring.data.domain.impl.DescribedDataStoreOperation;
-import com.mmnaseri.utils.spring.data.sample.usecases.proxy.resolvers.NoOpQueryDescriptionExtractor;
+import com.mmnaseri.utils.spring.data.sample.usecases.proxy.resolvers.NoOpMethodQueryDescriptionExtractor;
 import com.mmnaseri.utils.spring.data.sample.usecases.proxy.resolvers.SampleMappedRepository;
 import com.mmnaseri.utils.spring.data.store.DataStoreOperation;
 import org.testng.annotations.Test;
@@ -17,7 +17,7 @@ public class QueryMethodDataOperationResolverTest {
 
     @Test
     public void testThatItCallsAQueryExtractor() throws Exception {
-        final NoOpQueryDescriptionExtractor extractor = new NoOpQueryDescriptionExtractor();
+        final NoOpMethodQueryDescriptionExtractor extractor = new NoOpMethodQueryDescriptionExtractor();
         final QueryMethodDataOperationResolver resolver = new QueryMethodDataOperationResolver(extractor, null, null, null);
         assertThat(extractor.isCalled(), is(false));
         final DataStoreOperation<?, ?, ?> operation = resolver.resolve(SampleMappedRepository.class.getMethod("normalMethodBy"));
@@ -28,7 +28,7 @@ public class QueryMethodDataOperationResolverTest {
 
     @Test
     public void testMethodThatIsAnnotatedWithVendorQuery() throws Exception {
-        final QueryMethodDataOperationResolver resolver = new QueryMethodDataOperationResolver(new NoOpQueryDescriptionExtractor(), null, null, null);
+        final QueryMethodDataOperationResolver resolver = new QueryMethodDataOperationResolver(new NoOpMethodQueryDescriptionExtractor(), null, null, null);
         final DataStoreOperation<?, ?, ?> method = resolver.resolve(SampleMappedRepository.class.getMethod("nativeMethod"));
         assertThat(method, is(nullValue()));
     }

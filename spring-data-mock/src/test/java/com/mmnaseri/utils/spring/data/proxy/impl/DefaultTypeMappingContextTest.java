@@ -23,7 +23,14 @@ public class DefaultTypeMappingContextTest {
 
     @BeforeMethod
     public void setUp() throws Exception {
-        defaultImplementations = new Class[]{DefaultGemfireRepository.class, DefaultJpaRepository.class, DefaultPagingAndSortingRepository.class, DefaultCrudRepository.class, DefaultQueryDslPredicateExecutor.class};
+        defaultImplementations = new Class[]{
+                DefaultGemfireRepository.class,
+                DefaultJpaRepository.class,
+                DefaultPagingAndSortingRepository.class,
+                DefaultCrudRepository.class,
+                DefaultQueryDslPredicateExecutor.class,
+                DefaultQueryByExampleExecutor.class
+        };
     }
 
     @Test

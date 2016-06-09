@@ -2,7 +2,7 @@ package com.mmnaseri.utils.spring.data.proxy.impl;
 
 import com.mmnaseri.utils.spring.data.domain.impl.DefaultOperatorContext;
 import com.mmnaseri.utils.spring.data.domain.impl.DefaultRepositoryMetadataResolver;
-import com.mmnaseri.utils.spring.data.domain.impl.QueryDescriptionExtractor;
+import com.mmnaseri.utils.spring.data.domain.impl.MethodQueryDescriptionExtractor;
 import com.mmnaseri.utils.spring.data.domain.impl.key.UUIDKeyGenerator;
 import com.mmnaseri.utils.spring.data.proxy.RepositoryFactoryConfiguration;
 import com.mmnaseri.utils.spring.data.query.impl.DefaultDataFunctionRegistry;
@@ -32,7 +32,7 @@ public class DefaultRepositoryFactoryTest {
         final DefaultRepositoryFactoryConfiguration configuration = new DefaultRepositoryFactoryConfiguration();
         final DefaultDataStoreRegistry dataStoreRegistry = new DefaultDataStoreRegistry();
         configuration.setDataStoreRegistry(dataStoreRegistry);
-        configuration.setDescriptionExtractor(new QueryDescriptionExtractor(new DefaultOperatorContext()));
+        configuration.setDescriptionExtractor(new MethodQueryDescriptionExtractor(new DefaultOperatorContext()));
         configuration.setEventListenerContext(new DefaultDataStoreEventListenerContext());
         configuration.setFunctionRegistry(new DefaultDataFunctionRegistry());
         configuration.setOperationInvocationHandler(new NonDataOperationInvocationHandler());

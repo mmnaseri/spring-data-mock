@@ -8,6 +8,9 @@ import com.mmnaseri.utils.spring.data.sample.models.EntityWithAnnotatedIdGetterF
 import com.mmnaseri.utils.spring.data.tools.AbstractUtilityClassTest;
 import org.testng.annotations.Test;
 
+import java.lang.reflect.Field;
+import java.util.List;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
@@ -45,6 +48,17 @@ public class IdPropertyResolverUtilsTest extends AbstractUtilityClassTest {
         final String propertyName = IdPropertyResolverUtils.getPropertyNameFromAnnotatedMethod(EntityWithAnnotatedIdGetterFromJPA.class, Integer.class, EntityWithAnnotatedIdGetterFromJPA.class.getDeclaredMethod("getMyCustomId"));
         assertThat(propertyName, is(notNullValue()));
         assertThat(propertyName, is("myCustomId"));
+    }
+
+    @Test
+    public void testDeclaringAnnotationsThatAreNotPresent() throws Exception {
+        final Field idAnnotations = IdPropertyResolverUtils.class.getDeclaredField("ID_ANNOTATIONS");
+        idAnnotations.setAccessible(true);
+        final List list = (List) idAnnotations.get(null);
+        //noinspection unchecked
+        list.add("random class name");
+        final String propertyName = IdPropertyResolverUtils.getPropertyNameFromAnnotatedMethod(EntityWithAnnotatedIdGetterFromJPA.class, Integer.class, EntityWithAnnotatedIdGetterFromJPA.class.getDeclaredMethod("getMyCustomId"));
+        assertThat(propertyName, is(notNullValue()));
     }
 
 }

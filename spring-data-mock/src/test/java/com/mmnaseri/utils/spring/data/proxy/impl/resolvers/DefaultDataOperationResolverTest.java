@@ -31,7 +31,7 @@ public class DefaultDataOperationResolverTest {
     public void setUp() throws Exception {
         final ArrayList<TypeMapping<?>> mappings = new ArrayList<>();
         mappings.add(new ImmutableTypeMapping<>(MappedType.class, new MappedType()));
-        final QueryDescriptionExtractor descriptionExtractor = new QueryDescriptionExtractor(new DefaultOperatorContext());
+        final MethodQueryDescriptionExtractor descriptionExtractor = new MethodQueryDescriptionExtractor(new DefaultOperatorContext());
         final ImmutableRepositoryMetadata repositoryMetadata = new ImmutableRepositoryMetadata(String.class, Person.class, SampleMappedRepository.class, "id");
         final DefaultDataFunctionRegistry functionRegistry = new DefaultDataFunctionRegistry();
         resolver = new DefaultDataOperationResolver(mappings, descriptionExtractor, repositoryMetadata, functionRegistry, new DefaultRepositoryFactoryConfiguration());
