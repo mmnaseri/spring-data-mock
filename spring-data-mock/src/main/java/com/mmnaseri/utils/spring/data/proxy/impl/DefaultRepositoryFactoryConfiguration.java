@@ -1,7 +1,7 @@
 package com.mmnaseri.utils.spring.data.proxy.impl;
 
 import com.mmnaseri.utils.spring.data.domain.RepositoryMetadataResolver;
-import com.mmnaseri.utils.spring.data.domain.impl.QueryDescriptionExtractor;
+import com.mmnaseri.utils.spring.data.domain.impl.MethodQueryDescriptionExtractor;
 import com.mmnaseri.utils.spring.data.proxy.RepositoryFactoryConfiguration;
 import com.mmnaseri.utils.spring.data.proxy.ResultAdapterContext;
 import com.mmnaseri.utils.spring.data.proxy.TypeMappingContext;
@@ -18,7 +18,7 @@ import com.mmnaseri.utils.spring.data.store.DataStoreRegistry;
 public class DefaultRepositoryFactoryConfiguration implements RepositoryFactoryConfiguration {
 
     private RepositoryMetadataResolver repositoryMetadataResolver;
-    private QueryDescriptionExtractor descriptionExtractor;
+    private MethodQueryDescriptionExtractor descriptionExtractor;
     private DataFunctionRegistry functionRegistry;
     private DataStoreRegistry dataStoreRegistry;
     private ResultAdapterContext resultAdapterContext;
@@ -36,11 +36,11 @@ public class DefaultRepositoryFactoryConfiguration implements RepositoryFactoryC
     }
 
     @Override
-    public QueryDescriptionExtractor getDescriptionExtractor() {
+    public MethodQueryDescriptionExtractor getDescriptionExtractor() {
         return descriptionExtractor;
     }
 
-    public void setDescriptionExtractor(QueryDescriptionExtractor descriptionExtractor) {
+    public void setDescriptionExtractor(MethodQueryDescriptionExtractor descriptionExtractor) {
         this.descriptionExtractor = descriptionExtractor;
     }
 
