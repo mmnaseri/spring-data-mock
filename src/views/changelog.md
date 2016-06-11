@@ -8,6 +8,44 @@ Where applicable, an issue number and a link to the appropriate
 issue is provided as well.
 
 
+[v1.1.1](https://github.com/mmnaseri/spring-data-mock/releases/tag/v1.1.1)
+------------------------------------------------
+
+##### Enhancements
+
+  * [#68](https://github.com/mmnaseri/spring-data-mock/issues/68):
+   Fix up the dependencies left from hastily adding support for QueryDSL
+
+  * [#72](https://github.com/mmnaseri/spring-data-mock/issues/72):
+   Fix Codacey issues prior to v1.1.1
+
+##### Fixes
+
+  * [#69](https://github.com/mmnaseri/spring-data-mock/issues/69):
+   Fix the dependency on CGLIB
+
+[v1.1](https://github.com/mmnaseri/spring-data-mock/releases/tag/v1.1)
+------------------------------------------------
+
+##### Enhancements
+
+  * [#3](https://github.com/mmnaseri/spring-data-mock/issues/3):
+  Add support for `QueryDslPredicateExecutor`
+
+  * [#50](https://github.com/mmnaseri/spring-data-mock/issues/50):
+  Update Maven dependencies
+
+  * [#54](https://github.com/mmnaseri/spring-data-mock/issues/54):
+  Indicating that the library depends on `commons-logging`
+
+  * [#56](https://github.com/mmnaseri/spring-data-mock/issues/56):
+  Add support for querying entities by example
+
+##### Fixes
+
+  * [#55](https://github.com/mmnaseri/spring-data-mock/issues/55):
+  Fix the issue where JPA annotations aren't honored
+
 [v1.0.3](https://github.com/mmnaseri/spring-data-mock/releases/tag/v1.0.3)
 ------------------------------------------------
 
