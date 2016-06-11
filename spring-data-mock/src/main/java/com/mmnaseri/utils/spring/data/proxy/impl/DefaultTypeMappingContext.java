@@ -27,6 +27,11 @@ import java.util.concurrent.ConcurrentMap;
 public class DefaultTypeMappingContext implements TypeMappingContext {
 
     private static final Log log = LogFactory.getLog(DefaultTypeMappingContext.class);
+    private static final String GEMFIRE_SUPPORT_CLASS = "org.springframework.data.gemfire.repository.GemfireRepository";
+    private static final String JPA_SUPPORT_CLASS = "org.springframework.data.jpa.repository.JpaRepository";
+    private static final String QUERYDSL_SUPPORT_CLASS = "org.springframework.data.querydsl.QueryDslPredicateExecutor";
+    private static final String QUERY_BY_EXAMPLE_SUPPORT_CLASS = "org.springframework.data.repository.query.QueryByExampleExecutor";
+    private static final String CGLIB_SUPPORT_CLASS = "net.sf.cglib.proxy.Callback";
     private final TypeMappingContext parent;
     private ConcurrentMap<Class<?>, List<Class<?>>> mappings = new ConcurrentHashMap<>();
 
@@ -45,26 +50,29 @@ public class DefaultTypeMappingContext implements TypeMappingContext {
         this(null);
         if (registerDefaults) {
             log.info("Trying to register all the default type mappings");
-            final ClassLoader defaultClassLoader = ClassUtils.getDefaultClassLoader();
-            if (ClassUtils.isPresent("org.springframework.data.gemfire.repository.GemfireRepository", defaultClassLoader)) {
+            if (isClassPresent(GEMFIRE_SUPPORT_CLASS)) {
                 log.debug("We seem to have Gemfire in the classpath, so, we should register the supporting registry");
                 register(Object.class, DefaultGemfireRepository.class);
             }
-            if (ClassUtils.isPresent("org.springframework.data.jpa.repository.JpaRepository", defaultClassLoader)) {
+            if (isClassPresent(JPA_SUPPORT_CLASS)) {
                 log.debug("JPA support is enabled in this project, so we need to support the methods");
                 register(Object.class, DefaultJpaRepository.class);
             }
-            if (ClassUtils.isPresent("org.springframework.data.querydsl.QueryDslPredicateExecutor", defaultClassLoader)) {
+            if (isClassPresent(QUERYDSL_SUPPORT_CLASS) && isClassPresent(CGLIB_SUPPORT_CLASS)) {
                 log.debug("QueryDSL support is enabled. We will add the proper method implementations.");
                 register(Object.class, DefaultQueryDslPredicateExecutor.class);
             }
-            if (ClassUtils.isPresent("org.springframework.data.repository.query.QueryByExampleExecutor", defaultClassLoader)) {
+            if (isClassPresent(QUERY_BY_EXAMPLE_SUPPORT_CLASS)) {
                 log.debug("Query by example is enabled. We will the proper method implementations.");
                 register(Object.class, DefaultQueryByExampleExecutor.class);
             }
             register(Object.class, DefaultPagingAndSortingRepository.class);
             register(Object.class, DefaultCrudRepository.class);
         }
+    }
+
+    private boolean isClassPresent(String className) {
+        return ClassUtils.isPresent(className, ClassUtils.getDefaultClassLoader());
     }
 
     public DefaultTypeMappingContext(TypeMappingContext parent) {
