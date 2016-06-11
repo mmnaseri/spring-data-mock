@@ -15,10 +15,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Utilities for figuring out the specifics of the ID property
+ *
  * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (6/8/16, 1:43 AM)
  */
-final class IdPropertyResolverUtils {
+@SuppressWarnings("WeakerAccess")
+public final class IdPropertyResolverUtils {
 
     private static final List<String> ID_ANNOTATIONS = new ArrayList<>();
     private static final Log log = LogFactory.getLog(IdPropertyResolverUtils.class);
@@ -39,7 +42,7 @@ final class IdPropertyResolverUtils {
      * @param idAnnotatedMethod    the method that will return the ID (e.g. getter for the ID property)
      * @return the name of the property, or {@literal null} if the method is {@literal null}
      */
-    static String getPropertyNameFromAnnotatedMethod(Class<?> entityType, Class<? extends Serializable> idType, Method idAnnotatedMethod) {
+    public static String getPropertyNameFromAnnotatedMethod(Class<?> entityType, Class<? extends Serializable> idType, Method idAnnotatedMethod) {
         if (idAnnotatedMethod != null) {
             final String name = PropertyUtils.getPropertyName(idAnnotatedMethod);
             if (!idType.isAssignableFrom(idAnnotatedMethod.getReturnType())) {
@@ -57,7 +60,7 @@ final class IdPropertyResolverUtils {
      * @param element    the element to be examined
      * @return {@literal true} if the element has any of the ID annotations
      */
-    static boolean isAnnotated(AnnotatedElement element) {
+    public static boolean isAnnotated(AnnotatedElement element) {
         final List<Class<? extends Annotation>> annotations = getIdAnnotations();
         for (Class<? extends Annotation> annotation : annotations) {
             if (AnnotationUtils.findAnnotation(element, annotation) != null) {
