@@ -28,6 +28,7 @@ You can download this framework via:
                 <groupId>com.mmnaseri.utils</groupId>
                 <artifactId>spring-data-mock</artifactId>
                 <version>${latest-version}</version>
+                <scope>test</scope>
             </dependency>
         </code>
       </pre>
