@@ -3,6 +3,7 @@ package com.mmnaseri.utils.spring.data.domain.impl.id;
 import com.mmnaseri.utils.spring.data.domain.IdPropertyResolver;
 import com.mmnaseri.utils.spring.data.error.MultipleIdPropertiesException;
 import com.mmnaseri.utils.spring.data.error.PropertyTypeMismatchException;
+import com.mmnaseri.utils.spring.data.tools.PropertyUtils;
 import org.springframework.data.annotation.Id;
 import org.springframework.util.ReflectionUtils;
 
@@ -41,7 +42,7 @@ public class AnnotatedFieldIdPropertyResolver implements IdPropertyResolver {
         final Field idAnnotatedField = found.get();
         //if a field was found, try to get the ID property name
         if (idAnnotatedField != null) {
-            if (!idType.isAssignableFrom(idAnnotatedField.getType())) {
+            if (!PropertyUtils.getTypeOf(idType).isAssignableFrom(PropertyUtils.getTypeOf(idAnnotatedField.getType()))) {
                 throw new PropertyTypeMismatchException(entityType, idAnnotatedField.getName(), idType, idAnnotatedField.getType());
             } else {
                 return idAnnotatedField.getName();
