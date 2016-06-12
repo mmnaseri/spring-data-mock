@@ -100,6 +100,13 @@ There you can get more information on how to download the framework, as well as 
 incorporate it in your project to have hassle-free data store mocking capabilities added to
 your shiny applications.
 
+## History
+
+- 1.1 Add QueryDSL and findByExample support
+
+see [site changelog](https://mmnaseri.github.io/spring-data-mock/site/#/changelog)
+
+
 FAQ
 -------------
 
