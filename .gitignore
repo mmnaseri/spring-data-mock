@@ -24,6 +24,11 @@ com_crashlytics_export_strings.xml
 crashlytics.properties
 crashlytics-build.properties
 
+# Eclipse IDE stuff
+.settings/
+.classpath
+.project
+
 # Maven Target
 target
 
