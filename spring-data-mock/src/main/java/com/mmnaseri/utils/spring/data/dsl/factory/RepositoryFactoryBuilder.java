@@ -245,7 +245,12 @@ public class RepositoryFactoryBuilder implements Start, DataFunctionsAnd, DataSt
 
     @Override
     public RepositoryFactory build() {
-        return new DefaultRepositoryFactory(new ImmutableRepositoryFactoryConfiguration(metadataResolver, queryDescriptionExtractor, functionRegistry, dataStoreRegistry, resultAdapterContext, typeMappingContext, eventListenerContext, operationInvocationHandler));
+        return new DefaultRepositoryFactory(configure());
+    }
+
+    @Override
+    public RepositoryFactoryConfiguration configure() {
+        return new ImmutableRepositoryFactoryConfiguration(metadataResolver, queryDescriptionExtractor, functionRegistry, dataStoreRegistry, resultAdapterContext, typeMappingContext, eventListenerContext, operationInvocationHandler);
     }
 
     @Override
