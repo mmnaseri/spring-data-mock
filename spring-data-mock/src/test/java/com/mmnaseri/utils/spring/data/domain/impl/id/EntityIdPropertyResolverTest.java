@@ -2,7 +2,9 @@ package com.mmnaseri.utils.spring.data.domain.impl.id;
 
 import com.mmnaseri.utils.spring.data.domain.IdPropertyResolver;
 import com.mmnaseri.utils.spring.data.error.NoIdPropertyException;
+import com.mmnaseri.utils.spring.data.error.PrimitiveIdTypeException;
 import com.mmnaseri.utils.spring.data.sample.models.*;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.io.Serializable;
@@ -17,9 +19,15 @@ import static org.hamcrest.Matchers.notNullValue;
  */
 public class EntityIdPropertyResolverTest {
 
+    private EntityIdPropertyResolver resolver;
+
+    @BeforeMethod
+    public void setUp() throws Exception {
+        resolver = new EntityIdPropertyResolver();
+    }
+
     @Test
     public void testThatAnnotatedGetterHasPrecedence() throws Exception {
-        final IdPropertyResolver resolver = new EntityIdPropertyResolver();
         final String resolved = resolver.resolve(EntityWithAnnotationOnIdFieldAndGetterAndAnIdField.class, Serializable.class);
         assertThat(resolved, is(notNullValue()));
         assertThat(resolved, is("unannotatedId"));
@@ -27,7 +35,6 @@ public class EntityIdPropertyResolverTest {
 
     @Test
     public void testThatAnnotatedPropertyIsSecond() throws Exception {
-        final IdPropertyResolver resolver = new EntityIdPropertyResolver();
         final String resolved = resolver.resolve(EntityWithIdFieldAndAnAnnotatedIdField.class, Serializable.class);
         assertThat(resolved, is(notNullValue()));
         assertThat(resolved, is("annotatedId"));
@@ -35,7 +42,6 @@ public class EntityIdPropertyResolverTest {
 
     @Test
     public void testThatNamedGetterIsThird() throws Exception {
-        final IdPropertyResolver resolver = new EntityIdPropertyResolver();
         final String resolved = resolver.resolve(EntityWithUnderscorePrecedingIdField.class, Serializable.class);
         assertThat(resolved, is(notNullValue()));
         assertThat(resolved, is("id"));
@@ -43,7 +49,6 @@ public class EntityIdPropertyResolverTest {
 
     @Test
     public void testThatNamedFieldIsFourth() throws Exception {
-        final IdPropertyResolver resolver = new EntityIdPropertyResolver();
         final String resolved = resolver.resolve(EntityWithIdFieldHiddenBehindDifferentlyNamedAccessors.class, Serializable.class);
         assertThat(resolved, is(notNullValue()));
         assertThat(resolved, is("id"));
@@ -51,8 +56,16 @@ public class EntityIdPropertyResolverTest {
 
     @Test(expectedExceptions = NoIdPropertyException.class)
     public void testThatNoOtherValueIsHonored() throws Exception {
-        final IdPropertyResolver resolver = new EntityIdPropertyResolver();
         resolver.resolve(EntityWithNoImmediatelyResolvableIdProperty.class, Serializable.class);
+    }
+
+    /**
+     * see https://github.com/mmnaseri/spring-data-mock/issues/83
+     * @throws Exception
+     */
+    @Test(expectedExceptions = PrimitiveIdTypeException.class)
+    public void testPrimitiveIdTypeDoesNotWork() throws Exception {
+        resolver.resolve(EntityWithPrimitiveIdProperty.class,  Long.class);
     }
 
 }

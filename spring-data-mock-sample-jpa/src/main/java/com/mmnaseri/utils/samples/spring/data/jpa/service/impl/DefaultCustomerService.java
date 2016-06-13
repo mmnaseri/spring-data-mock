@@ -47,7 +47,7 @@ public class DefaultCustomerService implements CustomerService {
                 .withMatcher("firstName", ignoreCase())
                 .withMatcher("lastName", ignoreCase());
         final Example<Customer> example = Example.of(probe, matcher);
-        return repository.findAll(example);
+        return repository.findByExample(example);
     }
 
 }

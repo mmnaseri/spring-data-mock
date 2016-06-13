@@ -14,17 +14,17 @@ import java.util.Date;
 public class Customer {
 
     @Id
-    private long id;
+    private Long id;
     @Temporal(TemporalType.DATE)
     private Date birthday;
     private String firstName;
     private String lastName;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

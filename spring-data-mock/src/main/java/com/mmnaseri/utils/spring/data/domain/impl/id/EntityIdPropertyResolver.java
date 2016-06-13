@@ -2,6 +2,10 @@ package com.mmnaseri.utils.spring.data.domain.impl.id;
 
 import com.mmnaseri.utils.spring.data.domain.IdPropertyResolver;
 import com.mmnaseri.utils.spring.data.error.NoIdPropertyException;
+import com.mmnaseri.utils.spring.data.error.PrimitiveIdTypeException;
+import com.mmnaseri.utils.spring.data.query.PropertyDescriptor;
+import com.mmnaseri.utils.spring.data.tools.PropertyUtils;
+import com.mmnaseri.utils.spring.data.tools.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -53,6 +57,10 @@ public class EntityIdPropertyResolver implements IdPropertyResolver {
         if (idProperty == null) {
             log.error("No ID property was found for entity " + entityType);
             throw new NoIdPropertyException(entityType);
+        }
+        final PropertyDescriptor descriptor = PropertyUtils.getPropertyDescriptor(entityType, StringUtils.capitalize(idProperty));
+        if (descriptor.getType().isPrimitive()) {
+            throw new PrimitiveIdTypeException(entityType, idProperty);
         }
         return idProperty;
     }
