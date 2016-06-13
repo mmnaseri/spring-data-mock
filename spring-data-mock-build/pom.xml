@@ -27,11 +27,12 @@
     <groupId>com.mmnaseri.utils</groupId>
     <artifactId>spring-data-mock-build</artifactId>
     <version>1.1.0</version>
+    <packaging>pom</packaging>
+
     <name>Spring Data Mock: Build Aggregator</name>
     <description>This is the build module that will aggregate all reactors for the spring-data-mock project</description>
     <url>https://mmnaseri.github.io/spring-data-mock</url>
-    <packaging>pom</packaging>
-
+    <inceptionYear>2015</inceptionYear>
     <licenses>
         <license>
             <name>MIT</name>
@@ -51,11 +52,22 @@
         </developer>
     </developers>
 
+    <modules>
+        <module>../spring-data-mock/</module>
+        <module>../spring-data-mock-sample-jpa</module>
+    </modules>
+
     <scm>
         <connection>scm:git:git@github.com:mmnaseri/spring-data-mock.git</connection>
         <developerConnection>scm:git:git@github.com:mmnaseri/spring-data-mock.git</developerConnection>
         <url>git@github.com:mmnaseri/spring-data-mock.git</url>
     </scm>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven-compiler-plugin.version>3.5.1</maven-compiler-plugin.version>
+        <target-jdk.version>1.7</target-jdk.version>
+    </properties>
 
     <build>
         <plugins>
@@ -70,16 +82,5 @@
             </plugin>
         </plugins>
     </build>
-
-	<modules>
-		<module>../spring-data-mock/</module>
-        <module>../spring-data-mock-sample-jpa</module>
-    </modules>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven-compiler-plugin.version>3.5.1</maven-compiler-plugin.version>
-        <target-jdk.version>1.7</target-jdk.version>
-    </properties>
 
 </project>

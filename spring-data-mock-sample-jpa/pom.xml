@@ -7,36 +7,42 @@
     <groupId>com.mmnaseri.utils.sample</groupId>
     <artifactId>spring-data-mock-sample-jpa</artifactId>
     <version>1.0</version>
+
     <name>Spring Data Mock: Samples (JPA)</name>
     <description>This module tries to demonstrate how Spring Data Mock could be used to test an application that
     is using Spring Data JPA.</description>
+    <inceptionYear>2016</inceptionYear>
+    <licenses>
+        <license>
+            <name>MIT</name>
+            <url>http://mit-license.org</url>
+        </license>
+    </licenses>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>${maven-compiler-plugin.version}</version>
-                <configuration>
-                    <source>${target-jdk.version}</source>
-                    <target>${target-jdk.version}</target>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>cobertura-maven-plugin</artifactId>
-                <version>${cobertura-maven-plugin.version}</version>
-                <configuration>
-                    <format>xml</format>
-                    <maxmem>256m</maxmem>
-                    <!-- aggregated reports for multi-module projects -->
-                    <aggregate>true</aggregate>
-                    <check/>
-                    <outputDirectory>target/reports</outputDirectory>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
+    <developers>
+        <developer>
+            <name>Milad Naseri</name>
+            <email>mmnaseri@programmer.net</email>
+            <url>http://www.mmnaseri.com</url>
+            <roles>
+                <role>designer</role>
+                <role>developer</role>
+            </roles>
+        </developer>
+    </developers>
+
+    <properties>
+        <spring-data-commons.version>1.12.1.RELEASE</spring-data-commons.version>
+        <spring-data-jpa.version>1.10.1.RELEASE</spring-data-jpa.version>
+        <persistence-api.version>1.0.2</persistence-api.version>
+        <spring-data-mock.version>1.1.2</spring-data-mock.version>
+        <testng.version>6.9.6</testng.version>
+        <hamcrest.version>1.3</hamcrest.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven-compiler-plugin.version>3.5.1</maven-compiler-plugin.version>
+        <target-jdk.version>1.7</target-jdk.version>
+        <cobertura-maven-plugin.version>2.7</cobertura-maven-plugin.version>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -74,17 +80,31 @@
         </dependency>
     </dependencies>
 
-    <properties>
-        <spring-data-commons.version>1.12.1.RELEASE</spring-data-commons.version>
-        <spring-data-jpa.version>1.10.1.RELEASE</spring-data-jpa.version>
-        <persistence-api.version>1.0.2</persistence-api.version>
-        <spring-data-mock.version>1.1.2</spring-data-mock.version>
-        <testng.version>6.9.6</testng.version>
-        <hamcrest.version>1.3</hamcrest.version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven-compiler-plugin.version>3.5.1</maven-compiler-plugin.version>
-        <target-jdk.version>1.7</target-jdk.version>
-        <cobertura-maven-plugin.version>2.7</cobertura-maven-plugin.version>
-    </properties>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler-plugin.version}</version>
+                <configuration>
+                    <source>${target-jdk.version}</source>
+                    <target>${target-jdk.version}</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>cobertura-maven-plugin</artifactId>
+                <version>${cobertura-maven-plugin.version}</version>
+                <configuration>
+                    <format>xml</format>
+                    <maxmem>256m</maxmem>
+                    <!-- aggregated reports for multi-module projects -->
+                    <aggregate>true</aggregate>
+                    <check/>
+                    <outputDirectory>target/reports</outputDirectory>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
