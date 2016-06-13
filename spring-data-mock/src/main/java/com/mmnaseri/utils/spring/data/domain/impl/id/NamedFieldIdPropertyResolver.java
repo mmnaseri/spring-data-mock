@@ -2,6 +2,7 @@ package com.mmnaseri.utils.spring.data.domain.impl.id;
 
 import com.mmnaseri.utils.spring.data.domain.IdPropertyResolver;
 import com.mmnaseri.utils.spring.data.error.PropertyTypeMismatchException;
+import com.mmnaseri.utils.spring.data.tools.PropertyUtils;
 import org.springframework.util.ReflectionUtils;
 
 import java.io.Serializable;
@@ -20,7 +21,7 @@ public class NamedFieldIdPropertyResolver implements IdPropertyResolver {
     public String resolve(Class<?> entityType, Class<? extends Serializable> idType) {
         final Field field = ReflectionUtils.findField(entityType, "id");
         if (field != null) {
-            if (idType.isAssignableFrom(field.getType())) {
+            if (PropertyUtils.getTypeOf(idType).isAssignableFrom(PropertyUtils.getTypeOf(field.getType()))) {
                 return field.getName();
             } else {
                 throw new PropertyTypeMismatchException(entityType, field.getName(), idType, field.getType());
