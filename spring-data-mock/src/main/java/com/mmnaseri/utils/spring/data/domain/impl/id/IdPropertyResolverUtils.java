@@ -45,7 +45,7 @@ public final class IdPropertyResolverUtils {
     public static String getPropertyNameFromAnnotatedMethod(Class<?> entityType, Class<? extends Serializable> idType, Method idAnnotatedMethod) {
         if (idAnnotatedMethod != null) {
             final String name = PropertyUtils.getPropertyName(idAnnotatedMethod);
-            if (!idType.isAssignableFrom(idAnnotatedMethod.getReturnType())) {
+            if (!PropertyUtils.getTypeOf(idType).isAssignableFrom(PropertyUtils.getTypeOf(idAnnotatedMethod.getReturnType()))) {
                 throw new PropertyTypeMismatchException(entityType, name, idType, idAnnotatedMethod.getReturnType());
             } else {
                 return name;

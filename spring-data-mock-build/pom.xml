@@ -26,7 +26,7 @@
 
     <groupId>com.mmnaseri.utils</groupId>
     <artifactId>spring-data-mock-build</artifactId>
-    <version>1.1.1</version>
+    <version>1.1.0</version>
     <name>Spring Data Mock: Build Aggregator</name>
     <description>This is the build module that will aggregate all reactors for the spring-data-mock project</description>
     <url>https://mmnaseri.github.io/spring-data-mock</url>
@@ -73,7 +73,8 @@
 
 	<modules>
 		<module>../spring-data-mock/</module>
-	</modules>
+        <module>../spring-data-mock-sample-jpa</module>
+    </modules>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
