@@ -44,6 +44,8 @@ class KeyGeneratorProvider {
                 RandomLongKeyGenerator.class,
                 SequentialIntegerKeyGenerator.class,
                 SequentialLongKeyGenerator.class,
+                ConfigurableSequentialIntegerKeyGenerator.class,
+                ConfigurableSequentialLongKeyGenerator.class,
                 UUIDKeyGenerator.class
         );
     }
