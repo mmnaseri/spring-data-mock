@@ -1,9 +1,10 @@
 package com.mmnaseri.utils.spring.data.domain.impl.key;
 
+import com.mmnaseri.utils.spring.data.domain.KeyGenerator;
 import org.testng.annotations.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.is;
 
 /**
  * @author Milad Naseri (milad.naseri@cdk.com)
@@ -13,29 +14,29 @@ public class ConfigurableSequentialLongKeyGeneratorTest {
 
     @Test
     public void testKeyGenerationWithDefaultSettings() throws Exception {
-        final ConfigurableSequentialLongKeyGenerator generator = new ConfigurableSequentialLongKeyGenerator();
-        assertThat(generator.getNext(), is(1L));
-        assertThat(generator.getNext(), is(2L));
-        assertThat(generator.getNext(), is(3L));
+        final KeyGenerator<Long> generator = new ConfigurableSequentialLongKeyGenerator();
+        assertThat(generator.generate(), is(1L));
+        assertThat(generator.generate(), is(2L));
+        assertThat(generator.generate(), is(3L));
     }
 
     @Test
     public void testKeyGenerationWithDefaultStepAndCustomInitialValue() throws Exception {
         final long initialValue = 100L;
-        final ConfigurableSequentialLongKeyGenerator generator = new ConfigurableSequentialLongKeyGenerator(initialValue);
-        assertThat(generator.getNext(), is(initialValue));
-        assertThat(generator.getNext(), is(initialValue + 1));
-        assertThat(generator.getNext(), is(initialValue + 2));
+        final KeyGenerator<Long> generator = new ConfigurableSequentialLongKeyGenerator(initialValue);
+        assertThat(generator.generate(), is(initialValue));
+        assertThat(generator.generate(), is(initialValue + 1));
+        assertThat(generator.generate(), is(initialValue + 2));
     }
 
     @Test
     public void testKeyGenerationWithCustomStepAndCustomInitialValue() throws Exception {
         final long initialValue = 100L;
         final long step = 3L;
-        final ConfigurableSequentialLongKeyGenerator generator = new ConfigurableSequentialLongKeyGenerator(initialValue, step);
-        assertThat(generator.getNext(), is(initialValue));
-        assertThat(generator.getNext(), is(initialValue + step));
-        assertThat(generator.getNext(), is(initialValue + step * 2));
+        final KeyGenerator<Long> generator = new ConfigurableSequentialLongKeyGenerator(initialValue, step);
+        assertThat(generator.generate(), is(initialValue));
+        assertThat(generator.generate(), is(initialValue + step));
+        assertThat(generator.generate(), is(initialValue + step * 2));
     }
 
 }
