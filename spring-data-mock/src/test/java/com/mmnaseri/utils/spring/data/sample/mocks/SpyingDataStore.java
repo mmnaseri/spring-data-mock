@@ -80,6 +80,13 @@ public class SpyingDataStore<K extends Serializable, E> implements QueueingDataS
         return delegate.getEntityType();
     }
 
+    @Override
+    public void truncate() {
+        if (delegate != null) {
+            delegate.truncate();
+        }
+    }
+
     public List<OperationRequest> getRequests() {
         return Collections.unmodifiableList(requests);
     }
