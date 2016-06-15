@@ -10,14 +10,14 @@ import com.mmnaseri.utils.spring.data.proxy.impl.NonDataOperationInvocationHandl
  * @since 1.0 (4/8/16)
  */
 @SuppressWarnings("WeakerAccess")
-public interface OperationHandlers extends EventListener {
+public interface OperationHandlers extends FallbackKeyGenerator {
 
     /**
      * Sets the invocation handler used for handling non-data-related operations
      * @param invocationHandler    the invocation handler
      * @return the rest of the configuration
      */
-    EventListener withOperationHandlers(NonDataOperationInvocationHandler invocationHandler);
+    FallbackKeyGenerator withOperationHandlers(NonDataOperationInvocationHandler invocationHandler);
 
     /**
      * Registers an operation handler

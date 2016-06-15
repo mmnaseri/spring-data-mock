@@ -5,6 +5,9 @@ import com.mmnaseri.utils.spring.data.domain.RepositoryAware;
 import com.mmnaseri.utils.spring.data.domain.impl.DefaultOperatorContext;
 import com.mmnaseri.utils.spring.data.domain.impl.DefaultRepositoryMetadataResolver;
 import com.mmnaseri.utils.spring.data.domain.impl.MethodQueryDescriptionExtractor;
+import com.mmnaseri.utils.spring.data.domain.impl.key.NoOpKeyGenerator;
+import com.mmnaseri.utils.spring.data.domain.impl.key.UUIDKeyGenerator;
+import com.mmnaseri.utils.spring.data.dsl.factory.RepositoryFactoryBuilder;
 import com.mmnaseri.utils.spring.data.error.CorruptDataException;
 import com.mmnaseri.utils.spring.data.error.DataOperationExecutionException;
 import com.mmnaseri.utils.spring.data.error.MockBuilderException;
@@ -38,7 +41,7 @@ public class RepositoryMockBuilderTest {
 
     @Test
     public void testOutOfTheBoxMocking() throws Exception {
-        final SimpleCrudPersonRepository repository = new RepositoryMockBuilder().mock(SimpleCrudPersonRepository.class);
+        final SimpleCrudPersonRepository repository = new RepositoryMockBuilder().useConfiguration(RepositoryFactoryBuilder.defaultConfiguration()).mock(SimpleCrudPersonRepository.class);
         assertThat(repository, is(notNullValue()));
         final Person person = repository.save(new Person());
         assertThat(repository.findAll(), is(notNullValue()));
@@ -68,6 +71,17 @@ public class RepositoryMockBuilderTest {
         assertThat(repository.findAll(), hasItem(person));
         repository.delete(person);
         assertThat(repository.findAll(), is(empty()));
+    }
+
+    @Test
+    public void testMockingWithFallbackKeyGenerator() throws Exception {
+        final DefaultRepositoryFactoryConfiguration configuration = new DefaultRepositoryFactoryConfiguration(RepositoryFactoryBuilder.defaultConfiguration());
+        configuration.setDefaultKeyGenerator(new UUIDKeyGenerator());
+        final SimpleCrudPersonRepository repository = new RepositoryMockBuilder().useConfiguration(configuration).mock(SimpleCrudPersonRepository.class);
+        assertThat(repository, is(notNullValue()));
+        final Person saved = repository.save(new Person());
+        assertThat(saved, is(notNullValue()));
+        assertThat(saved.getId(), is(notNullValue()));
     }
 
     @Test
@@ -157,7 +171,7 @@ public class RepositoryMockBuilderTest {
 
     @Test
     public void testNoOpKeyGeneration() throws Exception {
-        final RepositoryMockBuilder.NoOpKeyGenerator<Serializable> generator = new RepositoryMockBuilder.NoOpKeyGenerator<>();
+        final NoOpKeyGenerator<Serializable> generator = new NoOpKeyGenerator<>();
         assertThat(generator.generate(), is(nullValue()));
     }
 
