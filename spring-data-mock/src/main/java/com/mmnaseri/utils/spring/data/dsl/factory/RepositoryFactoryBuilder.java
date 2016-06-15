@@ -32,7 +32,6 @@ import java.io.Serializable;
 @SuppressWarnings("WeakerAccess")
 public class RepositoryFactoryBuilder implements Start, DataFunctionsAnd, DataStoresAnd, EventListenerAnd, MappingContextAnd, OperatorsAnd, ResultAdaptersAnd, OperationHandlersAnd {
 
-    private static RepositoryFactory DEFAULT_FACTORY;
     public static final String DEFAULT_USER = "User";
     private RepositoryMetadataResolver metadataResolver;
     private MethodQueryDescriptionExtractor queryDescriptionExtractor;
@@ -45,16 +44,7 @@ public class RepositoryFactoryBuilder implements Start, DataFunctionsAnd, DataSt
     private KeyGenerator<? extends Serializable> defaultKeyGenerator;
 
     /**
-     * Starting point for writing code in the builder's DSL
-     *
-     * @return an instance of the builder
-     */
-    public static Start builder() {
-        return new RepositoryFactoryBuilder();
-    }
-
-    /**
-     * @return the default configuration (always the same instance)
+     * @return the default configuration
      */
     public static RepositoryFactoryConfiguration defaultConfiguration() {
         final RepositoryFactoryBuilder builder = (RepositoryFactoryBuilder) builder();
@@ -71,13 +61,39 @@ public class RepositoryFactoryBuilder implements Start, DataFunctionsAnd, DataSt
     }
 
     /**
-     * @return the default factory (always the same instance)
+     * Starting point for writing code in the builder's DSL
+     *
+     * @return an instance of the builder
+     */
+    public static Start builder() {
+        return new RepositoryFactoryBuilder();
+    }
+
+    /**
+     * Start the configuration DSL by considering the provided configuration as
+     * the default fallback
+     * @param configuration    the fallback configuration
+     * @return an instance of the builder
+     */
+    public static Start given(RepositoryFactoryConfiguration configuration) {
+        final RepositoryFactoryBuilder builder = new RepositoryFactoryBuilder();
+        builder.metadataResolver = configuration.getRepositoryMetadataResolver() != null ? configuration.getRepositoryMetadataResolver() : builder.metadataResolver;
+        builder.queryDescriptionExtractor = configuration.getDescriptionExtractor() != null ? configuration.getDescriptionExtractor() : builder.queryDescriptionExtractor;
+        builder.functionRegistry = configuration.getFunctionRegistry() != null ? configuration.getFunctionRegistry() : builder.functionRegistry;
+        builder.dataStoreRegistry = configuration.getDataStoreRegistry() != null ? configuration.getDataStoreRegistry() : builder.dataStoreRegistry;
+        builder.resultAdapterContext = configuration.getResultAdapterContext() != null ? configuration.getResultAdapterContext() : builder.resultAdapterContext;
+        builder.typeMappingContext = configuration.getTypeMappingContext() != null ? configuration.getTypeMappingContext() : builder.typeMappingContext;
+        builder.eventListenerContext = configuration.getEventListenerContext() != null ? configuration.getEventListenerContext() : builder.eventListenerContext;
+        builder.operationInvocationHandler = configuration.getOperationInvocationHandler() != null ? configuration.getOperationInvocationHandler() : builder.operationInvocationHandler;
+        builder.defaultKeyGenerator = configuration.getDefaultKeyGenerator() != null ? configuration.getDefaultKeyGenerator() : builder.defaultKeyGenerator;
+        return builder;
+    }
+
+    /**
+     * @return the default factory
      */
     public static RepositoryFactory defaultFactory() {
-        if (DEFAULT_FACTORY == null) {
-            DEFAULT_FACTORY = new DefaultRepositoryFactory(defaultConfiguration());
-        }
-        return DEFAULT_FACTORY;
+        return new DefaultRepositoryFactory(defaultConfiguration());
     }
 
     private RepositoryFactoryBuilder() {

@@ -14,6 +14,7 @@ import com.mmnaseri.utils.spring.data.proxy.RepositoryFactory;
 import com.mmnaseri.utils.spring.data.proxy.RepositoryFactoryConfiguration;
 import com.mmnaseri.utils.spring.data.proxy.ResultAdapterContext;
 import com.mmnaseri.utils.spring.data.proxy.TypeMappingContext;
+import com.mmnaseri.utils.spring.data.proxy.impl.DefaultRepositoryFactoryConfiguration;
 import com.mmnaseri.utils.spring.data.proxy.impl.DefaultResultAdapterContext;
 import com.mmnaseri.utils.spring.data.proxy.impl.DefaultTypeMappingContext;
 import com.mmnaseri.utils.spring.data.proxy.impl.NonDataOperationInvocationHandler;
@@ -37,6 +38,7 @@ import org.testng.annotations.Test;
 import java.io.Serializable;
 import java.util.List;
 
+import static com.mmnaseri.utils.spring.data.dsl.factory.RepositoryFactoryBuilder.given;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
@@ -64,7 +66,20 @@ public class RepositoryFactoryBuilderTest {
     public void testDefaultFactory() throws Exception {
         final RepositoryFactory factory = RepositoryFactoryBuilder.defaultFactory();
         assertThat(factory, is(notNullValue()));
-        assertThat(factory, is(RepositoryFactoryBuilder.defaultFactory()));
+    }
+
+    @Test
+    public void testConfiguringAProvidedConfiguration() throws Exception {
+        final DefaultRepositoryFactoryConfiguration configuration = new DefaultRepositoryFactoryConfiguration();
+        final DefaultDataFunctionRegistry functionRegistry = new DefaultDataFunctionRegistry();
+        configuration.setFunctionRegistry(functionRegistry);
+        configuration.setDefaultKeyGenerator(new NoOpKeyGenerator<>());
+        final UUIDKeyGenerator keyGenerator = new UUIDKeyGenerator();
+        final RepositoryFactoryConfiguration modifiedConfiguration = given(configuration).withDefaultKeyGenerator(keyGenerator).withListener(new AllCatchingEventListener()).configure();
+        assertThat(modifiedConfiguration, is(notNullValue()));
+        assertThat(modifiedConfiguration.getDefaultKeyGenerator(), is((Object) keyGenerator));
+        assertThat(modifiedConfiguration.getEventListenerContext(), is(notNullValue()));
+        assertThat(modifiedConfiguration.getEventListenerContext().getListeners(DataStoreEvent.class), hasSize(1));
     }
 
     @Test
