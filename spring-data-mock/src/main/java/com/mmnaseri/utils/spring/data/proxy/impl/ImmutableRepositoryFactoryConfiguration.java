@@ -1,5 +1,6 @@
 package com.mmnaseri.utils.spring.data.proxy.impl;
 
+import com.mmnaseri.utils.spring.data.domain.KeyGenerator;
 import com.mmnaseri.utils.spring.data.domain.RepositoryMetadataResolver;
 import com.mmnaseri.utils.spring.data.domain.impl.MethodQueryDescriptionExtractor;
 import com.mmnaseri.utils.spring.data.proxy.RepositoryFactoryConfiguration;
@@ -27,14 +28,15 @@ public class ImmutableRepositoryFactoryConfiguration implements RepositoryFactor
     private final TypeMappingContext typeMappingContext;
     private final DataStoreEventListenerContext eventListenerContext;
     private final NonDataOperationInvocationHandler operationInvocationHandler;
+    private final KeyGenerator<?> keyGenerator;
 
     public ImmutableRepositoryFactoryConfiguration(RepositoryFactoryConfiguration configuration) {
         this(configuration.getRepositoryMetadataResolver(), configuration.getDescriptionExtractor(), configuration.getFunctionRegistry(),
                 configuration.getDataStoreRegistry(), configuration.getResultAdapterContext(), configuration.getTypeMappingContext(),
-                configuration.getEventListenerContext(), configuration.getOperationInvocationHandler());
+                configuration.getEventListenerContext(), configuration.getOperationInvocationHandler(), configuration.getDefaultKeyGenerator());
     }
 
-    public ImmutableRepositoryFactoryConfiguration(RepositoryMetadataResolver metadataResolver, MethodQueryDescriptionExtractor queryDescriptionExtractor, DataFunctionRegistry functionRegistry, DataStoreRegistry dataStoreRegistry, ResultAdapterContext resultAdapterContext, TypeMappingContext typeMappingContext, DataStoreEventListenerContext eventListenerContext, NonDataOperationInvocationHandler operationInvocationHandler) {
+    public ImmutableRepositoryFactoryConfiguration(RepositoryMetadataResolver metadataResolver, MethodQueryDescriptionExtractor queryDescriptionExtractor, DataFunctionRegistry functionRegistry, DataStoreRegistry dataStoreRegistry, ResultAdapterContext resultAdapterContext, TypeMappingContext typeMappingContext, DataStoreEventListenerContext eventListenerContext, NonDataOperationInvocationHandler operationInvocationHandler, KeyGenerator<?> keyGenerator) {
         this.metadataResolver = metadataResolver;
         this.queryDescriptionExtractor = queryDescriptionExtractor;
         this.functionRegistry = functionRegistry;
@@ -43,6 +45,7 @@ public class ImmutableRepositoryFactoryConfiguration implements RepositoryFactor
         this.typeMappingContext = typeMappingContext;
         this.eventListenerContext = eventListenerContext;
         this.operationInvocationHandler = operationInvocationHandler;
+        this.keyGenerator = keyGenerator;
     }
 
     @Override
@@ -83,6 +86,11 @@ public class ImmutableRepositoryFactoryConfiguration implements RepositoryFactor
     @Override
     public NonDataOperationInvocationHandler getOperationInvocationHandler() {
         return operationInvocationHandler;
+    }
+
+    @Override
+    public KeyGenerator<?> getDefaultKeyGenerator() {
+        return keyGenerator;
     }
 
 }

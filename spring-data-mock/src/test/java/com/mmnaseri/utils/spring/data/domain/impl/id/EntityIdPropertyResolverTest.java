@@ -1,6 +1,5 @@
 package com.mmnaseri.utils.spring.data.domain.impl.id;
 
-import com.mmnaseri.utils.spring.data.domain.IdPropertyResolver;
 import com.mmnaseri.utils.spring.data.error.NoIdPropertyException;
 import com.mmnaseri.utils.spring.data.error.PrimitiveIdTypeException;
 import com.mmnaseri.utils.spring.data.sample.models.*;

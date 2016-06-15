@@ -113,4 +113,14 @@ public class MemoryDataStoreTest {
         dataStore.retrieve(null);
     }
 
+    @Test
+    public void testTruncating() throws Exception {
+        dataStore.save("1", new Person());
+        dataStore.save("2", new Person());
+        dataStore.save("3", new Person());
+        assertThat(dataStore.retrieveAll(), hasSize(3));
+        dataStore.truncate();
+        assertThat(dataStore.retrieveAll(), is(Matchers.<Person>empty()));
+    }
+
 }

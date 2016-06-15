@@ -1,5 +1,6 @@
 package com.mmnaseri.utils.spring.data.proxy;
 
+import com.mmnaseri.utils.spring.data.domain.KeyGenerator;
 import com.mmnaseri.utils.spring.data.domain.RepositoryMetadataResolver;
 import com.mmnaseri.utils.spring.data.domain.impl.MethodQueryDescriptionExtractor;
 import com.mmnaseri.utils.spring.data.proxy.impl.NonDataOperationInvocationHandler;
@@ -54,5 +55,10 @@ public interface RepositoryFactoryConfiguration {
      * @return the non-data operation invocation handler
      */
     NonDataOperationInvocationHandler getOperationInvocationHandler();
+
+    /**
+     * @return the default key generator that should be used as a fallback when no key generator is specified
+     */
+    KeyGenerator<?> getDefaultKeyGenerator();
 
 }

@@ -62,4 +62,9 @@ public interface DataStore<K extends Serializable, E> {
      */
     Class<E> getEntityType();
 
+    /**
+     * Does a hard remove of all the entities in the data store
+     */
+    void truncate();
+
 }

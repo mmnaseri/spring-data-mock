@@ -32,8 +32,6 @@ import java.io.Serializable;
 @SuppressWarnings("WeakerAccess")
 public class RepositoryFactoryBuilder implements Start, DataFunctionsAnd, DataStoresAnd, EventListenerAnd, MappingContextAnd, OperatorsAnd, ResultAdaptersAnd, OperationHandlersAnd {
 
-    private static RepositoryFactory DEFAULT_FACTORY;
-    private static RepositoryFactoryConfiguration DEFAULT_FACTORY_CONFIGURATION;
     public static final String DEFAULT_USER = "User";
     private RepositoryMetadataResolver metadataResolver;
     private MethodQueryDescriptionExtractor queryDescriptionExtractor;
@@ -43,6 +41,24 @@ public class RepositoryFactoryBuilder implements Start, DataFunctionsAnd, DataSt
     private TypeMappingContext typeMappingContext;
     private DataStoreEventListenerContext eventListenerContext;
     private NonDataOperationInvocationHandler operationInvocationHandler;
+    private KeyGenerator<? extends Serializable> defaultKeyGenerator;
+
+    /**
+     * @return the default configuration
+     */
+    public static RepositoryFactoryConfiguration defaultConfiguration() {
+        final RepositoryFactoryBuilder builder = (RepositoryFactoryBuilder) builder();
+        return new ImmutableRepositoryFactoryConfiguration(
+                builder.metadataResolver,
+                builder.queryDescriptionExtractor,
+                builder.functionRegistry,
+                builder.dataStoreRegistry,
+                builder.resultAdapterContext,
+                builder.typeMappingContext,
+                builder.eventListenerContext,
+                builder.operationInvocationHandler,
+                builder.defaultKeyGenerator);
+    }
 
     /**
      * Starting point for writing code in the builder's DSL
@@ -54,33 +70,30 @@ public class RepositoryFactoryBuilder implements Start, DataFunctionsAnd, DataSt
     }
 
     /**
-     * @return the default configuration (always the same instance)
+     * Start the configuration DSL by considering the provided configuration as
+     * the default fallback
+     * @param configuration    the fallback configuration
+     * @return an instance of the builder
      */
-    public static RepositoryFactoryConfiguration defaultConfiguration() {
-        if (DEFAULT_FACTORY_CONFIGURATION == null) {
-            final RepositoryFactoryBuilder builder = (RepositoryFactoryBuilder) builder();
-            DEFAULT_FACTORY_CONFIGURATION = new ImmutableRepositoryFactoryConfiguration(
-                    builder.metadataResolver,
-                    builder.queryDescriptionExtractor,
-                    builder.functionRegistry,
-                    builder.dataStoreRegistry,
-                    builder.resultAdapterContext,
-                    builder.typeMappingContext,
-                    builder.eventListenerContext,
-                    builder.operationInvocationHandler
-            );
-        }
-        return DEFAULT_FACTORY_CONFIGURATION;
+    public static Start given(RepositoryFactoryConfiguration configuration) {
+        final RepositoryFactoryBuilder builder = new RepositoryFactoryBuilder();
+        builder.metadataResolver = configuration.getRepositoryMetadataResolver() != null ? configuration.getRepositoryMetadataResolver() : builder.metadataResolver;
+        builder.queryDescriptionExtractor = configuration.getDescriptionExtractor() != null ? configuration.getDescriptionExtractor() : builder.queryDescriptionExtractor;
+        builder.functionRegistry = configuration.getFunctionRegistry() != null ? configuration.getFunctionRegistry() : builder.functionRegistry;
+        builder.dataStoreRegistry = configuration.getDataStoreRegistry() != null ? configuration.getDataStoreRegistry() : builder.dataStoreRegistry;
+        builder.resultAdapterContext = configuration.getResultAdapterContext() != null ? configuration.getResultAdapterContext() : builder.resultAdapterContext;
+        builder.typeMappingContext = configuration.getTypeMappingContext() != null ? configuration.getTypeMappingContext() : builder.typeMappingContext;
+        builder.eventListenerContext = configuration.getEventListenerContext() != null ? configuration.getEventListenerContext() : builder.eventListenerContext;
+        builder.operationInvocationHandler = configuration.getOperationInvocationHandler() != null ? configuration.getOperationInvocationHandler() : builder.operationInvocationHandler;
+        builder.defaultKeyGenerator = configuration.getDefaultKeyGenerator() != null ? configuration.getDefaultKeyGenerator() : builder.defaultKeyGenerator;
+        return builder;
     }
 
     /**
-     * @return the default factory (always the same instance)
+     * @return the default factory
      */
     public static RepositoryFactory defaultFactory() {
-        if (DEFAULT_FACTORY == null) {
-            DEFAULT_FACTORY = new DefaultRepositoryFactory(defaultConfiguration());
-        }
-        return DEFAULT_FACTORY;
+        return new DefaultRepositoryFactory(defaultConfiguration());
     }
 
     private RepositoryFactoryBuilder() {
@@ -92,6 +105,8 @@ public class RepositoryFactoryBuilder implements Start, DataFunctionsAnd, DataSt
         typeMappingContext = new DefaultTypeMappingContext();
         eventListenerContext = new DefaultDataStoreEventListenerContext();
         operationInvocationHandler = new NonDataOperationInvocationHandler();
+        //by default, we do not want any key generator, unless one is specified
+        defaultKeyGenerator = null;
     }
 
     @Override
@@ -168,7 +183,7 @@ public class RepositoryFactoryBuilder implements Start, DataFunctionsAnd, DataSt
 
 
     @Override
-    public EventListener withOperationHandlers(NonDataOperationInvocationHandler invocationHandler) {
+    public FallbackKeyGenerator withOperationHandlers(NonDataOperationInvocationHandler invocationHandler) {
         operationInvocationHandler = invocationHandler;
         return this;
     }
@@ -220,6 +235,12 @@ public class RepositoryFactoryBuilder implements Start, DataFunctionsAnd, DataSt
     }
 
     @Override
+    public EventListener withDefaultKeyGenerator(KeyGenerator<? extends Serializable> keyGenerator) {
+        defaultKeyGenerator = keyGenerator;
+        return this;
+    }
+
+    @Override
     public <E extends DataStoreEvent> EventListenerAnd and(DataStoreEventListener<E> listener) {
         eventListenerContext.register(listener);
         return this;
@@ -245,7 +266,12 @@ public class RepositoryFactoryBuilder implements Start, DataFunctionsAnd, DataSt
 
     @Override
     public RepositoryFactory build() {
-        return new DefaultRepositoryFactory(new ImmutableRepositoryFactoryConfiguration(metadataResolver, queryDescriptionExtractor, functionRegistry, dataStoreRegistry, resultAdapterContext, typeMappingContext, eventListenerContext, operationInvocationHandler));
+        return new DefaultRepositoryFactory(configure());
+    }
+
+    @Override
+    public RepositoryFactoryConfiguration configure() {
+        return new ImmutableRepositoryFactoryConfiguration(metadataResolver, queryDescriptionExtractor, functionRegistry, dataStoreRegistry, resultAdapterContext, typeMappingContext, eventListenerContext, operationInvocationHandler, defaultKeyGenerator);
     }
 
     @Override

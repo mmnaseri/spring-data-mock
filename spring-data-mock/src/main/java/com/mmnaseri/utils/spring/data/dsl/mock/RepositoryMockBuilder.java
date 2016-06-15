@@ -2,6 +2,7 @@ package com.mmnaseri.utils.spring.data.dsl.mock;
 
 import com.mmnaseri.utils.spring.data.domain.KeyGenerator;
 import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
+import com.mmnaseri.utils.spring.data.domain.impl.key.NoOpKeyGenerator;
 import com.mmnaseri.utils.spring.data.dsl.factory.RepositoryFactoryBuilder;
 import com.mmnaseri.utils.spring.data.error.MockBuilderException;
 import com.mmnaseri.utils.spring.data.proxy.RepositoryFactory;
@@ -20,7 +21,6 @@ import java.util.List;
  */
 public class RepositoryMockBuilder implements Start, ImplementationAnd, KeyGeneration {
 
-    private static final KeyGenerator<? extends Serializable> NOOP = new NoOpKeyGenerator<>();
     private final RepositoryFactory factory;
     private final List<Class<?>> implementations;
     private final KeyGenerator<? extends Serializable> keyGenerator;
@@ -71,7 +71,7 @@ public class RepositoryMockBuilder implements Start, ImplementationAnd, KeyGener
 
     @Override
     public Implementation withoutGeneratingKeys() {
-        return new RepositoryMockBuilder(factory, implementations, NOOP);
+        return new RepositoryMockBuilder(factory, implementations, new NoOpKeyGenerator<>());
     }
 
     private KeyGenerator<?> createKeyGenerator(Class<? extends KeyGenerator> generatorType) {
@@ -93,31 +93,21 @@ public class RepositoryMockBuilder implements Start, ImplementationAnd, KeyGener
             repositoryFactory = this.factory;
         }
         if (keyGenerator == null) {
-            final KeyGeneratorProvider generatorProvider = new KeyGeneratorProvider();
-            final RepositoryMetadata metadata = repositoryFactory.getConfiguration().getRepositoryMetadataResolver().resolve(repositoryInterface);
-            final Class<? extends Serializable> identifierType = metadata.getIdentifierType();
-            final Class<? extends KeyGenerator<? extends Serializable>> keyGeneratorType = generatorProvider.getKeyGenerator(identifierType);
-            final KeyGenerator<? extends Serializable> keyGenerator = createKeyGenerator(keyGeneratorType);
-            return generateKeysUsing(keyGenerator).mock(repositoryInterface);
+            final RepositoryFactoryConfiguration configuration = repositoryFactory.getConfiguration();
+            final KeyGenerator<? extends Serializable> evaluatedKeyGenerator;
+            if (configuration.getDefaultKeyGenerator() != null) {
+                evaluatedKeyGenerator = configuration.getDefaultKeyGenerator();
+            } else {
+                final KeyGeneratorProvider generatorProvider = new KeyGeneratorProvider();
+                final RepositoryMetadata metadata = configuration.getRepositoryMetadataResolver().resolve(repositoryInterface);
+                final Class<? extends Serializable> identifierType = metadata.getIdentifierType();
+                final Class<? extends KeyGenerator<? extends Serializable>> keyGeneratorType = generatorProvider.getKeyGenerator(identifierType);
+                evaluatedKeyGenerator = createKeyGenerator(keyGeneratorType);
+            }
+            return generateKeysUsing(evaluatedKeyGenerator).mock(repositoryInterface);
         } else {
-            return repositoryFactory.getInstance(NOOP.equals(keyGenerator) ? null : keyGenerator, repositoryInterface, implementations.toArray(new Class[implementations.size()]));
+            return repositoryFactory.getInstance(keyGenerator, repositoryInterface, implementations.toArray(new Class[implementations.size()]));
         }
-    }
-
-    /**
-     * This class is used to indicate that we don't want key generation. Whenever the singleton instance
-     * {@link #NOOP} is used for key generation, the builder will set the underlying key generator to
-     * {@literal null}, thus signifying to the various implementing classes that no key generator has been
-     * provided
-     * @param <S>    the type of the keys this class generates
-     */
-    public static class NoOpKeyGenerator<S extends Serializable> implements KeyGenerator<S> {
-
-        @Override
-        public S generate() {
-            return null;
-        }
-
     }
 
 }

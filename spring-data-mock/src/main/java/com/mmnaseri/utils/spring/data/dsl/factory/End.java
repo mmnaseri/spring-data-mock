@@ -2,6 +2,7 @@ package com.mmnaseri.utils.spring.data.dsl.factory;
 
 import com.mmnaseri.utils.spring.data.dsl.mock.KeyGeneration;
 import com.mmnaseri.utils.spring.data.proxy.RepositoryFactory;
+import com.mmnaseri.utils.spring.data.proxy.RepositoryFactoryConfiguration;
 
 /**
  * Finalizes the DSL by providing a way to either choose to {@link #build() build} the factory or to
@@ -19,5 +20,11 @@ public interface End extends KeyGeneration {
      * @see Start for configuration options.
      */
     RepositoryFactory build();
+
+    /**
+     * @return the {@link RepositoryFactoryConfiguration repository factory configuration} instance that has
+     * been created as a result of method calls via this DSL
+     */
+    RepositoryFactoryConfiguration configure();
 
 }
