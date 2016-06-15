@@ -96,4 +96,9 @@ public class MemoryDataStore<K extends Serializable, E> implements DataStore<K, 
         return entityType;
     }
 
+    @Override
+    public void truncate() {
+        store.clear();
+    }
+
 }

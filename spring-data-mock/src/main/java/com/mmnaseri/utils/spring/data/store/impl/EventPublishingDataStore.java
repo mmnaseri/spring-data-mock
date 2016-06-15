@@ -103,6 +103,11 @@ public class EventPublishingDataStore<K extends Serializable, E> implements Data
     }
 
     @Override
+    public void truncate() {
+        delegate.truncate();
+    }
+
+    @Override
     public void publishEvent(DataStoreEvent event) {
          listenerContext.trigger(event);
     }

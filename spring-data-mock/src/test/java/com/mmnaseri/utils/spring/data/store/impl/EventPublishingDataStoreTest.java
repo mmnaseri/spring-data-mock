@@ -183,4 +183,16 @@ public class EventPublishingDataStoreTest {
         assertThat(after.getEvent().getDataStore(), Matchers.<DataStore<?, ?>>is(dataStore));
     }
 
+    @Test
+    public void testTruncating() throws Exception {
+        final String k1 = "k1";
+        final String k2 = "k2";
+        assertThat(dataStore.retrieveAll(), is(delegate.retrieveAll()));
+        delegate.save(k1, new Person());
+        delegate.save(k2, new Person());
+        assertThat(dataStore.retrieveAll(), is(delegate.retrieveAll()));
+        dataStore.truncate();
+        assertThat(delegate.retrieveAll(), is(Matchers.<Person>empty()));
+    }
+
 }
