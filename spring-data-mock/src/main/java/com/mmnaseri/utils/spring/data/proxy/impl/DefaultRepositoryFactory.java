@@ -2,6 +2,7 @@ package com.mmnaseri.utils.spring.data.proxy.impl;
 
 import com.mmnaseri.utils.spring.data.domain.*;
 import com.mmnaseri.utils.spring.data.domain.impl.MethodQueryDescriptionExtractor;
+import com.mmnaseri.utils.spring.data.domain.impl.key.NoOpKeyGenerator;
 import com.mmnaseri.utils.spring.data.proxy.*;
 import com.mmnaseri.utils.spring.data.proxy.impl.resolvers.DefaultDataOperationResolver;
 import com.mmnaseri.utils.spring.data.query.DataFunctionRegistry;
@@ -57,6 +58,15 @@ public class DefaultRepositoryFactory implements RepositoryFactory {
 
     @Override
     public <E> E getInstance(KeyGenerator<? extends Serializable> keyGenerator, Class<E> repositoryInterface, Class... implementations) {
+        if (keyGenerator == null) {
+            if (configuration.getDefaultKeyGenerator() != null) {
+                //if no key generator is passed and there is a default key generator specified, we fall back to that
+                keyGenerator = configuration.getDefaultKeyGenerator();
+            } else {
+                //otherwise, let's assume that not key generation is required
+                keyGenerator = new NoOpKeyGenerator<>();
+            }
+        }
         log.info("We are going to create a proxy instance of type " + repositoryInterface + " using key generator " + keyGenerator + " and binding the implementations to " + Arrays.toString(implementations));
         //figure out the repository metadata
         log.info("Resolving repository metadata for " + repositoryInterface);

@@ -8,7 +8,8 @@ import com.mmnaseri.utils.spring.data.domain.impl.DefaultOperatorContext;
 import com.mmnaseri.utils.spring.data.domain.impl.DefaultRepositoryMetadataResolver;
 import com.mmnaseri.utils.spring.data.domain.impl.ImmutableOperator;
 import com.mmnaseri.utils.spring.data.domain.impl.MethodQueryDescriptionExtractor;
-import com.mmnaseri.utils.spring.data.dsl.mock.RepositoryMockBuilder;
+import com.mmnaseri.utils.spring.data.domain.impl.key.NoOpKeyGenerator;
+import com.mmnaseri.utils.spring.data.domain.impl.key.UUIDKeyGenerator;
 import com.mmnaseri.utils.spring.data.proxy.RepositoryFactory;
 import com.mmnaseri.utils.spring.data.proxy.RepositoryFactoryConfiguration;
 import com.mmnaseri.utils.spring.data.proxy.ResultAdapterContext;
@@ -57,14 +58,12 @@ public class RepositoryFactoryBuilderTest {
         assertThat(configuration.getFunctionRegistry(), is(notNullValue()));
         assertThat(configuration.getEventListenerContext(), is(notNullValue()));
         assertThat(configuration.getDescriptionExtractor(), is(notNullValue()));
-        assertThat(RepositoryFactoryBuilder.defaultConfiguration(), is(RepositoryFactoryBuilder.defaultConfiguration()));
     }
 
     @Test
     public void testDefaultFactory() throws Exception {
         final RepositoryFactory factory = RepositoryFactoryBuilder.defaultFactory();
         assertThat(factory, is(notNullValue()));
-        assertThat(factory.getConfiguration(), is(RepositoryFactoryBuilder.defaultConfiguration()));
         assertThat(factory, is(RepositoryFactoryBuilder.defaultFactory()));
     }
 
@@ -86,6 +85,14 @@ public class RepositoryFactoryBuilderTest {
         assertThat(factory.getConfiguration(), is(notNullValue()));
         assertThat(factory.getConfiguration().getDescriptionExtractor(), is(notNullValue()));
         assertThat(factory.getConfiguration().getDescriptionExtractor(), is(queryDescriptionExtractor));
+    }
+
+    @Test
+    public void testSpecifyingDefaultKeyGenerator() throws Exception {
+        final UUIDKeyGenerator generator = new UUIDKeyGenerator();
+        final RepositoryFactoryConfiguration configuration = RepositoryFactoryBuilder.builder().withDefaultKeyGenerator(generator).configure();
+        assertThat(configuration.getDefaultKeyGenerator(), is(notNullValue()));
+        assertThat(configuration.getDefaultKeyGenerator(), is((Object) generator));
     }
 
     @Test
@@ -302,12 +309,13 @@ public class RepositoryFactoryBuilderTest {
     public void testMockingWithoutGeneratingKeys() throws Exception {
         final ConfiguredSimplePersonRepository repository = RepositoryFactoryBuilder.builder().withoutGeneratingKeys().usingImplementation(ConfiguredMapping.class).mock(ConfiguredSimplePersonRepository.class);
         assertThat(repository.getRepositoryConfiguration(), is(notNullValue()));
-        assertThat(repository.getRepositoryConfiguration().getKeyGenerator(), is(nullValue()));
+        assertThat(repository.getRepositoryConfiguration().getKeyGenerator(), is(notNullValue()));
+        assertThat(repository.getRepositoryConfiguration().getKeyGenerator(), is(instanceOf(NoOpKeyGenerator.class)));
     }
 
     @Test
     public void testMockingWithCustomKeyGeneration() throws Exception {
-        final RepositoryMockBuilder.NoOpKeyGenerator<Serializable> keyGenerator = new RepositoryMockBuilder.NoOpKeyGenerator<>();
+        final NoOpKeyGenerator<Serializable> keyGenerator = new NoOpKeyGenerator<>();
         final ConfiguredSimplePersonRepository repository = RepositoryFactoryBuilder.builder().generateKeysUsing(keyGenerator).usingImplementation(ConfiguredMapping.class).mock(ConfiguredSimplePersonRepository.class);
         assertThat(repository.getRepositoryConfiguration(), is(notNullValue()));
         assertThat(repository.getRepositoryConfiguration().getKeyGenerator(), is(notNullValue()));
@@ -317,10 +325,10 @@ public class RepositoryFactoryBuilderTest {
     @Test
     public void testMockingWithCustomKeyGenerationByType() throws Exception {
         //noinspection unchecked
-        final ConfiguredSimplePersonRepository repository = RepositoryFactoryBuilder.builder().generateKeysUsing(RepositoryMockBuilder.NoOpKeyGenerator.class).usingImplementation(ConfiguredMapping.class).mock(ConfiguredSimplePersonRepository.class);
+        final ConfiguredSimplePersonRepository repository = RepositoryFactoryBuilder.builder().generateKeysUsing(NoOpKeyGenerator.class).usingImplementation(ConfiguredMapping.class).mock(ConfiguredSimplePersonRepository.class);
         assertThat(repository.getRepositoryConfiguration(), is(notNullValue()));
         assertThat(repository.getRepositoryConfiguration().getKeyGenerator(), is(notNullValue()));
-        assertThat(repository.getRepositoryConfiguration().getKeyGenerator(), is(instanceOf(RepositoryMockBuilder.NoOpKeyGenerator.class)));
+        assertThat(repository.getRepositoryConfiguration().getKeyGenerator(), is(instanceOf(NoOpKeyGenerator.class)));
     }
 
 }

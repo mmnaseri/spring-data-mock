@@ -1,5 +1,6 @@
 package com.mmnaseri.utils.spring.data.proxy.impl;
 
+import com.mmnaseri.utils.spring.data.domain.KeyGenerator;
 import com.mmnaseri.utils.spring.data.domain.RepositoryMetadataResolver;
 import com.mmnaseri.utils.spring.data.domain.impl.MethodQueryDescriptionExtractor;
 import com.mmnaseri.utils.spring.data.proxy.RepositoryFactoryConfiguration;
@@ -25,6 +26,28 @@ public class DefaultRepositoryFactoryConfiguration implements RepositoryFactoryC
     private TypeMappingContext typeMappingContext;
     private DataStoreEventListenerContext eventListenerContext;
     private NonDataOperationInvocationHandler operationInvocationHandler;
+    private KeyGenerator<?> defaultKeyGenerator;
+
+    public DefaultRepositoryFactoryConfiguration() {
+    }
+
+    public DefaultRepositoryFactoryConfiguration(RepositoryFactoryConfiguration configuration) {
+        this(configuration.getRepositoryMetadataResolver(), configuration.getDescriptionExtractor(), configuration.getFunctionRegistry(), configuration.getDataStoreRegistry(),
+                configuration.getResultAdapterContext(), configuration.getTypeMappingContext(), configuration.getEventListenerContext(),
+                configuration.getOperationInvocationHandler(), configuration.getDefaultKeyGenerator());
+    }
+
+    public DefaultRepositoryFactoryConfiguration(RepositoryMetadataResolver repositoryMetadataResolver, MethodQueryDescriptionExtractor descriptionExtractor, DataFunctionRegistry functionRegistry, DataStoreRegistry dataStoreRegistry, ResultAdapterContext resultAdapterContext, TypeMappingContext typeMappingContext, DataStoreEventListenerContext eventListenerContext, NonDataOperationInvocationHandler operationInvocationHandler, KeyGenerator<?> defaultKeyGenerator) {
+        this.repositoryMetadataResolver = repositoryMetadataResolver;
+        this.descriptionExtractor = descriptionExtractor;
+        this.functionRegistry = functionRegistry;
+        this.dataStoreRegistry = dataStoreRegistry;
+        this.resultAdapterContext = resultAdapterContext;
+        this.typeMappingContext = typeMappingContext;
+        this.eventListenerContext = eventListenerContext;
+        this.operationInvocationHandler = operationInvocationHandler;
+        this.defaultKeyGenerator = defaultKeyGenerator;
+    }
 
     @Override
     public RepositoryMetadataResolver getRepositoryMetadataResolver() {
@@ -96,6 +119,15 @@ public class DefaultRepositoryFactoryConfiguration implements RepositoryFactoryC
 
     public void setOperationInvocationHandler(NonDataOperationInvocationHandler operationInvocationHandler) {
         this.operationInvocationHandler = operationInvocationHandler;
+    }
+
+    @Override
+    public KeyGenerator<?> getDefaultKeyGenerator() {
+        return defaultKeyGenerator;
+    }
+
+    public void setDefaultKeyGenerator(KeyGenerator<?> defaultKeyGenerator) {
+        this.defaultKeyGenerator = defaultKeyGenerator;
     }
 
 }

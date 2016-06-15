@@ -1,7 +1,7 @@
 package com.mmnaseri.utils.spring.data.sample.repositories;
 
 import com.mmnaseri.utils.spring.data.domain.RepositoryAware;
-import com.mmnaseri.utils.spring.data.domain.impl.key.UUIDKeyGenerator;
+import com.mmnaseri.utils.spring.data.domain.impl.key.NoOpKeyGenerator;
 import com.mmnaseri.utils.spring.data.proxy.*;
 import com.mmnaseri.utils.spring.data.sample.models.Person;
 import org.hamcrest.Matchers;
@@ -35,7 +35,7 @@ public class RepositoryClearerMapping implements RepositoryAware<ClearableSimple
     public void setRepositoryConfiguration(RepositoryConfiguration repositoryConfiguration) {
         assertThat(repositoryConfiguration, is(notNullValue()));
         assertThat(repositoryConfiguration.getKeyGenerator(), is(notNullValue()));
-        assertThat(repositoryConfiguration.getKeyGenerator(), is(instanceOf(UUIDKeyGenerator.class)));
+        assertThat(repositoryConfiguration.getKeyGenerator(), is(instanceOf(NoOpKeyGenerator.class)));
         assertThat(repositoryConfiguration.getRepositoryMetadata(), is(notNullValue()));
         assertThat(repositoryConfiguration.getRepositoryMetadata().getEntityType(), is(Matchers.<Class<?>>equalTo(Person.class)));
         assertThat(repositoryConfiguration.getRepositoryMetadata().getIdentifierProperty(), is("id"));

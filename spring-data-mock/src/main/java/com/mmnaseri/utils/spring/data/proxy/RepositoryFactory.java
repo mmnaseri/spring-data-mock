@@ -20,8 +20,8 @@ public interface RepositoryFactory {
      * Creates an instance of the repository as per the provided configuration.
      *
      * @param keyGenerator           the key generator to use when inserting items (if auto generation is required).
-     *                               You can specify a {@literal null} key generator to signify that while inserting
-     *                               items, we don't need key generation.
+     *                               You can specify a {@literal null} key generator to signify that {@link RepositoryFactoryConfiguration#getDefaultKeyGenerator()
+     *                               the fallback key generator} should be used when generating keys.
      * @param repositoryInterface    the repository interface which we want to mock
      * @param implementations        all the concrete classes that can be used to figure out method mappings
      * @param <E>                    the type of the interface
