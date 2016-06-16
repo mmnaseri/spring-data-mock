@@ -8,6 +8,37 @@ Where applicable, an issue number and a link to the appropriate
 issue is provided as well.
 
 
+[v1.1.3](https://github.com/mmnaseri/spring-data-mock/releases/tag/v1.1.3)
+------------------------------------------------
+
+##### Enhancements
+
+  * [#92](https://github.com/mmnaseri/spring-data-mock/issues/92) Have the `pom` files follow the conventions
+
+  * [#93](https://github.com/mmnaseri/spring-data-mock/issues/93) Allow for specifying a fallback key generator on a per-application basis
+
+  * [#95](https://github.com/mmnaseri/spring-data-mock/issues/95) Upgrade `maven-javadoc-plugin` to `2.10.4`
+
+  * [#96](https://github.com/mmnaseri/spring-data-mock/issues/96) Optimize imports and usages
+
+  * [#97](https://github.com/mmnaseri/spring-data-mock/issues/97) Add `.configure()` to `RepositoryFactoryBuilder` DSL
+
+  * [#104](https://github.com/mmnaseri/spring-data-mock/issues/104) Create more flexible key generators
+
+  * [#105](https://github.com/mmnaseri/spring-data-mock/issues/105) Add samples outlining configuration scope
+
+  * [#109](https://github.com/mmnaseri/spring-data-mock/issues/109) Add support for using the DSL to configure on top of an existing configuration
+
+
+[v1.1.2](https://github.com/mmnaseri/spring-data-mock/releases/tag/v1.1.2)
+------------------------------------------------
+
+##### Enhancements
+
+  * [#79](https://github.com/mmnaseri/spring-data-mock/issues/79) Restructure the project
+  and add samples
+
+
 [v1.1.1](https://github.com/mmnaseri/spring-data-mock/releases/tag/v1.1.1)
 ------------------------------------------------
 
