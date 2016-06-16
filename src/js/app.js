@@ -26,7 +26,7 @@ module.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider,
 module.run(function ($rootScope, $location, $document) {
     $rootScope.$on('$viewContentLoading', function () {
         $rootScope.headers = [];
-        $rootScope.location = $location.url();
+        $rootScope.location = $location.path();
     });
     var hash = "";
     setInterval(function () {
