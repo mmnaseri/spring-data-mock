@@ -251,11 +251,10 @@ and if not tries to extract its metadata from the interface should it extend `or
 
 If none of these conditions are met, it will throw an exception.
 
-#### Primitve IDs
-
 <div class="alert alert-warning">
- At this point, we do not support primitive identifier types. This means that if your ID type
- is `long`, you will have to change it to `java.lang.Long` to be able to use this framework.
+<h4 id="primitive-ids">Primitve IDs</h4>
+<p> At this point, we do not support primitive identifier types. This means that if your ID type
+ is `long`, you will have to change it to `java.lang.Long` to be able to use this framework.</p>
 </div>
 
 ## The Operators

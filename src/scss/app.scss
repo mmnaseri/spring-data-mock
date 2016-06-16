@@ -18,6 +18,7 @@ body {
 
 p {
   text-align: justify;
+  line-height: 24px;
 }
 
 .center {
@@ -83,6 +84,10 @@ a.jump-top {
   &:hover {
     opacity: 1;
   }
+}
+
+.alert .header {
+  margin-top: 0;
 }
 
 @import "parts/header.scss";

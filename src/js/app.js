@@ -26,6 +26,7 @@ module.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider,
 module.run(function ($rootScope, $location, $document) {
     $rootScope.$on('$viewContentLoading', function () {
         $rootScope.headers = [];
+        $rootScope.location = $location.url();
     });
     var hash = "";
     setInterval(function () {
@@ -69,14 +70,15 @@ module.directive('code', function () {
         }
     }
 });
-module.directive('tableOfContents', function ($templateCache, $rootScope) {
-    $templateCache.put('$templates/tableOfContents.html', '<p><a href="#/readme#{{item.id}}" target="_self">{{item.title}}</a><ul ng-if="item.children.length"><li ng-repeat="item in item.children" ng-include="\'$templates/tableOfContents.html\'"></li></ul></p>');
+module.directive('tableOfContents', function ($templateCache, $rootScope, $location) {
+    $templateCache.put('$templates/tableOfContents.html', '<p><a href="#{{location}}#{{item.id}}" target="_self">{{item.title}}</a><ul ng-if="item.children.length"><li ng-repeat="item in item.children" ng-include="\'$templates/tableOfContents.html\'"></li></ul></p>');
     return {
         restrict: "E",
         template: '<div class="table-of-contents"><ul><li ng-repeat="item in items" ng-include="\'$templates/tableOfContents.html\'"></li></ul></div>',
         replace: true,
         scope: {},
         link: function ($scope) {
+            $scope.location = $location.url();
             $scope.items = $rootScope.headers;
         }
     };
@@ -95,7 +97,7 @@ var headerDirective = function (level) {
     return function ($rootScope, $location) {
         return {
             restrict: "E",
-            template: "<div class='header header-{{level}}'><span ng-transclude=''></span><a href='#/readme#{{id}}' class='pull-right'><i class='glyphicon glyphicon-link'></i></a></div>",
+            template: "<div class='header header-{{level}}'><span ng-transclude=''></span><a href='#{{location}}#{{id}}' class='pull-right'><i class='glyphicon glyphicon-link'></i></a></div>",
             replace: true,
             transclude: true,
             scope: {},

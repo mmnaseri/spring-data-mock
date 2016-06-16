@@ -285,10 +285,10 @@ the repository as well as the persistent entity it is supporting. This is what t
 class, which will first see if the repository is annotated with <code>@<span class="hljs-keyword">org</span>.<span class="hljs-keyword">springframework</span>.<span class="hljs-keyword">data</span>.<span class="hljs-keyword">repository</span>.<span class="hljs-keyword">RepositoryDefinition</span></code>
 and if not tries to extract its metadata from the interface should it extend <code>org<span class="hljs-selector-class">.springframework</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.repository</span><span class="hljs-selector-class">.Repository</span></code>.</p>
 <p>If none of these conditions are met, it will throw an exception.</p>
-<h4 id="primitve-ids">Primitve IDs</h4>
 <div class="alert alert-warning">
- At this point, we do not support primitive identifier types. This means that if your ID type
- is <code><span class="hljs-keyword">long</span></code>, you will have to change it to <code>java<span class="hljs-selector-class">.lang</span><span class="hljs-selector-class">.Long</span></code> to be able to use this framework.
+<h4 id="primitive-ids">Primitve IDs</h4>
+<p> At this point, we do not support primitive identifier types. This means that if your ID type
+ is <code><span class="hljs-keyword">long</span></code>, you will have to change it to <code>java<span class="hljs-selector-class">.lang</span><span class="hljs-selector-class">.Long</span></code> to be able to use this framework.</p>
 </div>
 
 <h2 id="the-operators">The Operators</h2>
