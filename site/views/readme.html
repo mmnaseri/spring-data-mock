@@ -1,4 +1,7 @@
-<h1 id="spring-data-mock">Spring Data Mock</h1>
+<p><jump-top></jump-top></p>
+<h1 id="contents">Contents</h1>
+<p><table-of-contents></table-of-contents></p>
+<h1 id="introduction">Introduction</h1>
 <p>This is a fairly flexible, versatile framework for mocking Spring Data repositories. Spring Data provides a very good
 foundation for separating the concerns of managing a database and its subsequently resulting queries from those of the
 business layer.</p>
@@ -11,9 +14,7 @@ productive tasks. This is why I decided to write this framework: to avoid the un
 infrastructure replicating what Spring would do with an actual database, only in-memory. This will allow for mocking the
 repository with actual data. Thus, you can test your services <em>without</em> having to start up the application context, and
 with the highest level of isolation -- with actual data.</p>
-<h2 id="contents">Contents</h2>
-<p><table-of-contents></table-of-contents></p>
-<h2 id="quick-start">Quick Start</h2>
+<h1 id="quick-start">Quick Start</h1>
 <p>Regardless of how you add the necessary dependency to your project, mocking a repository can be as simple as:</p>
 <pre><code><span class="hljs-selector-tag">builder</span>()<span class="hljs-selector-class">.mock</span>(<span class="hljs-selector-tag">UserRepository</span><span class="hljs-selector-class">.class</span>);
 </code></pre><p>where <code><span class="hljs-function"><span class="hljs-title">builder</span><span class="hljs-params">()</span></span></code> is a static method of the <code>RepositoryFactoryBuilder</code> class under package <code>com<span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.dsl</span><span class="hljs-selector-class">.factory</span></code>.</p>
@@ -47,7 +48,7 @@ package:</p>
     .useConfiguration(configuration)
     .mock(UserRepository.<span class="hljs-keyword">class</span>);
 </code></pre>
-<h2 id="mocking-a-repository">Mocking a Repository</h2>
+<h1 id="mocking-a-repository">Mocking a Repository</h1>
 <p>To mock a repository you must somehow use the underlying <code>RepositoryFactory</code>. There is currently a single implementation of
 this interface available, <code>com<span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.proxy</span><span class="hljs-selector-class">.impl</span><span class="hljs-selector-class">.DefaultRepositoryFactory</span></code>. The factory has a <code><span class="hljs-function"><span class="hljs-title">getInstance</span>(<span class="hljs-params">...</span>)</span></code>
 method that let&#39;s you customize the mocking for each instance of the repository you create. This means that you can mock a
@@ -68,7 +69,7 @@ an entity when it is inserted into the underlying data store.</li>
 <pre><code class="lang-java"><span class="hljs-keyword">final</span> UserRepository repository = <span class="hljs-keyword">factory</span>.getInstance(<span class="hljs-keyword">null</span>, UserRepository.<span class="hljs-keyword">class</span>);
 </code></pre>
 <p>which falls back on the default way of generating keys, and relies solely on default implementations for handling method calls.</p>
-<h3 id="repository-factory-configuration">Repository Factory Configuration</h3>
+<h2 id="repository-factory-configuration">Repository Factory Configuration</h2>
 <p>The default repository factory implementation takes in a configuration object which will let you customize multiple
 aspects of the mocking mechanism.</p>
 <p>The configuration object allows you the following customizations:</p>
@@ -106,7 +107,7 @@ and deleting a particular entity.</p>
 </ul>
 <p>Since the configuration object is complex and can be a hassle to create, you can use the much easier to use DSL via the
 <code>com<span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.dsl</span><span class="hljs-selector-class">.factory</span><span class="hljs-selector-class">.RepositoryFactoryBuilder</span></code> class. We will go over that shortly.</p>
-<h3 id="using-the-dsl-to-mock-a-repository">Using the DSL to Mock a Repository</h3>
+<h2 id="using-the-dsl-to-mock-a-repository">Using the DSL to Mock a Repository</h2>
 <p>Once you have a configuration object at hand, you can use the DSL bundled with this framework to easily mock
 your repositories and avoid going through the RepositoryFactory class.</p>
 <p>You can mock a repository this way:</p>
@@ -130,7 +131,7 @@ internal state, but rather return an object which reflects all the configuration
     .usingImplementation(SampleImpl2.<span class="hljs-keyword">class</span>);
 </code></pre>
 <p>This is by design, and is to allow developers and testers the freedom of reusing their configurations.</p>
-<h3 id="using-the-dsl-to-create-a-configuration">Using the DSL to Create a Configuration</h3>
+<h2 id="using-the-dsl-to-create-a-configuration">Using the DSL to Create a Configuration</h2>
 <p>Whereas mocking a repository is a relatively painless process and might not require the use of a dedicated DSL, creating
 a configuration is another story altogether. In recognition of this fact, I have created a DSL for this very purpose, so
 that you can craft configurations using a <em>stateful</em> builder via this DSL:</p>
@@ -267,17 +268,15 @@ to just work out of the box.</p>
 </tbody>
 </table>
 <p>To answer the question of what all of these configurable steps mean, we need to go to the next section.</p>
-<h2 id="the-mechanics">The Mechanics</h2>
+<h1 id="the-mechanics">The Mechanics</h1>
 <p>In this section, we will detail the framework and go over how each part of it can be configured.</p>
-<h3 id="metadata-resolver">Metadata Resolver</h3>
+<h2 id="metadata-resolver">Metadata Resolver</h2>
 <p>The metadata resolver is an entity that is capable of looking at a repository interface and figuring out detail about
 the repository as well as the persistent entity it is supporting. This is what the metadata resolver will find out:</p>
 <ul>
 <li><p>the type of the entity for which the repository has been created</p>
 </li>
-<li><p>the (actual or encapsulated) property of the persistent entity which holds the identifier. At this point, we do not
-support primitive identifier types. This means that if your ID type is <code><span class="hljs-keyword">long</span></code>, you will have to change it to <code>java<span class="hljs-selector-class">.lang</span><span class="hljs-selector-class">.Long</span></code>
-to be able to use this framework.</p>
+<li><p>the (actual or encapsulated) property of the persistent entity which holds the identifier.</p>
 </li>
 <li><p>the type of the identifier associated with the entity</p>
 </li>
@@ -286,7 +285,13 @@ to be able to use this framework.</p>
 class, which will first see if the repository is annotated with <code>@<span class="hljs-keyword">org</span>.<span class="hljs-keyword">springframework</span>.<span class="hljs-keyword">data</span>.<span class="hljs-keyword">repository</span>.<span class="hljs-keyword">RepositoryDefinition</span></code>
 and if not tries to extract its metadata from the interface should it extend <code>org<span class="hljs-selector-class">.springframework</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.repository</span><span class="hljs-selector-class">.Repository</span></code>.</p>
 <p>If none of these conditions are met, it will throw an exception.</p>
-<h3 id="the-operators">The Operators</h3>
+<h4 id="primitve-ids">Primitve IDs</h4>
+<div class="alert alert-warning">
+ At this point, we do not support primitive identifier types. This means that if your ID type
+ is <code><span class="hljs-keyword">long</span></code>, you will have to change it to <code>java<span class="hljs-selector-class">.lang</span><span class="hljs-selector-class">.Long</span></code> to be able to use this framework.
+</div>
+
+<h2 id="the-operators">The Operators</h2>
 <p>The operators are what drive how the query methods are parsed. This is the general recipe:</p>
 <p>At each juncture, we look for the operator whose tokens matches the longest suffix, and assume the rest to be a
 property path, so that for instance, if we are parsing &quot;ParentParentAgeGreaterThanEqual&quot;, we will match it with the
@@ -400,7 +405,7 @@ Spring Data actually expand beyond what it is today.</p>
 </tbody>
 </table>
 <p>If no suffix is present to determine the operator by, it is assumed that the <code><span class="hljs-keyword">IS</span></code> operator was intended.</p>
-<h3 id="data-functions">Data Functions</h3>
+<h2 id="data-functions">Data Functions</h2>
 <p>Data functions determine what should be done with a particular selection of entities before a result is returned. For instance,
 the <code><span class="hljs-built_in">count</span></code> data function just returns the collection size for a subset of data, thus allowing you to start your query method with
 <code><span class="hljs-built_in">count</span></code> and expect it to return the size of the selection.</p>
@@ -416,16 +421,16 @@ used in the beginning of a query method&#39;s name.</p>
 </thead>
 <tbody>
 <tr>
-<td>count</td>
+<td><code><span class="hljs-built_in">count</span></code></td>
 <td>Returns the number of items that were selected</td>
 </tr>
 <tr>
-<td>delete</td>
+<td><code><span class="hljs-keyword">delete</span></code></td>
 <td>Deletes all the selected items</td>
 </tr>
 </tbody>
 </table>
-<h3 id="data-stores">Data Stores</h3>
+<h2 id="data-stores">Data Stores</h2>
 <p>This framework has an abstraction hiding away the details of where and how entities are stored and are looked up. The default
 behavior is, of course, to keep everything in memory. It might, however, be necessary to delegate this to some external service
 or entity, such as an im-memory data store, a distributed cache, or an actual database.</p>
@@ -459,7 +464,7 @@ three operations:</p>
 <li><code><span class="hljs-keyword">end</span></code>: to end the batch that was indicated</li>
 </ul>
 <p>Certain repository methods can take advantage of these additional functionality if provided.</p>
-<h3 id="result-adapters">Result Adapters</h3>
+<h2 id="result-adapters">Result Adapters</h2>
 <p>Many times the actual implementation methods for an operation return very generic results, such as a list or a set, whereas the
 required return type for the repository interface method might be something else. Suppose for instance, that the implementation
 method returns a List, while the interface method returns just one instance.</p>
@@ -604,7 +609,7 @@ method returns a List, while the interface method returns just one instance.</p>
 </tr>
 </tbody>
 </table>
-<h3 id="custom-implementations-and-type-mapping-context">Custom Implementations and Type Mapping Context</h3>
+<h2 id="custom-implementations-and-type-mapping-context">Custom Implementations and Type Mapping Context</h2>
 <p>You can map custom implementations to repository interfaces. To this end, a type mapping context exists which will let you bind
 particular repository interface super types to custom implementation classes. The methods are then looked up according to their
 signature.</p>
@@ -615,34 +620,34 @@ signature.</p>
 <li>We look at globally available implementations supplied through the configuration object</li>
 <li>We try to interpret the method name as a query.</li>
 </ol>
-<h3 id="spring-data-extensions">Spring Data Extensions</h3>
+<h2 id="spring-data-extensions">Spring Data Extensions</h2>
 <p>Spring Data extensions are modules provided by the Spring Data team or third parties that provide additional support for more
 data sources.</p>
 <p>These extensions can receive support from this mocking framework if you register a corresponding implementation in
 the type mapping context.</p>
 <p>We have implemented the following data extensions.</p>
-<h4 id="support-for-crudrepository">Support for CrudRepository</h4>
+<h3 id="support-for-crudrepository">Support for CrudRepository</h3>
 <p>All methods introduced in <code>org<span class="hljs-selector-class">.springframework</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.repository</span><span class="hljs-selector-class">.CrudRepository</span></code> are implemented in a class called
 <code>com<span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.repository</span><span class="hljs-selector-class">.DefaultCrudRepository</span></code>. This class is registered with the type mapping
 for all repositories by default.</p>
-<h4 id="support-for-pagingandsortingrepository">Support for PagingAndSortingRepository</h4>
+<h3 id="support-for-pagingandsortingrepository">Support for PagingAndSortingRepository</h3>
 <p>All methods introduced in <code>org<span class="hljs-selector-class">.springframework</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.repository</span><span class="hljs-selector-class">.PagingAndSortingRepository</span></code> are implemented in a class called
 <code>com<span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.repository</span><span class="hljs-selector-class">.DefaultPagingAndSortingRepository</span></code>. This class is registered with the type mapping
 for all repositories by default.</p>
-<h4 id="support-for-query-by-example-">Support for &quot;Query by Example&quot;</h4>
+<h3 id="support-for-query-by-example-">Support for &quot;Query by Example&quot;</h3>
 <p>Query by example is a concept introduced in Spring Data 1.12 and as such might not be shipped with your version of Spring
 Data by default.</p>
 <p>That is why we first check to see if interface <code>org<span class="hljs-selector-class">.springframework</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.repository</span><span class="hljs-selector-class">.query</span><span class="hljs-selector-class">.QueryByExampleExecutor</span></code> is found
 in the classpath. If so, then we register supporting type <code>com<span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.repository</span><span class="hljs-selector-class">.DefaultQueryByExampleExecutor</span></code>
 which includes methods that are capable of taking care of all methods introduced in this interface.</p>
-<h4 id="support-for-querydsl">Support for QueryDSL</h4>
+<h3 id="support-for-querydsl">Support for QueryDSL</h3>
 <p>There is an extension for <a href="http://www.querydsl.com">QueryDSL</a> for Spring Data that will let you use a fluent API to
 interact with the data store, while hiding away the complexities of talking to the database itself.</p>
 <p>If the <code>org<span class="hljs-selector-class">.springframework</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.querydsl</span><span class="hljs-selector-class">.QueryDslPredicateExecutor</span></code> interface is found in the classpath and, additionally,
 we can also find the CGLib library in the classpath (which is required for QueryDSL to function), we assume
 QueryDSL support to be enabled. We then add the <code>com<span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.repository</span><span class="hljs-selector-class">.DefaultQueryDslPredicateExecutor</span></code>
 implementation to the type mapping context.</p>
-<h5 id="note-on-additional-dependencies">Note on additional dependencies</h5>
+<h4 id="note-on-additional-dependencies">Note on additional dependencies</h4>
 <p><code>DefaultQueryDslPredicateExecutor</code> uses the <code><span class="hljs-selector-tag">com</span><span class="hljs-selector-class">.querydsl</span><span class="hljs-selector-pseudo">:querydsl-collections</span></code> to query the underlying data store mock
 the same way as the QueryDSL framework itself. As such, if you want to be able to mock repositories that use QueryDSL
 operations, you will have to add a dependency to <code>querydsl-collections</code>:</p>
@@ -657,15 +662,15 @@ operations, you will have to add a dependency to <code>querydsl-collections</cod
 </span></code>
 </pre>
 
-<h4 id="support-for-jpa">Support for JPA</h4>
+<h3 id="support-for-jpa">Support for JPA</h3>
 <p>If we can find <code>org<span class="hljs-selector-class">.springframework</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.jpa</span><span class="hljs-selector-class">.repository</span><span class="hljs-selector-class">.JpaRepository</span></code> in the classpath, we assume JPA support to be added.
 As such, we will register <code>com<span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.repository</span><span class="hljs-selector-class">.DefaultJpaRepository</span></code> which will take care of all the
 methods in the <code>JpaRepository</code> interface that are not already handled by other extensions.</p>
-<h4 id="gemfire-support">Gemfire Support</h4>
+<h3 id="gemfire-support">Gemfire Support</h3>
 <p>If <code>org<span class="hljs-selector-class">.springframework</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.gemfire</span><span class="hljs-selector-class">.repository</span><span class="hljs-selector-class">.GemfireRepository</span></code> is found in the classpath, we will assume that you want
 to be able to mock Gemfire repositories as well. That is why we register <code>com<span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.repository</span><span class="hljs-selector-class">.DefaultGemfireRepository</span></code>
 to be able to take care of Gemfire-specific methods that aren&#39;t found on regular repositories.</p>
-<h3 id="non-data-operation-handlers">Non-Data-Operation Handlers</h3>
+<h2 id="non-data-operation-handlers">Non-Data-Operation Handlers</h2>
 <p>Non-data-operation handlers, as the name suggests, are operation handlers that support invocation of methods that are not
 data-specific. Examples include <code>Object.<span class="hljs-keyword">equals</span>(<span class="hljs-attr">...</span>)</code> and <code><span class="hljs-selector-tag">Object</span><span class="hljs-selector-class">.hashCode</span>(...)</code>.</p>
 <p>These are registered with <code>com<span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.proxy</span><span class="hljs-selector-class">.impl</span><span class="hljs-selector-class">.NonDataOperationInvocationHandler</span></code> which has a <code><span class="hljs-function"><span class="hljs-title">register</span>(<span class="hljs-params">...</span>)</span></code>
@@ -677,9 +682,9 @@ but these come with the framework:</p>
 <li><code>com<span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.proxy</span><span class="hljs-selector-class">.impl</span><span class="hljs-selector-class">.regular</span><span class="hljs-selector-class">.HashCodeNonDataOperationHandler</span></code> for handling <code><span class="hljs-selector-tag">Object</span><span class="hljs-selector-class">.hashCode</span>()</code></li>
 <li><code>com<span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.proxy</span><span class="hljs-selector-class">.impl</span><span class="hljs-selector-class">.regular</span><span class="hljs-selector-class">.ToStringNonDataOperationHandler</span></code> for handling <code><span class="hljs-selector-tag">Object</span><span class="hljs-selector-class">.toString</span>()</code></li>
 </ul>
-<h4 id="disclaimer">Disclaimer</h4>
+<h3 id="disclaimer">Disclaimer</h3>
 <p>The credit for fixing this goes to @Kaidjin who went all ninja on this and helped resolve #12 in all speed.</p>
-<h3 id="event-listeners">Event Listeners</h3>
+<h2 id="event-listeners">Event Listeners</h2>
 <p>You can register event listeners for each of the following events:</p>
 <ul>
 <li><code>BeforeInsertDataStoreEvent</code></li>
@@ -693,23 +698,23 @@ but these come with the framework:</p>
 <p>If you use the <code><span class="hljs-function"><span class="hljs-title">enableAuditing</span><span class="hljs-params">()</span></span></code> feature above, an event listener (<code>com<span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.store</span><span class="hljs-selector-class">.impl</span><span class="hljs-selector-class">.AuditDataEventListener</span></code>)
 will be registered with the configuration which will enable auditing features and will set relevant properties in the appropriate
 juncture by listening closely to the events listed above.</p>
-<h4 id="auditing">Auditing</h4>
+<h3 id="auditing">Auditing</h3>
 <p>Out-of-the-box auditing is supported through this event mechanism for the usual <code>CreatedBy</code>, <code>CreatedDate</code>, <code>LastModifiedBy</code>,
 and <code>LastModifiedDate</code> audit annotations provided by Spring Data Commons. To support user-related auditing (created by and last
 modified by) you will need to supply an <code>AuditorAware</code> or accept the default one, which will always return a String object with
 value, <code><span class="hljs-variable">&amp;quot</span>;User<span class="hljs-variable">&amp;quot</span>;</code>.</p>
 <p>By default, auditing is disabled. This is to follow in the footprints of Spring. Since Spring Data asks you to explicitly enable
 auditing, this framework, too, pushes for the same requirement.</p>
-<h5 id="note-on-additional-dependencies">Note on additional dependencies</h5>
+<h4 id="note-on-additional-dependencies">Note on additional dependencies</h4>
 <p>When you enable auditing, Spring Data will use the <code>joda-<span class="hljs-built_in">time</span></code> library to achieve precision timestamping. As such, when you
 enable auditing, you will have to add a dependency on <code>joda-<span class="hljs-built_in">time</span>:joda-<span class="hljs-built_in">time</span></code>.</p>
-<h4 id="a-note-on-distinct-selections">A Note on Distinct Selections</h4>
+<h3 id="a-note-on-distinct-selections">A Note on Distinct Selections</h3>
 <p>When using the <code><span class="hljs-keyword">distinct</span></code> modifier for selection, this framework will use the internal <code><span class="hljs-function"><span class="hljs-title">hashCode</span><span class="hljs-params">()</span></span></code> of the object being read
 from the data store abstraction to figure out distinct values.</p>
 <p>This is because as opposed to most data stores, we do not have any notion of row-by-row or object-to-object equality relations
 and at the moment we cannot figure out if two objects should be considered as equal, unless they have a <code><span class="hljs-built_in">hash</span>Code</code>.</p>
 <p>Having a <code><span class="hljs-built_in">hash</span>Code</code> is good programming practice anyway, so I don&#39;t feel too bad about not having implemented this for the moment.</p>
-<h4 id="referenced-objects">Referenced Objects</h4>
+<h3 id="referenced-objects">Referenced Objects</h3>
 <p>In this framework referenced objects are not going to be separated out. We have not implemented a full-fledged ORM and that is not
 the plan -- at least for the moment.</p>
 <p>When you save an object such as this:</p>
@@ -722,7 +727,7 @@ the plan -- at least for the moment.</p>
 </code></pre>
 <p>we are not going to automatically create a data store for the <code>EntityB</code> class and store the values there. Though it doesn&#39;t seem to
 be to complicated to implement, at the moment it is not how we do things.</p>
-<h3 id="key-generation">Key Generation</h3>
+<h2 id="key-generation">Key Generation</h2>
 <p>When storing data in the data store, we require a key. That is because the underlying data store abstraction is essentially a key-value
 store.</p>
 <p>This means that you will either have to provide keys for every entity you save, or that there must be some sort of key generation

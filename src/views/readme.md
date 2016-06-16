@@ -1,4 +1,10 @@
-# Spring Data Mock
+<jump-top></jump-top>
+
+# Contents
+
+<table-of-contents></table-of-contents>
+
+# Introduction
 
 This is a fairly flexible, versatile framework for mocking Spring Data repositories. Spring Data provides a very good
 foundation for separating the concerns of managing a database and its subsequently resulting queries from those of the
@@ -15,11 +21,7 @@ infrastructure replicating what Spring would do with an actual database, only in
 repository with actual data. Thus, you can test your services *without* having to start up the application context, and
 with the highest level of isolation -- with actual data.
 
-## Contents
-
-<table-of-contents></table-of-contents>
-
-## Quick Start
+# Quick Start
 
 Regardless of how you add the necessary dependency to your project, mocking a repository can be as simple as:
 
@@ -63,7 +65,7 @@ final UserRepository repository = new RepositoryMockBuilder()
     .mock(UserRepository.class);
 ````
 
-## Mocking a Repository
+# Mocking a Repository
 
 To mock a repository you must somehow use the underlying `RepositoryFactory`. There is currently a single implementation of
 this interface available, `com.mmnaseri.utils.spring.data.proxy.impl.DefaultRepositoryFactory`. The factory has a `getInstance(...)`
@@ -92,7 +94,7 @@ final UserRepository repository = factory.getInstance(null, UserRepository.class
 
 which falls back on the default way of generating keys, and relies solely on default implementations for handling method calls.
 
-### Repository Factory Configuration
+## Repository Factory Configuration
 
 The default repository factory implementation takes in a configuration object which will let you customize multiple
 aspects of the mocking mechanism.
@@ -132,7 +134,7 @@ The configuration object allows you the following customizations:
 Since the configuration object is complex and can be a hassle to create, you can use the much easier to use DSL via the
 `com.mmnaseri.utils.spring.data.dsl.factory.RepositoryFactoryBuilder` class. We will go over that shortly.
 
-### Using the DSL to Mock a Repository
+## Using the DSL to Mock a Repository
 
 Once you have a configuration object at hand, you can use the DSL bundled with this framework to easily mock
 your repositories and avoid going through the RepositoryFactory class.
@@ -166,7 +168,7 @@ final RepositoryMockBuilder builder2 = base.useConfiguration(configuration)
 
 This is by design, and is to allow developers and testers the freedom of reusing their configurations.
 
-### Using the DSL to Create a Configuration
+## Using the DSL to Create a Configuration
 
 Whereas mocking a repository is a relatively painless process and might not require the use of a dedicated DSL, creating
 a configuration is another story altogether. In recognition of this fact, I have created a DSL for this very purpose, so
@@ -228,20 +230,18 @@ Term | Explanation | Default Behavior
 
 To answer the question of what all of these configurable steps mean, we need to go to the next section.
 
-## The Mechanics
+# The Mechanics
 
 In this section, we will detail the framework and go over how each part of it can be configured.
 
-### Metadata Resolver
+## Metadata Resolver
 
 The metadata resolver is an entity that is capable of looking at a repository interface and figuring out detail about
 the repository as well as the persistent entity it is supporting. This is what the metadata resolver will find out:
 
   * the type of the entity for which the repository has been created
 
-  * the (actual or encapsulated) property of the persistent entity which holds the identifier. At this point, we do not
-  support primitive identifier types. This means that if your ID type is `long`, you will have to change it to `java.lang.Long`
-  to be able to use this framework.
+  * the (actual or encapsulated) property of the persistent entity which holds the identifier.
 
   * the type of the identifier associated with the entity
 
@@ -251,7 +251,14 @@ and if not tries to extract its metadata from the interface should it extend `or
 
 If none of these conditions are met, it will throw an exception.
 
-### The Operators
+#### Primitve IDs
+
+<div class="alert alert-warning">
+ At this point, we do not support primitive identifier types. This means that if your ID type
+ is `long`, you will have to change it to `java.lang.Long` to be able to use this framework.
+</div>
+
+## The Operators
 
 The operators are what drive how the query methods are parsed. This is the general recipe:
 
@@ -297,7 +304,7 @@ TRUE                       | `True`, `IsTrue`
 If no suffix is present to determine the operator by, it is assumed that the `IS` operator was intended.
 
 
-### Data Functions
+## Data Functions
 
 Data functions determine what should be done with a particular selection of entities before a result is returned. For instance,
 the `count` data function just returns the collection size for a subset of data, thus allowing you to start your query method with
@@ -308,12 +315,12 @@ used in the beginning of a query method's name.
 
 Available data functions:
 
-Function | Description
----------|-----------------------------------
-count    | Returns the number of items that were selected
-delete   | Deletes all the selected items
+ Function  | Description
+-----------|-----------------------------------
+`count`    | Returns the number of items that were selected
+`delete`   | Deletes all the selected items
 
-### Data Stores
+## Data Stores
 
 This framework has an abstraction hiding away the details of where and how entities are stored and are looked up. The default
 behavior is, of course, to keep everything in memory. It might, however, be necessary to delegate this to some external service
@@ -353,7 +360,7 @@ three operations:
 
 Certain repository methods can take advantage of these additional functionality if provided.
 
-### Result Adapters
+## Result Adapters
 
 Many times the actual implementation methods for an operation return very generic results, such as a list or a set, whereas the
 required return type for the repository interface method might be something else. Suppose for instance, that the implementation
@@ -384,7 +391,7 @@ Adapter                                  | Converts from      | Converts to     
 `FutureIterableResultAdapter`            | `Future          ` | `Iterable`         | `-100`   |
 `ListenableFutureIterableResultAdapter`  | `ListenableFuture` | `Iterable`         | `-50`    |
 
-### Custom Implementations and Type Mapping Context
+## Custom Implementations and Type Mapping Context
 
 You can map custom implementations to repository interfaces. To this end, a type mapping context exists which will let you bind
 particular repository interface super types to custom implementation classes. The methods are then looked up according to their
@@ -398,7 +405,7 @@ When proxying a repository method this is the order with which a method is bound
   2. We look at globally available implementations supplied through the configuration object
   3. We try to interpret the method name as a query.
 
-### Spring Data Extensions
+## Spring Data Extensions
 
 Spring Data extensions are modules provided by the Spring Data team or third parties that provide additional support for more
 data sources.
@@ -408,19 +415,19 @@ the type mapping context.
 
 We have implemented the following data extensions.
 
-#### Support for CrudRepository
+### Support for CrudRepository
 
 All methods introduced in `org.springframework.data.repository.CrudRepository` are implemented in a class called
 `com.mmnaseri.utils.spring.data.repository.DefaultCrudRepository`. This class is registered with the type mapping
 for all repositories by default.
 
-#### Support for PagingAndSortingRepository
+### Support for PagingAndSortingRepository
 
 All methods introduced in `org.springframework.data.repository.PagingAndSortingRepository` are implemented in a class called
 `com.mmnaseri.utils.spring.data.repository.DefaultPagingAndSortingRepository`. This class is registered with the type mapping
 for all repositories by default.
 
-#### Support for "Query by Example"
+### Support for "Query by Example"
 
 Query by example is a concept introduced in Spring Data 1.12 and as such might not be shipped with your version of Spring
 Data by default.
@@ -429,7 +436,7 @@ That is why we first check to see if interface `org.springframework.data.reposit
 in the classpath. If so, then we register supporting type `com.mmnaseri.utils.spring.data.repository.DefaultQueryByExampleExecutor`
 which includes methods that are capable of taking care of all methods introduced in this interface.
 
-#### Support for QueryDSL
+### Support for QueryDSL
 
 There is an extension for [QueryDSL](http://www.querydsl.com) for Spring Data that will let you use a fluent API to
 interact with the data store, while hiding away the complexities of talking to the database itself.
@@ -439,7 +446,7 @@ we can also find the CGLib library in the classpath (which is required for Query
 QueryDSL support to be enabled. We then add the `com.mmnaseri.utils.spring.data.repository.DefaultQueryDslPredicateExecutor`
 implementation to the type mapping context.
 
-##### Note on additional dependencies
+#### Note on additional dependencies
 
 `DefaultQueryDslPredicateExecutor` uses the `com.querydsl:querydsl-collections` to query the underlying data store mock
 the same way as the QueryDSL framework itself. As such, if you want to be able to mock repositories that use QueryDSL
@@ -456,19 +463,19 @@ operations, you will have to add a dependency to `querydsl-collections`:
 </code>
 </pre>
 
-#### Support for JPA
+### Support for JPA
 
 If we can find `org.springframework.data.jpa.repository.JpaRepository` in the classpath, we assume JPA support to be added.
 As such, we will register `com.mmnaseri.utils.spring.data.repository.DefaultJpaRepository` which will take care of all the
 methods in the `JpaRepository` interface that are not already handled by other extensions.
 
-#### Gemfire Support
+### Gemfire Support
 
 If `org.springframework.data.gemfire.repository.GemfireRepository` is found in the classpath, we will assume that you want
 to be able to mock Gemfire repositories as well. That is why we register `com.mmnaseri.utils.spring.data.repository.DefaultGemfireRepository`
 to be able to take care of Gemfire-specific methods that aren't found on regular repositories.
 
-### Non-Data-Operation Handlers
+## Non-Data-Operation Handlers
 
 Non-data-operation handlers, as the name suggests, are operation handlers that support invocation of methods that are not
 data-specific. Examples include `Object.equals(...)` and `Object.hashCode(...)`.
@@ -483,11 +490,11 @@ but these come with the framework:
   * `com.mmnaseri.utils.spring.data.proxy.impl.regular.HashCodeNonDataOperationHandler` for handling `Object.hashCode()`
   * `com.mmnaseri.utils.spring.data.proxy.impl.regular.ToStringNonDataOperationHandler` for handling `Object.toString()`
 
-#### Disclaimer
+### Disclaimer
 
 The credit for fixing this goes to @Kaidjin who went all ninja on this and helped resolve #12 in all speed.
 
-### Event Listeners
+## Event Listeners
 
 You can register event listeners for each of the following events:
 
@@ -504,7 +511,7 @@ If you use the `enableAuditing()` feature above, an event listener (`com.mmnaser
 will be registered with the configuration which will enable auditing features and will set relevant properties in the appropriate
 juncture by listening closely to the events listed above.
 
-#### Auditing
+### Auditing
 
 Out-of-the-box auditing is supported through this event mechanism for the usual `CreatedBy`, `CreatedDate`, `LastModifiedBy`,
 and `LastModifiedDate` audit annotations provided by Spring Data Commons. To support user-related auditing (created by and last
@@ -514,12 +521,12 @@ value, `"User"`.
 By default, auditing is disabled. This is to follow in the footprints of Spring. Since Spring Data asks you to explicitly enable
 auditing, this framework, too, pushes for the same requirement.
 
-##### Note on additional dependencies
+#### Note on additional dependencies
 
 When you enable auditing, Spring Data will use the `joda-time` library to achieve precision timestamping. As such, when you
 enable auditing, you will have to add a dependency on `joda-time:joda-time`.
 
-#### A Note on Distinct Selections
+### A Note on Distinct Selections
 
 When using the `distinct` modifier for selection, this framework will use the internal `hashCode()` of the object being read
 from the data store abstraction to figure out distinct values.
@@ -529,7 +536,7 @@ and at the moment we cannot figure out if two objects should be considered as eq
 
 Having a `hashCode` is good programming practice anyway, so I don't feel too bad about not having implemented this for the moment.
 
-#### Referenced Objects
+### Referenced Objects
 
 In this framework referenced objects are not going to be separated out. We have not implemented a full-fledged ORM and that is not
 the plan -- at least for the moment.
@@ -548,7 +555,7 @@ public class EntityA {
 we are not going to automatically create a data store for the `EntityB` class and store the values there. Though it doesn't seem to
 be to complicated to implement, at the moment it is not how we do things.
 
-### Key Generation
+## Key Generation
 
 When storing data in the data store, we require a key. That is because the underlying data store abstraction is essentially a key-value
 store.
