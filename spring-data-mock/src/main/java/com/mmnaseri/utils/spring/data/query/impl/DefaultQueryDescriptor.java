@@ -3,6 +3,7 @@ package com.mmnaseri.utils.spring.data.query.impl;
 import com.mmnaseri.utils.spring.data.domain.*;
 import com.mmnaseri.utils.spring.data.proxy.RepositoryFactoryConfiguration;
 import com.mmnaseri.utils.spring.data.query.*;
+import com.mmnaseri.utils.spring.data.tools.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.BeanWrapper;
@@ -91,11 +92,19 @@ public class DefaultQueryDescriptor implements QueryDescriptor {
         for (List<Parameter> branch : branches) {
             boolean matches = true;
             for (Parameter parameter : branch) {
-                final Object value = wrapper.getPropertyValue(parameter.getPath());
+                final boolean ignoreCase;
+                ignoreCase = parameter.getModifiers().contains(Modifier.IGNORE_CASE);
+                Object value = wrapper.getPropertyValue(parameter.getPath());
+                if (ignoreCase && value != null && value instanceof String) {
+                    value = ((String) value).toLowerCase();
+                }
                 final Operator operator = parameter.getOperator();
                 final Object[] properties = new Object[operator.getOperands()];
                 for (int i = 0; i < operator.getOperands(); i++) {
                     properties[i] = invocation.getArguments()[parameter.getIndices()[i]];
+                    if (ignoreCase && properties[i] != null && properties[i] instanceof String) {
+                        properties[i] = ((String) properties[i]).toLowerCase();
+                    }
                 }
                 if (!operator.getMatcher().matches(parameter, value, properties)) {
                     matches = false;
