@@ -82,7 +82,7 @@
         <cobertura-maven-plugin.version>2.7</cobertura-maven-plugin.version>
         <coveralls-maven-plugin.version>4.2.0</coveralls-maven-plugin.version>
         <!-- feature support -->
-        <spring-data-commons.version>1.12.1.RELEASE</spring-data-commons.version>
+        <spring-data-commons.version>1.12.2.RELEASE</spring-data-commons.version>
         <spring-data-gemfire.version>1.8.1.RELEASE</spring-data-gemfire.version>
         <spring-data-jpa.version>1.10.1.RELEASE</spring-data-jpa.version>
         <querydsl.version>4.1.2</querydsl.version>
