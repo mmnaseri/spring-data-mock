@@ -58,16 +58,19 @@ public class DefaultRepositoryFactory implements RepositoryFactory {
 
     @Override
     public <E> E getInstance(KeyGenerator<? extends Serializable> keyGenerator, Class<E> repositoryInterface, Class... implementations) {
+        final KeyGenerator<? extends Serializable> actualKeyGenerator;
         if (keyGenerator == null) {
             if (configuration.getDefaultKeyGenerator() != null) {
                 //if no key generator is passed and there is a default key generator specified, we fall back to that
-                keyGenerator = configuration.getDefaultKeyGenerator();
+                actualKeyGenerator = configuration.getDefaultKeyGenerator();
             } else {
                 //otherwise, let's assume that not key generation is required
-                keyGenerator = new NoOpKeyGenerator<>();
+                actualKeyGenerator = new NoOpKeyGenerator<>();
             }
+        } else {
+            actualKeyGenerator = keyGenerator;
         }
-        log.info("We are going to create a proxy instance of type " + repositoryInterface + " using key generator " + keyGenerator + " and binding the implementations to " + Arrays.toString(implementations));
+        log.info("We are going to create a proxy instance of type " + repositoryInterface + " using key generator " + actualKeyGenerator + " and binding the implementations to " + Arrays.toString(implementations));
         //figure out the repository metadata
         log.info("Resolving repository metadata for " + repositoryInterface);
         final RepositoryMetadata metadata = getRepositoryMetadata(repositoryInterface);
@@ -76,7 +79,7 @@ public class DefaultRepositoryFactory implements RepositoryFactory {
         final DataStore<Serializable, Object> dataStore = getDataStore(metadata);
         //figure out type mappings
         log.info("Trying to find all the proper type mappings for entity repository " + repositoryInterface);
-        final List<TypeMapping<?>> typeMappings = getTypeMappings(metadata, dataStore, keyGenerator, implementations);
+        final List<TypeMapping<?>> typeMappings = getTypeMappings(metadata, dataStore, actualKeyGenerator, implementations);
         //set up the data operation resolver
         final DataOperationResolver operationResolver = new DefaultDataOperationResolver(typeMappings, descriptionExtractor, metadata, functionRegistry, configuration);
         //get all of this repository's methods
@@ -90,7 +93,7 @@ public class DefaultRepositoryFactory implements RepositoryFactory {
             boundImplementations.add(mapping.getType());
         }
         //set up the repository configuration
-        final RepositoryConfiguration repositoryConfiguration = new ImmutableRepositoryConfiguration(metadata, keyGenerator, boundImplementations);
+        final RepositoryConfiguration repositoryConfiguration = new ImmutableRepositoryConfiguration(metadata, actualKeyGenerator, boundImplementations);
         //create the interceptor
         //noinspection unchecked
         final InvocationHandler interceptor = new DataOperationInvocationHandler(repositoryConfiguration, invocationMappings, dataStore, adapterContext, operationInvocationHandler);

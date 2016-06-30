@@ -38,7 +38,7 @@ or you can add a maven dependency since it is now available in Maven central:
     <dependency>
         <groupId>com.mmnaseri.utils</groupId>
         <artifactId>spring-data-mock</artifactId>
-        <version>${latest-version}</version>
+        <version>${spring-data-mock.version}</version>
         <scope>test</scope>
     </dependency>
 
@@ -52,7 +52,7 @@ using [Maven exclusions](https://maven.apache.org/guides/introduction/introducti
     <dependency>
         <groupId>com.mmnaseri.utils</groupId>
         <artifactId>spring-data-mock</artifactId>
-        <version>${latest-version}</version>
+        <version>${spring-data-mock.version}</version>
         <scope>test</scope>
         <exclusions>
             <exclusion>
