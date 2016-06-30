@@ -77,16 +77,20 @@ public class RepositoryFactoryBuilder implements Start, DataFunctionsAnd, DataSt
      */
     public static Start given(RepositoryFactoryConfiguration configuration) {
         final RepositoryFactoryBuilder builder = new RepositoryFactoryBuilder();
-        builder.metadataResolver = configuration.getRepositoryMetadataResolver() != null ? configuration.getRepositoryMetadataResolver() : builder.metadataResolver;
-        builder.queryDescriptionExtractor = configuration.getDescriptionExtractor() != null ? configuration.getDescriptionExtractor() : builder.queryDescriptionExtractor;
-        builder.functionRegistry = configuration.getFunctionRegistry() != null ? configuration.getFunctionRegistry() : builder.functionRegistry;
-        builder.dataStoreRegistry = configuration.getDataStoreRegistry() != null ? configuration.getDataStoreRegistry() : builder.dataStoreRegistry;
-        builder.resultAdapterContext = configuration.getResultAdapterContext() != null ? configuration.getResultAdapterContext() : builder.resultAdapterContext;
-        builder.typeMappingContext = configuration.getTypeMappingContext() != null ? configuration.getTypeMappingContext() : builder.typeMappingContext;
-        builder.eventListenerContext = configuration.getEventListenerContext() != null ? configuration.getEventListenerContext() : builder.eventListenerContext;
-        builder.operationInvocationHandler = configuration.getOperationInvocationHandler() != null ? configuration.getOperationInvocationHandler() : builder.operationInvocationHandler;
-        builder.defaultKeyGenerator = configuration.getDefaultKeyGenerator() != null ? configuration.getDefaultKeyGenerator() : builder.defaultKeyGenerator;
+        builder.metadataResolver = getOrDefault(configuration.getRepositoryMetadataResolver(), builder.metadataResolver);
+        builder.queryDescriptionExtractor = getOrDefault(configuration.getDescriptionExtractor(), builder.queryDescriptionExtractor);
+        builder.functionRegistry = getOrDefault(configuration.getFunctionRegistry(), builder.functionRegistry);
+        builder.dataStoreRegistry = getOrDefault(configuration.getDataStoreRegistry(), builder.dataStoreRegistry);
+        builder.resultAdapterContext = getOrDefault(configuration.getResultAdapterContext(), builder.resultAdapterContext);
+        builder.typeMappingContext = getOrDefault(configuration.getTypeMappingContext(), builder.typeMappingContext);
+        builder.eventListenerContext = getOrDefault(configuration.getEventListenerContext(), builder.eventListenerContext);
+        builder.operationInvocationHandler = getOrDefault(configuration.getOperationInvocationHandler(), builder.operationInvocationHandler);
+        builder.defaultKeyGenerator = getOrDefault(configuration.getDefaultKeyGenerator(), builder.defaultKeyGenerator);
         return builder;
+    }
+
+    private static <E> E getOrDefault(E value, E defaultValue) {
+        return value != null ? value : defaultValue;
     }
 
     /**
