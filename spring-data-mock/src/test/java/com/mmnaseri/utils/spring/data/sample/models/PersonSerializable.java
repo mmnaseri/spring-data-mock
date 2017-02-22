@@ -6,6 +6,8 @@
 package com.mmnaseri.utils.spring.data.sample.models;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -16,6 +18,23 @@ public class PersonSerializable extends Person implements Serializable {
     @Override
     public String getId() {
         return super.getId(); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    
+    public static PersonSerializable build() {
+        return new PersonSerializable();
+    }
+    
+    public static List<PersonSerializable> getList(int count) {
+        ArrayList<PersonSerializable> list = new ArrayList<>();
+        for (int i = 0; i < count; i++) {
+            list.add(PersonSerializable.build());
+        }
+        return list;
+    }
+    
+    public static List<PersonSerializable> getList() {
+        return getList(3);
     }
 
 }

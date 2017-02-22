@@ -6,14 +6,13 @@ import com.mmnaseri.utils.spring.data.sample.models.PersonSerializable;
 import com.mmnaseri.utils.spring.data.sample.repositories.SimplePersonSerializableRepository;
 import com.mmnaseri.utils.spring.data.store.DataStore;
 import com.mmnaseri.utils.spring.data.store.impl.MemoryDataStore;
+import static org.hamcrest.MatcherAssert.assertThat;
 import org.hamcrest.Matchers;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.testng.Assert.fail;
 
 /**
  * @author Milad Naseri (mmnaseri@programmer.net)
@@ -36,16 +35,15 @@ public class DefaultCrudRepositoryWithSerializedTest {
 
     @Test
     public void testDeleteByEntityWhenEntityHasKey() throws Exception {
-        final PersonSerializable original = new PersonSerializable();
+        final PersonSerializable original = PersonSerializable.build();
         dataStore.save("1", original);
         assertThat(dataStore.hasKey("1"), is(true));
-        final PersonSerializable personToDelete = new PersonSerializable();
+        final PersonSerializable personToDelete = PersonSerializable.build();
         personToDelete.setId("1");
         final Object deleted = repository.delete(personToDelete);
         assertThat(dataStore.hasKey("1"), is(false));
         assertThat(deleted, is(notNullValue()));
         assertThat(deleted, Matchers.<Object>is(original));
     }
-
-
+    
 }

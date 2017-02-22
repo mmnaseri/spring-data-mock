@@ -1,11 +1,14 @@
 package com.mmnaseri.utils.spring.data.sample.models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/21/15)
  */
 public class Person {
-
+    
     private String id;
     private String firstName;
     private String lastName;
@@ -82,6 +85,22 @@ public class Person {
     @Override
     public int hashCode() {
         return id != null ? id.hashCode() : 0;
+    }
+    
+    public static Person build() {
+        return new Person();
+    }
+
+    public static List<Person> list(int count) {
+        ArrayList<Person> people = new ArrayList();
+        for (int i = 0; i < count; i++) {
+            people.add(Person.build());
+        }
+        return people;
+    }
+    
+    public static List<Person> list() {
+        return list(1);
     }
 
 }
