@@ -92,7 +92,7 @@ public class Person {
     }
 
     public static List<Person> list(int count) {
-        ArrayList<Person> people = new ArrayList();
+        ArrayList<Person> people = new ArrayList<>();
         for (int i = 0; i < count; i++) {
             people.add(Person.build());
         }

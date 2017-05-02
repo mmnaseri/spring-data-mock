@@ -42,8 +42,8 @@ public class SignatureDataOperationResolver implements DataOperationResolver {
             final Class<?> type = mapping.getType();
             final Method declaration = findMethod(type, method.getName(), method.getParameterTypes());
             if (declaration != null) {
-                log.info("Setting the resolution as a method invocation on the previously prepared type mapping");
                 final Object instance = mapping.getInstance();
+                log.info("Setting the resolution as a method invocation on the previously prepared type mapping with method " + declaration);
                 return new MethodInvocationDataStoreOperation<Serializable, Object>(instance, declaration);
             }
         }
@@ -54,9 +54,9 @@ public class SignatureDataOperationResolver implements DataOperationResolver {
         log.debug("Attempting to look for the actual declaration of the method named '" + name + "' with parameter types " + Arrays.toString(parameterTypes) + " on the child type " + type);
         Class<?> searchType = type;
         while (searchType != null) {
-            log.trace("Looking at type " + type + " for method " + name);
             final Method[] methods = searchType.isInterface() ? searchType.getMethods() : searchType.getDeclaredMethods();
             for (Method method : methods) {
+                log.trace("Looking at type " + type + " for method " + name + " with method " + method);
                 if (method.getName().equals(name) && parameterTypes.length == method.getParameterTypes().length) {
                     boolean matches = true;
                     for (int i = 0; i < parameterTypes.length; i++) {

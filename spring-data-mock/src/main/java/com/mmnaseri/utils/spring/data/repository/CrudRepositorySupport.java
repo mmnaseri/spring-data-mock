@@ -7,6 +7,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.io.Serializable;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * <p>This implementation is used to factor out the commonalities between various Spring interfaces extending the
@@ -18,7 +20,7 @@ import java.io.Serializable;
 @SuppressWarnings("WeakerAccess")
 public class CrudRepositorySupport implements DataStoreAware, RepositoryMetadataAware, KeyGeneratorAware<Serializable> {
 
-    private static final Log log = LogFactory.getLog(CrudRepositorySupport.class);
+    private static final Log LOG = LogFactory.getLog(CrudRepositorySupport.class);
     private KeyGenerator<? extends Serializable> keyGenerator;
     private DataStore dataStore;
     private RepositoryMetadata repositoryMetadata;
@@ -33,19 +35,34 @@ public class CrudRepositorySupport implements DataStoreAware, RepositoryMetadata
      */
     public Object save(Object entity) {
         Object key = PropertyUtils.getPropertyValue(entity, repositoryMetadata.getIdentifierProperty());
-        log.info("The entity that is to be saved has a key with value " + key);
+        LOG.info("The entity that is to be saved has a key with value " + key);
         if (key == null && keyGenerator != null) {
-            log.info("The key was null, but the generator was not, so we are going to get a key for the entity");
+            LOG.info("The key was null, but the generator was not, so we are going to get a key for the entity");
             key = keyGenerator.generate();
-            log.debug("The generated key for the entity was " + key);
+            LOG.debug("The generated key for the entity was " + key);
             PropertyUtils.setPropertyValue(entity, repositoryMetadata.getIdentifierProperty(), key);
         }
         if (key == null) {
-            log.warn("Attempting to save an entity without a key. This might result in an error. To fix this, specify a key generator.");
+            LOG.warn("Attempting to save an entity without a key. This might result in an error. To fix this, specify a key generator.");
         }
         //noinspection unchecked
         dataStore.save((Serializable) key, entity);
         return entity;
+    }
+    
+    /**
+     * Saves all the given entities
+     * @param entities entities to save (insert or update)
+     * @return saved entities
+     */
+    public Iterable save(Iterable entities) {
+        List<Object> list = new LinkedList<>();
+        LOG.info("Going to save a number of entities in the underlying data store");
+        LOG.debug(entities);
+        for (Object entity : entities) {
+            list.add(save(entity));
+        }
+        return list;
     }
 
     @Override

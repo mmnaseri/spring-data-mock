@@ -25,21 +25,6 @@ public class DefaultCrudRepository extends CrudRepositorySupport {
     private static final Log log = LogFactory.getLog(DefaultCrudRepository.class);
 
     /**
-     * Saves all the given entities
-     * @param entities entities to save (insert or update)
-     * @return saved entities
-     */
-    public Iterable<Object> save(Iterable entities) {
-        final List<Object> list = new LinkedList<>();
-        log.info("Going to save a number of entities in the underlying data store");
-        log.debug(entities);
-        for (Object entity : entities) {
-            list.add(save(entity));
-        }
-        return list;
-    }
-
-    /**
      * Finds the entity that was saved with this key, or returns {@literal null}
      * @param key the key
      * @return the entity

@@ -47,6 +47,7 @@ public class MockedRepositoryTest {
     public void testSaveList() {
         List<Person> people = Person.list();
         List<Person> savedPeople = repository.save(people);
+        assertThat(savedPeople, is(notNullValue()));
         assertThat(repository.findAll(), is(notNullValue()));
         assertThat(repository.findAll(), hasSize(1));
     }
