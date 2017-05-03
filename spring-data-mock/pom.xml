@@ -200,7 +200,6 @@
                 <configuration>
                     <source>${target-jdk.version}</source>
                     <target>${target-jdk.version}</target>
-                    <showDeprecation>false</showDeprecation>
                 </configuration>
             </plugin>
         </plugins>

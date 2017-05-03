@@ -55,7 +55,7 @@ public class CrudRepositorySupport implements DataStoreAware, RepositoryMetadata
      * @param entities entities to save (insert or update)
      * @return saved entities
      */
-    public Iterable save(Iterable entities) {
+    public Iterable<Object> save(Iterable<?> entities) {
         List<Object> list = new LinkedList<>();
         LOG.info("Going to save a number of entities in the underlying data store");
         LOG.debug(entities);
