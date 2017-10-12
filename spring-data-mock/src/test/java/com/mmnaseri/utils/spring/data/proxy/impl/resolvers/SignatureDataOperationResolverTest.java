@@ -8,7 +8,9 @@ import com.mmnaseri.utils.spring.data.store.DataStoreOperation;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -28,6 +30,31 @@ public class SignatureDataOperationResolverTest {
         mappings.add(new ImmutableTypeMapping<>(SuperInterface.class, new SuperInterfaceImpl()));
         mappings.add(new ImmutableTypeMapping<>(ChildClass.class, new ChildClass()));
         resolver = new SignatureDataOperationResolver(mappings);
+    }
+
+    @Test
+    public void testWeResolveTheCorrectMethod_whenMethodWithObjectParam_comesFirstInMethodList() throws Exception {
+        Method method = ProxiedClass.class.getMethod("somethingToAnObject", Iterable.class);
+        final DataStoreOperation<?, ?, ?> operation = resolver.resolve(method);
+
+        assertThat(operation, is(notNullValue()));
+        assertThat(operation, is(instanceOf(MethodInvocationDataStoreOperation.class)));
+        final MethodInvocationDataStoreOperation invocationOperation = (MethodInvocationDataStoreOperation) operation;
+        assertThat(invocationOperation.getInstance(), is(instanceOf(SuperInterface.class)));
+        assertThat(invocationOperation.getMethod(), is(SuperInterface.class.getMethod("somethingToAnObject", Iterable.class)));
+    }
+
+
+    @Test
+    public void testWeResolveTheCorrectMethod_whenMethodWithObjectParam_comesFirstInMethodList_andNotAnExactMatch() throws Exception {
+        Method method = ProxiedClass.class.getMethod("somethingToAnObject", Collection.class);
+        final DataStoreOperation<?, ?, ?> operation = resolver.resolve(method);
+
+        assertThat(operation, is(notNullValue()));
+        assertThat(operation, is(instanceOf(MethodInvocationDataStoreOperation.class)));
+        final MethodInvocationDataStoreOperation invocationOperation = (MethodInvocationDataStoreOperation) operation;
+        assertThat(invocationOperation.getInstance(), is(instanceOf(SuperInterface.class)));
+        assertThat(invocationOperation.getMethod(), is(SuperInterface.class.getMethod("somethingToAnObject", Iterable.class)));
     }
 
     @Test
