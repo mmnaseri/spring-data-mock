@@ -7,6 +7,16 @@ package com.mmnaseri.utils.spring.data.sample.usecases.proxy.resolvers;
 public class SuperInterfaceImpl implements SuperInterface {
 
     @Override
+    public void somethingToAnObject(Object object) {
+
+    }
+
+    @Override
+    public void somethingToAnObject(Iterable iterable) {
+
+    }
+
+    @Override
     public void saySomething(CharSequence sequence, Double number) {
 
     }
@@ -15,4 +25,5 @@ public class SuperInterfaceImpl implements SuperInterface {
     public void doSomething() {
 
     }
+
 }

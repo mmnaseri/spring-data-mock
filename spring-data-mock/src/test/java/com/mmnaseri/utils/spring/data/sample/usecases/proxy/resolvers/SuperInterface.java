@@ -6,8 +6,14 @@ package com.mmnaseri.utils.spring.data.sample.usecases.proxy.resolvers;
  */
 public interface SuperInterface {
 
+    void somethingToAnObject(Object object);
+
+    void somethingToAnObject(Iterable iterable);
+
+
     void saySomething(CharSequence sequence, Double number);
 
     void doSomething();
+
 
 }
