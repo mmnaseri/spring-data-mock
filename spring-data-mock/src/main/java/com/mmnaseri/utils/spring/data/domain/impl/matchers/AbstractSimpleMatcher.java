@@ -29,4 +29,8 @@ public abstract class AbstractSimpleMatcher implements Matcher {
      */
     protected abstract boolean matches(Parameter parameter, Object actual, Object expected);
 
+    @Override
+    public boolean isApplicableTo(Class<?> parameterType, Class<?>... propertiesTypes) {
+        return propertiesTypes.length == 1 && parameterType.isAssignableFrom(propertiesTypes[0]);
+    }
 }

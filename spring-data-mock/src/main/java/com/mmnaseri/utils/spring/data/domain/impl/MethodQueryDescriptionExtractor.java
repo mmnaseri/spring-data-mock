@@ -1,5 +1,6 @@
 package com.mmnaseri.utils.spring.data.domain.impl;
 
+import com.google.common.base.Joiner;
 import com.mmnaseri.utils.spring.data.domain.*;
 import com.mmnaseri.utils.spring.data.error.QueryParserException;
 import com.mmnaseri.utils.spring.data.proxy.RepositoryFactoryConfiguration;
@@ -243,14 +244,20 @@ public class MethodQueryDescriptionExtractor implements QueryDescriptionExtracto
 
     private int parseParameterIndices(Method method, String methodName, int index, Operator operator, PropertyDescriptor propertyDescriptor, int[] indices) {
         int parameterIndex = index;
+        Class<?>[] parameterTypes = new Class[operator.getOperands()];
         for (int i = 0; i < operator.getOperands(); i++) {
             if (parameterIndex >= method.getParameterTypes().length) {
                 throw new QueryParserException(method.getDeclaringClass(), "Expected to see parameter with index " + parameterIndex);
             }
-            if (!propertyDescriptor.getType().isAssignableFrom(method.getParameterTypes()[parameterIndex])) {
-                throw new QueryParserException(method.getDeclaringClass(), "Expected parameter " + parameterIndex + " on method " + methodName + " to be a descendant of " + propertyDescriptor.getType());
-            }
+            parameterTypes[i] = method.getParameterTypes()[parameterIndex];
             indices[i] = parameterIndex ++;
+        }
+        if (!operator.getMatcher().isApplicableTo(propertyDescriptor.getType(), parameterTypes)) {
+            throw new QueryParserException(method.getDeclaringClass(),
+                    String.format("Invalid parameter types for operator %s on property %s: [%s]",
+                            operator.getName(),
+                            propertyDescriptor.getPath(),
+                            Joiner.on(",").join(parameterTypes)));
         }
         return parameterIndex;
     }

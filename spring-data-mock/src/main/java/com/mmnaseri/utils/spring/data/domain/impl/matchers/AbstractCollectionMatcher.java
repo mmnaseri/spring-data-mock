@@ -61,4 +61,11 @@ public abstract class AbstractCollectionMatcher extends AbstractSimpleMatcher {
      */
     protected abstract boolean matches(Parameter parameter, Object actual, Collection collection);
 
+    @Override
+    public boolean isApplicableTo(Class<?> parameterType, Class<?>... propertiesTypes) {
+        Class<?> propertyType = propertiesTypes[0];
+        return Collection.class.isAssignableFrom(propertyType)
+                || Iterator.class.isAssignableFrom(propertyType)
+                || Iterable.class.isAssignableFrom(propertyType);
+    }
 }

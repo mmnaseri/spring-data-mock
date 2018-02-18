@@ -6,6 +6,9 @@ import com.mmnaseri.utils.spring.data.error.InvalidArgumentException;
 import com.mmnaseri.utils.spring.data.sample.mocks.NotMatchingBinaryMatcher;
 import org.testng.annotations.Test;
 
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertTrue;
+
 /**
  * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (4/10/16)
@@ -32,4 +35,27 @@ public class AbstractBinaryMatcherTest {
         matcher.matches(new ImmutableParameter("x.y.z", null, null, new ImmutableOperator("sample", 2, null)), new Object(), new Object[]{new Object(), new Object()});
     }
 
+    @Test
+    public void testIsApplicableTo() {
+        final NotMatchingBinaryMatcher matcher = new NotMatchingBinaryMatcher();
+        assertTrue(matcher.isApplicableTo(String.class, String.class, String.class));
+    }
+
+    @Test
+    public void shouldNotBeApplicableToOnlyOneArgument() {
+        final NotMatchingBinaryMatcher matcher = new NotMatchingBinaryMatcher();
+        assertFalse(matcher.isApplicableTo(String.class, String.class));
+    }
+
+    @Test
+    public void shouldNotBeApplicableToIncompatibleFirstArgument() {
+        final NotMatchingBinaryMatcher matcher = new NotMatchingBinaryMatcher();
+        assertFalse(matcher.isApplicableTo(String.class, Integer.class, String.class));
+    }
+
+    @Test
+    public void shouldNotBeApplicableToIncompatibleSecondArgument() {
+        final NotMatchingBinaryMatcher matcher = new NotMatchingBinaryMatcher();
+        assertFalse(matcher.isApplicableTo(String.class, String.class, Integer.class));
+    }
 }
