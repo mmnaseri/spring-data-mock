@@ -130,7 +130,7 @@ FAQ
 
   4. When should I use this?
 
-  > You should only use this to write you *unit* tests. For anything else, you would want the whole application to
+  > You should only use this to write your *unit* tests. For anything else, you would want the whole application to
   come alive and work. Using mocks for that is a bad idea.
 
   5. This is going to be used at the level of code testing. Is it really well written?
