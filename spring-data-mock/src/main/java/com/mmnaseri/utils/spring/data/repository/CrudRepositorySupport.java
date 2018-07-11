@@ -7,6 +7,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.io.Serializable;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * <p>This implementation is used to factor out the commonalities between various Spring interfaces extending the
@@ -32,6 +34,9 @@ public class CrudRepositorySupport implements DataStoreAware, RepositoryMetadata
      * newly inserted, it will have a key).
      */
     public Object save(Object entity) {
+        if (entity instanceof Iterable) {
+            return save((Iterable) entity);
+        }
         Object key = PropertyUtils.getPropertyValue(entity, repositoryMetadata.getIdentifierProperty());
         log.info("The entity that is to be saved has a key with value " + key);
         if (key == null && keyGenerator != null) {
@@ -46,6 +51,22 @@ public class CrudRepositorySupport implements DataStoreAware, RepositoryMetadata
         //noinspection unchecked
         dataStore.save((Serializable) key, entity);
         return entity;
+    }
+
+
+    /**
+     * Saves all the given entities
+     * @param entities entities to save (insert or update)
+     * @return saved entities
+     */
+    public Iterable<Object> save(Iterable entities) {
+        final List<Object> list = new LinkedList<>();
+        log.info("Going to save a number of entities in the underlying data store");
+        log.debug(entities);
+        for (Object entity : entities) {
+            list.add(save(entity));
+        }
+        return list;
     }
 
     @Override
