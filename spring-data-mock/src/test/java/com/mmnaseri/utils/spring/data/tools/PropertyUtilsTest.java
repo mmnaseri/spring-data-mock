@@ -207,7 +207,7 @@ public class PropertyUtilsTest extends AbstractUtilityClassTest {
         PropertyUtils.setPropertyValue(new ClassWithErrorThrowingAccessors(), "id", "");
     }
 
-    @Test(expectedExceptions = IllegalStateException.class)
+    @Test
     public void testSettingImmediateFinalField() throws Exception {
         PropertyUtils.setPropertyValue(new ClassWithFinalId(), "id", "");
     }
