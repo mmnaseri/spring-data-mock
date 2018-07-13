@@ -1,10 +1,7 @@
 package com.mmnaseri.utils.spring.data.domain.impl.id;
 
 import com.mmnaseri.utils.spring.data.domain.IdPropertyResolver;
-import com.mmnaseri.utils.spring.data.sample.models.EntityWithAnnotatedIdGetter;
-import com.mmnaseri.utils.spring.data.sample.models.EntityWithAnnotatedIdGetterFromJPA;
-import com.mmnaseri.utils.spring.data.sample.models.EntityWithMultipleAnnotatedIdGetters;
-import com.mmnaseri.utils.spring.data.sample.models.EntityWithoutAnnotatedIdGetter;
+import com.mmnaseri.utils.spring.data.sample.models.*;
 import org.testng.annotations.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -45,6 +42,13 @@ public class AnnotatedGetterIdPropertyResolverTest extends BaseRepeatableIdPrope
     @Test
     public void testResolvingIdPropertyWhenIdAnnotationOnGetterIsFromJPA() throws Exception {
         final String property = getIdPropertyResolver().resolve(EntityWithAnnotatedIdGetterFromJPA.class, Integer.class);
+        assertThat(property, is(notNullValue()));
+        assertThat(property, is("myCustomId"));
+    }
+
+    @Test
+    public void testResolvingIdPropertyWhenEmbeddedIdAnnotationOnGetterIsFromJPA() throws Exception {
+        final String property = getIdPropertyResolver().resolve(EntityWithAnnotatedEmbeddedIdGetterFromJPA.class, EmbeddableId.class);
         assertThat(property, is(notNullValue()));
         assertThat(property, is("myCustomId"));
     }
