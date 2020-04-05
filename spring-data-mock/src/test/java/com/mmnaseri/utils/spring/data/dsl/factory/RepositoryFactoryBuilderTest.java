@@ -25,8 +25,17 @@ import com.mmnaseri.utils.spring.data.query.impl.DefaultDataFunctionRegistry;
 import com.mmnaseri.utils.spring.data.sample.mocks.AllCatchingEventListener;
 import com.mmnaseri.utils.spring.data.sample.mocks.SpyingDataFunction;
 import com.mmnaseri.utils.spring.data.sample.mocks.SpyingHandler;
-import com.mmnaseri.utils.spring.data.sample.repositories.*;
-import com.mmnaseri.utils.spring.data.store.*;
+import com.mmnaseri.utils.spring.data.sample.repositories.ConfiguredMapping;
+import com.mmnaseri.utils.spring.data.sample.repositories.ConfiguredSimplePersonRepository;
+import com.mmnaseri.utils.spring.data.sample.repositories.ExtendedSimplePersonRepository;
+import com.mmnaseri.utils.spring.data.sample.repositories.NumberMapping;
+import com.mmnaseri.utils.spring.data.sample.repositories.SimplePersonRepository;
+import com.mmnaseri.utils.spring.data.sample.repositories.StringMapping;
+import com.mmnaseri.utils.spring.data.store.DataStore;
+import com.mmnaseri.utils.spring.data.store.DataStoreEvent;
+import com.mmnaseri.utils.spring.data.store.DataStoreEventListener;
+import com.mmnaseri.utils.spring.data.store.DataStoreEventListenerContext;
+import com.mmnaseri.utils.spring.data.store.DataStoreRegistry;
 import com.mmnaseri.utils.spring.data.store.impl.AuditDataEventListener;
 import com.mmnaseri.utils.spring.data.store.impl.DefaultDataStoreEventListenerContext;
 import com.mmnaseri.utils.spring.data.store.impl.DefaultDataStoreRegistry;
@@ -35,12 +44,15 @@ import org.hamcrest.Matchers;
 import org.springframework.data.domain.AuditorAware;
 import org.testng.annotations.Test;
 
-import java.io.Serializable;
 import java.util.List;
 
 import static com.mmnaseri.utils.spring.data.dsl.factory.RepositoryFactoryBuilder.given;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 
 /**
  * @author Milad Naseri (mmnaseri@programmer.net)
@@ -173,8 +185,8 @@ public class RepositoryFactoryBuilderTest {
 
     @Test
     public void testUsingDefaultDataStoreRegistryAndCustomDataStores() throws Exception {
-        final MemoryDataStore<Serializable, Integer> x = new MemoryDataStore<>(Integer.class);
-        final MemoryDataStore<Serializable, String> y = new MemoryDataStore<>(String.class);
+        final MemoryDataStore<Object, Integer> x = new MemoryDataStore<>(Integer.class);
+        final MemoryDataStore<Object, String> y = new MemoryDataStore<>(String.class);
         final RepositoryFactory factory = RepositoryFactoryBuilder.builder().registerDataStore(x).and(y).build();
         assertThat(factory, is(notNullValue()));
         assertThat(factory.getConfiguration(), is(notNullValue()));
@@ -303,7 +315,7 @@ public class RepositoryFactoryBuilderTest {
     @Test
     public void testDefaultAuditorAware() throws Exception {
         final AuditorAware<String> auditorAware = new RepositoryFactoryBuilder.DefaultAuditorAware();
-        assertThat(auditorAware.getCurrentAuditor(), is(RepositoryFactoryBuilder.DEFAULT_USER));
+        assertThat(auditorAware.getCurrentAuditor().get(), is(RepositoryFactoryBuilder.DEFAULT_USER));
     }
 
     @Test
@@ -330,7 +342,7 @@ public class RepositoryFactoryBuilderTest {
 
     @Test
     public void testMockingWithCustomKeyGeneration() throws Exception {
-        final NoOpKeyGenerator<Serializable> keyGenerator = new NoOpKeyGenerator<>();
+        final NoOpKeyGenerator<Object> keyGenerator = new NoOpKeyGenerator<>();
         final ConfiguredSimplePersonRepository repository = RepositoryFactoryBuilder.builder().generateKeysUsing(keyGenerator).usingImplementation(ConfiguredMapping.class).mock(ConfiguredSimplePersonRepository.class);
         assertThat(repository.getRepositoryConfiguration(), is(notNullValue()));
         assertThat(repository.getRepositoryConfiguration().getKeyGenerator(), is(notNullValue()));

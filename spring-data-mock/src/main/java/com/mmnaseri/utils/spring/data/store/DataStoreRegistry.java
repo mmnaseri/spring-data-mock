@@ -1,7 +1,5 @@
 package com.mmnaseri.utils.spring.data.store;
 
-import java.io.Serializable;
-
 /**
  * This interface is used to register and look up data store for specific entity types.
  *
@@ -17,7 +15,7 @@ public interface DataStoreRegistry {
      * @param <E>          the type of the entities
      * @param <K>          the type of the keys
      */
-    <E, K extends Serializable> void register(DataStore<K, E> dataStore);
+    <E, K> void register(DataStore<K, E> dataStore);
 
     /**
      * Finds the data store for the given entity type
@@ -28,7 +26,7 @@ public interface DataStoreRegistry {
      * @throws com.mmnaseri.utils.spring.data.error.DataStoreNotFoundException if no data store can be found
      * for the given entity type
      */
-    <E, K extends Serializable> DataStore<K, E> getDataStore(Class<E> entityType);
+    <E, K> DataStore<K, E> getDataStore(Class<E> entityType);
 
     /**
      * Used to determine whether or not a data store has been registered that supports the given entity type.

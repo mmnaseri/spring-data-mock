@@ -3,15 +3,13 @@ package com.mmnaseri.utils.spring.data.store;
 import com.mmnaseri.utils.spring.data.domain.Invocation;
 import com.mmnaseri.utils.spring.data.proxy.RepositoryConfiguration;
 
-import java.io.Serializable;
-
 /**
  * This interface encapsulates a single operation taking place on a data store
  *
  * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/17/15)
  */
-public interface DataStoreOperation<R, K extends Serializable, E> {
+public interface DataStoreOperation<R, K, E> {
 
     /**
      * Called to trigger the actual operation

@@ -32,7 +32,7 @@ public class DefaultCustomerService implements CustomerService {
     }
 
     public Customer findCustomer(long id) {
-        return repository.findOne(id);
+        return repository.findById(id).orElse(null);
     }
 
     public List<Customer> findCustomersByBirthday(Date from, Date to) {

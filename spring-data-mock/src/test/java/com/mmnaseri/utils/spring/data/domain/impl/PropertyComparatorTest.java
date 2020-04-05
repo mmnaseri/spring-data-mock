@@ -4,7 +4,11 @@ import com.mmnaseri.utils.spring.data.error.InvalidArgumentException;
 import com.mmnaseri.utils.spring.data.query.NullHandling;
 import com.mmnaseri.utils.spring.data.query.SortDirection;
 import com.mmnaseri.utils.spring.data.query.impl.ImmutableOrder;
-import com.mmnaseri.utils.spring.data.sample.models.*;
+import com.mmnaseri.utils.spring.data.sample.models.Address;
+import com.mmnaseri.utils.spring.data.sample.models.ChildZip;
+import com.mmnaseri.utils.spring.data.sample.models.OtherChildZip;
+import com.mmnaseri.utils.spring.data.sample.models.Person;
+import com.mmnaseri.utils.spring.data.sample.models.Zip;
 import org.testng.annotations.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;

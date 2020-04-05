@@ -2,8 +2,6 @@ package com.mmnaseri.utils.spring.data.dsl.factory;
 
 import com.mmnaseri.utils.spring.data.store.DataStore;
 
-import java.io.Serializable;
-
 /**
  * Lets us add another data store
  *
@@ -20,6 +18,6 @@ public interface DataStoresAnd extends ResultAdapters {
      * @param <K>          the type of the key
      * @return the rest of the configuration
      */
-    <E, K extends Serializable> DataStoresAnd and(DataStore<K, E> dataStore);
+    <E, K> DataStoresAnd and(DataStore<K, E> dataStore);
 
 }

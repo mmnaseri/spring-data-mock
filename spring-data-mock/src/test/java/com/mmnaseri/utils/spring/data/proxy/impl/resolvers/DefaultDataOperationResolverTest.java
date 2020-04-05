@@ -1,6 +1,10 @@
 package com.mmnaseri.utils.spring.data.proxy.impl.resolvers;
 
-import com.mmnaseri.utils.spring.data.domain.impl.*;
+import com.mmnaseri.utils.spring.data.domain.impl.DefaultOperatorContext;
+import com.mmnaseri.utils.spring.data.domain.impl.DescribedDataStoreOperation;
+import com.mmnaseri.utils.spring.data.domain.impl.ImmutableRepositoryMetadata;
+import com.mmnaseri.utils.spring.data.domain.impl.MethodInvocationDataStoreOperation;
+import com.mmnaseri.utils.spring.data.domain.impl.MethodQueryDescriptionExtractor;
 import com.mmnaseri.utils.spring.data.error.DataOperationDefinitionException;
 import com.mmnaseri.utils.spring.data.error.UnknownDataOperationException;
 import com.mmnaseri.utils.spring.data.proxy.TypeMapping;
@@ -17,7 +21,9 @@ import org.testng.annotations.Test;
 import java.util.ArrayList;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 
 /**
  * @author Milad Naseri (mmnaseri@programmer.net)

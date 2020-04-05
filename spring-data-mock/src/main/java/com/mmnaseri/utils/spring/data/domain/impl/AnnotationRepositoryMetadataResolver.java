@@ -4,8 +4,6 @@ import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
 import com.mmnaseri.utils.spring.data.error.RepositoryDefinitionException;
 import org.springframework.data.repository.RepositoryDefinition;
 
-import java.io.Serializable;
-
 /**
  * This class will try to resolve metadata from a repository interface that has been annotated with
  * Spring's {@link RepositoryDefinition @RepositoryDefinition}. If the annotation is not found, it will
@@ -23,7 +21,7 @@ public class AnnotationRepositoryMetadataResolver extends AbstractRepositoryMeta
             throw new RepositoryDefinitionException(repositoryInterface, "Expected the repository to be annotated with @RepositoryDefinition");
         }
         final Class<?> entityType = definition.domainClass();
-        final Class<? extends Serializable> idType = definition.idClass();
+        final Class<?> idType = definition.idClass();
         String idProperty = resolveIdProperty(entityType, idType);
         return new ImmutableRepositoryMetadata(idType, entityType, repositoryInterface, idProperty);
     }

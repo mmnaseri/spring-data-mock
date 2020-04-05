@@ -6,7 +6,6 @@ import com.mmnaseri.utils.spring.data.tools.GetterMethodFilter;
 import org.springframework.data.annotation.Id;
 import org.springframework.util.ReflectionUtils;
 
-import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -24,7 +23,7 @@ import static com.mmnaseri.utils.spring.data.domain.impl.id.IdPropertyResolverUt
 public class AnnotatedGetterIdPropertyResolver implements IdPropertyResolver {
 
     @Override
-    public String resolve(final Class<?> entityType, Class<? extends Serializable> idType) {
+    public String resolve(final Class<?> entityType, Class<?> idType) {
         final AtomicReference<Method> found = new AtomicReference<>();
         ReflectionUtils.doWithMethods(entityType, new ReflectionUtils.MethodCallback() {
             @Override

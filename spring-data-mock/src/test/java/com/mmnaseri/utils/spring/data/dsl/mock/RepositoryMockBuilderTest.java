@@ -28,10 +28,14 @@ import com.mmnaseri.utils.spring.data.store.impl.DefaultDataStoreRegistry;
 import org.hamcrest.Matchers;
 import org.testng.annotations.Test;
 
-import java.io.Serializable;
-
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
 
 /**
  * @author Milad Naseri (mmnaseri@programmer.net)
@@ -171,7 +175,7 @@ public class RepositoryMockBuilderTest {
 
     @Test
     public void testNoOpKeyGeneration() throws Exception {
-        final NoOpKeyGenerator<Serializable> generator = new NoOpKeyGenerator<>();
+        final NoOpKeyGenerator<Object> generator = new NoOpKeyGenerator<>();
         assertThat(generator.generate(), is(nullValue()));
     }
 
@@ -235,13 +239,13 @@ public class RepositoryMockBuilderTest {
 
     }
 
-    public static class InaccessibleKeyGenerator implements KeyGenerator<Serializable> {
+    public static class InaccessibleKeyGenerator implements KeyGenerator<Object> {
 
         private InaccessibleKeyGenerator() {
         }
 
         @Override
-        public Serializable generate() {
+        public Object generate() {
             return null;
         }
 

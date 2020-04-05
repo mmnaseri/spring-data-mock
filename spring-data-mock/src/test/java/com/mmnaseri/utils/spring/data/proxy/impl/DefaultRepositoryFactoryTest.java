@@ -15,11 +15,13 @@ import com.mmnaseri.utils.spring.data.store.impl.DefaultDataStoreRegistry;
 import org.hamcrest.Matchers;
 import org.testng.annotations.Test;
 
-import java.io.Serializable;
 import java.util.Collection;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 
 /**
  * @author Milad Naseri (mmnaseri@programmer.net)
@@ -46,7 +48,7 @@ public class DefaultRepositoryFactoryTest {
         factory.getInstance(null, ClearableSimpleCrudPersonRepository.class, RepositoryClearerMapping.class);
         assertThat(dataStoreRegistry.has(Person.class), is(true));
         final ClearableSimpleCrudPersonRepository repository = factory.getInstance(null, ClearableSimpleCrudPersonRepository.class, RepositoryClearerMapping.class);
-        final DataStore<Serializable, Person> dataStore = dataStoreRegistry.getDataStore(Person.class);
+        final DataStore<Object, Person> dataStore = dataStoreRegistry.getDataStore(Person.class);
         dataStore.save("k1", new Person().setId("k1").setLastName("Sadeghi"));
         dataStore.save("k2", new Person().setId("k2").setLastName("Naseri"));
         dataStore.save("k3", new Person().setId("k3").setLastName("Sadeghi"));
@@ -85,7 +87,7 @@ public class DefaultRepositoryFactoryTest {
         factory.getInstance(null, ClearableSimpleCrudPersonRepository.class, RepositoryClearerMapping.class);
         assertThat(dataStoreRegistry.has(Person.class), is(true));
         final ClearableSimpleCrudPersonRepository repository = factory.getInstance(null, ClearableSimpleCrudPersonRepository.class, RepositoryClearerMapping.class);
-        final DataStore<Serializable, Person> dataStore = dataStoreRegistry.getDataStore(Person.class);
+        final DataStore<Object, Person> dataStore = dataStoreRegistry.getDataStore(Person.class);
         dataStore.save("k1", new Person().setId("k1").setLastName("Sadeghi"));
         dataStore.save("k2", new Person().setId("k2").setLastName("Naseri"));
         dataStore.save("k3", new Person().setId("k3").setLastName("Sadeghi"));

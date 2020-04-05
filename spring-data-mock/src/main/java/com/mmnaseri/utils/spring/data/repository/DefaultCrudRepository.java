@@ -5,10 +5,10 @@ import com.mmnaseri.utils.spring.data.tools.PropertyUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * <p>
@@ -29,7 +29,7 @@ public class DefaultCrudRepository extends CrudRepositorySupport {
      * @param entities entities to save (insert or update)
      * @return saved entities
      */
-    public Iterable<Object> save(Iterable entities) {
+    public Iterable<Object> saveAll(Iterable entities) {
         final List<Object> list = new LinkedList<>();
         log.info("Going to save a number of entities in the underlying data store");
         log.debug(entities);
@@ -44,9 +44,9 @@ public class DefaultCrudRepository extends CrudRepositorySupport {
      * @param key the key
      * @return the entity
      */
-    public Object findOne(Serializable key) {
+    public Optional<Object> findById(Object key) {
         log.info("Attempting to load the entity with key " + key);
-        return getDataStore().retrieve(key);
+        return Optional.ofNullable(getDataStore().retrieve(key));
     }
 
     /**
@@ -54,7 +54,7 @@ public class DefaultCrudRepository extends CrudRepositorySupport {
      * @param key the key
      * @return {@literal true} if the key is valid
      */
-    public boolean exists(Serializable key) {
+    public boolean existsById(Object key) {
         return getDataStore().hasKey(key);
     }
 
@@ -63,15 +63,15 @@ public class DefaultCrudRepository extends CrudRepositorySupport {
      * @param ids ids to look for
      * @return entities that matched the ids.
      */
-    public Iterable findAll(Iterable ids) {
+    public Iterable findAllById(Iterable ids) {
         final List entities = new LinkedList();
         log.info("Looking for multiple entities for a number of ids");
         log.debug(ids);
         for (Object id : ids) {
-            final Object found = findOne((Serializable) id);
-            if (found != null) {
+            final Optional<Object> found = findById(id);
+            if (found.isPresent()) {
                 log.trace("Entity found for key " + id + ", adding the found entity to the list of returned entity");
-                entities.add(found);
+                entities.add(found.get());
             }
         }
         return entities;
@@ -83,13 +83,13 @@ public class DefaultCrudRepository extends CrudRepositorySupport {
      * @param id the id
      * @return the entity that was deleted or {@literal null} if it wasn't found
      */
-    public Object delete(Serializable id) {
+    public Object delete(Object id) {
         Object retrieved = getDataStore().retrieve(id);
         log.info("Attempting to delete the entity with key " + id);
         if (retrieved == null) {
             log.info("Object not found with key " + id + ", try to find by identifier property");
             try {
-                id = (Serializable) PropertyUtils.getPropertyValue(id, getRepositoryMetadata().getIdentifierProperty());
+                id = PropertyUtils.getPropertyValue(id, getRepositoryMetadata().getIdentifierProperty());
                 retrieved = getDataStore().retrieve(id);
             } catch (IllegalStateException exception) {
                 log.info("Serialized id doesn't have a identifier property");
@@ -105,13 +105,13 @@ public class DefaultCrudRepository extends CrudRepositorySupport {
      * @return the deleted entity
      * @throws EntityMissingKeyException if the passed entity doesn't have a key
      */
-    public Object delete(Object entity) {
+    public Object deleteById(Object entity) {
         final Object key = PropertyUtils.getPropertyValue(entity, getRepositoryMetadata().getIdentifierProperty());
         if (key == null) {
             log.error("The entity that was supposed to be deleted, does not have a key");
             throw new EntityMissingKeyException(getRepositoryMetadata().getEntityType(), getRepositoryMetadata().getIdentifierProperty());
         }
-        return delete((Serializable) key);
+        return delete(key);
     }
 
     /**
@@ -124,7 +124,7 @@ public class DefaultCrudRepository extends CrudRepositorySupport {
         log.debug(entities);
         final List list = new LinkedList();
         for (Object entity : entities) {
-            final Object deleted = delete(entity);
+            final Object deleted = deleteById(entity);
             if (deleted != null) {
                 log.debug("The entity was deleted successfully and will be added to the list of deleted entities");
                 list.add(deleted);
@@ -143,7 +143,7 @@ public class DefaultCrudRepository extends CrudRepositorySupport {
         final Collection keys = getDataStore().keys();
         log.debug("There are " + keys.size() + " entities altogether in the data store that are going to be deleted");
         for (Object key : keys) {
-            final Object deleted = delete(((Serializable) key));
+            final Object deleted = delete((key));
             if (deleted != null) {
                 log.debug("The entity was deleted successfully and will be added to the list of deleted entities");
                 list.add(deleted);

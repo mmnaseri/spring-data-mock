@@ -1,10 +1,15 @@
 package com.mmnaseri.utils.spring.data.dsl.mock;
 
 import com.mmnaseri.utils.spring.data.domain.KeyGenerator;
-import com.mmnaseri.utils.spring.data.domain.impl.key.*;
+import com.mmnaseri.utils.spring.data.domain.impl.key.ConfigurableSequentialIntegerKeyGenerator;
+import com.mmnaseri.utils.spring.data.domain.impl.key.ConfigurableSequentialLongKeyGenerator;
+import com.mmnaseri.utils.spring.data.domain.impl.key.RandomIntegerKeyGenerator;
+import com.mmnaseri.utils.spring.data.domain.impl.key.RandomLongKeyGenerator;
+import com.mmnaseri.utils.spring.data.domain.impl.key.SequentialIntegerKeyGenerator;
+import com.mmnaseri.utils.spring.data.domain.impl.key.SequentialLongKeyGenerator;
+import com.mmnaseri.utils.spring.data.domain.impl.key.UUIDKeyGenerator;
 import org.springframework.core.GenericTypeResolver;
 
-import java.io.Serializable;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -22,7 +27,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @SuppressWarnings("WeakerAccess")
 class KeyGeneratorProvider {
 
-    private final Map<Class<? extends Serializable>, List<Class<? extends KeyGenerator>>> generators;
+    private final Map<Class<?>, List<Class<? extends KeyGenerator>>> generators;
 
     KeyGeneratorProvider() {
         final List<Class<? extends KeyGenerator>> discoveredKeyGenerators = getKeyGeneratorTypes();
@@ -30,7 +35,7 @@ class KeyGeneratorProvider {
         for (Class<? extends KeyGenerator> generatorType : discoveredKeyGenerators) {
             final Class<?> keyType = GenericTypeResolver.resolveTypeArgument(generatorType, KeyGenerator.class);
             assert keyType != null;
-            final Class<? extends Serializable> actualKeyType = keyType.asSubclass(Serializable.class);
+            final Class<?> actualKeyType = keyType.asSubclass(Object.class);
             if (!generators.containsKey(actualKeyType)) {
                 generators.put(actualKeyType, new CopyOnWriteArrayList<Class<? extends KeyGenerator>>());
             }
@@ -51,7 +56,7 @@ class KeyGeneratorProvider {
     }
 
     @SuppressWarnings("unchecked")
-    private <S extends Serializable> List<Class<? extends KeyGenerator<S>>> getKeyGenerators(Class<S> keyType) {
+    private <S> List<Class<? extends KeyGenerator<S>>> getKeyGenerators(Class<S> keyType) {
         final LinkedList<Class<? extends KeyGenerator<S>>> keyGenerators = new LinkedList<>();
         if (generators.containsKey(keyType)) {
             final List<Class<? extends KeyGenerator>> classes = generators.get(keyType);
@@ -59,7 +64,7 @@ class KeyGeneratorProvider {
                 keyGenerators.add((Class<? extends KeyGenerator<S>>) type);
             }
         }
-        for (Class<? extends Serializable> generatorKeyType : generators.keySet()) {
+        for (Class<?> generatorKeyType : generators.keySet()) {
             if (keyType.isAssignableFrom(generatorKeyType)) {
                 final List<Class<? extends KeyGenerator>> classes = generators.get(generatorKeyType);
                 for (Class<? extends KeyGenerator> type : classes) {
@@ -77,7 +82,7 @@ class KeyGeneratorProvider {
      * @param <S>        the type of keys the generator will provide
      * @return the generator or {@literal null} if none could be found to satisfy the key type
      */
-    public <S extends Serializable> Class<? extends KeyGenerator<S>> getKeyGenerator(Class<S> keyType) {
+    public <S> Class<? extends KeyGenerator<S>> getKeyGenerator(Class<S> keyType) {
         final List<Class<? extends KeyGenerator<S>>> generators = getKeyGenerators(keyType);
         return generators.isEmpty() ? null : generators.get(0);
     }

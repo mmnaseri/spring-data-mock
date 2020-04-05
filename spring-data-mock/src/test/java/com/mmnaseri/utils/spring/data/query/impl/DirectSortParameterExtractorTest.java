@@ -8,7 +8,9 @@ import org.springframework.data.domain.Sort;
 import org.testng.annotations.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 
 /**
  * @author Milad Naseri (mmnaseri@programmer.net)
@@ -37,7 +39,7 @@ public class DirectSortParameterExtractorTest {
     @Test
     public void testPassingSortValue() throws Exception {
         final DirectSortParameterExtractor extractor = new DirectSortParameterExtractor(0);
-        final com.mmnaseri.utils.spring.data.query.Sort extracted = extractor.extract(new ImmutableInvocation(null, new Object[]{new Sort("a", "b")}));
+        final com.mmnaseri.utils.spring.data.query.Sort extracted = extractor.extract(new ImmutableInvocation(null, new Object[]{Sort.by("a", "b")}));
         assertThat(extracted, is(notNullValue()));
         assertThat(extracted.getOrders(), hasSize(2));
         assertThat(extracted.getOrders().get(0).getProperty(), is("a"));

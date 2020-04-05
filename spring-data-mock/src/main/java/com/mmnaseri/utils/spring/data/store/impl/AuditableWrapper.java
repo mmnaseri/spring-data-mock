@@ -2,7 +2,6 @@ package com.mmnaseri.utils.spring.data.store.impl;
 
 import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
 import com.mmnaseri.utils.spring.data.tools.GetterMethodFilter;
-import org.joda.time.DateTime;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.data.annotation.CreatedBy;
@@ -13,9 +12,11 @@ import org.springframework.data.domain.Auditable;
 import org.springframework.util.ReflectionUtils;
 
 import java.beans.PropertyDescriptor;
-import java.io.Serializable;
 import java.lang.annotation.Annotation;
+import java.time.Instant;
+import java.time.temporal.TemporalAccessor;
 import java.util.Date;
+import java.util.Optional;
 
 /**
  * This class is used to wrap a normal entity in an entity that supports {@link Auditable auditing}. If the underlying
@@ -58,7 +59,7 @@ public class AuditableWrapper implements Auditable {
         }
         Object propertyValue = wrapper.getPropertyValue(property);
         if (propertyValue instanceof Date) {
-            propertyValue = new DateTime(((Date) propertyValue).getTime());
+            propertyValue = Instant.ofEpochMilli(((Date) propertyValue).getTime());
         }
         return type.cast(propertyValue);
     }
@@ -73,16 +74,16 @@ public class AuditableWrapper implements Auditable {
         if (property != null) {
             Object targetValue = value;
             final PropertyDescriptor descriptor = wrapper.getPropertyDescriptor(property);
-            if (targetValue instanceof DateTime) {
-                DateTime dateTime = (DateTime) targetValue;
+            if (targetValue instanceof Instant) {
+                Instant instant = (Instant) targetValue;
                 if (Date.class.equals(descriptor.getPropertyType())) {
-                    targetValue = dateTime.toDate();
+                    targetValue = new Date(instant.toEpochMilli());
                 } else if (java.sql.Date.class.equals(descriptor.getPropertyType())) {
-                    targetValue = new java.sql.Date(dateTime.toDate().getTime());
+                    targetValue = new java.sql.Date(instant.toEpochMilli());
                 } else if (java.sql.Timestamp.class.equals(descriptor.getPropertyType())) {
-                    targetValue = new java.sql.Timestamp(dateTime.toDate().getTime());
+                    targetValue = new java.sql.Timestamp(instant.toEpochMilli());
                 } else if (java.sql.Time.class.equals(descriptor.getPropertyType())) {
-                    targetValue = new java.sql.Time(dateTime.toDate().getTime());
+                    targetValue = new java.sql.Time(instant.toEpochMilli());
                 }
             }
             if (wrapper.isWritableProperty(property)) {
@@ -101,8 +102,8 @@ public class AuditableWrapper implements Auditable {
     }
 
     @Override
-    public Object getCreatedBy() {
-        return getProperty(Object.class, wrapper, createdBy);
+    public Optional<Object> getCreatedBy() {
+        return Optional.ofNullable(getProperty(Object.class, wrapper, createdBy));
     }
 
     @Override
@@ -111,18 +112,18 @@ public class AuditableWrapper implements Auditable {
     }
 
     @Override
-    public DateTime getCreatedDate() {
-        return getProperty(DateTime.class, wrapper, createdDate);
+    public Optional<Instant> getCreatedDate() {
+        return Optional.ofNullable(getProperty(Instant.class, wrapper, createdDate));
     }
 
     @Override
-    public void setCreatedDate(DateTime creationDate) {
+    public void setCreatedDate(TemporalAccessor creationDate) {
         setProperty(wrapper, createdDate, creationDate);
     }
 
     @Override
-    public Object getLastModifiedBy() {
-        return getProperty(Object.class, wrapper, lastModifiedBy);
+    public Optional<Object> getLastModifiedBy() {
+        return Optional.ofNullable(getProperty(Object.class, wrapper, lastModifiedBy));
     }
 
     @Override
@@ -131,18 +132,18 @@ public class AuditableWrapper implements Auditable {
     }
 
     @Override
-    public DateTime getLastModifiedDate() {
-        return getProperty(DateTime.class, wrapper, lastModifiedDate);
+    public Optional<Instant> getLastModifiedDate() {
+        return Optional.ofNullable(getProperty(Instant.class, wrapper, lastModifiedDate));
     }
 
     @Override
-    public void setLastModifiedDate(DateTime lastModifiedDate) {
+    public void setLastModifiedDate(TemporalAccessor lastModifiedDate) {
         setProperty(wrapper, this.lastModifiedDate, lastModifiedDate);
     }
 
     @Override
-    public Serializable getId() {
-        return (Serializable) wrapper.getPropertyValue(repositoryMetadata.getIdentifierProperty());
+    public Object getId() {
+        return wrapper.getPropertyValue(repositoryMetadata.getIdentifierProperty());
     }
 
     @Override

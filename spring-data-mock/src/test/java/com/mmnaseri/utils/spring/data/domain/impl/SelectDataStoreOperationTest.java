@@ -6,7 +6,11 @@ import com.mmnaseri.utils.spring.data.query.NullHandling;
 import com.mmnaseri.utils.spring.data.query.Order;
 import com.mmnaseri.utils.spring.data.query.PageParameterExtractor;
 import com.mmnaseri.utils.spring.data.query.SortDirection;
-import com.mmnaseri.utils.spring.data.query.impl.*;
+import com.mmnaseri.utils.spring.data.query.impl.DefaultQueryDescriptor;
+import com.mmnaseri.utils.spring.data.query.impl.ImmutableOrder;
+import com.mmnaseri.utils.spring.data.query.impl.ImmutableSort;
+import com.mmnaseri.utils.spring.data.query.impl.PageablePageParameterExtractor;
+import com.mmnaseri.utils.spring.data.query.impl.WrappedSortParameterExtractor;
 import com.mmnaseri.utils.spring.data.sample.models.Address;
 import com.mmnaseri.utils.spring.data.sample.models.Person;
 import com.mmnaseri.utils.spring.data.sample.repositories.RepositoryWithValidMethods;
@@ -24,7 +28,12 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.isIn;
+import static org.hamcrest.Matchers.notNullValue;
 
 /**
  * @author Milad Naseri (mmnaseri@programmer.net)
@@ -90,7 +99,7 @@ public class SelectDataStoreOperationTest {
         final PageParameterExtractor pageExtractor = new PageablePageParameterExtractor(0);
         final DefaultQueryDescriptor descriptor = new DefaultQueryDescriptor(false, null, 0, pageExtractor, null, branches, null, null);
         final SelectDataStoreOperation<String, Person> operation = new SelectDataStoreOperation<>(descriptor);
-        final List<Person> selected = operation.execute(dataStore, null, new ImmutableInvocation(RepositoryWithValidMethods.class.getMethod("findAll", Pageable.class), new Object[]{new PageRequest(2, 10)}));
+        final List<Person> selected = operation.execute(dataStore, null, new ImmutableInvocation(RepositoryWithValidMethods.class.getMethod("findAll", Pageable.class), new Object[]{PageRequest.of(2, 10)}));
         assertThat(selected, is(empty()));
     }
 
@@ -100,7 +109,7 @@ public class SelectDataStoreOperationTest {
         final List<List<Parameter>> branches = Collections.emptyList();
         final DefaultQueryDescriptor descriptor = new DefaultQueryDescriptor(false, null, 0, pageExtractor, null, branches, null, null);
         final DataStoreOperation<List<Person>, String, Person> operation = new SelectDataStoreOperation<>(descriptor);
-        final List<Person> selected = operation.execute(dataStore, null, new ImmutableInvocation(RepositoryWithValidMethods.class.getMethod("findAll", Pageable.class), new Object[]{new PageRequest(1, 3)}));
+        final List<Person> selected = operation.execute(dataStore, null, new ImmutableInvocation(RepositoryWithValidMethods.class.getMethod("findAll", Pageable.class), new Object[]{PageRequest.of(1, 3)}));
         assertThat(selected, hasSize(1));
     }
 

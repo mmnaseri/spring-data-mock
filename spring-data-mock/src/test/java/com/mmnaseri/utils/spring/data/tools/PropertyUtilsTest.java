@@ -2,7 +2,11 @@ package com.mmnaseri.utils.spring.data.tools;
 
 import com.mmnaseri.utils.spring.data.error.ParserException;
 import com.mmnaseri.utils.spring.data.query.PropertyDescriptor;
-import com.mmnaseri.utils.spring.data.sample.models.*;
+import com.mmnaseri.utils.spring.data.sample.models.Address;
+import com.mmnaseri.utils.spring.data.sample.models.NoAccessorPerson;
+import com.mmnaseri.utils.spring.data.sample.models.Person;
+import com.mmnaseri.utils.spring.data.sample.models.State;
+import com.mmnaseri.utils.spring.data.sample.models.Zip;
 import com.mmnaseri.utils.spring.data.sample.usecases.tools.ClassWithErrorThrowingAccessors;
 import com.mmnaseri.utils.spring.data.sample.usecases.tools.ClassWithFinalId;
 import com.mmnaseri.utils.spring.data.sample.usecases.tools.ClassWithNoGetters;
@@ -15,7 +19,10 @@ import java.lang.reflect.Field;
 import java.math.BigDecimal;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
 
 /**
  * @author Milad Naseri (mmnaseri@programmer.net)

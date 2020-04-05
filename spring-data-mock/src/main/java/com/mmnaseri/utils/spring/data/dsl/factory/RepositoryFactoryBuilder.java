@@ -10,18 +10,31 @@ import com.mmnaseri.utils.spring.data.domain.impl.MethodQueryDescriptionExtracto
 import com.mmnaseri.utils.spring.data.dsl.mock.Implementation;
 import com.mmnaseri.utils.spring.data.dsl.mock.ImplementationAnd;
 import com.mmnaseri.utils.spring.data.dsl.mock.RepositoryMockBuilder;
-import com.mmnaseri.utils.spring.data.proxy.*;
-import com.mmnaseri.utils.spring.data.proxy.impl.*;
+import com.mmnaseri.utils.spring.data.proxy.NonDataOperationHandler;
+import com.mmnaseri.utils.spring.data.proxy.RepositoryFactory;
+import com.mmnaseri.utils.spring.data.proxy.RepositoryFactoryConfiguration;
+import com.mmnaseri.utils.spring.data.proxy.ResultAdapter;
+import com.mmnaseri.utils.spring.data.proxy.ResultAdapterContext;
+import com.mmnaseri.utils.spring.data.proxy.TypeMappingContext;
+import com.mmnaseri.utils.spring.data.proxy.impl.DefaultRepositoryFactory;
+import com.mmnaseri.utils.spring.data.proxy.impl.DefaultResultAdapterContext;
+import com.mmnaseri.utils.spring.data.proxy.impl.DefaultTypeMappingContext;
+import com.mmnaseri.utils.spring.data.proxy.impl.ImmutableRepositoryFactoryConfiguration;
+import com.mmnaseri.utils.spring.data.proxy.impl.NonDataOperationInvocationHandler;
 import com.mmnaseri.utils.spring.data.query.DataFunction;
 import com.mmnaseri.utils.spring.data.query.DataFunctionRegistry;
 import com.mmnaseri.utils.spring.data.query.impl.DefaultDataFunctionRegistry;
-import com.mmnaseri.utils.spring.data.store.*;
+import com.mmnaseri.utils.spring.data.store.DataStore;
+import com.mmnaseri.utils.spring.data.store.DataStoreEvent;
+import com.mmnaseri.utils.spring.data.store.DataStoreEventListener;
+import com.mmnaseri.utils.spring.data.store.DataStoreEventListenerContext;
+import com.mmnaseri.utils.spring.data.store.DataStoreRegistry;
 import com.mmnaseri.utils.spring.data.store.impl.AuditDataEventListener;
 import com.mmnaseri.utils.spring.data.store.impl.DefaultDataStoreEventListenerContext;
 import com.mmnaseri.utils.spring.data.store.impl.DefaultDataStoreRegistry;
 import org.springframework.data.domain.AuditorAware;
 
-import java.io.Serializable;
+import java.util.Optional;
 
 /**
  * This class implements the DSL used to configure and build a repository factory object.
@@ -41,7 +54,7 @@ public class RepositoryFactoryBuilder implements Start, DataFunctionsAnd, DataSt
     private TypeMappingContext typeMappingContext;
     private DataStoreEventListenerContext eventListenerContext;
     private NonDataOperationInvocationHandler operationInvocationHandler;
-    private KeyGenerator<? extends Serializable> defaultKeyGenerator;
+    private KeyGenerator<?> defaultKeyGenerator;
 
     /**
      * @return the default configuration
@@ -156,7 +169,7 @@ public class RepositoryFactoryBuilder implements Start, DataFunctionsAnd, DataSt
     }
 
     @Override
-    public <E, K extends Serializable> DataStoresAnd registerDataStore(DataStore<K, E> dataStore) {
+    public <E, K> DataStoresAnd registerDataStore(DataStore<K, E> dataStore) {
         dataStoreRegistry.register(dataStore);
         return this;
     }
@@ -227,7 +240,7 @@ public class RepositoryFactoryBuilder implements Start, DataFunctionsAnd, DataSt
     }
 
     @Override
-    public <E, K extends Serializable> DataStoresAnd and(DataStore<K, E> dataStore) {
+    public <E, K> DataStoresAnd and(DataStore<K, E> dataStore) {
         dataStoreRegistry.register(dataStore);
         return this;
     }
@@ -239,7 +252,7 @@ public class RepositoryFactoryBuilder implements Start, DataFunctionsAnd, DataSt
     }
 
     @Override
-    public EventListener withDefaultKeyGenerator(KeyGenerator<? extends Serializable> keyGenerator) {
+    public EventListener withDefaultKeyGenerator(KeyGenerator<?> keyGenerator) {
         defaultKeyGenerator = keyGenerator;
         return this;
     }
@@ -279,12 +292,12 @@ public class RepositoryFactoryBuilder implements Start, DataFunctionsAnd, DataSt
     }
 
     @Override
-    public <S extends Serializable> Implementation generateKeysUsing(KeyGenerator<S> keyGenerator) {
+    public <S> Implementation generateKeysUsing(KeyGenerator<S> keyGenerator) {
         return new RepositoryMockBuilder().useFactory(build()).generateKeysUsing(keyGenerator);
     }
 
     @Override
-    public <S extends Serializable, G extends KeyGenerator<S>> Implementation generateKeysUsing(Class<G> generatorType) {
+    public <S, G extends KeyGenerator<S>> Implementation generateKeysUsing(Class<G> generatorType) {
         return new RepositoryMockBuilder().useFactory(build()).generateKeysUsing(generatorType);
     }
 
@@ -313,8 +326,8 @@ public class RepositoryFactoryBuilder implements Start, DataFunctionsAnd, DataSt
          * @return {@link #DEFAULT_USER}
          */
         @Override
-        public String getCurrentAuditor() {
-            return DEFAULT_USER;
+        public Optional<String> getCurrentAuditor() {
+            return Optional.of(DEFAULT_USER);
         }
 
     }

@@ -1,7 +1,5 @@
 package com.mmnaseri.utils.spring.data.domain;
 
-import java.io.Serializable;
-
 /**
  * An id property resolver will be capable of looking at an entity class and find the name of the property that
  * is the ID property of that class based on the expected type of the identifier.
@@ -19,6 +17,6 @@ public interface IdPropertyResolver {
      * @param idType        the expected type (or supertype) for the ID property
      * @return the name of the property that represents the key to the entity
      */
-    String resolve(Class<?> entityType, Class<? extends Serializable> idType);
+    String resolve(Class<?> entityType, Class<?> idType);
 
 }

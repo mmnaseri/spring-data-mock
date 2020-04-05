@@ -7,7 +7,6 @@ import com.mmnaseri.utils.spring.data.tools.PropertyUtils;
 import org.springframework.data.annotation.Id;
 import org.springframework.util.ReflectionUtils;
 
-import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -24,7 +23,7 @@ import static com.mmnaseri.utils.spring.data.domain.impl.id.IdPropertyResolverUt
 public class AnnotatedFieldIdPropertyResolver implements IdPropertyResolver {
 
     @Override
-    public String resolve(final Class<?> entityType, Class<? extends Serializable> idType) {
+    public String resolve(final Class<?> entityType, Class<?> idType) {
         final AtomicReference<Field> found = new AtomicReference<>();
         //try to find the ID field
         ReflectionUtils.doWithFields(entityType, new ReflectionUtils.FieldCallback() {

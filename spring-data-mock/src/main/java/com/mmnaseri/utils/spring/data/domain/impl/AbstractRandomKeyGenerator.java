@@ -2,7 +2,6 @@ package com.mmnaseri.utils.spring.data.domain.impl;
 
 import com.mmnaseri.utils.spring.data.domain.KeyGenerator;
 
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,7 +14,7 @@ import java.util.Set;
  * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (10/8/15)
  */
-public abstract class AbstractRandomKeyGenerator<S extends Serializable> implements KeyGenerator<S> {
+public abstract class AbstractRandomKeyGenerator<S> implements KeyGenerator<S> {
 
     private final Set<S> used = new HashSet<>();
 

@@ -14,12 +14,17 @@ import org.hamcrest.Matchers;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.isIn;
 
 /**
  * @author Milad Naseri (mmnaseri@programmer.net)
@@ -79,9 +84,9 @@ public class DeleteDataFunctionTest {
         function.apply(dataStore, query, null, selection);
         assertThat(dataStore.getRequests(), hasSize(2));
         assertThat(dataStore.getRequests().get(0).getOperation(), is(Operation.DELETE));
-        assertThat(dataStore.getRequests().get(0).getKey(), Matchers.<Serializable>is(selection.get(0).getId()));
+        assertThat(dataStore.getRequests().get(0).getKey(), Matchers.<Object>is(selection.get(0).getId()));
         assertThat(dataStore.getRequests().get(1).getOperation(), is(Operation.DELETE));
-        assertThat(dataStore.getRequests().get(1).getKey(), Matchers.<Serializable>is(selection.get(1).getId()));
+        assertThat(dataStore.getRequests().get(1).getKey(), Matchers.<Object>is(selection.get(1).getId()));
     }
 
     @Test
@@ -99,9 +104,9 @@ public class DeleteDataFunctionTest {
         function.apply(dataStore, query, null, selection);
         assertThat(dataStore.getRequests(), hasSize(2));
         assertThat(dataStore.getRequests().get(0).getOperation(), is(Operation.DELETE));
-        assertThat(dataStore.getRequests().get(0).getKey(), Matchers.<Serializable>is(entities.get(1).getId()));
+        assertThat(dataStore.getRequests().get(0).getKey(), Matchers.<Object>is(entities.get(1).getId()));
         assertThat(dataStore.getRequests().get(1).getOperation(), is(Operation.DELETE));
-        assertThat(dataStore.getRequests().get(1).getKey(), Matchers.<Serializable>is(entities.get(2).getId()));
+        assertThat(dataStore.getRequests().get(1).getKey(), Matchers.<Object>is(entities.get(2).getId()));
         assertThat(dataStore.hasKey(entities.get(0).getId()), is(true));
         assertThat(dataStore.hasKey(entities.get(1).getId()), is(false));
         assertThat(dataStore.hasKey(entities.get(2).getId()), is(false));
@@ -124,11 +129,11 @@ public class DeleteDataFunctionTest {
         final List<Person> deleted = function.apply(dataStore, query, null, selection);
         assertThat(dataStore.getRequests(), hasSize(3));
         assertThat(dataStore.getRequests().get(0).getOperation(), is(Operation.DELETE));
-        assertThat(dataStore.getRequests().get(0).getKey(), Matchers.<Serializable>is(entities.get(1).getId()));
+        assertThat(dataStore.getRequests().get(0).getKey(), Matchers.<Object>is(entities.get(1).getId()));
         assertThat(dataStore.getRequests().get(1).getOperation(), is(Operation.DELETE));
-        assertThat(dataStore.getRequests().get(1).getKey(), Matchers.<Serializable>is(entities.get(2).getId()));
+        assertThat(dataStore.getRequests().get(1).getKey(), Matchers.<Object>is(entities.get(2).getId()));
         assertThat(dataStore.getRequests().get(2).getOperation(), is(Operation.DELETE));
-        assertThat(dataStore.getRequests().get(2).getKey(), Matchers.<Serializable>is(selection.get(2).getId()));
+        assertThat(dataStore.getRequests().get(2).getKey(), Matchers.<Object>is(selection.get(2).getId()));
         assertThat(deleted, hasSize(2));
         final List<String> deletedIds = new ArrayList<>(Arrays.asList(entities.get(1).getId(), entities.get(2).getId()));
         for (Person person : deleted) {

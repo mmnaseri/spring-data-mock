@@ -6,8 +6,6 @@ import com.mmnaseri.utils.spring.data.store.DataStore;
 import org.hamcrest.Matchers;
 import org.testng.annotations.Test;
 
-import java.io.Serializable;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
@@ -19,19 +17,19 @@ public class DefaultDataStoreRegistryTest {
     @Test
     public void testRegisteringDataStore() throws Exception {
         final DefaultDataStoreRegistry registry = new DefaultDataStoreRegistry();
-        final MemoryDataStore<Serializable, Person> dataStore = new MemoryDataStore<>(Person.class);
+        final MemoryDataStore<Object, Person> dataStore = new MemoryDataStore<>(Person.class);
         registry.register(dataStore);
-        assertThat(registry.getDataStore(Person.class), Matchers.<DataStore<Serializable, Person>>is(dataStore));
+        assertThat(registry.getDataStore(Person.class), Matchers.<DataStore<Object, Person>>is(dataStore));
     }
 
     @Test
     public void testOverridingDataStore() throws Exception {
         final DefaultDataStoreRegistry registry = new DefaultDataStoreRegistry();
-        final MemoryDataStore<Serializable, Person> first = new MemoryDataStore<>(Person.class);
-        final MemoryDataStore<Serializable, Person> second = new MemoryDataStore<>(Person.class);
+        final MemoryDataStore<Object, Person> first = new MemoryDataStore<>(Person.class);
+        final MemoryDataStore<Object, Person> second = new MemoryDataStore<>(Person.class);
         registry.register(first);
         registry.register(second);
-        assertThat(registry.getDataStore(Person.class), Matchers.<DataStore<Serializable, Person>>is(second));
+        assertThat(registry.getDataStore(Person.class), Matchers.<DataStore<Object, Person>>is(second));
     }
 
     @Test(expectedExceptions = DataStoreNotFoundException.class)

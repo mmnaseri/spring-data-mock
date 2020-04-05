@@ -1,7 +1,5 @@
 package com.mmnaseri.utils.spring.data.store;
 
-import java.io.Serializable;
-
 /**
  * This interface indicates that the implementing data store has queueing capabilities and can thus be called upon
  * to flush the queue and commit the results, and more over, handle operations in batches by refraining to flush the
@@ -10,7 +8,7 @@ import java.io.Serializable;
  * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (4/11/16, 1:18 PM)
  */
-public interface QueueingDataStore<K extends Serializable, E, B> extends DataStore<K, E> {
+public interface QueueingDataStore<K, E, B> extends DataStore<K, E> {
 
     /**
      * Should be called to manually trigger a flush

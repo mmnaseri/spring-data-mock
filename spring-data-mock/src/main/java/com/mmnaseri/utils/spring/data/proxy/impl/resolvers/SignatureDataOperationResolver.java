@@ -8,7 +8,6 @@ import com.mmnaseri.utils.spring.data.tools.PropertyUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
@@ -44,7 +43,7 @@ public class SignatureDataOperationResolver implements DataOperationResolver {
             if (declaration != null) {
                 log.info("Setting the resolution as a method invocation on the previously prepared type mapping");
                 final Object instance = mapping.getInstance();
-                return new MethodInvocationDataStoreOperation<Serializable, Object>(instance, declaration);
+                return new MethodInvocationDataStoreOperation<Object, Object>(instance, declaration);
             }
         }
         return null;

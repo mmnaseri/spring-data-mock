@@ -1,9 +1,25 @@
 package com.mmnaseri.utils.spring.data.proxy.impl;
 
-import com.mmnaseri.utils.spring.data.domain.*;
+import com.mmnaseri.utils.spring.data.domain.DataStoreAware;
+import com.mmnaseri.utils.spring.data.domain.KeyGenerator;
+import com.mmnaseri.utils.spring.data.domain.KeyGeneratorAware;
+import com.mmnaseri.utils.spring.data.domain.RepositoryAware;
+import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
+import com.mmnaseri.utils.spring.data.domain.RepositoryMetadataAware;
+import com.mmnaseri.utils.spring.data.domain.RepositoryMetadataResolver;
 import com.mmnaseri.utils.spring.data.domain.impl.MethodQueryDescriptionExtractor;
 import com.mmnaseri.utils.spring.data.domain.impl.key.NoOpKeyGenerator;
-import com.mmnaseri.utils.spring.data.proxy.*;
+import com.mmnaseri.utils.spring.data.proxy.DataOperationResolver;
+import com.mmnaseri.utils.spring.data.proxy.InvocationMapping;
+import com.mmnaseri.utils.spring.data.proxy.RepositoryConfiguration;
+import com.mmnaseri.utils.spring.data.proxy.RepositoryConfigurationAware;
+import com.mmnaseri.utils.spring.data.proxy.RepositoryFactory;
+import com.mmnaseri.utils.spring.data.proxy.RepositoryFactoryAware;
+import com.mmnaseri.utils.spring.data.proxy.RepositoryFactoryConfiguration;
+import com.mmnaseri.utils.spring.data.proxy.RepositoryFactoryConfigurationAware;
+import com.mmnaseri.utils.spring.data.proxy.ResultAdapterContext;
+import com.mmnaseri.utils.spring.data.proxy.TypeMapping;
+import com.mmnaseri.utils.spring.data.proxy.TypeMappingContext;
 import com.mmnaseri.utils.spring.data.proxy.impl.resolvers.DefaultDataOperationResolver;
 import com.mmnaseri.utils.spring.data.query.DataFunctionRegistry;
 import com.mmnaseri.utils.spring.data.store.DataStore;
@@ -15,7 +31,6 @@ import com.mmnaseri.utils.spring.data.store.impl.MemoryDataStore;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
@@ -57,8 +72,8 @@ public class DefaultRepositoryFactory implements RepositoryFactory {
     }
 
     @Override
-    public <E> E getInstance(KeyGenerator<? extends Serializable> keyGenerator, Class<E> repositoryInterface, Class... implementations) {
-        final KeyGenerator<? extends Serializable> actualKeyGenerator;
+    public <E> E getInstance(KeyGenerator<?> keyGenerator, Class<E> repositoryInterface, Class... implementations) {
+        final KeyGenerator<?> actualKeyGenerator;
         if (keyGenerator == null) {
             if (configuration.getDefaultKeyGenerator() != null) {
                 //if no key generator is passed and there is a default key generator specified, we fall back to that
@@ -76,7 +91,7 @@ public class DefaultRepositoryFactory implements RepositoryFactory {
         final RepositoryMetadata metadata = getRepositoryMetadata(repositoryInterface);
         //get the underlying data store
         log.info("Resolving the data store for " + repositoryInterface);
-        final DataStore<Serializable, Object> dataStore = getDataStore(metadata);
+        final DataStore<Object, Object> dataStore = getDataStore(metadata);
         //figure out type mappings
         log.info("Trying to find all the proper type mappings for entity repository " + repositoryInterface);
         final List<TypeMapping<?>> typeMappings = getTypeMappings(metadata, dataStore, actualKeyGenerator, implementations);
@@ -86,7 +101,7 @@ public class DefaultRepositoryFactory implements RepositoryFactory {
         final Method[] methods = repositoryInterface.getMethods();
         //get mappings for the repository methods
         log.info("Trying to find all the invocation mappings for methods declared on " + repositoryInterface);
-        final List<InvocationMapping<? extends Serializable, ?>> invocationMappings = getInvocationMappings(operationResolver, methods);
+        final List<InvocationMapping<?, ?>> invocationMappings = getInvocationMappings(operationResolver, methods);
         //extract the bound implementation types
         final List<Class<?>> boundImplementations = new LinkedList<>();
         for (TypeMapping<?> mapping : typeMappings) {
@@ -137,7 +152,7 @@ public class DefaultRepositoryFactory implements RepositoryFactory {
      * @param implementations    the implementations specified by the user
      * @return the resolved list of type mappings
      */
-    private List<TypeMapping<?>> getTypeMappings(RepositoryMetadata metadata, DataStore<Serializable, Object> dataStore, KeyGenerator<? extends Serializable> keyGenerator, Class[] implementations) {
+    private List<TypeMapping<?>> getTypeMappings(RepositoryMetadata metadata, DataStore<Object, Object> dataStore, KeyGenerator<?> keyGenerator, Class[] implementations) {
         final List<TypeMapping<?>> typeMappings = new LinkedList<>();
         final TypeMappingContext localContext = new DefaultTypeMappingContext(typeMappingContext);
         for (Class implementation : implementations) {
@@ -195,11 +210,11 @@ public class DefaultRepositoryFactory implements RepositoryFactory {
      * @param metadata    the metadata
      * @return the data store
      */
-    private DataStore<Serializable, Object> getDataStore(RepositoryMetadata metadata) {
-        DataStore<Serializable, Object> dataStore;
+    private DataStore<Object, Object> getDataStore(RepositoryMetadata metadata) {
+        DataStore<Object, Object> dataStore;
         if (dataStoreRegistry.has(metadata.getEntityType())) {
             //noinspection unchecked
-            dataStore = (DataStore<Serializable, Object>) dataStoreRegistry.getDataStore(metadata.getEntityType());
+            dataStore = (DataStore<Object, Object>) dataStoreRegistry.getDataStore(metadata.getEntityType());
         } else {
             //noinspection unchecked
             dataStore = new MemoryDataStore<>((Class<Object>) metadata.getEntityType());
@@ -217,12 +232,12 @@ public class DefaultRepositoryFactory implements RepositoryFactory {
      * @param methods              the array of methods
      * @return resolved invocations
      */
-    private List<InvocationMapping<? extends Serializable, ?>> getInvocationMappings(DataOperationResolver operationResolver, Method[] methods) {
-        final List<InvocationMapping<? extends Serializable, ?>> invocationMappings = new LinkedList<>();
+    private List<InvocationMapping<?, ?>> getInvocationMappings(DataOperationResolver operationResolver, Method[] methods) {
+        final List<InvocationMapping<?, ?>> invocationMappings = new LinkedList<>();
         for (Method method : methods) {
             final DataStoreOperation<?, ?, ?> operation = operationResolver.resolve(method);
             //noinspection unchecked
-            invocationMappings.add(new ImmutableInvocationMapping<>(method, (DataStoreOperation<?, Serializable, Object>) operation));
+            invocationMappings.add(new ImmutableInvocationMapping<>(method, (DataStoreOperation<?, Object, Object>) operation));
         }
         return invocationMappings;
     }

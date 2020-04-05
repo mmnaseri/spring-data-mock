@@ -11,7 +11,6 @@ import org.springframework.data.domain.Sort;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -19,7 +18,12 @@ import java.util.List;
 import static com.querydsl.core.alias.Alias.$;
 import static com.querydsl.core.alias.Alias.alias;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.isIn;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
 
 /**
  * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
@@ -27,7 +31,7 @@ import static org.hamcrest.Matchers.*;
  */
 public class DefaultQueryDslPredicateExecutorTest {
 
-    private MemoryDataStore<Serializable, Person> dataStore;
+    private MemoryDataStore<Object, Person> dataStore;
     private DefaultQueryDslPredicateExecutor executor;
 
     @BeforeMethod
@@ -97,7 +101,7 @@ public class DefaultQueryDslPredicateExecutorTest {
         dataStore.save("4", new Person().setId("4").setAge(15));
         dataStore.save("5", new Person().setId("5").setAge(10));
         final Person person = alias(Person.class);
-        final Iterable result = executor.findAll($(person.getAge()).gt(20).or($(person.getAge()).eq(20)), new Sort(Sort.Direction.ASC, "age"));
+        final Iterable result = executor.findAll($(person.getAge()).gt(20).or($(person.getAge()).eq(20)), Sort.by(Sort.Direction.ASC, "age"));
         assertThat(result, is(notNullValue()));
         final List<?> list = TestUtils.iterableToList(result);
         assertThat(list, hasSize(3));
@@ -114,7 +118,7 @@ public class DefaultQueryDslPredicateExecutorTest {
         dataStore.save("4", new Person().setId("4").setAge(15));
         dataStore.save("5", new Person().setId("5").setAge(10));
         final Person person = alias(Person.class);
-        final Iterable result = executor.findAll($(person.getAge()).gt(20).or($(person.getAge()).eq(20)), new PageRequest(0, 2, new Sort(Sort.Direction.ASC, "age")));
+        final Iterable result = executor.findAll($(person.getAge()).gt(20).or($(person.getAge()).eq(20)), PageRequest.of(0, 2, Sort.by(Sort.Direction.ASC, "age")));
         assertThat(result, is(notNullValue()));
         final List<?> list = TestUtils.iterableToList(result);
         assertThat(list, hasSize(2));
@@ -130,7 +134,7 @@ public class DefaultQueryDslPredicateExecutorTest {
         dataStore.save("4", new Person().setId("4").setAge(15));
         dataStore.save("5", new Person().setId("5").setAge(10));
         final Person person = alias(Person.class);
-        final Iterable result = executor.findAll($(person.getAge()).gt(20).or($(person.getAge()).eq(20)), new PageRequest(0, 2));
+        final Iterable result = executor.findAll($(person.getAge()).gt(20).or($(person.getAge()).eq(20)), PageRequest.of(0, 2));
         assertThat(result, is(notNullValue()));
         final List<?> list = TestUtils.iterableToList(result);
         assertThat(list, hasSize(2));

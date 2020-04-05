@@ -9,7 +9,9 @@ import org.springframework.data.domain.PageRequest;
 import org.testng.annotations.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 
 /**
  * @author Milad Naseri (mmnaseri@programmer.net)
@@ -39,14 +41,14 @@ public class PageableSortParameterExtractorTest {
     @Test
     public void testPassingPageableWithNullSort() throws Exception {
         final PageableSortParameterExtractor extractor = new PageableSortParameterExtractor(0);
-        final Sort extracted = extractor.extract(new ImmutableInvocation(null, new Object[]{new PageRequest(0, 1)}));
-        assertThat(extracted, is(nullValue()));
+        final Sort extracted = extractor.extract(new ImmutableInvocation(null, new Object[]{PageRequest.of(0, 1)}));
+        assertThat(extracted instanceof ImmutableSort, is(true));
     }
 
     @Test
     public void testPassingPageableWithNullProperSort() throws Exception {
         final PageableSortParameterExtractor extractor = new PageableSortParameterExtractor(0);
-        final Sort extracted = extractor.extract(new ImmutableInvocation(null, new Object[]{new PageRequest(0, 1, org.springframework.data.domain.Sort.Direction.DESC, "a", "b")}));
+        final Sort extracted = extractor.extract(new ImmutableInvocation(null, new Object[]{PageRequest.of(0, 1, org.springframework.data.domain.Sort.Direction.DESC, "a", "b")}));
         assertThat(extracted, is(notNullValue()));
         assertThat(extracted.getOrders(), hasSize(2));
         assertThat(extracted.getOrders().get(0).getProperty(), is("a"));

@@ -4,7 +4,6 @@ import com.mmnaseri.utils.spring.data.sample.mocks.StringifiableDataStoreOperati
 import com.mmnaseri.utils.spring.data.sample.usecases.proxy.ReturnTypeSampleRepository;
 import org.testng.annotations.Test;
 
-import java.io.Serializable;
 import java.lang.reflect.Method;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -20,7 +19,7 @@ public class ImmutableInvocationMappingTest {
     public void testToString() throws Exception {
         final String string = "string representation";
         final Method method = ReturnTypeSampleRepository.class.getMethod("doSomething");
-        final ImmutableInvocationMapping<Serializable, Object> mapping = new ImmutableInvocationMapping<>(method, new StringifiableDataStoreOperation<>(string));
+        final ImmutableInvocationMapping<Object, Object> mapping = new ImmutableInvocationMapping<>(method, new StringifiableDataStoreOperation<>(string));
         assertThat(mapping.toString(), is(method.toString() + " -> " + string));
     }
 

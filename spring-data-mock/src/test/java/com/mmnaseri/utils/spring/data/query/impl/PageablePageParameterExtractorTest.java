@@ -38,7 +38,7 @@ public class PageablePageParameterExtractorTest {
     @Test
     public void testPassingPageRequest() throws Exception {
         final PageablePageParameterExtractor extractor = new PageablePageParameterExtractor(0);
-        final PageRequest pageRequest = new PageRequest(3, 7);
+        final PageRequest pageRequest = PageRequest.of(3, 7);
         final Page extracted = extractor.extract(new ImmutableInvocation(null, new Object[]{pageRequest}));
         assertThat(extracted, is(notNullValue()));
         assertThat(extracted.getPageNumber(), is(pageRequest.getPageNumber()));

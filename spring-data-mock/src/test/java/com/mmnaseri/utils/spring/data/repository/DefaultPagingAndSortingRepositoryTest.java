@@ -16,7 +16,9 @@ import org.testng.annotations.Test;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 
 /**
  * @author Milad Naseri (mmnaseri@programmer.net)
@@ -51,7 +53,7 @@ public class DefaultPagingAndSortingRepositoryTest {
 
     @Test
     public void testFindAllWithSort() throws Exception {
-        final List<?> found = repository.findAll(new Sort(new Sort.Order(Sort.Direction.ASC, "address.city"), new Sort.Order(Sort.Direction.DESC, "address.zip.area")));
+        final List<?> found = repository.findAll(Sort.by(new Sort.Order(Sort.Direction.ASC, "address.city"), new Sort.Order(Sort.Direction.DESC, "address.zip.area")));
         assertThat(found, hasSize(dataStore.retrieveAll().size()));
         assertThat(found.get(0), Matchers.<Object>is(dataStore.retrieve("2")));
         assertThat(found.get(1), Matchers.<Object>is(dataStore.retrieve("4")));
@@ -65,7 +67,7 @@ public class DefaultPagingAndSortingRepositoryTest {
 
     @Test
     public void testFindAllWithPagingAndNoSorting() throws Exception {
-        final Page page = repository.findAll(new PageRequest(2, 3));
+        final Page page = repository.findAll(PageRequest.of(2, 3));
         assertThat(page.getTotalElements(), is(8L));
         assertThat(page.getTotalPages(), is(3));
         assertThat(page.getNumber(), is(2));
@@ -75,7 +77,7 @@ public class DefaultPagingAndSortingRepositoryTest {
 
     @Test
     public void testFindAllWithPagingAndSorting() throws Exception {
-        final Page page = repository.findAll(new PageRequest(2, 3, new Sort(new Sort.Order(Sort.Direction.ASC, "address.city"), new Sort.Order(Sort.Direction.DESC, "address.zip.area"))));
+        final Page page = repository.findAll(PageRequest.of(2, 3, Sort.by(new Sort.Order(Sort.Direction.ASC, "address.city"), new Sort.Order(Sort.Direction.DESC, "address.zip.area"))));
         assertThat(page.getTotalElements(), is(8L));
         assertThat(page.getTotalPages(), is(3));
         assertThat(page.getNumber(), is(2));
@@ -89,7 +91,7 @@ public class DefaultPagingAndSortingRepositoryTest {
     @Test
     public void testWithNullsFirst() throws Exception {
         dataStore.save("9", new Person().setId("9").setAddress(new Address().setZip(new Zip().setArea(null)).setCity("Spokane").setState(new State().setName("Washington").setAbbreviation("WA"))));
-        final List<?> found = repository.findAll(new Sort(new Sort.Order(Sort.Direction.ASC, "address.city"), new Sort.Order(Sort.Direction.DESC, "address.zip.area", Sort.NullHandling.NULLS_FIRST)));
+        final List<?> found = repository.findAll(Sort.by(new Sort.Order(Sort.Direction.ASC, "address.city"), new Sort.Order(Sort.Direction.DESC, "address.zip.area", Sort.NullHandling.NULLS_FIRST)));
         assertThat(found, hasSize(dataStore.retrieveAll().size()));
         assertThat(found.get(0), Matchers.<Object>is(dataStore.retrieve("2")));
         assertThat(found.get(1), Matchers.<Object>is(dataStore.retrieve("4")));
@@ -105,7 +107,7 @@ public class DefaultPagingAndSortingRepositoryTest {
     @Test
     public void testWithNullsLast() throws Exception {
         dataStore.save("9", new Person().setId("9").setAddress(new Address().setZip(new Zip().setArea(null)).setCity("Spokane").setState(new State().setName("Washington").setAbbreviation("WA"))));
-        final List<?> found = repository.findAll(new Sort(new Sort.Order(Sort.Direction.ASC, "address.city"), new Sort.Order(Sort.Direction.DESC, "address.zip.area", Sort.NullHandling.NULLS_LAST)));
+        final List<?> found = repository.findAll(Sort.by(new Sort.Order(Sort.Direction.ASC, "address.city"), new Sort.Order(Sort.Direction.DESC, "address.zip.area", Sort.NullHandling.NULLS_LAST)));
         assertThat(found, hasSize(dataStore.retrieveAll().size()));
         assertThat(found.get(0), Matchers.<Object>is(dataStore.retrieve("2")));
         assertThat(found.get(1), Matchers.<Object>is(dataStore.retrieve("4")));

@@ -7,7 +7,6 @@ import com.mmnaseri.utils.spring.data.tools.PropertyUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -42,15 +41,14 @@ public class DefaultJpaRepository extends CrudRepositorySupport {
      * @return deleted entities
      */
     public Iterable deleteInBatch(Iterable entities) {
-        final List<Serializable> keys = new LinkedList<>();
+        final List<Object> keys = new LinkedList<>();
         for (Object entity : entities) {
             final Object key = PropertyUtils.getPropertyValue(entity, getRepositoryMetadata().getIdentifierProperty());
             if (key == null) {
                 log.error("There is no key set for the entity we were trying to delete");
                 throw new EntityMissingKeyException(getRepositoryMetadata().getEntityType(), getRepositoryMetadata().getIdentifierProperty());
             }
-            final Serializable serializable = (Serializable) key;
-            keys.add(serializable);
+            keys.add(key);
         }
         return deleteByKeysInBatch(keys);
     }
@@ -69,7 +67,7 @@ public class DefaultJpaRepository extends CrudRepositorySupport {
      * @param keys    the keys
      * @return deleted entities
      */
-    private Iterable deleteByKeysInBatch(Collection<Serializable> keys) {
+    private Iterable deleteByKeysInBatch(Collection<Object> keys) {
         final Object batch;
         if (getDataStore() instanceof QueueingDataStore) {
             log.debug("The data store support queueing, so we are going to start a batch");
@@ -79,7 +77,7 @@ public class DefaultJpaRepository extends CrudRepositorySupport {
             batch = null;
         }
         final List result = new LinkedList();
-        for (Serializable key : keys) {
+        for (Object key : keys) {
             if (getDataStore().hasKey(key)) {
                 result.add(getDataStore().retrieve(key));
                 getDataStore().delete(key);
@@ -97,7 +95,7 @@ public class DefaultJpaRepository extends CrudRepositorySupport {
      * @param key    the key
      * @return returns the entity or {@literal null} if it couldn't be found
      */
-    public Object getOne(Serializable key) {
+    public Object getOne(Object key) {
         if (getDataStore().hasKey(key)) {
             log.info("Returning entity for key " + key);
             return getDataStore().retrieve(key);
