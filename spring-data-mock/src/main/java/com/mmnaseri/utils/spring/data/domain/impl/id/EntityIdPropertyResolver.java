@@ -9,8 +9,6 @@ import com.mmnaseri.utils.spring.data.tools.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import java.io.Serializable;
-
 /**
  * <p>This class will use all the magic implemented in the other ID property resolvers to find out the ID property
  * for an entity.</p>
@@ -39,7 +37,7 @@ public class EntityIdPropertyResolver implements IdPropertyResolver {
     private final NamedFieldIdPropertyResolver namedFieldIdPropertyResolver = new NamedFieldIdPropertyResolver();
 
     @Override
-    public String resolve(Class<?> entityType, Class<? extends Serializable> idType) {
+    public String resolve(Class<?> entityType, Class<?> idType) {
         log.info("Trying to resolve the ID property for entity " + entityType + " using the annotated getter method");
         String idProperty = annotatedGetterIdPropertyResolver.resolve(entityType, idType);
         if (idProperty == null) {

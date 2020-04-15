@@ -5,13 +5,11 @@
  */
 package com.mmnaseri.utils.spring.data.sample.models;
 
-import java.io.Serializable;
-
 /**
  *
  * @author blackleg
  */
-public class PersonSerializable extends Person implements Serializable {
+public class PersonSerializable extends Person {
 
     @Override
     public String getId() {

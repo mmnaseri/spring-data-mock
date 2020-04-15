@@ -7,10 +7,10 @@ import com.mmnaseri.utils.spring.data.store.impl.MemoryDataStore;
 import org.springframework.data.gemfire.repository.Wrapper;
 import org.testng.annotations.Test;
 
-import java.io.Serializable;
-
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 
 /**
  * @author Milad Naseri (mmnaseri@programmer.net)
@@ -20,7 +20,7 @@ public class DefaultGemfireRepositoryTest {
 
     @Test
     public void testSave() throws Exception {
-        final MemoryDataStore<Serializable, Person> dataStore = new MemoryDataStore<>(Person.class);
+        final MemoryDataStore<Object, Person> dataStore = new MemoryDataStore<>(Person.class);
         final ImmutableRepositoryMetadata repositoryMetadata = new ImmutableRepositoryMetadata(String.class, Person.class, SimplePersonRepository.class, "id");
         final DefaultGemfireRepository repository = new DefaultGemfireRepository();
         repository.setDataStore(dataStore);
@@ -28,7 +28,7 @@ public class DefaultGemfireRepositoryTest {
         final String id = "12345";
         final Wrapper<?, ?> wrapper = new Wrapper<>(new Person(), id);
         //noinspection unchecked
-        final Object saved = repository.save((Wrapper<Object, Serializable>) wrapper);
+        final Object saved = repository.save((Wrapper<Object, Object>) wrapper);
         assertThat(saved, is(notNullValue()));
         assertThat(saved, is(instanceOf(Person.class)));
         assertThat(((Person) saved).getId(), is(notNullValue()));

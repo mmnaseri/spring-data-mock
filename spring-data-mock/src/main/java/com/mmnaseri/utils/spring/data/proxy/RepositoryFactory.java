@@ -2,8 +2,6 @@ package com.mmnaseri.utils.spring.data.proxy;
 
 import com.mmnaseri.utils.spring.data.domain.KeyGenerator;
 
-import java.io.Serializable;
-
 /**
  * <p>This interface encapsulates the process of instantiating a repository. A repository factory is needed to
  * properly set up a repository instance.</p>
@@ -28,7 +26,7 @@ public interface RepositoryFactory {
      * @return a prepared instance of the repository
      * @throws com.mmnaseri.utils.spring.data.error.RepositoryMockException should anything go wrong
      */
-    <E> E getInstance(KeyGenerator<? extends Serializable> keyGenerator, Class<E> repositoryInterface, Class... implementations);
+    <E> E getInstance(KeyGenerator<?> keyGenerator, Class<E> repositoryInterface, Class... implementations);
 
     /**
      * @return the configuration bound to this repository factory

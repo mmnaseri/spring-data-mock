@@ -10,7 +10,6 @@ import com.mmnaseri.utils.spring.data.store.DataStoreOperation;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -20,7 +19,7 @@ import java.util.List;
  * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/29/15)
  */
-public class DescribedDataStoreOperation<K extends Serializable, E> implements DataStoreOperation<Object, K, E> {
+public class DescribedDataStoreOperation<K, E> implements DataStoreOperation<Object, K, E> {
 
     private static final Log log = LogFactory.getLog(DescribedDataStoreOperation.class);
     private final SelectDataStoreOperation<K, E> selectOperation;

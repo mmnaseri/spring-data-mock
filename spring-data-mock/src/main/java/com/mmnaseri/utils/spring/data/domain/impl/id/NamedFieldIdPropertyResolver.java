@@ -5,7 +5,6 @@ import com.mmnaseri.utils.spring.data.error.PropertyTypeMismatchException;
 import com.mmnaseri.utils.spring.data.tools.PropertyUtils;
 import org.springframework.util.ReflectionUtils;
 
-import java.io.Serializable;
 import java.lang.reflect.Field;
 
 /**
@@ -18,7 +17,7 @@ import java.lang.reflect.Field;
 public class NamedFieldIdPropertyResolver implements IdPropertyResolver {
 
     @Override
-    public String resolve(Class<?> entityType, Class<? extends Serializable> idType) {
+    public String resolve(Class<?> entityType, Class<?> idType) {
         final Field field = ReflectionUtils.findField(entityType, "id");
         if (field != null) {
             if (PropertyUtils.getTypeOf(idType).isAssignableFrom(PropertyUtils.getTypeOf(field.getType()))) {

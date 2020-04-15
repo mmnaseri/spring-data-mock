@@ -10,7 +10,6 @@ import com.mmnaseri.utils.spring.data.tools.PropertyUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -27,7 +26,7 @@ public class DeleteDataFunction implements DataFunction<List<?>> {
     private static final Log log = LogFactory.getLog(DeleteDataFunction.class);
 
     @Override
-    public <K extends Serializable, E> List<E> apply(DataStore<K, E> dataStore, QueryDescriptor query, RepositoryConfiguration repositoryConfiguration, List<E> selection) {
+    public <K, E> List<E> apply(DataStore<K, E> dataStore, QueryDescriptor query, RepositoryConfiguration repositoryConfiguration, List<E> selection) {
         if (dataStore == null) {
             log.error("Cannot delete entities when the data store is null");
             throw new InvalidArgumentException("Data store cannot be null");

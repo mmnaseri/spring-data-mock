@@ -14,10 +14,17 @@ import org.testng.annotations.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static com.mmnaseri.utils.spring.data.utils.TestUtils.iterableToList;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.isIn;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
 
 /**
  * @author Milad Naseri (mmnaseri@programmer.net)
@@ -40,7 +47,7 @@ public class DefaultCrudRepositoryTest {
     @Test
     public void testSave() throws Exception {
         final List<Person> entities = Arrays.asList(new Person(), new Person(), new Person());
-        final Iterable<Object> inserted = repository.save(entities);
+        final Iterable<Object> inserted = repository.saveAll(entities);
         assertThat(inserted, is(notNullValue()));
         final List<Object> insertedList = iterableToList(inserted);
         assertThat(insertedList, hasSize(3));
@@ -50,7 +57,7 @@ public class DefaultCrudRepositoryTest {
             assertThat(((Person) item).getId(), is(notNullValue()));
         }
         assertThat(dataStore.retrieveAll(), hasSize(entities.size()));
-        final Iterable<Object> updated = repository.save(entities);
+        final Iterable<Object> updated = repository.saveAll(entities);
         assertThat(updated, is(notNullValue()));
         final List<Object> updatedList = iterableToList(updated);
         assertThat(updatedList, hasSize(3));
@@ -64,18 +71,18 @@ public class DefaultCrudRepositoryTest {
     @Test
     public void testFindOne() throws Exception {
         final String key = "1234";
-        assertThat(repository.findOne(key), is(nullValue()));
+        assertThat(repository.findById(key), is(Optional.empty()));
         final Person person = new Person();
         dataStore.save("1234", person);
-        assertThat(repository.findOne(key), Matchers.<Object>is(person));
+        assertThat(repository.findById(key).get(), Matchers.is(person));
     }
 
     @Test
     public void testExists() throws Exception {
         final String key = "1234";
-        assertThat(repository.exists(key), is(false));
+        assertThat(repository.existsById(key), is(false));
         dataStore.save("1234", new Person());
-        assertThat(repository.exists(key), is(true));
+        assertThat(repository.existsById(key), is(true));
     }
 
     @Test
@@ -93,7 +100,7 @@ public class DefaultCrudRepositoryTest {
         for (String id : existingIds) {
             expected.add(dataStore.retrieve(id));
         }
-        final List<?> list = iterableToList(repository.findAll(request));
+        final List<?> list = iterableToList(repository.findAllById(request));
         assertThat(list, hasSize(existingIds.size()));
         for (Object found : list) {
             assertThat(found, is(instanceOf(Person.class)));
@@ -112,7 +119,7 @@ public class DefaultCrudRepositoryTest {
         final Person original = new Person();
         dataStore.save("1", original);
         assertThat(dataStore.hasKey("1"), is(true));
-        final Object deleted = repository.delete(new Person().setId("1"));
+        final Object deleted = repository.deleteById(new Person().setId("1"));
         assertThat(dataStore.hasKey("1"), is(false));
         assertThat(deleted, is(notNullValue()));
         assertThat(deleted, Matchers.<Object>is(original));
@@ -120,7 +127,7 @@ public class DefaultCrudRepositoryTest {
 
     @Test(expectedExceptions = EntityMissingKeyException.class)
     public void testDeleteByEntityWhenEntityHasNoKey() throws Exception {
-        repository.delete(new Person());
+        repository.deleteById(new Person());
     }
 
     @Test

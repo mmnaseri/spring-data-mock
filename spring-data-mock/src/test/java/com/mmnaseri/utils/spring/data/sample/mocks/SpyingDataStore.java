@@ -3,18 +3,23 @@ package com.mmnaseri.utils.spring.data.sample.mocks;
 import com.mmnaseri.utils.spring.data.store.DataStore;
 import com.mmnaseri.utils.spring.data.store.QueueingDataStore;
 
-import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Stack;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 
 /**
  * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (4/10/16)
  */
-public class SpyingDataStore<K extends Serializable, E> implements QueueingDataStore<K, E, Object> {
+public class SpyingDataStore<K, E> implements QueueingDataStore<K, E, Object> {
 
     private final DataStore<K, E> delegate;
     private final List<OperationRequest> requests;

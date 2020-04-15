@@ -2,22 +2,33 @@ package com.mmnaseri.utils.spring.data.store.impl;
 
 import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
 import com.mmnaseri.utils.spring.data.domain.impl.ImmutableRepositoryMetadata;
-import com.mmnaseri.utils.spring.data.sample.models.*;
+import com.mmnaseri.utils.spring.data.sample.models.EntityWithCreatedBy;
+import com.mmnaseri.utils.spring.data.sample.models.EntityWithCreatedDate;
+import com.mmnaseri.utils.spring.data.sample.models.EntityWithDateTimeLastModifiedDate;
+import com.mmnaseri.utils.spring.data.sample.models.EntityWithFinalCreatedBy;
+import com.mmnaseri.utils.spring.data.sample.models.EntityWithLastModifiedBy;
+import com.mmnaseri.utils.spring.data.sample.models.EntityWithSqlDateLastModifiedDate;
+import com.mmnaseri.utils.spring.data.sample.models.EntityWithTimeLastModifiedDate;
+import com.mmnaseri.utils.spring.data.sample.models.EntityWithTimestampDateLastModifiedDate;
+import com.mmnaseri.utils.spring.data.sample.models.EntityWithUtilDateLastModifiedDate;
+import com.mmnaseri.utils.spring.data.sample.models.EntityWithWriteOnlyCreatedBy;
 import com.mmnaseri.utils.spring.data.sample.usecases.store.SampleAuditorAware;
 import org.hamcrest.Matchers;
-import org.joda.time.DateTime;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.util.ReflectionUtils;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.time.Instant;
+import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
 
 /**
  * @author Milad Naseri (mmnaseri@programmer.net)
@@ -39,9 +50,9 @@ public class AuditableWrapperTest {
         final EntityWithCreatedBy entity = new EntityWithCreatedBy();
         final AuditableWrapper wrapper = new AuditableWrapper(entity, repositoryMetadata);
         assertThat(entity.getCreatedBy(), is(nullValue()));
-        assertThat(wrapper.getCreatedBy(), is(nullValue()));
-        wrapper.setCreatedBy(auditorAware.getCurrentAuditor());
-        assertThat(wrapper.getCreatedBy(), Matchers.<Object>is(SampleAuditorAware.AUDITOR));
+        assertThat(wrapper.getCreatedBy(), is(Optional.empty()));
+        wrapper.setCreatedBy(auditorAware.getCurrentAuditor().orElse(null));
+        assertThat(wrapper.getCreatedBy().get(), Matchers.<Object>is(SampleAuditorAware.AUDITOR));
         assertThat(entity.getCreatedBy(), is(SampleAuditorAware.AUDITOR));
     }
 
@@ -51,9 +62,9 @@ public class AuditableWrapperTest {
         final EntityWithLastModifiedBy entity = new EntityWithLastModifiedBy();
         final AuditableWrapper wrapper = new AuditableWrapper(entity, repositoryMetadata);
         assertThat(entity.getLastModifiedBy(), is(nullValue()));
-        assertThat(wrapper.getLastModifiedBy(), is(nullValue()));
-        wrapper.setLastModifiedBy(auditorAware.getCurrentAuditor());
-        assertThat(wrapper.getLastModifiedBy(), Matchers.<Object>is(SampleAuditorAware.AUDITOR));
+        assertThat(wrapper.getLastModifiedBy(), is(Optional.empty()));
+        wrapper.setLastModifiedBy(auditorAware.getCurrentAuditor().orElse(null));
+        assertThat(wrapper.getLastModifiedBy().get(), Matchers.<Object>is(SampleAuditorAware.AUDITOR));
         assertThat(entity.getLastModifiedBy(), is(SampleAuditorAware.AUDITOR));
     }
 
@@ -63,11 +74,11 @@ public class AuditableWrapperTest {
         final EntityWithCreatedDate entity = new EntityWithCreatedDate();
         final AuditableWrapper wrapper = new AuditableWrapper(entity, repositoryMetadata);
         assertThat(entity.getCreatedDate(), is(nullValue()));
-        assertThat(wrapper.getCreatedDate(), is(nullValue()));
-        final DateTime time = new DateTime();
+        assertThat(wrapper.getCreatedDate(), is(Optional.empty()));
+        final Instant time = Instant.now();
         wrapper.setCreatedDate(time);
-        assertThat(wrapper.getCreatedDate(), is(time));
-        assertThat(entity.getCreatedDate(), is(time.toDate()));
+        assertThat(wrapper.getCreatedDate().get(), is(time));
+        assertThat(entity.getCreatedDate().toInstant(), is(time));
     }
 
     @Test
@@ -75,12 +86,12 @@ public class AuditableWrapperTest {
         final RepositoryMetadata repositoryMetadata = new ImmutableRepositoryMetadata(String.class, EntityWithUtilDateLastModifiedDate.class, null, "id");
         final EntityWithUtilDateLastModifiedDate entity = new EntityWithUtilDateLastModifiedDate();
         final AuditableWrapper wrapper = new AuditableWrapper(entity, repositoryMetadata);
-        final DateTime time = new DateTime();
+        final Instant time = Instant.now();
         assertThat(entity.getLastModifiedDate(), is(nullValue()));
-        assertThat(wrapper.getLastModifiedDate(), is(nullValue()));
+        assertThat(wrapper.getLastModifiedDate(), is(Optional.empty()));
         wrapper.setLastModifiedDate(time);
-        assertThat(wrapper.getLastModifiedDate(), is(time));
-        assertThat(entity.getLastModifiedDate(), is(time.toDate()));
+        assertThat(wrapper.getLastModifiedDate().get(), is(time));
+        assertThat(entity.getLastModifiedDate().toInstant(), is(time));
     }
 
     @Test
@@ -88,12 +99,12 @@ public class AuditableWrapperTest {
         final RepositoryMetadata repositoryMetadata = new ImmutableRepositoryMetadata(String.class, EntityWithSqlDateLastModifiedDate.class, null, "id");
         final EntityWithSqlDateLastModifiedDate entity = new EntityWithSqlDateLastModifiedDate();
         final AuditableWrapper wrapper = new AuditableWrapper(entity, repositoryMetadata);
-        final DateTime time = new DateTime();
+        final Instant time = Instant.now();
         assertThat(entity.getLastModifiedDate(), is(nullValue()));
-        assertThat(wrapper.getLastModifiedDate(), is(nullValue()));
+        assertThat(wrapper.getLastModifiedDate(), is(Optional.empty()));
         wrapper.setLastModifiedDate(time);
-        assertThat(wrapper.getLastModifiedDate(), is(time));
-        assertThat(entity.getLastModifiedDate(), is(new java.sql.Date(time.toDate().getTime())));
+        assertThat(wrapper.getLastModifiedDate().get(), is(time));
+        assertThat(entity.getLastModifiedDate().getTime(), is(time.toEpochMilli()));
     }
 
     @Test
@@ -101,12 +112,12 @@ public class AuditableWrapperTest {
         final RepositoryMetadata repositoryMetadata = new ImmutableRepositoryMetadata(String.class, EntityWithTimestampDateLastModifiedDate.class, null, "id");
         final EntityWithTimestampDateLastModifiedDate entity = new EntityWithTimestampDateLastModifiedDate();
         final AuditableWrapper wrapper = new AuditableWrapper(entity, repositoryMetadata);
-        final DateTime time = new DateTime();
+        final Instant time = Instant.now();
         assertThat(entity.getLastModifiedDate(), is(nullValue()));
-        assertThat(wrapper.getLastModifiedDate(), is(nullValue()));
+        assertThat(wrapper.getLastModifiedDate(), is(Optional.empty()));
         wrapper.setLastModifiedDate(time);
-        assertThat(wrapper.getLastModifiedDate(), is(time));
-        assertThat(entity.getLastModifiedDate(), is(new Timestamp(time.toDate().getTime())));
+        assertThat(wrapper.getLastModifiedDate().get(), is(time));
+        assertThat(entity.getLastModifiedDate(), is(new Timestamp(time.toEpochMilli())));
     }
 
     @Test
@@ -114,12 +125,12 @@ public class AuditableWrapperTest {
         final RepositoryMetadata repositoryMetadata = new ImmutableRepositoryMetadata(String.class, EntityWithTimeLastModifiedDate.class, null, "id");
         final EntityWithTimeLastModifiedDate entity = new EntityWithTimeLastModifiedDate();
         final AuditableWrapper wrapper = new AuditableWrapper(entity, repositoryMetadata);
-        final DateTime time = new DateTime();
+        final Instant time = Instant.now();
         assertThat(entity.getLastModifiedDate(), is(nullValue()));
-        assertThat(wrapper.getLastModifiedDate(), is(nullValue()));
+        assertThat(wrapper.getLastModifiedDate(), is(Optional.empty()));
         wrapper.setLastModifiedDate(time);
-        assertThat(wrapper.getLastModifiedDate(), is(time));
-        assertThat(entity.getLastModifiedDate(), is(new Time(time.toDate().getTime())));
+        assertThat(wrapper.getLastModifiedDate().get(), is(time));
+        assertThat(entity.getLastModifiedDate(), is(new Time(time.toEpochMilli())));
     }
 
     @Test
@@ -127,11 +138,11 @@ public class AuditableWrapperTest {
         final RepositoryMetadata repositoryMetadata = new ImmutableRepositoryMetadata(String.class, EntityWithDateTimeLastModifiedDate.class, null, "id");
         final EntityWithDateTimeLastModifiedDate entity = new EntityWithDateTimeLastModifiedDate();
         final AuditableWrapper wrapper = new AuditableWrapper(entity, repositoryMetadata);
-        final DateTime time = new DateTime();
+        final Instant time = Instant.now();
         assertThat(entity.getLastModifiedDate(), is(nullValue()));
-        assertThat(wrapper.getLastModifiedDate(), is(nullValue()));
+        assertThat(wrapper.getLastModifiedDate(), is(Optional.empty()));
         wrapper.setLastModifiedDate(time);
-        assertThat(wrapper.getLastModifiedDate(), is(time));
+        assertThat(wrapper.getLastModifiedDate().get(), is(time));
         assertThat(entity.getLastModifiedDate(), is(time));
     }
 
@@ -153,7 +164,7 @@ public class AuditableWrapperTest {
         assertThat(wrapper.getId(), is(nullValue()));
         entity.setId("some identifier");
         assertThat(wrapper.getId(), is(notNullValue()));
-        assertThat(wrapper.getId(), Matchers.<Serializable>is(entity.getId()));
+        assertThat(wrapper.getId(), Matchers.<Object>is(entity.getId()));
     }
 
     @Test
@@ -172,9 +183,9 @@ public class AuditableWrapperTest {
         final EntityWithFinalCreatedBy entity = new EntityWithFinalCreatedBy();
         final AuditableWrapper wrapper = new AuditableWrapper(entity, repositoryMetadata);
         assertThat(entity.getCreatedBy(), is(nullValue()));
-        assertThat(wrapper.getCreatedBy(), is(nullValue()));
+        assertThat(wrapper.getCreatedBy(), is(Optional.empty()));
         wrapper.setCreatedBy(auditorAware.getCurrentAuditor());
-        assertThat(wrapper.getCreatedBy(), is(nullValue()));
+        assertThat(wrapper.getCreatedBy(), is(Optional.empty()));
         assertThat(entity.getCreatedBy(), is(nullValue()));
     }
 
@@ -186,10 +197,10 @@ public class AuditableWrapperTest {
         final Field createdBy = ReflectionUtils.findField(EntityWithWriteOnlyCreatedBy.class, "createdBy");
         createdBy.setAccessible(true);
         assertThat(createdBy.get(entity), is(nullValue()));
-        assertThat(wrapper.getCreatedBy(), is(nullValue()));
-        wrapper.setCreatedBy(auditorAware.getCurrentAuditor());
+        assertThat(wrapper.getCreatedBy(), is(Optional.empty()));
+        wrapper.setCreatedBy(auditorAware.getCurrentAuditor().orElse(null));
         //the wrapper will not be able to read the value ...
-        assertThat(wrapper.getCreatedBy(), is(nullValue()));
+        assertThat(wrapper.getCreatedBy(), is(Optional.empty()));
         //... but the value is set anyway
         assertThat(createdBy.get(entity), Matchers.<Object>is(SampleAuditorAware.AUDITOR));
     }

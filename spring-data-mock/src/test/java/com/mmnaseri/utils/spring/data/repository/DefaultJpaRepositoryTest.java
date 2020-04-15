@@ -14,7 +14,6 @@ import org.hamcrest.Matchers;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -23,7 +22,12 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import static com.mmnaseri.utils.spring.data.utils.TestUtils.iterableToList;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.isIn;
+import static org.hamcrest.Matchers.nullValue;
 
 /**
  * @author Milad Naseri (mmnaseri@programmer.net)
@@ -50,7 +54,7 @@ public class DefaultJpaRepositoryTest {
         final DefaultJpaRepository repository = new DefaultJpaRepository();
         repository.setKeyGenerator(new UUIDKeyGenerator());
         repository.setRepositoryMetadata(repositoryMetadata);
-        final SpyingDataStore<Serializable, Object> dataStore = new SpyingDataStore<>(null, new AtomicLong());
+        final SpyingDataStore<Object, Object> dataStore = new SpyingDataStore<>(null, new AtomicLong());
         repository.setDataStore(dataStore);
         repository.flush();
         assertThat(dataStore.getRequests(), hasSize(1));

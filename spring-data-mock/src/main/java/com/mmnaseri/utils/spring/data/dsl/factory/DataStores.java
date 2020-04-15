@@ -3,8 +3,6 @@ package com.mmnaseri.utils.spring.data.dsl.factory;
 import com.mmnaseri.utils.spring.data.store.DataStore;
 import com.mmnaseri.utils.spring.data.store.DataStoreRegistry;
 
-import java.io.Serializable;
-
 /**
  * Lets us change the data store and the data store registry
  *
@@ -28,6 +26,6 @@ public interface DataStores extends ResultAdapters {
      * @param <K>          the key type
      * @return the rest of the configuration
      */
-    <E, K extends Serializable> DataStoresAnd registerDataStore(DataStore<K, E> dataStore);
+    <E, K> DataStoresAnd registerDataStore(DataStore<K, E> dataStore);
 
 }

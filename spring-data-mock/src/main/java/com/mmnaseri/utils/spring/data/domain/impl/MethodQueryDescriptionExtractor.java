@@ -1,10 +1,27 @@
 package com.mmnaseri.utils.spring.data.domain.impl;
 
-import com.mmnaseri.utils.spring.data.domain.*;
+import com.mmnaseri.utils.spring.data.domain.MatchedOperator;
+import com.mmnaseri.utils.spring.data.domain.Modifier;
+import com.mmnaseri.utils.spring.data.domain.Operator;
+import com.mmnaseri.utils.spring.data.domain.OperatorContext;
+import com.mmnaseri.utils.spring.data.domain.Parameter;
+import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
 import com.mmnaseri.utils.spring.data.error.QueryParserException;
 import com.mmnaseri.utils.spring.data.proxy.RepositoryFactoryConfiguration;
-import com.mmnaseri.utils.spring.data.query.*;
-import com.mmnaseri.utils.spring.data.query.impl.*;
+import com.mmnaseri.utils.spring.data.query.NullHandling;
+import com.mmnaseri.utils.spring.data.query.Order;
+import com.mmnaseri.utils.spring.data.query.PageParameterExtractor;
+import com.mmnaseri.utils.spring.data.query.PropertyDescriptor;
+import com.mmnaseri.utils.spring.data.query.QueryDescriptor;
+import com.mmnaseri.utils.spring.data.query.SortDirection;
+import com.mmnaseri.utils.spring.data.query.SortParameterExtractor;
+import com.mmnaseri.utils.spring.data.query.impl.DefaultQueryDescriptor;
+import com.mmnaseri.utils.spring.data.query.impl.DirectSortParameterExtractor;
+import com.mmnaseri.utils.spring.data.query.impl.ImmutableOrder;
+import com.mmnaseri.utils.spring.data.query.impl.ImmutableSort;
+import com.mmnaseri.utils.spring.data.query.impl.PageablePageParameterExtractor;
+import com.mmnaseri.utils.spring.data.query.impl.PageableSortParameterExtractor;
+import com.mmnaseri.utils.spring.data.query.impl.WrappedSortParameterExtractor;
 import com.mmnaseri.utils.spring.data.string.DocumentReader;
 import com.mmnaseri.utils.spring.data.string.impl.DefaultDocumentReader;
 import com.mmnaseri.utils.spring.data.tools.PropertyUtils;
@@ -13,7 +30,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 /**

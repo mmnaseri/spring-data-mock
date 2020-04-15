@@ -3,7 +3,11 @@ package com.mmnaseri.utils.spring.data.store.impl;
 import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
 import com.mmnaseri.utils.spring.data.domain.impl.ImmutableRepositoryMetadata;
 import com.mmnaseri.utils.spring.data.error.CorruptDataException;
-import com.mmnaseri.utils.spring.data.sample.mocks.*;
+import com.mmnaseri.utils.spring.data.sample.mocks.EventTrigger;
+import com.mmnaseri.utils.spring.data.sample.mocks.Operation;
+import com.mmnaseri.utils.spring.data.sample.mocks.OperationRequest;
+import com.mmnaseri.utils.spring.data.sample.mocks.SpyingDataStore;
+import com.mmnaseri.utils.spring.data.sample.mocks.SpyingListenerContext;
 import com.mmnaseri.utils.spring.data.sample.models.DummyEvent;
 import com.mmnaseri.utils.spring.data.sample.models.Person;
 import com.mmnaseri.utils.spring.data.sample.repositories.SimplePersonRepository;
@@ -13,13 +17,16 @@ import org.hamcrest.Matchers;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.lessThan;
+import static org.hamcrest.Matchers.nullValue;
 
 /**
  * @author Milad Naseri (mmnaseri@programmer.net)
@@ -118,7 +125,7 @@ public class EventPublishingDataStoreTest {
         assertThat(delegateSpy.getRequests(), hasSize(2));
         final OperationRequest save = delegateSpy.getRequests().get(1);
         assertThat(save.getOperation(), is(Operation.SAVE));
-        assertThat(save.getKey(), Matchers.<Serializable>is(key));
+        assertThat(save.getKey(), Matchers.<Object>is(key));
         assertThat(save.getEntity(), Matchers.<Object>is(entity));
         final EventTrigger before = listenerContext.getEvents().get(0);
         final EventTrigger after = listenerContext.getEvents().get(1);
@@ -142,7 +149,7 @@ public class EventPublishingDataStoreTest {
         assertThat(delegateSpy.getRequests(), hasSize(2));
         final OperationRequest request = delegateSpy.getRequests().get(1);
         assertThat(request.getOperation(), is(Operation.SAVE));
-        assertThat(request.getKey(), Matchers.<Serializable>is(key));
+        assertThat(request.getKey(), Matchers.<Object>is(key));
         assertThat(request.getEntity(), Matchers.<Object>is(entity));
         final EventTrigger before = listenerContext.getEvents().get(0);
         final EventTrigger after = listenerContext.getEvents().get(1);
@@ -173,7 +180,7 @@ public class EventPublishingDataStoreTest {
         assertThat(delegateSpy.getRequests(), hasSize(3));
         final OperationRequest request = delegateSpy.getRequests().get(2);
         assertThat(request.getOperation(), is(Operation.DELETE));
-        assertThat(request.getKey(), Matchers.<Serializable>is(key));
+        assertThat(request.getKey(), Matchers.<Object>is(key));
         assertThat(request.getEntity(), is(nullValue()));
         final EventTrigger before = listenerContext.getEvents().get(0);
         final EventTrigger after = listenerContext.getEvents().get(1);

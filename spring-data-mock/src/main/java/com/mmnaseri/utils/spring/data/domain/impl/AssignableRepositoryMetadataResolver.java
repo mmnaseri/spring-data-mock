@@ -5,8 +5,6 @@ import com.mmnaseri.utils.spring.data.error.RepositoryDefinitionException;
 import org.springframework.core.GenericTypeResolver;
 import org.springframework.data.repository.Repository;
 
-import java.io.Serializable;
-
 /**
  * This class will try to determine the repository metadata from the generic arguments defined by the
  * repository interface, assuming that it has extended the {@link Repository Repository} interface from
@@ -24,8 +22,7 @@ public class AssignableRepositoryMetadataResolver extends AbstractRepositoryMeta
         }
         final Class<?>[] arguments = GenericTypeResolver.resolveTypeArguments(repositoryInterface, Repository.class);
         final Class<?> entityType = arguments[0];
-        final Class<?> rawIdType = arguments[1];
-        final Class<? extends Serializable> idType = rawIdType.asSubclass(Serializable.class);
+        final Class<?> idType = arguments[1];
         final String idProperty = resolveIdProperty(entityType, idType);
         return new ImmutableRepositoryMetadata(idType, entityType, repositoryInterface, idProperty);
     }

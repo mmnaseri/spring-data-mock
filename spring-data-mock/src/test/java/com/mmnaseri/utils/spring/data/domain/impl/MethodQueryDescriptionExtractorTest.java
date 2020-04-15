@@ -6,7 +6,11 @@ import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
 import com.mmnaseri.utils.spring.data.error.QueryParserException;
 import com.mmnaseri.utils.spring.data.proxy.RepositoryFactoryConfiguration;
 import com.mmnaseri.utils.spring.data.proxy.impl.DefaultRepositoryFactoryConfiguration;
-import com.mmnaseri.utils.spring.data.query.*;
+import com.mmnaseri.utils.spring.data.query.Order;
+import com.mmnaseri.utils.spring.data.query.Page;
+import com.mmnaseri.utils.spring.data.query.QueryDescriptor;
+import com.mmnaseri.utils.spring.data.query.Sort;
+import com.mmnaseri.utils.spring.data.query.SortDirection;
 import com.mmnaseri.utils.spring.data.sample.models.Person;
 import com.mmnaseri.utils.spring.data.sample.repositories.MalformedRepository;
 import com.mmnaseri.utils.spring.data.sample.repositories.RepositoryWithValidMethods;
@@ -19,7 +23,13 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
 
 /**
  * @author Milad Naseri (mmnaseri@programmer.net)
@@ -258,7 +268,7 @@ public class MethodQueryDescriptionExtractorTest {
         assertThat(orders, hasSize(1));
         assertThat(orders.get(0).getProperty(), is("lastName"));
         assertThat(orders.get(0).getDirection(), is(SortDirection.DESCENDING));
-        final Page page = descriptor.getPage(new ImmutableInvocation(null, new Object[]{null, new PageRequest(0, 1)}));
+        final Page page = descriptor.getPage(new ImmutableInvocation(null, new Object[]{null, PageRequest.of(0, 1)}));
         assertThat(page, is(notNullValue()));
         assertThat(page.getPageSize(), is(1));
         assertThat(page.getPageNumber(), is(0));
@@ -277,7 +287,7 @@ public class MethodQueryDescriptionExtractorTest {
         assertThat(descriptor.getBranches().get(0).get(0).getPath(), is("firstName"));
         assertThat(descriptor.getFunction(), is(nullValue()));
         assertThat(descriptor.getLimit(), is(0));
-        final ImmutableInvocation invocation = new ImmutableInvocation(null, new Object[]{null, new PageRequest(0, 1, new org.springframework.data.domain.Sort(org.springframework.data.domain.Sort.Direction.ASC, "firstName", "lastName"))});
+        final ImmutableInvocation invocation = new ImmutableInvocation(null, new Object[]{null, PageRequest.of(0, 1, org.springframework.data.domain.Sort.by(org.springframework.data.domain.Sort.Direction.ASC, "firstName", "lastName"))});
         final List<Order> orders = descriptor.getSort(invocation).getOrders();
         assertThat(orders, hasSize(2));
         assertThat(orders.get(0).getProperty(), is("firstName"));
@@ -303,7 +313,7 @@ public class MethodQueryDescriptionExtractorTest {
         assertThat(descriptor.getBranches().get(0).get(0).getPath(), is("firstName"));
         assertThat(descriptor.getFunction(), is(nullValue()));
         assertThat(descriptor.getLimit(), is(0));
-        final ImmutableInvocation invocation = new ImmutableInvocation(null, new Object[]{null, new org.springframework.data.domain.Sort(org.springframework.data.domain.Sort.Direction.ASC, "firstName", "lastName")});
+        final ImmutableInvocation invocation = new ImmutableInvocation(null, new Object[]{null, org.springframework.data.domain.Sort.by(org.springframework.data.domain.Sort.Direction.ASC, "firstName", "lastName")});
         final List<Order> orders = descriptor.getSort(invocation).getOrders();
         assertThat(orders, hasSize(2));
         assertThat(orders.get(0).getProperty(), is("firstName"));

@@ -9,7 +9,6 @@ import com.mmnaseri.utils.spring.data.proxy.RepositoryFactory;
 import com.mmnaseri.utils.spring.data.proxy.RepositoryFactoryConfiguration;
 import com.mmnaseri.utils.spring.data.proxy.impl.DefaultRepositoryFactory;
 
-import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -23,13 +22,13 @@ public class RepositoryMockBuilder implements Start, ImplementationAnd, KeyGener
 
     private final RepositoryFactory factory;
     private final List<Class<?>> implementations;
-    private final KeyGenerator<? extends Serializable> keyGenerator;
+    private final KeyGenerator<?> keyGenerator;
 
     public RepositoryMockBuilder() {
         this(null, new LinkedList<Class<?>>(), null);
     }
 
-    private RepositoryMockBuilder(RepositoryFactory factory, List<Class<?>> implementations, KeyGenerator<? extends Serializable> keyGenerator) {
+    private RepositoryMockBuilder(RepositoryFactory factory, List<Class<?>> implementations, KeyGenerator<?> keyGenerator) {
         this.factory = factory;
         this.implementations = implementations;
         this.keyGenerator = keyGenerator;
@@ -58,12 +57,12 @@ public class RepositoryMockBuilder implements Start, ImplementationAnd, KeyGener
     }
 
     @Override
-    public <S extends Serializable> Implementation generateKeysUsing(KeyGenerator<S> keyGenerator) {
+    public <S> Implementation generateKeysUsing(KeyGenerator<S> keyGenerator) {
         return new RepositoryMockBuilder(factory, implementations, keyGenerator);
     }
 
     @Override
-    public <S extends Serializable, G extends KeyGenerator<S>> Implementation generateKeysUsing(Class<G> generatorType) {
+    public <S, G extends KeyGenerator<S>> Implementation generateKeysUsing(Class<G> generatorType) {
         //noinspection unchecked
         final G instance = (G) createKeyGenerator(generatorType);
         return generateKeysUsing(instance);
@@ -94,14 +93,14 @@ public class RepositoryMockBuilder implements Start, ImplementationAnd, KeyGener
         }
         if (keyGenerator == null) {
             final RepositoryFactoryConfiguration configuration = repositoryFactory.getConfiguration();
-            final KeyGenerator<? extends Serializable> evaluatedKeyGenerator;
+            final KeyGenerator<?> evaluatedKeyGenerator;
             if (configuration.getDefaultKeyGenerator() != null) {
                 evaluatedKeyGenerator = configuration.getDefaultKeyGenerator();
             } else {
                 final KeyGeneratorProvider generatorProvider = new KeyGeneratorProvider();
                 final RepositoryMetadata metadata = configuration.getRepositoryMetadataResolver().resolve(repositoryInterface);
-                final Class<? extends Serializable> identifierType = metadata.getIdentifierType();
-                final Class<? extends KeyGenerator<? extends Serializable>> keyGeneratorType = generatorProvider.getKeyGenerator(identifierType);
+                final Class<?> identifierType = metadata.getIdentifierType();
+                final Class<? extends KeyGenerator<?>> keyGeneratorType = generatorProvider.getKeyGenerator(identifierType);
                 evaluatedKeyGenerator = createKeyGenerator(keyGeneratorType);
             }
             return generateKeysUsing(evaluatedKeyGenerator).mock(repositoryInterface);

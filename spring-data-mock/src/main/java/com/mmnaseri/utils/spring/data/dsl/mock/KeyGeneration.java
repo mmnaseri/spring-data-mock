@@ -2,8 +2,6 @@ package com.mmnaseri.utils.spring.data.dsl.mock;
 
 import com.mmnaseri.utils.spring.data.domain.KeyGenerator;
 
-import java.io.Serializable;
-
 /**
  * Lets us set up how we want our keys to be generated
  *
@@ -18,7 +16,7 @@ public interface KeyGeneration extends Implementation {
      * @param <S>             the type of the keys
      * @return the rest of the configuration
      */
-    <S extends Serializable> Implementation generateKeysUsing(KeyGenerator<S> keyGenerator);
+    <S> Implementation generateKeysUsing(KeyGenerator<S> keyGenerator);
 
     /**
      * Sets the key generator to an instance of the provided type.
@@ -27,7 +25,7 @@ public interface KeyGeneration extends Implementation {
      * @param <G>              the type of the generator
      * @return the rest of the configuration
      */
-    <S extends Serializable, G extends KeyGenerator<S>> Implementation generateKeysUsing(Class<G> generatorType);
+    <S, G extends KeyGenerator<S>> Implementation generateKeysUsing(Class<G> generatorType);
 
     /**
      * Tells the builder that we are not going to have any auto-generated keys

@@ -4,14 +4,13 @@ import com.mmnaseri.utils.spring.data.proxy.RepositoryConfiguration;
 import com.mmnaseri.utils.spring.data.query.QueryDescriptor;
 import com.mmnaseri.utils.spring.data.store.DataStore;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**
  * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (4/10/16)
  */
-public class DataFunctionInvocation<K extends Serializable, E> {
+public class DataFunctionInvocation<K, E> {
 
     private final DataStore<K, E> dataStore;
     private final QueryDescriptor query;

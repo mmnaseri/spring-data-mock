@@ -2,12 +2,22 @@ package com.mmnaseri.utils.spring.data.sample.repositories;
 
 import com.mmnaseri.utils.spring.data.domain.RepositoryAware;
 import com.mmnaseri.utils.spring.data.domain.impl.key.NoOpKeyGenerator;
-import com.mmnaseri.utils.spring.data.proxy.*;
+import com.mmnaseri.utils.spring.data.proxy.RepositoryConfiguration;
+import com.mmnaseri.utils.spring.data.proxy.RepositoryConfigurationAware;
+import com.mmnaseri.utils.spring.data.proxy.RepositoryFactory;
+import com.mmnaseri.utils.spring.data.proxy.RepositoryFactoryAware;
+import com.mmnaseri.utils.spring.data.proxy.RepositoryFactoryConfiguration;
+import com.mmnaseri.utils.spring.data.proxy.RepositoryFactoryConfigurationAware;
 import com.mmnaseri.utils.spring.data.sample.models.Person;
 import org.hamcrest.Matchers;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.notNullValue;
 
 /**
  * @author Milad Naseri (mmnaseri@programmer.net)

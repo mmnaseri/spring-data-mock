@@ -22,11 +22,13 @@ import org.springframework.data.domain.Sort;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import java.io.Serializable;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
 
 /**
  * @author Milad Naseri (milad.naseri@cdk.com)
@@ -35,7 +37,7 @@ import static org.hamcrest.Matchers.*;
 public class DefaultQueryByExampleExecutorTest {
 
     private DefaultQueryByExampleExecutor executor;
-    private DataStore<Serializable, Person> dataStore;
+    private DataStore<Object, Person> dataStore;
 
     @BeforeMethod
     public void setUp() throws Exception {
@@ -181,7 +183,7 @@ public class DefaultQueryByExampleExecutorTest {
         final Person probe = new Person().setAddress(new Address().setState(new State().setName("(WA|Teheran)")));
         final ExampleMatcher matching = ExampleMatcher.matching().withMatcher("address.state.name", ExampleMatcher.GenericPropertyMatchers.regex()).withIgnoreCase();
         final Example<Person> example = Example.of(probe, matching);
-        final Iterable found = executor.findAll(example, new Sort(Sort.Direction.ASC, "firstName", "lastName", "address.state.name"));
+        final Iterable found = executor.findAll(example, Sort.by(Sort.Direction.ASC, "firstName", "lastName", "address.state.name"));
         assertThat(found, is(notNullValue()));
         final List<?> list = TestUtils.iterableToList(found);
         assertThat(list, hasSize(4));
@@ -196,7 +198,7 @@ public class DefaultQueryByExampleExecutorTest {
         final Person probe = new Person().setAddress(new Address().setState(new State().setName("Teheran")));
         final ExampleMatcher matching = ExampleMatcher.matching().withMatcher("address.state.name", ExampleMatcher.GenericPropertyMatchers.regex()).withIgnoreCase().withIgnorePaths("address.state.name");
         final Example<Person> example = Example.of(probe, matching);
-        final Iterable found = executor.findAll(example, new PageRequest(2, 1, new Sort(Sort.Direction.ASC, "firstName", "lastName", "address.state.name")));
+        final Iterable found = executor.findAll(example, PageRequest.of(2, 1, Sort.by(Sort.Direction.ASC, "firstName", "lastName", "address.state.name")));
         assertThat(found, is(notNullValue()));
         final List<?> list = TestUtils.iterableToList(found);
         assertThat(list, hasSize(1));

@@ -1,7 +1,5 @@
 package com.mmnaseri.utils.spring.data.domain;
 
-import java.io.Serializable;
-
 /**
  * This interface encapsulates metadata required from a repository for the rest of this framework to function.
  *
@@ -18,7 +16,7 @@ public interface RepositoryMetadata {
     /**
      * @return the type of the key this repository uses
      */
-    Class<? extends Serializable> getIdentifierType();
+    Class<?> getIdentifierType();
 
     /**
      * @return the type of the entities this repository represents

@@ -1,6 +1,10 @@
 package com.mmnaseri.utils.spring.data.repository;
 
-import com.mmnaseri.utils.spring.data.domain.*;
+import com.mmnaseri.utils.spring.data.domain.Modifier;
+import com.mmnaseri.utils.spring.data.domain.Operator;
+import com.mmnaseri.utils.spring.data.domain.OperatorContext;
+import com.mmnaseri.utils.spring.data.domain.Parameter;
+import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
 import com.mmnaseri.utils.spring.data.domain.impl.ImmutableParameter;
 import com.mmnaseri.utils.spring.data.domain.impl.QueryDescriptionExtractor;
 import com.mmnaseri.utils.spring.data.proxy.RepositoryFactoryConfiguration;
@@ -13,7 +17,13 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 
 import java.beans.PropertyDescriptor;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author Milad Naseri (milad.naseri@cdk.com)

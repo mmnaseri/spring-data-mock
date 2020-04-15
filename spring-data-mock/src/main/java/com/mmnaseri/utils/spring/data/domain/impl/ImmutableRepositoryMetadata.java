@@ -2,8 +2,6 @@ package com.mmnaseri.utils.spring.data.domain.impl;
 
 import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
 
-import java.io.Serializable;
-
 /**
  * This is an immutable repository metadata.
  *
@@ -12,12 +10,12 @@ import java.io.Serializable;
  */
 public class ImmutableRepositoryMetadata implements RepositoryMetadata {
 
-    private final Class<? extends Serializable> identifierType;
+    private final Class<?> identifierType;
     private final Class<?> entityType;
     private final Class<?> repositoryInterface;
     private final String identifier;
 
-    public ImmutableRepositoryMetadata(Class<? extends Serializable> identifierType, Class<?> entityType, Class<?> repositoryInterface, String identifier) {
+    public ImmutableRepositoryMetadata(Class<?> identifierType, Class<?> entityType, Class<?> repositoryInterface, String identifier) {
         this.identifierType = identifierType;
         this.entityType = entityType;
         this.repositoryInterface = repositoryInterface;
@@ -30,7 +28,7 @@ public class ImmutableRepositoryMetadata implements RepositoryMetadata {
     }
 
     @Override
-    public Class<? extends Serializable> getIdentifierType() {
+    public Class<?> getIdentifierType() {
         return identifierType;
     }
 

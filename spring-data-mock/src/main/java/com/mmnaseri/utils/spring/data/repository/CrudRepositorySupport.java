@@ -1,12 +1,14 @@
 package com.mmnaseri.utils.spring.data.repository;
 
-import com.mmnaseri.utils.spring.data.domain.*;
+import com.mmnaseri.utils.spring.data.domain.DataStoreAware;
+import com.mmnaseri.utils.spring.data.domain.KeyGenerator;
+import com.mmnaseri.utils.spring.data.domain.KeyGeneratorAware;
+import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
+import com.mmnaseri.utils.spring.data.domain.RepositoryMetadataAware;
 import com.mmnaseri.utils.spring.data.store.DataStore;
 import com.mmnaseri.utils.spring.data.tools.PropertyUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
-import java.io.Serializable;
 
 /**
  * <p>This implementation is used to factor out the commonalities between various Spring interfaces extending the
@@ -16,10 +18,10 @@ import java.io.Serializable;
  * @since 1.0 (2015/11/09, 21:40)
  */
 @SuppressWarnings("WeakerAccess")
-public class CrudRepositorySupport implements DataStoreAware, RepositoryMetadataAware, KeyGeneratorAware<Serializable> {
+public class CrudRepositorySupport implements DataStoreAware, RepositoryMetadataAware, KeyGeneratorAware<Object> {
 
     private static final Log log = LogFactory.getLog(CrudRepositorySupport.class);
-    private KeyGenerator<? extends Serializable> keyGenerator;
+    private KeyGenerator<?> keyGenerator;
     private DataStore dataStore;
     private RepositoryMetadata repositoryMetadata;
 
@@ -44,7 +46,7 @@ public class CrudRepositorySupport implements DataStoreAware, RepositoryMetadata
             log.warn("Attempting to save an entity without a key. This might result in an error. To fix this, specify a key generator.");
         }
         //noinspection unchecked
-        dataStore.save((Serializable) key, entity);
+        dataStore.save(key, entity);
         return entity;
     }
 
@@ -54,7 +56,7 @@ public class CrudRepositorySupport implements DataStoreAware, RepositoryMetadata
     }
 
     @Override
-    public final void setKeyGenerator(KeyGenerator<? extends Serializable> keyGenerator) {
+    public final void setKeyGenerator(KeyGenerator<?> keyGenerator) {
         this.keyGenerator = keyGenerator;
     }
 
@@ -63,7 +65,7 @@ public class CrudRepositorySupport implements DataStoreAware, RepositoryMetadata
         this.repositoryMetadata = repositoryMetadata;
     }
 
-    protected KeyGenerator<? extends Serializable> getKeyGenerator() {
+    protected KeyGenerator<?> getKeyGenerator() {
         return keyGenerator;
     }
 

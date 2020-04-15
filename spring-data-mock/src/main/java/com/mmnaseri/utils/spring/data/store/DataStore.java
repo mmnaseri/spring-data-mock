@@ -1,6 +1,5 @@
 package com.mmnaseri.utils.spring.data.store;
 
-import java.io.Serializable;
 import java.util.Collection;
 
 /**
@@ -9,7 +8,7 @@ import java.util.Collection;
  * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (9/17/15)
  */
-public interface DataStore<K extends Serializable, E> {
+public interface DataStore<K, E> {
 
     /**
      * Determines whether or not an entity with the given key exists in the data store.
@@ -21,8 +20,8 @@ public interface DataStore<K extends Serializable, E> {
     /**
      * Saves the given entity into the data store under the provided key. Whether or not the key is actually used by the
      * data store in some sort of mapping does not matter. The only expectation is that after this call, should the
-     * save be successful a call to {@link #hasKey(Serializable)} should yield {@literal true}
-     * and the very same entity (or an equal value entity) can be retrieved by calling {@link #retrieve(Serializable)}.
+     * save be successful a call to {@link #hasKey(Object)} should yield {@literal true}
+     * and the very same entity (or an equal value entity) can be retrieved by calling {@link #retrieve(Object)}.
      * @param key       the key
      * @param entity    the entity
      * @return {@literal true} to indicate the entity was a new entry, and {@literal false} to indicate another entity
@@ -32,8 +31,8 @@ public interface DataStore<K extends Serializable, E> {
 
     /**
      * Deletes the entity identifiable with the provided key, or does nothing if no such entity exists. It is expected
-     * that as a side effect, once this method returns successfully, {@link #hasKey(Serializable)} should return
-     * {@literal false} and {@link #retrieve(Serializable)} should return {@literal null} for the same key.
+     * that as a side effect, once this method returns successfully, {@link #hasKey(Object)} should return
+     * {@literal false} and {@link #retrieve(Object)} should return {@literal null} for the same key.
      * @param key    the key for which the removal should happen
      * @return {@literal true} to indicate the entity was located and removed and {@literal false} to indicate that
      * no such entity existed in the first place.

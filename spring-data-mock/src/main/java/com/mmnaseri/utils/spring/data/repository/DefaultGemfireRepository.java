@@ -9,8 +9,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.data.gemfire.repository.Wrapper;
 
-import java.io.Serializable;
-
 /**
  * @author Milad Naseri (mmnaseri@programmer.net)
  * @since 1.0 (10/13/15)
@@ -28,10 +26,10 @@ public class DefaultGemfireRepository implements DataStoreAware, RepositoryMetad
      * @param wrapper the wrapper for the key and the object
      * @return the saved entity
      */
-    public Object save(Wrapper<Object, Serializable> wrapper) {
+    public Object save(Wrapper<Object, Object> wrapper) {
         log.info("Going to save a wrapped data store object");
         final Object entity = wrapper.getEntity();
-        final Serializable key = wrapper.getKey();
+        final Object key = wrapper.getKey();
         if (repositoryMetadata.getEntityType().isInstance(entity)) {
             log.debug("Since the entity is of the same type as the actual entity type supported by the data store, " +
                     "we know how to set the key on the wrapped entity.");

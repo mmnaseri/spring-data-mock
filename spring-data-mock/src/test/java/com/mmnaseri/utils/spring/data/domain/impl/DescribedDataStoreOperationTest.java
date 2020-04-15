@@ -12,7 +12,6 @@ import com.mmnaseri.utils.spring.data.store.impl.MemoryDataStore;
 import org.hamcrest.Matchers;
 import org.testng.annotations.Test;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,8 +30,8 @@ public class DescribedDataStoreOperationTest {
         final DefaultQueryDescriptor descriptor = new DefaultQueryDescriptor(false, null, 0, null, null, null, null, null);
         final List<Object> selection = new ArrayList<>();
         //noinspection unchecked
-        final SpyingSelectDataStoreOperation<Serializable, Object> operationSpy = new SpyingSelectDataStoreOperation<>(descriptor, selection);
-        final DescribedDataStoreOperation<Serializable, Object> operation = new DescribedDataStoreOperation<>(operationSpy, null);
+        final SpyingSelectDataStoreOperation<Object, Object> operationSpy = new SpyingSelectDataStoreOperation<>(descriptor, selection);
+        final DescribedDataStoreOperation<Object, Object> operation = new DescribedDataStoreOperation<>(operationSpy, null);
         assertThat(operationSpy.isCalled(), is(false));
         final Object result = operation.execute(new MemoryDataStore<>(Object.class), null, null);
         assertThat(operationSpy.isCalled(), is(true));
@@ -47,14 +46,14 @@ public class DescribedDataStoreOperationTest {
         final DefaultDataFunctionRegistry functionRegistry = new DefaultDataFunctionRegistry();
         final SpyingDataFunction<Object> spy = new SpyingDataFunction<>(new DataFunction<Object>() {
             @Override
-            public <K extends Serializable, E> Object apply(DataStore<K, E> dataStore, QueryDescriptor query, RepositoryConfiguration configuration, List<E> current) {
+            public <K, E> Object apply(DataStore<K, E> dataStore, QueryDescriptor query, RepositoryConfiguration configuration, List<E> current) {
                 return transformed;
             }
         });
         functionRegistry.register("xyz", spy);
         //noinspection unchecked
-        final SpyingSelectDataStoreOperation<Serializable, Object> operationSpy = new SpyingSelectDataStoreOperation<>(descriptor, selection);
-        final DescribedDataStoreOperation<Serializable, Object> operation = new DescribedDataStoreOperation<>(operationSpy, functionRegistry);
+        final SpyingSelectDataStoreOperation<Object, Object> operationSpy = new SpyingSelectDataStoreOperation<>(descriptor, selection);
+        final DescribedDataStoreOperation<Object, Object> operation = new DescribedDataStoreOperation<>(operationSpy, functionRegistry);
         assertThat(operationSpy.isCalled(), is(false));
         final Object result = operation.execute(new MemoryDataStore<>(Object.class), null, null);
         assertThat(operationSpy.isCalled(), is(true));
@@ -65,8 +64,8 @@ public class DescribedDataStoreOperationTest {
 
     @Test
     public void testToString() throws Exception {
-        final SelectDataStoreOperation<Serializable, Object> selectOperation = new SelectDataStoreOperation<>(new DefaultQueryDescriptor(false, null, 0, null, null, null, null, null));
-        final DescribedDataStoreOperation<Serializable, Object> describedOperation = new DescribedDataStoreOperation<>(selectOperation, null);
+        final SelectDataStoreOperation<Object, Object> selectOperation = new SelectDataStoreOperation<>(new DefaultQueryDescriptor(false, null, 0, null, null, null, null, null));
+        final DescribedDataStoreOperation<Object, Object> describedOperation = new DescribedDataStoreOperation<>(selectOperation, null);
         assertThat(describedOperation.toString(), is(selectOperation.toString()));
     }
 

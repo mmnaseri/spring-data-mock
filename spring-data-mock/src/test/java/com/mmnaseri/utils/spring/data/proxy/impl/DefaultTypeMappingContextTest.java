@@ -2,8 +2,18 @@ package com.mmnaseri.utils.spring.data.proxy.impl;
 
 import com.mmnaseri.utils.spring.data.error.RepositoryDefinitionException;
 import com.mmnaseri.utils.spring.data.proxy.TypeMapping;
-import com.mmnaseri.utils.spring.data.repository.*;
-import com.mmnaseri.utils.spring.data.sample.usecases.proxy.*;
+import com.mmnaseri.utils.spring.data.repository.DefaultCrudRepository;
+import com.mmnaseri.utils.spring.data.repository.DefaultGemfireRepository;
+import com.mmnaseri.utils.spring.data.repository.DefaultJpaRepository;
+import com.mmnaseri.utils.spring.data.repository.DefaultPagingAndSortingRepository;
+import com.mmnaseri.utils.spring.data.repository.DefaultQueryByExampleExecutor;
+import com.mmnaseri.utils.spring.data.repository.DefaultQueryDslPredicateExecutor;
+import com.mmnaseri.utils.spring.data.sample.usecases.proxy.ErrorThrowingImplementation;
+import com.mmnaseri.utils.spring.data.sample.usecases.proxy.HighPriorityMapping;
+import com.mmnaseri.utils.spring.data.sample.usecases.proxy.ImplementationWithPrivateConstructor;
+import com.mmnaseri.utils.spring.data.sample.usecases.proxy.ImplementationWithoutADefaultConstructor;
+import com.mmnaseri.utils.spring.data.sample.usecases.proxy.LowerPriorityMapping;
+import com.mmnaseri.utils.spring.data.sample.usecases.proxy.ProperImplementation;
 import org.hamcrest.Matchers;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -11,7 +21,12 @@ import org.testng.annotations.Test;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.lessThan;
+import static org.hamcrest.Matchers.notNullValue;
 
 /**
  * @author Milad Naseri (mmnaseri@programmer.net)
