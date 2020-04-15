@@ -22,8 +22,7 @@ public class AssignableRepositoryMetadataResolver extends AbstractRepositoryMeta
         }
         final Class<?>[] arguments = GenericTypeResolver.resolveTypeArguments(repositoryInterface, Repository.class);
         final Class<?> entityType = arguments[0];
-        final Class<?> rawIdType = arguments[1];
-        final Class<?> idType = rawIdType.asSubclass(Object.class);
+        final Class<?> idType = arguments[1];
         final String idProperty = resolveIdProperty(entityType, idType);
         return new ImmutableRepositoryMetadata(idType, entityType, repositoryInterface, idProperty);
     }

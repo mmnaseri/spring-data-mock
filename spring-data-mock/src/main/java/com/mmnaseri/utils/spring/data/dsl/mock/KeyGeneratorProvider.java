@@ -35,11 +35,10 @@ class KeyGeneratorProvider {
         for (Class<? extends KeyGenerator> generatorType : discoveredKeyGenerators) {
             final Class<?> keyType = GenericTypeResolver.resolveTypeArgument(generatorType, KeyGenerator.class);
             assert keyType != null;
-            final Class<?> actualKeyType = keyType.asSubclass(Object.class);
-            if (!generators.containsKey(actualKeyType)) {
-                generators.put(actualKeyType, new CopyOnWriteArrayList<Class<? extends KeyGenerator>>());
+            if (!generators.containsKey(keyType)) {
+                generators.put(keyType, new CopyOnWriteArrayList<Class<? extends KeyGenerator>>());
             }
-            generators.get(actualKeyType).add(generatorType);
+            generators.get(keyType).add(generatorType);
         }
     }
 
