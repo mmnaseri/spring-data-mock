@@ -76,7 +76,7 @@ final class PagingAndSortingUtils {
      */
     public static Page page(Collection entries, Pageable pageable) {
         final List<?> all;
-        if (pageable.getSort() != null) {
+        if (pageable.getSort().isSorted()) {
             log.info("The page specification requests sorting, so we are going to sort the data first");
             all = sort(entries, pageable.getSort());
         } else {

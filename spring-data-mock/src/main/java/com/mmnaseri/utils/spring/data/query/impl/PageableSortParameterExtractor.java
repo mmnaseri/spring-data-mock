@@ -32,9 +32,6 @@ public class PageableSortParameterExtractor extends AbstractSortParameterExtract
         if (value instanceof Pageable) {
             final Pageable pageable = (Pageable) value;
             final org.springframework.data.domain.Sort sort = pageable.getSort();
-            if (sort == null) {
-                return null;
-            }
             return getSort(sort);
         }
         throw new InvalidArgumentException("No valid value was passed to deduce the sort description from");
