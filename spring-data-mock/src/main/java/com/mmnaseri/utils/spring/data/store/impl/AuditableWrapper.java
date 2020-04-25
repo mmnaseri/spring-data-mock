@@ -25,7 +25,7 @@ import java.util.Optional;
  * requests. Otherwise, it will convert the values to their appropriate types and sets and gets the appropriate
  * properties.
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (10/12/15)
  */
 @SuppressWarnings("WeakerAccess")
@@ -47,10 +47,11 @@ public class AuditableWrapper implements Auditable {
 
     /**
      * Returns the property value for a given audit property.
-     * @param type        the type of the property
-     * @param wrapper     the bean wrapper
-     * @param property    actual property to read
-     * @param <E>         the object type for the value
+     *
+     * @param type     the type of the property
+     * @param wrapper  the bean wrapper
+     * @param property actual property to read
+     * @param <E>      the object type for the value
      * @return the property value
      */
     private static <E> E getProperty(Class<E> type, BeanWrapper wrapper, String property) {
@@ -66,9 +67,10 @@ public class AuditableWrapper implements Auditable {
 
     /**
      * Sets an audit property on the given entity
-     * @param wrapper     the bean wrapper for the entity
-     * @param property    the property for which the value is being set
-     * @param value       the original value of the property
+     *
+     * @param wrapper  the bean wrapper for the entity
+     * @param property the property for which the value is being set
+     * @param value    the original value of the property
      */
     private static void setProperty(BeanWrapper wrapper, String property, Object value) {
         if (property != null) {

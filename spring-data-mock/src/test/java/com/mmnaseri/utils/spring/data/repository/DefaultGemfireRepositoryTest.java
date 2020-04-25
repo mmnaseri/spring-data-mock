@@ -8,12 +8,10 @@ import org.springframework.data.gemfire.repository.Wrapper;
 import org.testng.annotations.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.*;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/11/16, 1:13 PM)
  */
 public class DefaultGemfireRepositoryTest {
@@ -21,7 +19,10 @@ public class DefaultGemfireRepositoryTest {
     @Test
     public void testSave() throws Exception {
         final MemoryDataStore<Object, Person> dataStore = new MemoryDataStore<>(Person.class);
-        final ImmutableRepositoryMetadata repositoryMetadata = new ImmutableRepositoryMetadata(String.class, Person.class, SimplePersonRepository.class, "id");
+        final ImmutableRepositoryMetadata repositoryMetadata = new ImmutableRepositoryMetadata(String.class,
+                                                                                               Person.class,
+                                                                                               SimplePersonRepository.class,
+                                                                                               "id");
         final DefaultGemfireRepository repository = new DefaultGemfireRepository();
         repository.setDataStore(dataStore);
         repository.setRepositoryMetadata(repositoryMetadata);

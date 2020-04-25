@@ -12,10 +12,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
- * This is a data store operation that delivers the operation by calling to a delegate method. This means that the results
- * of the operation are the same as what was returned by the method itself.
+ * This is a data store operation that delivers the operation by calling to a delegate method. This means that the
+ * results of the operation are the same as what was returned by the method itself.
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/29/15)
  */
 public class MethodInvocationDataStoreOperation<K, E> implements DataStoreOperation<Object, K, E> {
@@ -38,7 +38,8 @@ public class MethodInvocationDataStoreOperation<K, E> implements DataStoreOperat
         } catch (IllegalAccessException e) {
             throw new DataOperationExecutionException("Failed to access target method: " + method, e);
         } catch (InvocationTargetException e) {
-            throw new DataOperationExecutionException("Method call resulted in internal error: " + method, e.getTargetException());
+            throw new DataOperationExecutionException("Method call resulted in internal error: " + method,
+                                                      e.getTargetException());
         }
         return result;
     }

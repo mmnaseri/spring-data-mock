@@ -3,11 +3,7 @@ package com.mmnaseri.utils.spring.data.store.impl;
 import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
 import com.mmnaseri.utils.spring.data.domain.impl.ImmutableRepositoryMetadata;
 import com.mmnaseri.utils.spring.data.error.CorruptDataException;
-import com.mmnaseri.utils.spring.data.sample.mocks.EventTrigger;
-import com.mmnaseri.utils.spring.data.sample.mocks.Operation;
-import com.mmnaseri.utils.spring.data.sample.mocks.OperationRequest;
-import com.mmnaseri.utils.spring.data.sample.mocks.SpyingDataStore;
-import com.mmnaseri.utils.spring.data.sample.mocks.SpyingListenerContext;
+import com.mmnaseri.utils.spring.data.sample.mocks.*;
 import com.mmnaseri.utils.spring.data.sample.models.DummyEvent;
 import com.mmnaseri.utils.spring.data.sample.models.Person;
 import com.mmnaseri.utils.spring.data.sample.repositories.SimplePersonRepository;
@@ -22,14 +18,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.lessThan;
-import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.*;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/9/16)
  */
 @SuppressWarnings("WeakerAccess")
@@ -44,7 +36,8 @@ public class EventPublishingDataStoreTest {
 
     @BeforeMethod
     public void setUp() throws Exception {
-        repositoryMetadata = new ImmutableRepositoryMetadata(String.class, Person.class, SimplePersonRepository.class, "id");
+        repositoryMetadata = new ImmutableRepositoryMetadata(String.class, Person.class, SimplePersonRepository.class,
+                                                             "id");
         listenerContext = new SpyingListenerContext(counter);
         delegate = new MemoryDataStore<>(Person.class);
         delegateSpy = new SpyingDataStore<>(delegate, counter);
@@ -92,13 +85,15 @@ public class EventPublishingDataStoreTest {
     @Test
     public void testKeysDelegation() throws Exception {
         final AtomicBoolean called = new AtomicBoolean(false);
-        final DataStore<String, Person> localDataStore = new EventPublishingDataStore<>(new MemoryDataStore<String, Person>(Person.class) {
-            @Override
-            public Collection<String> keys() {
-                called.set(true);
-                return super.keys();
-            }
-        }, repositoryMetadata, listenerContext);
+        final DataStore<String, Person> localDataStore = new EventPublishingDataStore<>(
+                new MemoryDataStore<String, Person>(Person.class) {
+
+                    @Override
+                    public Collection<String> keys() {
+                        called.set(true);
+                        return super.keys();
+                    }
+                }, repositoryMetadata, listenerContext);
         assertThat(called.get(), is(false));
         localDataStore.keys();
         assertThat(called.get(), is(true));

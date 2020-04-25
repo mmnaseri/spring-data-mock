@@ -1,7 +1,7 @@
 package com.mmnaseri.utils.spring.data.sample.mocks;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/10/16)
  */
 public class OperationRequest<K, E> {

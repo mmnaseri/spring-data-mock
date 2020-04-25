@@ -8,7 +8,7 @@ import com.mmnaseri.utils.spring.data.domain.Invocation;
  *
  * <p>This adapter is executed at {@link Integer#MIN_VALUE the lowest possible priority}.</p>
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/24/15)
  */
 public class VoidResultAdapter extends AbstractResultAdapter<Object> {

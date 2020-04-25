@@ -5,7 +5,7 @@ import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
 /**
  * This is an immutable repository metadata.
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/19/15)
  */
 public class ImmutableRepositoryMetadata implements RepositoryMetadata {
@@ -15,7 +15,8 @@ public class ImmutableRepositoryMetadata implements RepositoryMetadata {
     private final Class<?> repositoryInterface;
     private final String identifier;
 
-    public ImmutableRepositoryMetadata(Class<?> identifierType, Class<?> entityType, Class<?> repositoryInterface, String identifier) {
+    public ImmutableRepositoryMetadata(Class<?> identifierType, Class<?> entityType, Class<?> repositoryInterface,
+                                       String identifier) {
         this.identifierType = identifierType;
         this.entityType = entityType;
         this.repositoryInterface = repositoryInterface;

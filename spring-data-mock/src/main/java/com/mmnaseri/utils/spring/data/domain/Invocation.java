@@ -5,7 +5,7 @@ import java.lang.reflect.Method;
 /**
  * This interface encapsulates a single invocation, regardless of the object on which the method was invoked.
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/17/15)
  */
 public interface Invocation {

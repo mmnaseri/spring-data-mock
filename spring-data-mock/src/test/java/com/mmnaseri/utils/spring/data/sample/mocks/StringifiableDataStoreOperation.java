@@ -6,7 +6,7 @@ import com.mmnaseri.utils.spring.data.store.DataStore;
 import com.mmnaseri.utils.spring.data.store.DataStoreOperation;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/12/16, 6:50 PM)
  */
 public class StringifiableDataStoreOperation<R, K, E> implements DataStoreOperation<R, K, E> {

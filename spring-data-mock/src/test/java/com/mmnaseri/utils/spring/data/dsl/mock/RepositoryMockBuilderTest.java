@@ -29,23 +29,18 @@ import org.hamcrest.Matchers;
 import org.testng.annotations.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.*;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/11/16, 2:38 PM)
  */
 public class RepositoryMockBuilderTest {
 
     @Test
     public void testOutOfTheBoxMocking() throws Exception {
-        final SimpleCrudPersonRepository repository = new RepositoryMockBuilder().useConfiguration(RepositoryFactoryBuilder.defaultConfiguration()).mock(SimpleCrudPersonRepository.class);
+        final SimpleCrudPersonRepository repository = new RepositoryMockBuilder().useConfiguration(
+                RepositoryFactoryBuilder.defaultConfiguration()).mock(SimpleCrudPersonRepository.class);
         assertThat(repository, is(notNullValue()));
         final Person person = repository.save(new Person());
         assertThat(repository.findAll(), is(notNullValue()));
@@ -57,7 +52,8 @@ public class RepositoryMockBuilderTest {
 
     @Test
     public void testMockingWithoutKeyGeneration() throws Exception {
-        final SimpleCrudPersonRepository repository = new RepositoryMockBuilder().withoutGeneratingKeys().mock(SimpleCrudPersonRepository.class);
+        final SimpleCrudPersonRepository repository = new RepositoryMockBuilder().withoutGeneratingKeys().mock(
+                SimpleCrudPersonRepository.class);
         assertThat(repository, is(notNullValue()));
         boolean exceptionThrown = false;
         try {
@@ -79,9 +75,11 @@ public class RepositoryMockBuilderTest {
 
     @Test
     public void testMockingWithFallbackKeyGenerator() throws Exception {
-        final DefaultRepositoryFactoryConfiguration configuration = new DefaultRepositoryFactoryConfiguration(RepositoryFactoryBuilder.defaultConfiguration());
+        final DefaultRepositoryFactoryConfiguration configuration = new DefaultRepositoryFactoryConfiguration(
+                RepositoryFactoryBuilder.defaultConfiguration());
         configuration.setDefaultKeyGenerator(new UUIDKeyGenerator());
-        final SimpleCrudPersonRepository repository = new RepositoryMockBuilder().useConfiguration(configuration).mock(SimpleCrudPersonRepository.class);
+        final SimpleCrudPersonRepository repository = new RepositoryMockBuilder().useConfiguration(configuration).mock(
+                SimpleCrudPersonRepository.class);
         assertThat(repository, is(notNullValue()));
         final Person saved = repository.save(new Person());
         assertThat(saved, is(notNullValue()));
@@ -90,7 +88,8 @@ public class RepositoryMockBuilderTest {
 
     @Test
     public void testCustomKeyGeneration() throws Exception {
-        final SimpleCrudPersonRepository repository = new RepositoryMockBuilder().generateKeysUsing(CustomStringKeyGenerator.class).mock(SimpleCrudPersonRepository.class);
+        final SimpleCrudPersonRepository repository = new RepositoryMockBuilder().generateKeysUsing(
+                CustomStringKeyGenerator.class).mock(SimpleCrudPersonRepository.class);
         assertThat(repository, is(notNullValue()));
         final Person person = repository.save(new Person());
         assertThat(repository.findAll(), is(notNullValue()));
@@ -107,7 +106,8 @@ public class RepositoryMockBuilderTest {
 
     @Test
     public void testUsingCustomImplementations() throws Exception {
-        final MappedSimpleCrudPersonRepository repository = new RepositoryMockBuilder().usingImplementation(ValueHashMapper.class).and(ValueStringMapper.class).mock(MappedSimpleCrudPersonRepository.class);
+        final MappedSimpleCrudPersonRepository repository = new RepositoryMockBuilder().usingImplementation(
+                ValueHashMapper.class).and(ValueStringMapper.class).mock(MappedSimpleCrudPersonRepository.class);
         assertThat(repository, is(notNullValue()));
         final Person person = repository.save(new Person());
         assertThat(repository.findAll(), is(notNullValue()));
@@ -122,9 +122,9 @@ public class RepositoryMockBuilderTest {
     /**
      * This is a slightly more sophisticated test that adds additional methods to the interface being mocked.
      * <p>
-     * This sort of thing might come in handy if we are unsure of how to proceed with the tests, or if there is something we need bound to the repository
-     * specifically for the tests, however, it should be noted that adding functionality to your repositories for the purpose of testing
-     * is not really the greatest idea.
+     * This sort of thing might come in handy if we are unsure of how to proceed with the tests, or if there is
+     * something we need bound to the repository specifically for the tests, however, it should be noted that adding
+     * functionality to your repositories for the purpose of testing is not really the greatest idea.
      *
      * @throws Exception
      */
@@ -139,20 +139,26 @@ public class RepositoryMockBuilderTest {
         configuration.setRepositoryMetadataResolver(new DefaultRepositoryMetadataResolver());
         configuration.setResultAdapterContext(new DefaultResultAdapterContext());
         configuration.setTypeMappingContext(new DefaultTypeMappingContext());
-        final SimpleCrudPersonRepository repository = new RepositoryMockBuilder().useFactory(new InformationExposingRepositoryFactory(configuration)).mock(SimpleCrudPersonRepository.class);
+        final SimpleCrudPersonRepository repository = new RepositoryMockBuilder().useFactory(
+                new InformationExposingRepositoryFactory(configuration)).mock(SimpleCrudPersonRepository.class);
         assertThat(repository, is(instanceOf(InformationExposingRepository.class)));
         final InformationExposingRepository informationExposingRepository = (InformationExposingRepository) repository;
         assertThat(informationExposingRepository.getFactoryConfiguration(), is(notNullValue()));
-        assertThat(informationExposingRepository.getFactoryConfiguration(), Matchers.<RepositoryFactoryConfiguration>is(configuration));
+        assertThat(informationExposingRepository.getFactoryConfiguration(),
+                   Matchers.<RepositoryFactoryConfiguration>is(configuration));
         assertThat(informationExposingRepository.getConfiguration(), is(notNullValue()));
         assertThat(informationExposingRepository.getConfiguration().getBoundImplementations(), is(notNullValue()));
         assertThat(informationExposingRepository.getConfiguration().getBoundImplementations(), is(empty()));
         assertThat(informationExposingRepository.getConfiguration().getKeyGenerator(), is(notNullValue()));
         assertThat(informationExposingRepository.getConfiguration().getRepositoryMetadata(), is(notNullValue()));
-        assertThat(informationExposingRepository.getConfiguration().getRepositoryMetadata().getEntityType(), is(Matchers.<Class<?>>equalTo(Person.class)));
-        assertThat(informationExposingRepository.getConfiguration().getRepositoryMetadata().getIdentifierType(), is(Matchers.<Class<?>>equalTo(String.class)));
-        assertThat(informationExposingRepository.getConfiguration().getRepositoryMetadata().getRepositoryInterface(), is(Matchers.<Class<?>>equalTo(SimpleCrudPersonRepository.class)));
-        assertThat(informationExposingRepository.getConfiguration().getRepositoryMetadata().getIdentifierProperty(), is("id"));
+        assertThat(informationExposingRepository.getConfiguration().getRepositoryMetadata().getEntityType(),
+                   is(Matchers.<Class<?>>equalTo(Person.class)));
+        assertThat(informationExposingRepository.getConfiguration().getRepositoryMetadata().getIdentifierType(),
+                   is(Matchers.<Class<?>>equalTo(String.class)));
+        assertThat(informationExposingRepository.getConfiguration().getRepositoryMetadata().getRepositoryInterface(),
+                   is(Matchers.<Class<?>>equalTo(SimpleCrudPersonRepository.class)));
+        assertThat(informationExposingRepository.getConfiguration().getRepositoryMetadata().getIdentifierProperty(),
+                   is("id"));
     }
 
     @Test
@@ -168,7 +174,8 @@ public class RepositoryMockBuilderTest {
         configuration.setRepositoryMetadataResolver(new DefaultRepositoryMetadataResolver());
         configuration.setResultAdapterContext(new DefaultResultAdapterContext());
         configuration.setTypeMappingContext(mappingContext);
-        final ConfiguredSimpleCrudPersonRepository repository = new RepositoryMockBuilder().useConfiguration(configuration).mock(ConfiguredSimpleCrudPersonRepository.class);
+        final ConfiguredSimpleCrudPersonRepository repository = new RepositoryMockBuilder().useConfiguration(
+                configuration).mock(ConfiguredSimpleCrudPersonRepository.class);
         assertThat(repository.getConfiguration(), is(notNullValue()));
         assertThat(repository.getConfiguration(), Matchers.<RepositoryFactoryConfiguration>is(configuration));
     }

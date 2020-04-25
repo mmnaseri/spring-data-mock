@@ -1,13 +1,7 @@
 package com.mmnaseri.utils.spring.data.dsl.mock;
 
 import com.mmnaseri.utils.spring.data.domain.KeyGenerator;
-import com.mmnaseri.utils.spring.data.domain.impl.key.ConfigurableSequentialIntegerKeyGenerator;
-import com.mmnaseri.utils.spring.data.domain.impl.key.ConfigurableSequentialLongKeyGenerator;
-import com.mmnaseri.utils.spring.data.domain.impl.key.RandomIntegerKeyGenerator;
-import com.mmnaseri.utils.spring.data.domain.impl.key.RandomLongKeyGenerator;
-import com.mmnaseri.utils.spring.data.domain.impl.key.SequentialIntegerKeyGenerator;
-import com.mmnaseri.utils.spring.data.domain.impl.key.SequentialLongKeyGenerator;
-import com.mmnaseri.utils.spring.data.domain.impl.key.UUIDKeyGenerator;
+import com.mmnaseri.utils.spring.data.domain.impl.key.*;
 import org.springframework.core.GenericTypeResolver;
 
 import java.util.Arrays;
@@ -18,10 +12,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
- * This class will provide a key generator for the requested key type, based on the preset list of available
- * key generators.
+ * This class will provide a key generator for the requested key type, based on the preset list of available key
+ * generators.
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (10/12/15)
  */
 @SuppressWarnings("WeakerAccess")
@@ -51,7 +45,7 @@ class KeyGeneratorProvider {
                 ConfigurableSequentialIntegerKeyGenerator.class,
                 ConfigurableSequentialLongKeyGenerator.class,
                 UUIDKeyGenerator.class
-        );
+                                                           );
     }
 
     @SuppressWarnings("unchecked")
@@ -75,10 +69,11 @@ class KeyGeneratorProvider {
     }
 
     /**
-     * Provides a key generator for the specified key type. This is to automate the process of getting
-     * a key generator, when no alternative is provided by the user.
-     * @param keyType    the type of keys for which a generator is required
-     * @param <S>        the type of keys the generator will provide
+     * Provides a key generator for the specified key type. This is to automate the process of getting a key generator,
+     * when no alternative is provided by the user.
+     *
+     * @param keyType the type of keys for which a generator is required
+     * @param <S>     the type of keys the generator will provide
      * @return the generator or {@literal null} if none could be found to satisfy the key type
      */
     public <S> Class<? extends KeyGenerator<S>> getKeyGenerator(Class<S> keyType) {

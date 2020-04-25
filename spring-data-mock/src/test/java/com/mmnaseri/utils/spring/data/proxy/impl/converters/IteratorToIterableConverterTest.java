@@ -8,13 +8,10 @@ import java.util.Arrays;
 import java.util.Iterator;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.*;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (10/6/15)
  */
 public class IteratorToIterableConverterTest {
@@ -22,7 +19,9 @@ public class IteratorToIterableConverterTest {
     @Test
     public void testConvertingIteratorToIterable() throws Exception {
         final IteratorToIterableConverter converter = new IteratorToIterableConverter();
-        final Object converted = converter.convert(new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findLong"), null), Arrays.asList(1, 2, 3, 4).iterator());
+        final Object converted = converter.convert(
+                new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findLong"), null),
+                Arrays.asList(1, 2, 3, 4).iterator());
         assertThat(converted, is(notNullValue()));
         assertThat(converted, is(instanceOf(Iterable.class)));
         final Iterable iterable = (Iterable) converted;

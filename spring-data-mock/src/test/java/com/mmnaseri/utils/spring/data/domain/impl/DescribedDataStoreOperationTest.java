@@ -20,18 +20,21 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/10/16)
  */
 public class DescribedDataStoreOperationTest {
 
     @Test
     public void testExecutionWithoutAnyFunctions() throws Exception {
-        final DefaultQueryDescriptor descriptor = new DefaultQueryDescriptor(false, null, 0, null, null, null, null, null);
+        final DefaultQueryDescriptor descriptor = new DefaultQueryDescriptor(false, null, 0, null, null, null, null,
+                                                                             null);
         final List<Object> selection = new ArrayList<>();
         //noinspection unchecked
-        final SpyingSelectDataStoreOperation<Object, Object> operationSpy = new SpyingSelectDataStoreOperation<>(descriptor, selection);
-        final DescribedDataStoreOperation<Object, Object> operation = new DescribedDataStoreOperation<>(operationSpy, null);
+        final SpyingSelectDataStoreOperation<Object, Object> operationSpy = new SpyingSelectDataStoreOperation<>(
+                descriptor, selection);
+        final DescribedDataStoreOperation<Object, Object> operation = new DescribedDataStoreOperation<>(operationSpy,
+                                                                                                        null);
         assertThat(operationSpy.isCalled(), is(false));
         final Object result = operation.execute(new MemoryDataStore<>(Object.class), null, null);
         assertThat(operationSpy.isCalled(), is(true));
@@ -40,20 +43,25 @@ public class DescribedDataStoreOperationTest {
 
     @Test
     public void testExecutionWithCustomFunction() throws Exception {
-        final DefaultQueryDescriptor descriptor = new DefaultQueryDescriptor(false, "xyz", 0, null, null, null, null, null);
+        final DefaultQueryDescriptor descriptor = new DefaultQueryDescriptor(false, "xyz", 0, null, null, null, null,
+                                                                             null);
         final List<Object> selection = new ArrayList<>();
         final Object transformed = new Object();
         final DefaultDataFunctionRegistry functionRegistry = new DefaultDataFunctionRegistry();
         final SpyingDataFunction<Object> spy = new SpyingDataFunction<>(new DataFunction<Object>() {
+
             @Override
-            public <K, E> Object apply(DataStore<K, E> dataStore, QueryDescriptor query, RepositoryConfiguration configuration, List<E> current) {
+            public <K, E> Object apply(DataStore<K, E> dataStore, QueryDescriptor query,
+                                       RepositoryConfiguration configuration, List<E> current) {
                 return transformed;
             }
         });
         functionRegistry.register("xyz", spy);
         //noinspection unchecked
-        final SpyingSelectDataStoreOperation<Object, Object> operationSpy = new SpyingSelectDataStoreOperation<>(descriptor, selection);
-        final DescribedDataStoreOperation<Object, Object> operation = new DescribedDataStoreOperation<>(operationSpy, functionRegistry);
+        final SpyingSelectDataStoreOperation<Object, Object> operationSpy = new SpyingSelectDataStoreOperation<>(
+                descriptor, selection);
+        final DescribedDataStoreOperation<Object, Object> operation = new DescribedDataStoreOperation<>(operationSpy,
+                                                                                                        functionRegistry);
         assertThat(operationSpy.isCalled(), is(false));
         final Object result = operation.execute(new MemoryDataStore<>(Object.class), null, null);
         assertThat(operationSpy.isCalled(), is(true));
@@ -64,8 +72,10 @@ public class DescribedDataStoreOperationTest {
 
     @Test
     public void testToString() throws Exception {
-        final SelectDataStoreOperation<Object, Object> selectOperation = new SelectDataStoreOperation<>(new DefaultQueryDescriptor(false, null, 0, null, null, null, null, null));
-        final DescribedDataStoreOperation<Object, Object> describedOperation = new DescribedDataStoreOperation<>(selectOperation, null);
+        final SelectDataStoreOperation<Object, Object> selectOperation = new SelectDataStoreOperation<>(
+                new DefaultQueryDescriptor(false, null, 0, null, null, null, null, null));
+        final DescribedDataStoreOperation<Object, Object> describedOperation = new DescribedDataStoreOperation<>(
+                selectOperation, null);
         assertThat(describedOperation.toString(), is(selectOperation.toString()));
     }
 

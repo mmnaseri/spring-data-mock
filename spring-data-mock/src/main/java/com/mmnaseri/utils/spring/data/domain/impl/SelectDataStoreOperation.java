@@ -10,19 +10,14 @@ import com.mmnaseri.utils.spring.data.store.DataStoreOperation;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * This is a data store operation that will read values from the underlying data store and match them up against the
  * query description's different decision branches. Once all the values are loaded and filtered, it will then sort them
  * according to the sort instruction, and then paginate them if necessary.
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/17/15)
  */
 public class SelectDataStoreOperation<K, E> implements DataStoreOperation<List<E>, K, E> {

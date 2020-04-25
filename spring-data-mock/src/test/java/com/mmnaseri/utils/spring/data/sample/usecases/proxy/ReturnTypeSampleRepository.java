@@ -7,15 +7,11 @@ import org.springframework.data.geo.GeoPage;
 import org.springframework.util.concurrent.ListenableFuture;
 
 import java.math.BigDecimal;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.Future;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/12/16, 5:31 PM)
  */
 public interface ReturnTypeSampleRepository {

@@ -9,11 +9,12 @@ import org.springframework.data.domain.AuditorAware;
 import java.time.Instant;
 
 /**
- * This event listener can be registered with an {@link com.mmnaseri.utils.spring.data.store.DataStoreEventListenerContext
- * event listener context} to add support for auditing entities as per the specifications set forth by Spring
- * Data Commons.
+ * This event listener can be registered with an
+ * {@link com.mmnaseri.utils.spring.data.store.DataStoreEventListenerContext
+ * event listener context} to add support for auditing entities as per the specifications set forth by Spring Data
+ * Commons.
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (10/12/15)
  */
 public class AuditDataEventListener implements DataStoreEventListener<DataStoreEvent> {
@@ -41,10 +42,11 @@ public class AuditDataEventListener implements DataStoreEventListener<DataStoreE
     }
 
     /**
-     * Given an entity returns an {@link Auditable} for it. If the entity itself implements that interface,
-     * it will be returned without any changes, otherwise it will be wrapped in an {@link AuditableWrapper}.
-     * @param entity                the entity
-     * @param repositoryMetadata    the repository metadata for the entity
+     * Given an entity returns an {@link Auditable} for it. If the entity itself implements that interface, it will be
+     * returned without any changes, otherwise it will be wrapped in an {@link AuditableWrapper}.
+     *
+     * @param entity             the entity
+     * @param repositoryMetadata the repository metadata for the entity
      * @return the auditable entity
      */
     private static Auditable getAuditable(Object entity, RepositoryMetadata repositoryMetadata) {

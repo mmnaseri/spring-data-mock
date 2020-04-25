@@ -24,10 +24,11 @@ import java.util.concurrent.CopyOnWriteArraySet;
  * <p>This class is in charge of handling a data operation that was triggered by invoking a repository method.</p>
  *
  * <p>The invocation is first considered by trying to find a data operation handler. If such a handler cannot be
- * found, we will try to handle it by finding the appropriate {@link com.mmnaseri.utils.spring.data.proxy.NonDataOperationHandler non-data
- * operation handler}.</p>
+ * found, we will try to handle it by finding the appropriate
+ * {@link com.mmnaseri.utils.spring.data.proxy.NonDataOperationHandler
+ * non-data operation handler}.</p>
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/23/15)
  */
 @SuppressWarnings("WeakerAccess")
@@ -43,7 +44,8 @@ public class DataOperationInvocationHandler<K, E> implements InvocationHandler {
     private final Set<Method> misses = new CopyOnWriteArraySet<>();
     private final NonDataOperationInvocationHandler operationInvocationHandler;
 
-    public DataOperationInvocationHandler(RepositoryConfiguration repositoryConfiguration, List<InvocationMapping<K, E>> mappings,
+    public DataOperationInvocationHandler(RepositoryConfiguration repositoryConfiguration,
+                                          List<InvocationMapping<K, E>> mappings,
                                           DataStore<K, E> dataStore, ResultAdapterContext adapterContext,
                                           NonDataOperationInvocationHandler operationInvocationHandler) {
         this.repositoryConfiguration = repositoryConfiguration;
@@ -56,7 +58,8 @@ public class DataOperationInvocationHandler<K, E> implements InvocationHandler {
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        log.info("A method call to " + method + " has been intercepted. We will now try to find an appropriate invocation.");
+        log.info("A method call to " + method
+                         + " has been intercepted. We will now try to find an appropriate invocation.");
         final Invocation methodInvocation = new ImmutableInvocation(method, args);
         InvocationMapping<K, E> targetMapping = null;
         if (!misses.contains(method)) {
@@ -73,7 +76,9 @@ public class DataOperationInvocationHandler<K, E> implements InvocationHandler {
             }
         }
         if (targetMapping == null) {
-            log.info("The invocation cannot be resolved using a data operation. We will try to handle this as a non-data operation");
+            log.info(
+                    "The invocation cannot be resolved using a data operation. We will try to handle this as a "
+                            + "non-data operation");
             misses.add(method);
             return operationInvocationHandler.invoke(proxy, method, args);
         }

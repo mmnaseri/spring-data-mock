@@ -19,9 +19,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.*;
 
 public class DataOperationInvocationHandlerTest {
 
@@ -30,17 +28,23 @@ public class DataOperationInvocationHandlerTest {
 
     @BeforeMethod
     public void setUp() throws Exception {
-        final RepositoryMetadata repositoryMetadata = new ImmutableRepositoryMetadata(String.class, Person.class, SimplePersonRepository.class, "id");
-        final RepositoryConfiguration repositoryConfiguration = new ImmutableRepositoryConfiguration(repositoryMetadata, new UUIDKeyGenerator(), Collections.<Class<?>>emptyList());
+        final RepositoryMetadata repositoryMetadata = new ImmutableRepositoryMetadata(String.class, Person.class,
+                                                                                      SimplePersonRepository.class,
+                                                                                      "id");
+        final RepositoryConfiguration repositoryConfiguration = new ImmutableRepositoryConfiguration(repositoryMetadata,
+                                                                                                     new UUIDKeyGenerator(),
+                                                                                                     Collections.<Class<?>>emptyList());
         final MemoryDataStore<String, Person> dataStore = new MemoryDataStore<>(Person.class);
         final DefaultResultAdapterContext adapterContext = new DefaultResultAdapterContext();
         final NonDataOperationInvocationHandler invocationHandler = new NonDataOperationInvocationHandler();
         mappings = new ArrayList<>();
-        handler = new DataOperationInvocationHandler<>(repositoryConfiguration, mappings, dataStore, adapterContext, invocationHandler);
+        handler = new DataOperationInvocationHandler<>(repositoryConfiguration, mappings, dataStore, adapterContext,
+                                                       invocationHandler);
     }
 
     /**
      * Regression test to reproduce #12
+     *
      * @throws Throwable
      */
     @Test
@@ -53,30 +57,35 @@ public class DataOperationInvocationHandlerTest {
 
     /**
      * Regression test to reproduce #12
+     *
      * @throws Throwable
      */
     @Test
     public void testCallingEqualsWhenTheyAreIdentical() throws Throwable {
         final Object proxy = new Object();
-        final Object result = handler.invoke(proxy, Object.class.getMethod("equals", Object.class), new Object[]{proxy});
+        final Object result = handler.invoke(proxy, Object.class.getMethod("equals", Object.class),
+                                             new Object[]{proxy});
         assertThat(result, is(notNullValue()));
         assertThat(result, Matchers.<Object>is(true));
     }
 
     /**
      * Regression test to reproduce #12
+     *
      * @throws Throwable
      */
     @Test
     public void testCallingEqualsWhenTheyAreNotIdentical() throws Throwable {
         final Object proxy = new Object();
-        final Object result = handler.invoke(proxy, Object.class.getMethod("equals", Object.class), new Object[]{new Object()});
+        final Object result = handler.invoke(proxy, Object.class.getMethod("equals", Object.class),
+                                             new Object[]{new Object()});
         assertThat(result, is(notNullValue()));
         assertThat(result, Matchers.<Object>is(false));
     }
 
     /**
      * Regression test to reproduce #12
+     *
      * @throws Throwable
      */
     @Test
@@ -89,8 +98,10 @@ public class DataOperationInvocationHandlerTest {
 
     @Test
     public void testMissingMethodTwice() throws Throwable {
-        assertThat(handler.invoke(new Object(), Object.class.getMethod("toString"), new Object[]{}), is(notNullValue()));
-        assertThat(handler.invoke(new Object(), Object.class.getMethod("toString"), new Object[]{}), is(notNullValue()));
+        assertThat(handler.invoke(new Object(), Object.class.getMethod("toString"), new Object[]{}),
+                   is(notNullValue()));
+        assertThat(handler.invoke(new Object(), Object.class.getMethod("toString"), new Object[]{}),
+                   is(notNullValue()));
     }
 
     @Test
@@ -99,7 +110,8 @@ public class DataOperationInvocationHandlerTest {
         final SpyingOperation spy = new SpyingOperation(originalValue);
         mappings.add(new ImmutableInvocationMapping<>(ReturnTypeSampleRepository.class.getMethod("findOther"), spy));
         final Object[] args = {1, 2, 3};
-        final Object result = handler.invoke(new Object(), ReturnTypeSampleRepository.class.getMethod("findOther"), args);
+        final Object result = handler.invoke(new Object(), ReturnTypeSampleRepository.class.getMethod("findOther"),
+                                             args);
         assertThat(spy.getInvocation(), is(notNullValue()));
         assertThat(spy.getInvocation().getMethod(), is(ReturnTypeSampleRepository.class.getMethod("findOther")));
         assertThat(spy.getInvocation().getArguments(), is(args));
@@ -113,8 +125,10 @@ public class DataOperationInvocationHandlerTest {
         final SpyingOperation otherSpy = new SpyingOperation(originalValue);
         mappings.add(new ImmutableInvocationMapping<>(Object.class.getMethod("hashCode"), otherSpy));
         mappings.add(new ImmutableInvocationMapping<>(ReturnTypeSampleRepository.class.getMethod("findOther"), spy));
-        assertThat(handler.invoke(new Object(), ReturnTypeSampleRepository.class.getMethod("findOther"), new Object[]{1, 2, 3}), is(originalValue));
-        assertThat(handler.invoke(new Object(), ReturnTypeSampleRepository.class.getMethod("findOther"), new Object[]{4, 5, 6}), is(originalValue));
+        assertThat(handler.invoke(new Object(), ReturnTypeSampleRepository.class.getMethod("findOther"),
+                                  new Object[]{1, 2, 3}), is(originalValue));
+        assertThat(handler.invoke(new Object(), ReturnTypeSampleRepository.class.getMethod("findOther"),
+                                  new Object[]{4, 5, 6}), is(originalValue));
         assertThat(otherSpy.getInvocation(), is(nullValue()));
     }
 

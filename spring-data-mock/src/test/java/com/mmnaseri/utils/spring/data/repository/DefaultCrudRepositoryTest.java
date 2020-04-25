@@ -18,16 +18,10 @@ import java.util.Optional;
 
 import static com.mmnaseri.utils.spring.data.utils.TestUtils.iterableToList;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.isIn;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.*;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/11/16, 10:15 AM)
  */
 public class DefaultCrudRepositoryTest {
@@ -39,7 +33,8 @@ public class DefaultCrudRepositoryTest {
     public void setUp() throws Exception {
         dataStore = new MemoryDataStore<>(Person.class);
         repository = new DefaultCrudRepository();
-        repository.setRepositoryMetadata(new ImmutableRepositoryMetadata(String.class, Person.class, SimplePersonRepository.class, "id"));
+        repository.setRepositoryMetadata(
+                new ImmutableRepositoryMetadata(String.class, Person.class, SimplePersonRepository.class, "id"));
         repository.setDataStore(dataStore);
         repository.setKeyGenerator(new UUIDKeyGenerator());
     }

@@ -9,13 +9,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.*;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (10/5/15)
  */
 public class PageIterableResultAdapterTest {
@@ -23,7 +20,9 @@ public class PageIterableResultAdapterTest {
     @Test
     public void testAdapting() throws Exception {
         final PageIterableResultAdapter adapter = new PageIterableResultAdapter();
-        final org.springframework.data.domain.Page<?> value = adapter.adapt(new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findPage"), null), Arrays.asList(1, 2, 3, 4));
+        final org.springframework.data.domain.Page<?> value = adapter.adapt(
+                new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findPage"), null),
+                Arrays.asList(1, 2, 3, 4));
         assertThat(value, is(notNullValue()));
         assertThat(value.getTotalElements(), is(4L));
         assertThat(value.getTotalPages(), is(1));
@@ -39,9 +38,15 @@ public class PageIterableResultAdapterTest {
     public void testAccepting() throws Exception {
         final PageIterableResultAdapter adapter = new PageIterableResultAdapter();
         assertThat(adapter.accepts(null, null), is(false));
-        assertThat(adapter.accepts(new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findOther"), new Object[]{}), new Object()), is(false));
-        assertThat(adapter.accepts(new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findPage"), new Object[]{}), new Object()), is(false));
-        assertThat(adapter.accepts(new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findPage"), new Object[]{}), new ArrayList<>()), is(true));
+        assertThat(adapter.accepts(
+                new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findOther"), new Object[]{}),
+                new Object()), is(false));
+        assertThat(adapter.accepts(
+                new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findPage"), new Object[]{}),
+                new Object()), is(false));
+        assertThat(adapter.accepts(
+                new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findPage"), new Object[]{}),
+                new ArrayList<>()), is(true));
     }
 
 }

@@ -12,13 +12,10 @@ import org.testng.annotations.Test;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.lessThan;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.*;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/10/16)
  */
 public class DefaultResultAdapterContextTest {
@@ -26,7 +23,8 @@ public class DefaultResultAdapterContextTest {
     @Test(expectedExceptions = ResultAdapterFailureException.class)
     public void testInvalidConversion() throws Exception {
         final DefaultResultAdapterContext context = new DefaultResultAdapterContext();
-        context.adapt(new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findPerson"), new Object[]{}), new Address());
+        context.adapt(new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findPerson"), new Object[]{}),
+                      new Address());
     }
 
     @Test
@@ -38,7 +36,9 @@ public class DefaultResultAdapterContextTest {
         final SpyingResultAdapter second = new SpyingResultAdapter(10000, counter, true, person);
         context.register(first);
         context.register(second);
-        final Object result = context.adapt(new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findPerson"), new Object[]{}), new Address());
+        final Object result = context.adapt(
+                new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findPerson"), new Object[]{}),
+                new Address());
         assertThat(first.getCheck(), is(notNullValue()));
         assertThat(second.getCheck(), is(notNullValue()));
         assertThat(first.getCheck(), is(lessThan(second.getCheck())));

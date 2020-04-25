@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * This class implements the interfaces used to define a DSL for mocking a repository.
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (10/14/15)
  */
 public class RepositoryMockBuilder implements Start, ImplementationAnd, KeyGeneration {
@@ -28,7 +28,8 @@ public class RepositoryMockBuilder implements Start, ImplementationAnd, KeyGener
         this(null, new LinkedList<Class<?>>(), null);
     }
 
-    private RepositoryMockBuilder(RepositoryFactory factory, List<Class<?>> implementations, KeyGenerator<?> keyGenerator) {
+    private RepositoryMockBuilder(RepositoryFactory factory, List<Class<?>> implementations,
+                                  KeyGenerator<?> keyGenerator) {
         this.factory = factory;
         this.implementations = implementations;
         this.keyGenerator = keyGenerator;
@@ -98,14 +99,17 @@ public class RepositoryMockBuilder implements Start, ImplementationAnd, KeyGener
                 evaluatedKeyGenerator = configuration.getDefaultKeyGenerator();
             } else {
                 final KeyGeneratorProvider generatorProvider = new KeyGeneratorProvider();
-                final RepositoryMetadata metadata = configuration.getRepositoryMetadataResolver().resolve(repositoryInterface);
+                final RepositoryMetadata metadata = configuration.getRepositoryMetadataResolver().resolve(
+                        repositoryInterface);
                 final Class<?> identifierType = metadata.getIdentifierType();
-                final Class<? extends KeyGenerator<?>> keyGeneratorType = generatorProvider.getKeyGenerator(identifierType);
+                final Class<? extends KeyGenerator<?>> keyGeneratorType = generatorProvider.getKeyGenerator(
+                        identifierType);
                 evaluatedKeyGenerator = createKeyGenerator(keyGeneratorType);
             }
             return generateKeysUsing(evaluatedKeyGenerator).mock(repositoryInterface);
         } else {
-            return repositoryFactory.getInstance(keyGenerator, repositoryInterface, implementations.toArray(new Class[implementations.size()]));
+            return repositoryFactory.getInstance(keyGenerator, repositoryInterface,
+                                                 implementations.toArray(new Class[implementations.size()]));
         }
     }
 

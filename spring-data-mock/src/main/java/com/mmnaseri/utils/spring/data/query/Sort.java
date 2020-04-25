@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * This interface represents a sort specification, which is in turn a collection of {@link Order orders}.
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/17/15)
  */
 public interface Sort {

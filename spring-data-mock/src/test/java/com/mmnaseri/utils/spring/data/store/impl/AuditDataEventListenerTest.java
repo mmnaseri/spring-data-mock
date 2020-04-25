@@ -12,14 +12,10 @@ import java.util.Optional;
 
 import static com.mmnaseri.utils.spring.data.sample.usecases.store.SampleAuditorAware.AUDITOR;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.greaterThanOrEqualTo;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.lessThanOrEqualTo;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.*;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/9/16)
  */
 public class AuditDataEventListenerTest {
@@ -27,7 +23,9 @@ public class AuditDataEventListenerTest {
     @Test
     public void testBeforeInsertForImplicitAuditing() throws Exception {
         final AuditDataEventListener listener = new AuditDataEventListener(new SampleAuditorAware());
-        final RepositoryMetadata repositoryMetadata = new ImmutableRepositoryMetadata(String.class, ImplicitlyAuditableEntity.class, null, "id");
+        final RepositoryMetadata repositoryMetadata = new ImmutableRepositoryMetadata(String.class,
+                                                                                      ImplicitlyAuditableEntity.class,
+                                                                                      null, "id");
         final ImplicitlyAuditableEntity entity = new ImplicitlyAuditableEntity();
         final Date before = new Date();
         listener.onEvent(new BeforeInsertDataStoreEvent(repositoryMetadata, null, entity));
@@ -44,7 +42,9 @@ public class AuditDataEventListenerTest {
     @Test
     public void testBeforeUpdateForImplicitAuditing() throws Exception {
         final AuditDataEventListener listener = new AuditDataEventListener(new SampleAuditorAware());
-        final RepositoryMetadata repositoryMetadata = new ImmutableRepositoryMetadata(String.class, ImplicitlyAuditableEntity.class, null, "id");
+        final RepositoryMetadata repositoryMetadata = new ImmutableRepositoryMetadata(String.class,
+                                                                                      ImplicitlyAuditableEntity.class,
+                                                                                      null, "id");
         final ImplicitlyAuditableEntity entity = new ImplicitlyAuditableEntity();
         final Date before = new Date();
         listener.onEvent(new BeforeUpdateDataStoreEvent(repositoryMetadata, null, entity));
@@ -61,7 +61,9 @@ public class AuditDataEventListenerTest {
     @Test
     public void testBeforeInsertForExplicitAuditing() throws Exception {
         final AuditDataEventListener listener = new AuditDataEventListener(new SampleAuditorAware());
-        final RepositoryMetadata repositoryMetadata = new ImmutableRepositoryMetadata(String.class, AuditableEntity.class, null, "id");
+        final RepositoryMetadata repositoryMetadata = new ImmutableRepositoryMetadata(String.class,
+                                                                                      AuditableEntity.class, null,
+                                                                                      "id");
         final AuditableEntity entity = new AuditableEntity();
         final Date before = new Date();
         listener.onEvent(new BeforeInsertDataStoreEvent(repositoryMetadata, null, entity));
@@ -78,7 +80,9 @@ public class AuditDataEventListenerTest {
     @Test
     public void testBeforeUpdateForExplicitAuditing() throws Exception {
         final AuditDataEventListener listener = new AuditDataEventListener(new SampleAuditorAware());
-        final RepositoryMetadata repositoryMetadata = new ImmutableRepositoryMetadata(String.class, AuditableEntity.class, null, "id");
+        final RepositoryMetadata repositoryMetadata = new ImmutableRepositoryMetadata(String.class,
+                                                                                      AuditableEntity.class, null,
+                                                                                      "id");
         final AuditableEntity entity = new AuditableEntity();
         final Date before = new Date();
         listener.onEvent(new BeforeUpdateDataStoreEvent(repositoryMetadata, null, entity));

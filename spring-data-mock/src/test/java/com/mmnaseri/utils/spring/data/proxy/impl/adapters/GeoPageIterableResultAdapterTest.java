@@ -12,13 +12,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.*;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (10/5/15)
  */
 public class GeoPageIterableResultAdapterTest {
@@ -26,8 +23,11 @@ public class GeoPageIterableResultAdapterTest {
     @Test
     public void testAdapting() throws Exception {
         final GeoPageIterableResultAdapter adapter = new GeoPageIterableResultAdapter();
-        final GeoResult[] geoResults = {new GeoResult<>(1, new Distance(0)), new GeoResult<>(2, new Distance(1)), new GeoResult<>(3, new Distance(1)), new GeoResult<>(4, new Distance(2))};
-        final GeoPage<?> value = adapter.adapt(new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findGeoPage"), null), Arrays.asList(geoResults));
+        final GeoResult[] geoResults = {new GeoResult<>(1, new Distance(0)), new GeoResult<>(2, new Distance(1)),
+                                        new GeoResult<>(3, new Distance(1)), new GeoResult<>(4, new Distance(2))};
+        final GeoPage<?> value = adapter.adapt(
+                new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findGeoPage"), null),
+                Arrays.asList(geoResults));
         assertThat(value, is(notNullValue()));
         assertThat(value.getAverageDistance(), is(new Distance(1)));
         assertThat(value.getNumber(), is(0));
@@ -44,9 +44,15 @@ public class GeoPageIterableResultAdapterTest {
     public void testAccepting() throws Exception {
         final GeoPageIterableResultAdapter adapter = new GeoPageIterableResultAdapter();
         assertThat(adapter.accepts(null, null), is(false));
-        assertThat(adapter.accepts(new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findOther"), new Object[]{}), new Object()), is(false));
-        assertThat(adapter.accepts(new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findGeoPage"), new Object[]{}), new Object()), is(false));
-        assertThat(adapter.accepts(new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findGeoPage"), new Object[]{}), new ArrayList<>()), is(true));
+        assertThat(adapter.accepts(
+                new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findOther"), new Object[]{}),
+                new Object()), is(false));
+        assertThat(adapter.accepts(
+                new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findGeoPage"), new Object[]{}),
+                new Object()), is(false));
+        assertThat(adapter.accepts(
+                new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findGeoPage"), new Object[]{}),
+                new ArrayList<>()), is(true));
     }
 
 }

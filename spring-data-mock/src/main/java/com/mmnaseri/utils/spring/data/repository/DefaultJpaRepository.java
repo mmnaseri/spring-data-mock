@@ -12,7 +12,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (10/13/15)
  */
 @SuppressWarnings({"unchecked", "WeakerAccess"})
@@ -21,8 +21,8 @@ public class DefaultJpaRepository extends CrudRepositorySupport {
     private static final Log log = LogFactory.getLog(DefaultJpaRepository.class);
 
     /**
-     * If the underlying data store supports {@link QueueingDataStore queueing} and needs the queue to be
-     * flushed, this method will flush the queue. Otherwise, it will not do anything
+     * If the underlying data store supports {@link QueueingDataStore queueing} and needs the queue to be flushed, this
+     * method will flush the queue. Otherwise, it will not do anything
      */
     public void flush() {
         final DataStore dataStore = getDataStore();
@@ -34,10 +34,11 @@ public class DefaultJpaRepository extends CrudRepositorySupport {
     }
 
     /**
-     * Deletes the given entities by enclosing the actual delete in batch requests. If the underlying data store
-     * doesn't support {@link QueueingDataStore queueing}, this will be no different than simply sequentially
-     * deleting all the entities.
-     * @param entities    entities to delete
+     * Deletes the given entities by enclosing the actual delete in batch requests. If the underlying data store doesn't
+     * support {@link QueueingDataStore queueing}, this will be no different than simply sequentially deleting all the
+     * entities.
+     *
+     * @param entities entities to delete
      * @return deleted entities
      */
     public Iterable deleteInBatch(Iterable entities) {
@@ -46,7 +47,8 @@ public class DefaultJpaRepository extends CrudRepositorySupport {
             final Object key = PropertyUtils.getPropertyValue(entity, getRepositoryMetadata().getIdentifierProperty());
             if (key == null) {
                 log.error("There is no key set for the entity we were trying to delete");
-                throw new EntityMissingKeyException(getRepositoryMetadata().getEntityType(), getRepositoryMetadata().getIdentifierProperty());
+                throw new EntityMissingKeyException(getRepositoryMetadata().getEntityType(),
+                                                    getRepositoryMetadata().getIdentifierProperty());
             }
             keys.add(key);
         }
@@ -55,6 +57,7 @@ public class DefaultJpaRepository extends CrudRepositorySupport {
 
     /**
      * Deletes everything in the data store that's of the bound entity type
+     *
      * @return deleted entities
      */
     public Iterable deleteAllInBatch() {
@@ -64,7 +67,8 @@ public class DefaultJpaRepository extends CrudRepositorySupport {
 
     /**
      * Deletes entities bound to the passed keys in batch
-     * @param keys    the keys
+     *
+     * @param keys the keys
      * @return deleted entities
      */
     private Iterable deleteByKeysInBatch(Collection<Object> keys) {
@@ -92,7 +96,8 @@ public class DefaultJpaRepository extends CrudRepositorySupport {
 
     /**
      * Returns the entity that has the given key
-     * @param key    the key
+     *
+     * @param key the key
      * @return returns the entity or {@literal null} if it couldn't be found
      */
     public Object getOne(Object key) {
@@ -106,7 +111,8 @@ public class DefaultJpaRepository extends CrudRepositorySupport {
 
     /**
      * Saves the entity to the database and flushes the queue
-     * @param entity    the entity
+     *
+     * @param entity the entity
      * @return the saved entity
      */
     public Object saveAndFlush(Object entity) {

@@ -25,13 +25,10 @@ import org.testng.annotations.Test;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.*;
 
 /**
- * @author Milad Naseri (milad.naseri@cdk.com)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (6/8/16, 12:12 PM)
  */
 public class DefaultQueryByExampleExecutorTest {
@@ -43,72 +40,73 @@ public class DefaultQueryByExampleExecutorTest {
     public void setUp() throws Exception {
         dataStore = new MemoryDataStore<>(Person.class);
         dataStore.save("1",
-                new Person()
-                        .setId("1")
-                        .setFirstName("Milad")
-                        .setLastName("Naseri")
-                        .setAge(28)
-                        .setAddressZip(new Zip())
-                        .setAddress(
-                                new Address()
-                                        .setCity("Tehran")
-                                        .setState(
-                                                new State()
-                                                        .setName("Teheran")
-                                        )
-                        )
-        );
+                       new Person()
+                               .setId("1")
+                               .setFirstName("Milad")
+                               .setLastName("Naseri")
+                               .setAge(28)
+                               .setAddressZip(new Zip())
+                               .setAddress(
+                                       new Address()
+                                               .setCity("Tehran")
+                                               .setState(
+                                                       new State()
+                                                               .setName("Teheran")
+                                                        )
+                                          )
+                      );
         dataStore.save("2",
-                new Person()
-                        .setId("2")
-                        .setFirstName("Zohreh")
-                        .setLastName("Sadeghi")
-                        .setAge(26)
-                        .setAddressZip(new Zip())
-                        .setAddress(
-                                new Address()
-                                        .setCity("Edmonds")
-                                        .setState(
-                                                new State()
-                                                        .setName("WA")
-                                        )
-                        )
-        );
+                       new Person()
+                               .setId("2")
+                               .setFirstName("Zohreh")
+                               .setLastName("Sadeghi")
+                               .setAge(26)
+                               .setAddressZip(new Zip())
+                               .setAddress(
+                                       new Address()
+                                               .setCity("Edmonds")
+                                               .setState(
+                                                       new State()
+                                                               .setName("WA")
+                                                        )
+                                          )
+                      );
         dataStore.save("3",
-                new Person()
-                        .setId("3")
-                        .setFirstName("Ramin")
-                        .setLastName("Farhanian")
-                        .setAge(40)
-                        .setAddressZip(null)
-                        .setAddress(
-                                new Address()
-                                        .setCity("Kirkland")
-                                        .setState(
-                                                new State()
-                                                        .setName("WA")
-                                        )
-                        )
-        );
+                       new Person()
+                               .setId("3")
+                               .setFirstName("Ramin")
+                               .setLastName("Farhanian")
+                               .setAge(40)
+                               .setAddressZip(null)
+                               .setAddress(
+                                       new Address()
+                                               .setCity("Kirkland")
+                                               .setState(
+                                                       new State()
+                                                               .setName("WA")
+                                                        )
+                                          )
+                      );
         dataStore.save("4",
-                new Person()
-                        .setId("4")
-                        .setFirstName("Niloufar")
-                        .setLastName("Poursultani")
-                        .setAge(53)
-                        .setAddressZip(new Zip())
-                        .setAddress(
-                                new Address()
-                                        .setCity("Tehran")
-                                        .setState(
-                                                new State()
-                                                        .setName("Teheran")
-                                        )
-                        )
-        );
+                       new Person()
+                               .setId("4")
+                               .setFirstName("Niloufar")
+                               .setLastName("Poursultani")
+                               .setAge(53)
+                               .setAddressZip(new Zip())
+                               .setAddress(
+                                       new Address()
+                                               .setCity("Tehran")
+                                               .setState(
+                                                       new State()
+                                                               .setName("Teheran")
+                                                        )
+                                          )
+                      );
         executor = new DefaultQueryByExampleExecutor();
         executor.setDataStore(dataStore);
-        final RepositoryMetadata metadata = new DefaultRepositoryMetadataResolver().resolve(SimplePersonRepository.class);
+        final RepositoryMetadata metadata = new DefaultRepositoryMetadataResolver().resolve(
+                SimplePersonRepository.class);
         executor.setRepositoryMetadata(metadata);
         executor.setRepositoryConfiguration(new ImmutableRepositoryConfiguration(metadata, null, null));
         final DefaultRepositoryFactoryConfiguration configuration = new DefaultRepositoryFactoryConfiguration();
@@ -129,7 +127,8 @@ public class DefaultQueryByExampleExecutorTest {
 
     @Test
     public void testFindOne() throws Exception {
-        final Object found = executor.findOne(Example.of(new Person().setAddress(new Address().setCity("Tehran")).setFirstName("Milad")));
+        final Object found = executor.findOne(
+                Example.of(new Person().setAddress(new Address().setCity("Tehran")).setFirstName("Milad")));
         assertThat(found, is(notNullValue()));
         assertThat(found, is((Object) dataStore.retrieve("1")));
     }
@@ -137,7 +136,9 @@ public class DefaultQueryByExampleExecutorTest {
     @Test
     public void testFindByExampleUsingEndingWithMatcher() throws Exception {
         final Person probe = new Person().setAddress(new Address().setState(new State().setName("ran")));
-        final ExampleMatcher matching = ExampleMatcher.matching().withMatcher("address.state.name", ExampleMatcher.GenericPropertyMatchers.endsWith()).withIgnoreCase();
+        final ExampleMatcher matching = ExampleMatcher.matching().withMatcher("address.state.name",
+                                                                              ExampleMatcher.GenericPropertyMatchers
+                                                                                      .endsWith()).withIgnoreCase();
         final Example<Person> example = Example.of(probe, matching);
         final Iterable found = executor.findAll(example);
         assertThat(found, is(notNullValue()));
@@ -148,7 +149,9 @@ public class DefaultQueryByExampleExecutorTest {
     @Test
     public void testFindByExampleUsingStartingWithMatcher() throws Exception {
         final Person probe = new Person().setAddress(new Address().setState(new State().setName("Teh")));
-        final ExampleMatcher matching = ExampleMatcher.matching().withMatcher("address.state.name", ExampleMatcher.GenericPropertyMatchers.startsWith()).withIgnoreCase();
+        final ExampleMatcher matching = ExampleMatcher.matching().withMatcher("address.state.name",
+                                                                              ExampleMatcher.GenericPropertyMatchers
+                                                                                      .startsWith()).withIgnoreCase();
         final Example<Person> example = Example.of(probe, matching);
         final Iterable found = executor.findAll(example);
         assertThat(found, is(notNullValue()));
@@ -159,7 +162,9 @@ public class DefaultQueryByExampleExecutorTest {
     @Test
     public void testFindByExampleUsingContainingMatcher() throws Exception {
         final Person probe = new Person().setAddress(new Address().setState(new State().setName("ehe")));
-        final ExampleMatcher matching = ExampleMatcher.matching().withMatcher("address.state.name", ExampleMatcher.GenericPropertyMatchers.contains()).withIgnoreCase();
+        final ExampleMatcher matching = ExampleMatcher.matching().withMatcher("address.state.name",
+                                                                              ExampleMatcher.GenericPropertyMatchers
+                                                                                      .contains()).withIgnoreCase();
         final Example<Person> example = Example.of(probe, matching);
         final Iterable found = executor.findAll(example);
         assertThat(found, is(notNullValue()));
@@ -170,7 +175,9 @@ public class DefaultQueryByExampleExecutorTest {
     @Test
     public void testFindByExampleUsingRegexMatcher() throws Exception {
         final Person probe = new Person().setAddress(new Address().setState(new State().setName("(WA|Teheran)")));
-        final ExampleMatcher matching = ExampleMatcher.matching().withMatcher("address.state.name", ExampleMatcher.GenericPropertyMatchers.regex()).withIgnoreCase();
+        final ExampleMatcher matching = ExampleMatcher.matching().withMatcher("address.state.name",
+                                                                              ExampleMatcher.GenericPropertyMatchers
+                                                                                      .regex()).withIgnoreCase();
         final Example<Person> example = Example.of(probe, matching);
         final Iterable found = executor.findAll(example);
         assertThat(found, is(notNullValue()));
@@ -181,9 +188,12 @@ public class DefaultQueryByExampleExecutorTest {
     @Test
     public void testFindByExampleWithSorting() throws Exception {
         final Person probe = new Person().setAddress(new Address().setState(new State().setName("(WA|Teheran)")));
-        final ExampleMatcher matching = ExampleMatcher.matching().withMatcher("address.state.name", ExampleMatcher.GenericPropertyMatchers.regex()).withIgnoreCase();
+        final ExampleMatcher matching = ExampleMatcher.matching().withMatcher("address.state.name",
+                                                                              ExampleMatcher.GenericPropertyMatchers
+                                                                                      .regex()).withIgnoreCase();
         final Example<Person> example = Example.of(probe, matching);
-        final Iterable found = executor.findAll(example, Sort.by(Sort.Direction.ASC, "firstName", "lastName", "address.state.name"));
+        final Iterable found = executor.findAll(example, Sort.by(Sort.Direction.ASC, "firstName", "lastName",
+                                                                 "address.state.name"));
         assertThat(found, is(notNullValue()));
         final List<?> list = TestUtils.iterableToList(found);
         assertThat(list, hasSize(4));
@@ -196,9 +206,13 @@ public class DefaultQueryByExampleExecutorTest {
     @Test
     public void testFindByExampleWithSortingAndPaging() throws Exception {
         final Person probe = new Person().setAddress(new Address().setState(new State().setName("Teheran")));
-        final ExampleMatcher matching = ExampleMatcher.matching().withMatcher("address.state.name", ExampleMatcher.GenericPropertyMatchers.regex()).withIgnoreCase().withIgnorePaths("address.state.name");
+        final ExampleMatcher matching = ExampleMatcher.matching().withMatcher("address.state.name",
+                                                                              ExampleMatcher.GenericPropertyMatchers
+                                                                                      .regex()).withIgnoreCase()
+                                                      .withIgnorePaths("address.state.name");
         final Example<Person> example = Example.of(probe, matching);
-        final Iterable found = executor.findAll(example, PageRequest.of(2, 1, Sort.by(Sort.Direction.ASC, "firstName", "lastName", "address.state.name")));
+        final Iterable found = executor.findAll(example, PageRequest
+                .of(2, 1, Sort.by(Sort.Direction.ASC, "firstName", "lastName", "address.state.name")));
         assertThat(found, is(notNullValue()));
         final List<?> list = TestUtils.iterableToList(found);
         assertThat(list, hasSize(1));
@@ -208,7 +222,9 @@ public class DefaultQueryByExampleExecutorTest {
     @Test
     public void testCount() throws Exception {
         final Person probe = new Person().setAddress(new Address().setState(new State().setName("ehe")));
-        final ExampleMatcher matching = ExampleMatcher.matching().withMatcher("address.state.name", ExampleMatcher.GenericPropertyMatchers.contains()).withIgnoreCase();
+        final ExampleMatcher matching = ExampleMatcher.matching().withMatcher("address.state.name",
+                                                                              ExampleMatcher.GenericPropertyMatchers
+                                                                                      .contains()).withIgnoreCase();
         final Example<Person> example = Example.of(probe, matching);
         final long count = executor.count(example);
         assertThat(count, is(2L));
@@ -218,7 +234,8 @@ public class DefaultQueryByExampleExecutorTest {
     public void testExists() throws Exception {
         final Person probe = new Person().setAddress(new Address().setState(new State().setName("ehe")));
         final ExampleMatcher matching = ExampleMatcher.matching()
-                .withMatcher("address.state.name", ExampleMatcher.GenericPropertyMatchers.contains());
+                                                      .withMatcher("address.state.name",
+                                                                   ExampleMatcher.GenericPropertyMatchers.contains());
         final Example<Person> example = Example.of(probe, matching);
         final boolean exists = executor.exists(example);
         assertThat(exists, is(true));
@@ -228,8 +245,9 @@ public class DefaultQueryByExampleExecutorTest {
     public void testWithNullsKept() throws Exception {
         final Person probe = new Person().setAddress(new Address().setState(new State().setName("ehe")));
         final ExampleMatcher matching = ExampleMatcher.matching()
-                .withMatcher("address.state.name", ExampleMatcher.GenericPropertyMatchers.contains())
-                .withIncludeNullValues();
+                                                      .withMatcher("address.state.name",
+                                                                   ExampleMatcher.GenericPropertyMatchers.contains())
+                                                      .withIncludeNullValues();
         final Example<Person> example = Example.of(probe, matching);
         final boolean exists = executor.exists(example);
         assertThat(exists, is(false));

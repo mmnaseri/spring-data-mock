@@ -4,24 +4,7 @@ import com.mmnaseri.utils.spring.data.domain.Invocation;
 import com.mmnaseri.utils.spring.data.error.ResultAdapterFailureException;
 import com.mmnaseri.utils.spring.data.proxy.ResultAdapter;
 import com.mmnaseri.utils.spring.data.proxy.ResultAdapterContext;
-import com.mmnaseri.utils.spring.data.proxy.impl.adapters.CollectionIterableResultAdapter;
-import com.mmnaseri.utils.spring.data.proxy.impl.adapters.FutureIterableResultAdapter;
-import com.mmnaseri.utils.spring.data.proxy.impl.adapters.GeoPageIterableResultAdapter;
-import com.mmnaseri.utils.spring.data.proxy.impl.adapters.IteratorIterableResultAdapter;
-import com.mmnaseri.utils.spring.data.proxy.impl.adapters.ListenableFutureIterableResultAdapter;
-import com.mmnaseri.utils.spring.data.proxy.impl.adapters.NullSimpleResultAdapter;
-import com.mmnaseri.utils.spring.data.proxy.impl.adapters.NullToCollectionResultAdapter;
-import com.mmnaseri.utils.spring.data.proxy.impl.adapters.NullToFutureResultAdapter;
-import com.mmnaseri.utils.spring.data.proxy.impl.adapters.NullToIterableResultAdapter;
-import com.mmnaseri.utils.spring.data.proxy.impl.adapters.NullToIteratorResultAdapter;
-import com.mmnaseri.utils.spring.data.proxy.impl.adapters.NullToListenableFutureResultAdapter;
-import com.mmnaseri.utils.spring.data.proxy.impl.adapters.NullToSliceResultAdapter;
-import com.mmnaseri.utils.spring.data.proxy.impl.adapters.NumberIterableResultAdapter;
-import com.mmnaseri.utils.spring.data.proxy.impl.adapters.PageIterableResultAdapter;
-import com.mmnaseri.utils.spring.data.proxy.impl.adapters.SameTypeResultAdapter;
-import com.mmnaseri.utils.spring.data.proxy.impl.adapters.SimpleIterableResultAdapter;
-import com.mmnaseri.utils.spring.data.proxy.impl.adapters.SliceIterableResultAdapter;
-import com.mmnaseri.utils.spring.data.proxy.impl.adapters.VoidResultAdapter;
+import com.mmnaseri.utils.spring.data.proxy.impl.adapters.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -33,7 +16,7 @@ import java.util.List;
 /**
  * This is the default implementation for registering and containing result adapters.
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/24/15)
  */
 @SuppressWarnings("WeakerAccess")
@@ -51,7 +34,8 @@ public class DefaultResultAdapterContext implements ResultAdapterContext {
 
     /**
      * Instantiates the context
-     * @param registerDefaults    whether default adapters should be registered by default.
+     *
+     * @param registerDefaults whether default adapters should be registered by default.
      */
     public DefaultResultAdapterContext(boolean registerDefaults) {
         adapters = new ArrayList<>();
@@ -93,7 +77,8 @@ public class DefaultResultAdapterContext implements ResultAdapterContext {
                 return adapter.adapt(invocation, originalResult);
             }
         }
-        log.error("Could not find any result adapter that was capable of adapting the result of the invocation to type " + invocation.getMethod().getReturnType());
+        log.error("Could not find any result adapter that was capable of adapting the result of the invocation to type "
+                          + invocation.getMethod().getReturnType());
         throw new ResultAdapterFailureException(originalResult, invocation.getMethod().getReturnType());
     }
 

@@ -12,9 +12,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/28/16)
+ * @deprecated This class is kept for backward compilation compatibility, however, it is not functional as of version
+ * 2.0.
  */
+@Deprecated
 public class DefaultQueryDslPredicateExecutor extends PagingAndSortingSupport implements DataStoreAware {
 
     private DataStore dataStore;
@@ -29,11 +32,13 @@ public class DefaultQueryDslPredicateExecutor extends PagingAndSortingSupport im
     }
 
     public Iterable findAll(Predicate predicate, Sort sort) {
-        return PagingAndSortingUtils.sort(((CollQuery) CollQueryFactory.from(alias, dataStore.retrieveAll()).where(predicate)).fetch(), sort);
+        return PagingAndSortingUtils.sort(((CollQuery) CollQueryFactory.from(alias, dataStore.retrieveAll()).where(
+                predicate)).fetch(), sort);
     }
 
     public Page findAll(Predicate predicate, Pageable pageable) {
-        return page(((CollQuery) CollQueryFactory.from(alias, dataStore.retrieveAll()).where(predicate)).fetch(), pageable);
+        return page(((CollQuery) CollQueryFactory.from(alias, dataStore.retrieveAll()).where(predicate)).fetch(),
+                    pageable);
     }
 
     public long count(Predicate predicate) {
@@ -51,7 +56,8 @@ public class DefaultQueryDslPredicateExecutor extends PagingAndSortingSupport im
 
     public Iterable findAll(Predicate predicate, OrderSpecifier... orders) {
         //noinspection unchecked
-        return ((CollQuery) CollQueryFactory.from(alias, dataStore.retrieveAll()).where(predicate).orderBy(orders)).fetch();
+        return ((CollQuery) CollQueryFactory.from(alias, dataStore.retrieveAll()).where(predicate).orderBy(orders))
+                .fetch();
     }
 
     @Override

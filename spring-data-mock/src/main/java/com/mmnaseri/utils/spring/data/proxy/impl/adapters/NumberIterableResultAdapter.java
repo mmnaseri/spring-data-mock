@@ -11,8 +11,8 @@ import java.util.Iterator;
  * executed with the results available.</p>
  *
  * <p>It will accept adaptations wherein the original value is some sort of iterable and the required return type
- * is an instance of {@link Number}. Additionally, it will check to see if the iterable yields only one item and
- * also that the item is a number.</p>
+ * is an instance of {@link Number}. Additionally, it will check to see if the iterable yields only one item and also
+ * that the item is a number.</p>
  *
  * <p>Here is a list of supported number types:</p>
  *
@@ -27,7 +27,7 @@ import java.util.Iterator;
  *
  * <p>This adapter will execute at priority {@literal -425}.</p>
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (10/12/15)
  */
 public class NumberIterableResultAdapter extends AbstractIterableResultAdapter<Object> {

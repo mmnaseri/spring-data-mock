@@ -11,10 +11,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 /**
- * This is the default, most basic implementation provided for a data store that stores entities in an in-memory
- * {@link java.util.Map map} by mapping entity keys to entities.
+ * This is the default, most basic implementation provided for a data store that stores entities in an in-memory {@link
+ * java.util.Map map} by mapping entity keys to entities.
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/17/15)
  */
 public class MemoryDataStore<K, E> implements DataStore<K, E> {

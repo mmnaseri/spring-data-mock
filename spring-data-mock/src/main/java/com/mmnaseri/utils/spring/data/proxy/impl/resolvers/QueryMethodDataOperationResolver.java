@@ -20,10 +20,9 @@ import java.lang.reflect.Method;
  * <p>This class will resolve methods to their query method equivalent by parsing their names and parameters.</p>
  *
  * <p>Even though, technically speaking, a class annotated with {@link QueryAnnotation} <em>is</em> a
- * query method, this class will ignore such methods since it doesn't know how to respond to native
- * queries.</p>
+ * query method, this class will ignore such methods since it doesn't know how to respond to native queries.</p>
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/29/15)
  */
 @SuppressWarnings("WeakerAccess")
@@ -35,7 +34,10 @@ public class QueryMethodDataOperationResolver implements DataOperationResolver {
     private final DataFunctionRegistry functionRegistry;
     private final RepositoryFactoryConfiguration configuration;
 
-    public QueryMethodDataOperationResolver(MethodQueryDescriptionExtractor descriptionExtractor, RepositoryMetadata repositoryMetadata, DataFunctionRegistry functionRegistry, RepositoryFactoryConfiguration configuration) {
+    public QueryMethodDataOperationResolver(MethodQueryDescriptionExtractor descriptionExtractor,
+                                            RepositoryMetadata repositoryMetadata,
+                                            DataFunctionRegistry functionRegistry,
+                                            RepositoryFactoryConfiguration configuration) {
         this.descriptionExtractor = descriptionExtractor;
         this.repositoryMetadata = repositoryMetadata;
         this.functionRegistry = functionRegistry;

@@ -9,19 +9,16 @@ import java.util.Arrays;
 import java.util.HashSet;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.*;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/30/15)
  */
 public class AbstractCollectionMatcherTest {
 
-    @Test(expectedExceptions = InvalidArgumentException.class, expectedExceptionsMessageRegExp = "Comparison property cannot be null: xyz")
+    @Test(expectedExceptions = InvalidArgumentException.class,
+          expectedExceptionsMessageRegExp = "Comparison property cannot be null: xyz")
     public void testWhenPivotIsNull() throws Exception {
         new SpyingCollectionMatcher().matches(new ImmutableParameter("xyz", null, null, null), 1, new Object[]{null});
     }
@@ -53,7 +50,8 @@ public class AbstractCollectionMatcherTest {
         assertThat(matcher.getCollection(), containsInAnyOrder((Object) 1, 2, 3, 4));
     }
 
-    @Test(expectedExceptions = InvalidArgumentException.class, expectedExceptionsMessageRegExp = "Expected an array, an iterator, or an iterable object")
+    @Test(expectedExceptions = InvalidArgumentException.class,
+          expectedExceptionsMessageRegExp = "Expected an array, an iterator, or an iterable object")
     public void testPassingInAnythingElse() throws Exception {
         new SpyingCollectionMatcher().matches(null, null, new Object[]{new Object()});
     }

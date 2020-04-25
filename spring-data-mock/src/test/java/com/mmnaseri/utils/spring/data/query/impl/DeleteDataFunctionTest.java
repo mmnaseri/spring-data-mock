@@ -14,20 +14,14 @@ import org.hamcrest.Matchers;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.isIn;
+import static org.hamcrest.Matchers.*;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/10/16)
  */
 public class DeleteDataFunctionTest {
@@ -38,7 +32,8 @@ public class DeleteDataFunctionTest {
 
     @BeforeMethod
     public void setUp() throws Exception {
-        final RepositoryMetadata repositoryMetadata = new ImmutableRepositoryMetadata(String.class, Person.class, null, "id");
+        final RepositoryMetadata repositoryMetadata = new ImmutableRepositoryMetadata(String.class, Person.class, null,
+                                                                                      "id");
         final MemoryDataStore<String, Person> delegate = new MemoryDataStore<>(Person.class);
         query = new DefaultQueryDescriptor(false, null, 0, null, null, null, null, repositoryMetadata);
         function = new DeleteDataFunction();
@@ -65,12 +60,15 @@ public class DeleteDataFunctionTest {
     @Test(expectedExceptions = DataFunctionException.class, expectedExceptionsMessageRegExp = "Failed to read .*")
     public void testWrongIdentifierProperty() throws Exception {
         final DataFunction<List<?>> function = new DeleteDataFunction();
-        final RepositoryMetadata repositoryMetadata = new ImmutableRepositoryMetadata(String.class, Person.class, null, "xyz");
-        final QueryDescriptor descriptor = new DefaultQueryDescriptor(false, null, 0, null, null, null, null, repositoryMetadata);
+        final RepositoryMetadata repositoryMetadata = new ImmutableRepositoryMetadata(String.class, Person.class, null,
+                                                                                      "xyz");
+        final QueryDescriptor descriptor = new DefaultQueryDescriptor(false, null, 0, null, null, null, null,
+                                                                      repositoryMetadata);
         function.apply(dataStore, descriptor, null, Collections.singletonList(new Person()));
     }
 
-    @Test(expectedExceptions = DataFunctionException.class, expectedExceptionsMessageRegExp = "Cannot delete an entity without the key property being set: id")
+    @Test(expectedExceptions = DataFunctionException.class,
+          expectedExceptionsMessageRegExp = "Cannot delete an entity without the key property being set: id")
     public void testNullIdentifierValue() throws Exception {
         final DataFunction<List<?>> function = new DeleteDataFunction();
         function.apply(dataStore, query, null, Collections.singletonList(new Person()));
@@ -135,7 +133,8 @@ public class DeleteDataFunctionTest {
         assertThat(dataStore.getRequests().get(2).getOperation(), is(Operation.DELETE));
         assertThat(dataStore.getRequests().get(2).getKey(), Matchers.<Object>is(selection.get(2).getId()));
         assertThat(deleted, hasSize(2));
-        final List<String> deletedIds = new ArrayList<>(Arrays.asList(entities.get(1).getId(), entities.get(2).getId()));
+        final List<String> deletedIds = new ArrayList<>(
+                Arrays.asList(entities.get(1).getId(), entities.get(2).getId()));
         for (Person person : deleted) {
             assertThat(person.getId(), isIn(deletedIds));
             deletedIds.remove(person.getId());

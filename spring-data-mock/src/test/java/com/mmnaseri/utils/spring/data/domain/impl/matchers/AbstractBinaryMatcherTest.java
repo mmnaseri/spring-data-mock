@@ -7,7 +7,7 @@ import com.mmnaseri.utils.spring.data.sample.mocks.NotMatchingBinaryMatcher;
 import org.testng.annotations.Test;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/10/16)
  */
 public class AbstractBinaryMatcherTest {
@@ -15,13 +15,15 @@ public class AbstractBinaryMatcherTest {
     @Test(expectedExceptions = InvalidArgumentException.class, expectedExceptionsMessageRegExp = ".*x.y.z.*")
     public void testWhenHasLessThanTwoParameters() throws Exception {
         final NotMatchingBinaryMatcher matcher = new NotMatchingBinaryMatcher();
-        matcher.matches(new ImmutableParameter("x.y.z", null, null, new ImmutableOperator("sample", 2, null)), new Object());
+        matcher.matches(new ImmutableParameter("x.y.z", null, null, new ImmutableOperator("sample", 2, null)),
+                        new Object());
     }
 
     @Test(expectedExceptions = InvalidArgumentException.class, expectedExceptionsMessageRegExp = ".*x.y.z.*")
     public void testWhenHasMoreThanTwoParameters() throws Exception {
         final NotMatchingBinaryMatcher matcher = new NotMatchingBinaryMatcher();
-        matcher.matches(new ImmutableParameter("x.y.z", null, null, new ImmutableOperator("sample", 2, null)), new Object(), new Object(), new Object(), new Object());
+        matcher.matches(new ImmutableParameter("x.y.z", null, null, new ImmutableOperator("sample", 2, null)),
+                        new Object(), new Object(), new Object(), new Object());
     }
 
     @Test
@@ -29,7 +31,8 @@ public class AbstractBinaryMatcherTest {
         final NotMatchingBinaryMatcher matcher = new NotMatchingBinaryMatcher();
         //we are creating the varargs array explicitly to call to the proper method signature
         //noinspection RedundantArrayCreation
-        matcher.matches(new ImmutableParameter("x.y.z", null, null, new ImmutableOperator("sample", 2, null)), new Object(), new Object[]{new Object(), new Object()});
+        matcher.matches(new ImmutableParameter("x.y.z", null, null, new ImmutableOperator("sample", 2, null)),
+                        new Object(), new Object[]{new Object(), new Object()});
     }
 
 }

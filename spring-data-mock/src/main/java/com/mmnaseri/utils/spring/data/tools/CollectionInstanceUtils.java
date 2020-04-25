@@ -1,27 +1,10 @@
 package com.mmnaseri.utils.spring.data.tools;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Deque;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.PriorityQueue;
-import java.util.Queue;
-import java.util.Set;
-import java.util.Stack;
-import java.util.TreeSet;
-import java.util.Vector;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.CopyOnWriteArraySet;
-import java.util.concurrent.LinkedBlockingDeque;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.PriorityBlockingQueue;
+import java.util.*;
+import java.util.concurrent.*;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/24/15)
  */
 public final class CollectionInstanceUtils {
@@ -32,7 +15,8 @@ public final class CollectionInstanceUtils {
 
     /**
      * Given any of the known collection types, this method will return an instance of the collection.
-     * @param collectionType    the type of the collection
+     *
+     * @param collectionType the type of the collection
      * @return the collection instance
      */
     public static Collection<?> getCollection(Class<?> collectionType) {

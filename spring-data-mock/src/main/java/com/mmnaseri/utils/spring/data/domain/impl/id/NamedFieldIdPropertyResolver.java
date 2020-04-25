@@ -10,7 +10,7 @@ import java.lang.reflect.Field;
 /**
  * This class is for finding a field with the name {@literal "id"}.
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/23/15)
  */
 @SuppressWarnings("WeakerAccess")

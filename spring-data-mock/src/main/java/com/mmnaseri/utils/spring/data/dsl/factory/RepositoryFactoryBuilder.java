@@ -10,25 +10,12 @@ import com.mmnaseri.utils.spring.data.domain.impl.MethodQueryDescriptionExtracto
 import com.mmnaseri.utils.spring.data.dsl.mock.Implementation;
 import com.mmnaseri.utils.spring.data.dsl.mock.ImplementationAnd;
 import com.mmnaseri.utils.spring.data.dsl.mock.RepositoryMockBuilder;
-import com.mmnaseri.utils.spring.data.proxy.NonDataOperationHandler;
-import com.mmnaseri.utils.spring.data.proxy.RepositoryFactory;
-import com.mmnaseri.utils.spring.data.proxy.RepositoryFactoryConfiguration;
-import com.mmnaseri.utils.spring.data.proxy.ResultAdapter;
-import com.mmnaseri.utils.spring.data.proxy.ResultAdapterContext;
-import com.mmnaseri.utils.spring.data.proxy.TypeMappingContext;
-import com.mmnaseri.utils.spring.data.proxy.impl.DefaultRepositoryFactory;
-import com.mmnaseri.utils.spring.data.proxy.impl.DefaultResultAdapterContext;
-import com.mmnaseri.utils.spring.data.proxy.impl.DefaultTypeMappingContext;
-import com.mmnaseri.utils.spring.data.proxy.impl.ImmutableRepositoryFactoryConfiguration;
-import com.mmnaseri.utils.spring.data.proxy.impl.NonDataOperationInvocationHandler;
+import com.mmnaseri.utils.spring.data.proxy.*;
+import com.mmnaseri.utils.spring.data.proxy.impl.*;
 import com.mmnaseri.utils.spring.data.query.DataFunction;
 import com.mmnaseri.utils.spring.data.query.DataFunctionRegistry;
 import com.mmnaseri.utils.spring.data.query.impl.DefaultDataFunctionRegistry;
-import com.mmnaseri.utils.spring.data.store.DataStore;
-import com.mmnaseri.utils.spring.data.store.DataStoreEvent;
-import com.mmnaseri.utils.spring.data.store.DataStoreEventListener;
-import com.mmnaseri.utils.spring.data.store.DataStoreEventListenerContext;
-import com.mmnaseri.utils.spring.data.store.DataStoreRegistry;
+import com.mmnaseri.utils.spring.data.store.*;
 import com.mmnaseri.utils.spring.data.store.impl.AuditDataEventListener;
 import com.mmnaseri.utils.spring.data.store.impl.DefaultDataStoreEventListenerContext;
 import com.mmnaseri.utils.spring.data.store.impl.DefaultDataStoreRegistry;
@@ -39,11 +26,13 @@ import java.util.Optional;
 /**
  * This class implements the DSL used to configure and build a repository factory object.
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (10/14/15)
  */
 @SuppressWarnings("WeakerAccess")
-public class RepositoryFactoryBuilder implements Start, DataFunctionsAnd, DataStoresAnd, EventListenerAnd, MappingContextAnd, OperatorsAnd, ResultAdaptersAnd, OperationHandlersAnd {
+public class RepositoryFactoryBuilder
+        implements Start, DataFunctionsAnd, DataStoresAnd, EventListenerAnd, MappingContextAnd, OperatorsAnd,
+                   ResultAdaptersAnd, OperationHandlersAnd {
 
     public static final String DEFAULT_USER = "User";
     private RepositoryMetadataResolver metadataResolver;
@@ -83,21 +72,26 @@ public class RepositoryFactoryBuilder implements Start, DataFunctionsAnd, DataSt
     }
 
     /**
-     * Start the configuration DSL by considering the provided configuration as
-     * the default fallback
-     * @param configuration    the fallback configuration
+     * Start the configuration DSL by considering the provided configuration as the default fallback
+     *
+     * @param configuration the fallback configuration
      * @return an instance of the builder
      */
     public static Start given(RepositoryFactoryConfiguration configuration) {
         final RepositoryFactoryBuilder builder = new RepositoryFactoryBuilder();
-        builder.metadataResolver = getOrDefault(configuration.getRepositoryMetadataResolver(), builder.metadataResolver);
-        builder.queryDescriptionExtractor = getOrDefault(configuration.getDescriptionExtractor(), builder.queryDescriptionExtractor);
+        builder.metadataResolver = getOrDefault(configuration.getRepositoryMetadataResolver(),
+                                                builder.metadataResolver);
+        builder.queryDescriptionExtractor = getOrDefault(configuration.getDescriptionExtractor(),
+                                                         builder.queryDescriptionExtractor);
         builder.functionRegistry = getOrDefault(configuration.getFunctionRegistry(), builder.functionRegistry);
         builder.dataStoreRegistry = getOrDefault(configuration.getDataStoreRegistry(), builder.dataStoreRegistry);
-        builder.resultAdapterContext = getOrDefault(configuration.getResultAdapterContext(), builder.resultAdapterContext);
+        builder.resultAdapterContext = getOrDefault(configuration.getResultAdapterContext(),
+                                                    builder.resultAdapterContext);
         builder.typeMappingContext = getOrDefault(configuration.getTypeMappingContext(), builder.typeMappingContext);
-        builder.eventListenerContext = getOrDefault(configuration.getEventListenerContext(), builder.eventListenerContext);
-        builder.operationInvocationHandler = getOrDefault(configuration.getOperationInvocationHandler(), builder.operationInvocationHandler);
+        builder.eventListenerContext = getOrDefault(configuration.getEventListenerContext(),
+                                                    builder.eventListenerContext);
+        builder.operationInvocationHandler = getOrDefault(configuration.getOperationInvocationHandler(),
+                                                          builder.operationInvocationHandler);
         builder.defaultKeyGenerator = getOrDefault(configuration.getDefaultKeyGenerator(), builder.defaultKeyGenerator);
         return builder;
     }
@@ -288,7 +282,10 @@ public class RepositoryFactoryBuilder implements Start, DataFunctionsAnd, DataSt
 
     @Override
     public RepositoryFactoryConfiguration configure() {
-        return new ImmutableRepositoryFactoryConfiguration(metadataResolver, queryDescriptionExtractor, functionRegistry, dataStoreRegistry, resultAdapterContext, typeMappingContext, eventListenerContext, operationInvocationHandler, defaultKeyGenerator);
+        return new ImmutableRepositoryFactoryConfiguration(metadataResolver, queryDescriptionExtractor,
+                                                           functionRegistry, dataStoreRegistry, resultAdapterContext,
+                                                           typeMappingContext, eventListenerContext,
+                                                           operationInvocationHandler, defaultKeyGenerator);
     }
 
     @Override

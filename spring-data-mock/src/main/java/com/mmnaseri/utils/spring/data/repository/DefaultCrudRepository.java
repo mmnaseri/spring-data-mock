@@ -12,11 +12,10 @@ import java.util.Optional;
 
 /**
  * <p>
- * This class will provide implementations for the methods introduced by the
- * Spring framework through
- * {@link org.springframework.data.repository.CrudRepository}.</p>
+ * This class will provide implementations for the methods introduced by the Spring framework through {@link
+ * org.springframework.data.repository.CrudRepository}.</p>
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (10/6/15)
  */
 @SuppressWarnings({"unchecked", "WeakerAccess"})
@@ -26,6 +25,7 @@ public class DefaultCrudRepository extends CrudRepositorySupport {
 
     /**
      * Saves all the given entities
+     *
      * @param entities entities to save (insert or update)
      * @return saved entities
      */
@@ -41,6 +41,7 @@ public class DefaultCrudRepository extends CrudRepositorySupport {
 
     /**
      * Finds the entity that was saved with this key, or returns {@literal null}
+     *
      * @param key the key
      * @return the entity
      */
@@ -51,6 +52,7 @@ public class DefaultCrudRepository extends CrudRepositorySupport {
 
     /**
      * Checks whether the given key represents an entity in the data store
+     *
      * @param key the key
      * @return {@literal true} if the key is valid
      */
@@ -60,6 +62,7 @@ public class DefaultCrudRepository extends CrudRepositorySupport {
 
     /**
      * Finds all the entities that match the given set of ids
+     *
      * @param ids ids to look for
      * @return entities that matched the ids.
      */
@@ -78,8 +81,8 @@ public class DefaultCrudRepository extends CrudRepositorySupport {
     }
 
     /**
-     * Deletes the entity with the given id and returns the actual entity that
-     * was just deleted.
+     * Deletes the entity with the given id and returns the actual entity that was just deleted.
+     *
      * @param id the id
      * @return the entity that was deleted or {@literal null} if it wasn't found
      */
@@ -101,6 +104,7 @@ public class DefaultCrudRepository extends CrudRepositorySupport {
 
     /**
      * Deletes the entity matching this entity's key from the data store
+     *
      * @param entity the entity
      * @return the deleted entity
      * @throws EntityMissingKeyException if the passed entity doesn't have a key
@@ -109,13 +113,15 @@ public class DefaultCrudRepository extends CrudRepositorySupport {
         final Object key = PropertyUtils.getPropertyValue(entity, getRepositoryMetadata().getIdentifierProperty());
         if (key == null) {
             log.error("The entity that was supposed to be deleted, does not have a key");
-            throw new EntityMissingKeyException(getRepositoryMetadata().getEntityType(), getRepositoryMetadata().getIdentifierProperty());
+            throw new EntityMissingKeyException(getRepositoryMetadata().getEntityType(),
+                                                getRepositoryMetadata().getIdentifierProperty());
         }
         return delete(key);
     }
 
     /**
      * Deletes all specified <em>entities</em> from the data store.
+     *
      * @param entities the entities to delete
      * @return the entities that were actually deleted
      */
@@ -135,6 +141,7 @@ public class DefaultCrudRepository extends CrudRepositorySupport {
 
     /**
      * Deletes everything from the data store
+     *
      * @return all the entities that were removed
      */
     public Iterable deleteAll() {

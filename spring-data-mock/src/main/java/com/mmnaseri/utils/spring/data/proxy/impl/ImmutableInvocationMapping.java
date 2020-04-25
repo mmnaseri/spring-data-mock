@@ -8,7 +8,7 @@ import java.lang.reflect.Method;
 /**
  * <p>This class is an immutable invocation mapping.</p>
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/29/15)
  */
 @SuppressWarnings("WeakerAccess")

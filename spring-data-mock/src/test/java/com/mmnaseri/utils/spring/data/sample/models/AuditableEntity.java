@@ -6,7 +6,7 @@ import java.time.Instant;
 import java.util.Optional;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/12/16, 5:23 PM)
  */
 public class AuditableEntity implements Auditable<String, String, Instant> {

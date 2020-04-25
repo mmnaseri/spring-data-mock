@@ -7,7 +7,7 @@ import com.mmnaseri.utils.spring.data.store.DataStore;
 import java.util.List;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/10/16)
  */
 public class DataFunctionInvocation<K, E> {
@@ -17,7 +17,8 @@ public class DataFunctionInvocation<K, E> {
     private final RepositoryConfiguration repositoryConfiguration;
     private final List<E> selection;
 
-    public DataFunctionInvocation(DataStore<K, E> dataStore, QueryDescriptor query, RepositoryConfiguration repositoryConfiguration, List<E> selection) {
+    public DataFunctionInvocation(DataStore<K, E> dataStore, QueryDescriptor query,
+                                  RepositoryConfiguration repositoryConfiguration, List<E> selection) {
         this.dataStore = dataStore;
         this.query = query;
         this.repositoryConfiguration = repositoryConfiguration;

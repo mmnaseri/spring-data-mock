@@ -8,10 +8,10 @@ import java.util.Set;
 /**
  * This implementation will wrap the key generation process in a procedure that prevents duplicate keys from being
  * generated. Since the {@link #generate() generate} method on this class is <em>synchronized</em> it protects
- * multi-threading and race issues from messing up the key generation, so the extending classes can easily generate
- * keys without having to worry about such issues.
+ * multi-threading and race issues from messing up the key generation, so the extending classes can easily generate keys
+ * without having to worry about such issues.
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (10/8/15)
  */
 public abstract class AbstractRandomKeyGenerator<S> implements KeyGenerator<S> {

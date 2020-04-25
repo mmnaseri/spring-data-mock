@@ -13,10 +13,9 @@ import java.util.concurrent.atomic.AtomicReference;
 import static com.mmnaseri.utils.spring.data.domain.impl.id.IdPropertyResolverUtils.isAnnotated;
 
 /**
- * This class will help resolve ID property name if the entity has a field that is annotated with
- * {@link Id @Id}
+ * This class will help resolve ID property name if the entity has a field that is annotated with {@link Id @Id}
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/23/15)
  */
 @SuppressWarnings("WeakerAccess")
@@ -27,6 +26,7 @@ public class AnnotatedFieldIdPropertyResolver implements IdPropertyResolver {
         final AtomicReference<Field> found = new AtomicReference<>();
         //try to find the ID field
         ReflectionUtils.doWithFields(entityType, new ReflectionUtils.FieldCallback() {
+
             @Override
             public void doWith(Field field) throws IllegalArgumentException, IllegalAccessException {
                 if (isAnnotated(field)) {
@@ -41,8 +41,10 @@ public class AnnotatedFieldIdPropertyResolver implements IdPropertyResolver {
         final Field idAnnotatedField = found.get();
         //if a field was found, try to get the ID property name
         if (idAnnotatedField != null) {
-            if (!PropertyUtils.getTypeOf(idType).isAssignableFrom(PropertyUtils.getTypeOf(idAnnotatedField.getType()))) {
-                throw new PropertyTypeMismatchException(entityType, idAnnotatedField.getName(), idType, idAnnotatedField.getType());
+            if (!PropertyUtils.getTypeOf(idType).isAssignableFrom(
+                    PropertyUtils.getTypeOf(idAnnotatedField.getType()))) {
+                throw new PropertyTypeMismatchException(entityType, idAnnotatedField.getName(), idType,
+                                                        idAnnotatedField.getType());
             } else {
                 return idAnnotatedField.getName();
             }

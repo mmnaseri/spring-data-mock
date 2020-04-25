@@ -11,7 +11,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/10/16)
  */
 public class PageablePageParameterExtractorTest {
@@ -44,5 +44,5 @@ public class PageablePageParameterExtractorTest {
         assertThat(extracted.getPageNumber(), is(pageRequest.getPageNumber()));
         assertThat(extracted.getPageSize(), is(pageRequest.getPageSize()));
     }
-    
+
 }

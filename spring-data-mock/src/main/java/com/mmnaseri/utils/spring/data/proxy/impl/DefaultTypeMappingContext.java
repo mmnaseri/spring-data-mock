@@ -3,12 +3,7 @@ package com.mmnaseri.utils.spring.data.proxy.impl;
 import com.mmnaseri.utils.spring.data.error.RepositoryDefinitionException;
 import com.mmnaseri.utils.spring.data.proxy.TypeMapping;
 import com.mmnaseri.utils.spring.data.proxy.TypeMappingContext;
-import com.mmnaseri.utils.spring.data.repository.DefaultCrudRepository;
-import com.mmnaseri.utils.spring.data.repository.DefaultGemfireRepository;
-import com.mmnaseri.utils.spring.data.repository.DefaultJpaRepository;
-import com.mmnaseri.utils.spring.data.repository.DefaultPagingAndSortingRepository;
-import com.mmnaseri.utils.spring.data.repository.DefaultQueryByExampleExecutor;
-import com.mmnaseri.utils.spring.data.repository.DefaultQueryDslPredicateExecutor;
+import com.mmnaseri.utils.spring.data.repository.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.core.annotation.AnnotationAwareOrderComparator;
@@ -25,7 +20,7 @@ import java.util.concurrent.ConcurrentMap;
  * <p>This is the default type mapping context that is also capable of registering the default mappings
  * for the interfaces provided through Spring Data.</p>
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (10/8/15)
  */
 @SuppressWarnings("WeakerAccess")
@@ -34,9 +29,8 @@ public class DefaultTypeMappingContext implements TypeMappingContext {
     private static final Log log = LogFactory.getLog(DefaultTypeMappingContext.class);
     private static final String GEMFIRE_SUPPORT_CLASS = "org.springframework.data.gemfire.repository.GemfireRepository";
     private static final String JPA_SUPPORT_CLASS = "org.springframework.data.jpa.repository.JpaRepository";
-    private static final String QUERYDSL_SUPPORT_CLASS = "org.springframework.data.querydsl.QuerydslPredicateExecutor";
-    private static final String QUERY_BY_EXAMPLE_SUPPORT_CLASS = "org.springframework.data.repository.query.QueryByExampleExecutor";
-    private static final String CGLIB_SUPPORT_CLASS = "net.sf.cglib.proxy.Callback";
+    private static final String QUERY_BY_EXAMPLE_SUPPORT_CLASS =
+            "org.springframework.data.repository.query.QueryByExampleExecutor";
     private final TypeMappingContext parent;
     private ConcurrentMap<Class<?>, List<Class<?>>> mappings = new ConcurrentHashMap<>();
 
@@ -49,7 +43,8 @@ public class DefaultTypeMappingContext implements TypeMappingContext {
 
     /**
      * Instantiates the context
-     * @param registerDefaults    whether or not the default mappings should be registered.
+     *
+     * @param registerDefaults whether or not the default mappings should be registered.
      */
     public DefaultTypeMappingContext(boolean registerDefaults) {
         this(null);
@@ -62,10 +57,6 @@ public class DefaultTypeMappingContext implements TypeMappingContext {
             if (isClassPresent(JPA_SUPPORT_CLASS)) {
                 log.debug("JPA support is enabled in this project, so we need to support the methods");
                 register(Object.class, DefaultJpaRepository.class);
-            }
-            if (isClassPresent(QUERYDSL_SUPPORT_CLASS) && isClassPresent(CGLIB_SUPPORT_CLASS)) {
-                log.debug("QueryDSL support is enabled. We will add the proper method implementations.");
-                register(Object.class, DefaultQueryDslPredicateExecutor.class);
             }
             if (isClassPresent(QUERY_BY_EXAMPLE_SUPPORT_CLASS)) {
                 log.debug("Query by example is enabled. We will the proper method implementations.");
@@ -88,11 +79,13 @@ public class DefaultTypeMappingContext implements TypeMappingContext {
     public void register(Class<?> repositoryType, Class<?> implementation) {
         if (Modifier.isAbstract(implementation.getModifiers()) || Modifier.isInterface(implementation.getModifiers())) {
             log.error("Cannot bind a non-concrete class as an implementation for a non-concrete class");
-            throw new RepositoryDefinitionException(repositoryType, "Cannot bind a non-concrete class as an implementation for a non-concrete class");
+            throw new RepositoryDefinitionException(repositoryType,
+                                                    "Cannot bind a non-concrete class as an implementation for a "
+                                                            + "non-concrete class");
         }
         log.info("Registering implementation " + implementation + " to super type " + repositoryType +
-                "; this means any repository of this type will inherit functionality defined in the " +
-                "bound implementation class.");
+                         "; this means any repository of this type will inherit functionality defined in the " +
+                         "bound implementation class.");
         mappings.putIfAbsent(repositoryType, new LinkedList<Class<?>>());
         mappings.get(repositoryType).add(implementation);
     }
@@ -122,17 +115,21 @@ public class DefaultTypeMappingContext implements TypeMappingContext {
             try {
                 instance = implementation.newInstance();
             } catch (InstantiationException e) {
-                log.error("Failed to instantiate class " + implementation + " because there was an error in the constructor");
-                throw new RepositoryDefinitionException(repositoryType, "Failed to instantiate an object of type " + implementation, e);
+                log.error("Failed to instantiate class " + implementation
+                                  + " because there was an error in the constructor");
+                throw new RepositoryDefinitionException(repositoryType,
+                                                        "Failed to instantiate an object of type " + implementation, e);
             } catch (IllegalAccessException e) {
                 log.error("The constructor for the implementation class is not accessible: " + implementation);
-                throw new RepositoryDefinitionException(repositoryType, "Failed to access the constructor for " + implementation, e);
+                throw new RepositoryDefinitionException(repositoryType,
+                                                        "Failed to access the constructor for " + implementation, e);
             } catch (Exception e) {
                 log.error("The constructor for " + implementation + " threw an exception");
-                throw new RepositoryDefinitionException(repositoryType, "Constructor threw an exception " + implementation, e);
+                throw new RepositoryDefinitionException(repositoryType,
+                                                        "Constructor threw an exception " + implementation, e);
             }
             //noinspection unchecked
-            typeMappings.add(new ImmutableTypeMapping<>((Class<Object>)implementation, instance));
+            typeMappings.add(new ImmutableTypeMapping<>((Class<Object>) implementation, instance));
         }
         return typeMappings;
     }

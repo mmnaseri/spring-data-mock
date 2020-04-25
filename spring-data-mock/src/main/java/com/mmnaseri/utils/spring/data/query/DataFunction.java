@@ -12,11 +12,12 @@ import java.util.List;
  * <p>An example for a data function would be returning the number of items from a selection (count function) or
  * duplicating all the selected entities.</p>
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/29/15)
  */
 public interface DataFunction<R> {
 
-    <K, E> R apply(DataStore<K, E> dataStore, QueryDescriptor query, RepositoryConfiguration configuration, List<E> selection);
+    <K, E> R apply(DataStore<K, E> dataStore, QueryDescriptor query, RepositoryConfiguration configuration,
+                   List<E> selection);
 
 }

@@ -6,7 +6,6 @@
 package com.mmnaseri.utils.spring.data.sample.models;
 
 /**
- *
  * @author blackleg
  */
 public class PersonSerializable extends Person {

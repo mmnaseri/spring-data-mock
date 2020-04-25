@@ -1,27 +1,10 @@
 package com.mmnaseri.utils.spring.data.domain.impl;
 
-import com.mmnaseri.utils.spring.data.domain.MatchedOperator;
-import com.mmnaseri.utils.spring.data.domain.Modifier;
-import com.mmnaseri.utils.spring.data.domain.Operator;
-import com.mmnaseri.utils.spring.data.domain.OperatorContext;
-import com.mmnaseri.utils.spring.data.domain.Parameter;
-import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
+import com.mmnaseri.utils.spring.data.domain.*;
 import com.mmnaseri.utils.spring.data.error.QueryParserException;
 import com.mmnaseri.utils.spring.data.proxy.RepositoryFactoryConfiguration;
-import com.mmnaseri.utils.spring.data.query.NullHandling;
-import com.mmnaseri.utils.spring.data.query.Order;
-import com.mmnaseri.utils.spring.data.query.PageParameterExtractor;
-import com.mmnaseri.utils.spring.data.query.PropertyDescriptor;
-import com.mmnaseri.utils.spring.data.query.QueryDescriptor;
-import com.mmnaseri.utils.spring.data.query.SortDirection;
-import com.mmnaseri.utils.spring.data.query.SortParameterExtractor;
-import com.mmnaseri.utils.spring.data.query.impl.DefaultQueryDescriptor;
-import com.mmnaseri.utils.spring.data.query.impl.DirectSortParameterExtractor;
-import com.mmnaseri.utils.spring.data.query.impl.ImmutableOrder;
-import com.mmnaseri.utils.spring.data.query.impl.ImmutableSort;
-import com.mmnaseri.utils.spring.data.query.impl.PageablePageParameterExtractor;
-import com.mmnaseri.utils.spring.data.query.impl.PageableSortParameterExtractor;
-import com.mmnaseri.utils.spring.data.query.impl.WrappedSortParameterExtractor;
+import com.mmnaseri.utils.spring.data.query.*;
+import com.mmnaseri.utils.spring.data.query.impl.*;
 import com.mmnaseri.utils.spring.data.string.DocumentReader;
 import com.mmnaseri.utils.spring.data.string.impl.DefaultDocumentReader;
 import com.mmnaseri.utils.spring.data.tools.PropertyUtils;
@@ -30,16 +13,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Pattern;
 
 /**
- * <p>This class will parse a query method's name and extract a {@link com.mmnaseri.utils.spring.data.dsl.factory.QueryDescription query description}
+ * <p>This class will parse a query method's name and extract a
+ * {@link com.mmnaseri.utils.spring.data.dsl.factory.QueryDescription
+ * query description}
  * from that name.</p>
  *
  * <p>In parsing the name, words are considered as being tokens in a camel case name.</p>
@@ -47,30 +27,43 @@ import java.util.regex.Pattern;
  * <p>Here is how a query method's name is parsed:</p>
  *
  * <ol>
- *     <li>We will look at the first word in the name until we reach one of the keywords that says we are specifying a limit, or
- *     we are going over the criteria defined by the method. This prefix will be called the "function name" for the operation
- *     defined by the query method. If the function name is one of "read", "find", "query", "get", "load", or "select", we will
- *     set the function name to {@literal null} to indicate that no special function should be applied to the result set. We
+ *     <li>We will look at the first word in the name until we reach one of the keywords that says we are specifying
+ *     a limit, or
+ *     we are going over the criteria defined by the method. This prefix will be called the "function name" for the
+ *     operation
+ *     defined by the query method. If the function name is one of "read", "find", "query", "get", "load", or
+ *     "select", we will
+ *     set the function name to {@literal null} to indicate that no special function should be applied to the result
+ *     set. We
  *     are only looking at the first word to let you be more verbose about the purpose of your query (e.g.
  *     {@literal findAllGreatPeopleByGreatnessGreaterThan(Integer greatness)} will still resolve to the function
  *     {@literal find}, which will ultimately be returned as {@literal null}</li>
  *     <li>We will then look for any of these patterns:
  *     <ul>
  *         <li>The word {@literal By}, signifying that we are ready to start parsing the query criteria</li>
- *         <li>One of the words {@literal First} or {@literal Top}, signifying that we should look for a limit on the number
+ *         <li>One of the words {@literal First} or {@literal Top}, signifying that we should look for a limit on the
+ *         number
  *         of results returned.</li>
  *         <li>The word {@literal Distinct}, signifying that the results should include no duplicates.</li>
  *     </ul>
  *     </li>
- *     <li>If the word {@literal First} had appeared, we will see if it is followed by an integer. If it is, that will be the limit.
+ *     <li>If the word {@literal First} had appeared, we will see if it is followed by an integer. If it is, that
+ *     will be the limit.
  *     If not, a limit of {@literal 1} is assumed.</li>
- *     <li>If the word {@literal Top} had appeared, we will look for the limit number, which should be an integer value.</li>
- *     <li>At this point, we will continue until we see 'By'. In the above, steps, we will look for the keywords in any order,
- *     and there can be any words in between. So, {@literal getTop5StudentsWhoAreAwesomeDistinct} is the same as {@literal getTop5Distinct}</li>
- *     <li>Once we reach the word "By", we will read the query in terms of "decision branches". Branches are separated using the keyword
- *     "Or", and each branch is a series of conjunctions. So, while you are separating your conditions with "And", you are in the same branch.</li>
- *     <li>A single branch consists of the pattern: "(Property)(Operator)?((And)(Property)(Operator)?)*". If the operator is missing, "Is" is assumed.
- *     Properties must match a proper property in the domain object. So, if you have "AddressZipPrefix" in your query method name, there must be a property
+ *     <li>If the word {@literal Top} had appeared, we will look for the limit number, which should be an integer
+ *     value.</li>
+ *     <li>At this point, we will continue until we see 'By'. In the above, steps, we will look for the keywords in
+ *     any order,
+ *     and there can be any words in between. So, {@literal getTop5StudentsWhoAreAwesomeDistinct} is the same as
+ *     {@literal getTop5Distinct}</li>
+ *     <li>Once we reach the word "By", we will read the query in terms of "decision branches". Branches are
+ *     separated using the keyword
+ *     "Or", and each branch is a series of conjunctions. So, while you are separating your conditions with "And",
+ *     you are in the same branch.</li>
+ *     <li>A single branch consists of the pattern: "(Property)(Operator)?((And)(Property)(Operator)?)*". If the
+ *     operator is missing, "Is" is assumed.
+ *     Properties must match a proper property in the domain object. So, if you have "AddressZipPrefix" in your query
+ *     method name, there must be a property
  *     reachable by one of the following paths in your domain class (in the given order):
  *     <ul>
  *         <li>{@literal addressZipPrefix}</li>
@@ -78,29 +71,38 @@ import java.util.regex.Pattern;
  *         <li>{@literal address.zipPrefix}</li>
  *         <li>{@literal address.zip.prefix}</li>
  *     </ul>
- *     Note that if you have both the "addressZip" and "address.zip" in your entity, the first will be taken up. To force the parser to choose the former, use
+ *     Note that if you have both the "addressZip" and "address.zip" in your entity, the first will be taken up. To
+ *     force the parser to choose the former, use
  *     the underscore character ({@literal _}) in place of the dot, like so: "{@literal Address_Zip}"<br>
- *     Depending on the operator that was matched to the suffix provided (e.g. GreaterThan, Is, etc.), a given number of method parameters will be matched
- *     as the operands to that operator. For instance, "Is" requires two values to determine equality, one if the property found on the domain object, and
+ *     Depending on the operator that was matched to the suffix provided (e.g. GreaterThan, Is, etc.), a given number
+ *     of method parameters will be matched
+ *     as the operands to that operator. For instance, "Is" requires two values to determine equality, one if the
+ *     property found on the domain object, and
  *     the other must be provided by the query method.<br>
- *     The operators themselves are scanned eagerly and based on the set of operators defined in the {@link OperatorContext}.
+ *     The operators themselves are scanned eagerly and based on the set of operators defined in the
+ *     {@link OperatorContext}.
  *     </li>
- *     <li>We continue the pattern indicated above, until we reach the end of the method name, or we reach the "OrderBy" pattern. Once we see "OrderBy"
- *     we expect the following pattern: "((Property)(Direction))+", wherein "Property" must follow the same rule as above, and "Direction" is one of
+ *     <li>We continue the pattern indicated above, until we reach the end of the method name, or we reach the
+ *     "OrderBy" pattern. Once we see "OrderBy"
+ *     we expect the following pattern: "((Property)(Direction))+", wherein "Property" must follow the same rule as
+ *     above, and "Direction" is one of
  *     "Asc" and "Desc" to indicate "ascending" and "descending" ordering, respectively.</li>
- *     <li>Finally, we look to see if the keyword "AllIgnoreCase" or {@link #ALL_IGNORE_CASE_SUFFIX one of its variations} is present at the end of the
+ *     <li>Finally, we look to see if the keyword "AllIgnoreCase" or {@link #ALL_IGNORE_CASE_SUFFIX one of its
+ *     variations} is present at the end of the
  *     query name, which will indicate all applicable comparisons should be case-insensitive.</li>
  *     <li>At the end, we allow one additional parameter for the query method, which can be of either of these types:
  *     <ul>
- *         <li>{@link Sort Sort}: to indicate a dynamic sort defined at runtime. If a static sort is already indicated via the pattern above, this will
+ *         <li>{@link Sort Sort}: to indicate a dynamic sort defined at runtime. If a static sort is already
+ *         indicated via the pattern above, this will
  *         result in an error.</li>
- *         <li>{@link Pageable Pageable}: to indicate a paging (and, possibly, sorting) at runtime. If a static sort is already indicated via the pattern
+ *         <li>{@link Pageable Pageable}: to indicate a paging (and, possibly, sorting) at runtime. If a static sort
+ *         is already indicated via the pattern
  *         above, the sort portion of this parameter will be always ignored.</li>
  *     </ul>
  *     </li>
  * </ol>
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/17/15)
  */
 public class MethodQueryDescriptionExtractor implements QueryDescriptionExtractor<Method> {
@@ -118,16 +120,18 @@ public class MethodQueryDescriptionExtractor implements QueryDescriptionExtracto
     }
 
     /**
-     * Extracts query description from a method's name. This will be done according to {@link MethodQueryDescriptionExtractor the parsing rules}
-     * for this extractor.
+     * Extracts query description from a method's name. This will be done according to {@link
+     * MethodQueryDescriptionExtractor the parsing rules} for this extractor.
      *
-     * @param repositoryMetadata    the repository metadata for this method.
-     * @param configuration         the repository factory configuration. This will be passed down through the description.
-     * @param method                the query method
+     * @param repositoryMetadata the repository metadata for this method.
+     * @param configuration      the repository factory configuration. This will be passed down through the
+     *                           description.
+     * @param method             the query method
      * @return the description for the query
      */
     @Override
-    public QueryDescriptor extract(RepositoryMetadata repositoryMetadata, RepositoryFactoryConfiguration configuration, Method method) {
+    public QueryDescriptor extract(RepositoryMetadata repositoryMetadata, RepositoryFactoryConfiguration configuration,
+                                   Method method) {
         String methodName = method.getName();
         //check to see if the AllIgnoreCase flag is set
         boolean allIgnoreCase = methodName.matches(".*" + ALL_IGNORE_CASE_SUFFIX);
@@ -158,16 +162,19 @@ public class MethodQueryDescriptionExtractor implements QueryDescriptionExtracto
             pageExtractor = getPageParameterExtractor(method, index, sort);
             sortExtractor = getSortParameterExtractor(method, index, sort);
         }
-        return new DefaultQueryDescriptor(queryModifiers.isDistinct(), function, queryModifiers.getLimit(), pageExtractor, sortExtractor, branches, configuration, repositoryMetadata);
+        return new DefaultQueryDescriptor(queryModifiers.isDistinct(), function, queryModifiers.getLimit(),
+                                          pageExtractor, sortExtractor, branches, configuration, repositoryMetadata);
     }
 
-    private SortParameterExtractor getSortParameterExtractor(Method method, int index, com.mmnaseri.utils.spring.data.query.Sort sort) {
+    private SortParameterExtractor getSortParameterExtractor(Method method, int index,
+                                                             com.mmnaseri.utils.spring.data.query.Sort sort) {
         SortParameterExtractor sortExtractor = null;
         if (method.getParameterTypes().length == index) {
             sortExtractor = sort == null ? null : new WrappedSortParameterExtractor(sort);
         } else if (method.getParameterTypes().length == index + 1) {
             if (Pageable.class.isAssignableFrom(method.getParameterTypes()[index])) {
-                sortExtractor = sort == null ? new PageableSortParameterExtractor(index) : new WrappedSortParameterExtractor(sort);
+                sortExtractor = sort == null ? new PageableSortParameterExtractor(index)
+                        : new WrappedSortParameterExtractor(sort);
             } else if (Sort.class.isAssignableFrom(method.getParameterTypes()[index])) {
                 sortExtractor = new DirectSortParameterExtractor(index);
             }
@@ -175,7 +182,8 @@ public class MethodQueryDescriptionExtractor implements QueryDescriptionExtracto
         return sortExtractor;
     }
 
-    private PageParameterExtractor getPageParameterExtractor(Method method, int index, com.mmnaseri.utils.spring.data.query.Sort sort) {
+    private PageParameterExtractor getPageParameterExtractor(Method method, int index,
+                                                             com.mmnaseri.utils.spring.data.query.Sort sort) {
         PageParameterExtractor pageExtractor;
         if (method.getParameterTypes().length == index) {
             pageExtractor = null;
@@ -184,19 +192,23 @@ public class MethodQueryDescriptionExtractor implements QueryDescriptionExtracto
                 pageExtractor = new PageablePageParameterExtractor(index);
             } else if (Sort.class.isAssignableFrom(method.getParameterTypes()[index])) {
                 if (sort != null) {
-                    throw new QueryParserException(method.getDeclaringClass(), "You cannot specify both an order-by clause and a dynamic ordering");
+                    throw new QueryParserException(method.getDeclaringClass(),
+                                                   "You cannot specify both an order-by clause and a dynamic ordering");
                 }
                 pageExtractor = null;
             } else {
-                throw new QueryParserException(method.getDeclaringClass(), "Invalid last argument: expected paging or sorting " + method);
+                throw new QueryParserException(method.getDeclaringClass(),
+                                               "Invalid last argument: expected paging or sorting " + method);
             }
         } else {
-            throw new QueryParserException(method.getDeclaringClass(), "Too many parameters declared for query method " + method);
+            throw new QueryParserException(method.getDeclaringClass(),
+                                           "Too many parameters declared for query method " + method);
         }
         return pageExtractor;
     }
 
-    private int parseExpression(RepositoryMetadata repositoryMetadata, Method method, String methodName, boolean allIgnoreCase, DocumentReader reader, List<List<Parameter>> branches) {
+    private int parseExpression(RepositoryMetadata repositoryMetadata, Method method, String methodName,
+                                boolean allIgnoreCase, DocumentReader reader, List<List<Parameter>> branches) {
         int index = 0;
         branches.add(new LinkedList<Parameter>());
         while (reader.hasMore()) {
@@ -212,20 +224,23 @@ public class MethodQueryDescriptionExtractor implements QueryDescriptionExtracto
             expression = parseModifiers(allIgnoreCase, expression, modifiers);
             //if the expression ends in And/Or, we expect there to be more
             if (expression.matches(".*?(And|Or)$") && !reader.hasMore()) {
-                throw new QueryParserException(method.getDeclaringClass(), "Expected more tokens to follow AND/OR operator");
+                throw new QueryParserException(method.getDeclaringClass(),
+                                               "Expected more tokens to follow AND/OR operator");
             }
             expression = expression.replaceFirst("(And|Or)$", "");
             String foundProperty = null;
             Operator operator = parseOperator(expression);
             if (operator != null) {
-                foundProperty = expression.substring(0, expression.length() - ((MatchedOperator) operator).getMatchedToken().length());
+                foundProperty = expression.substring(0, expression.length() - ((MatchedOperator) operator)
+                        .getMatchedToken().length());
             }
             //if no operator was found, it is the implied "IS" operator
             if (operator == null || foundProperty.isEmpty()) {
                 foundProperty = expression;
                 operator = operatorContext.getBySuffix(DEFAULT_OPERATOR_SUFFIX);
             }
-            final PropertyDescriptor propertyDescriptor = getPropertyDescriptor(repositoryMetadata, method, foundProperty);
+            final PropertyDescriptor propertyDescriptor = getPropertyDescriptor(repositoryMetadata, method,
+                                                                                foundProperty);
             final String property = propertyDescriptor.getPath();
             //we need to match the method parameters with the operands for the designated operator
             final int[] indices = new int[operator.getOperands()];
@@ -248,7 +263,8 @@ public class MethodQueryDescriptionExtractor implements QueryDescriptionExtracto
         return index;
     }
 
-    private com.mmnaseri.utils.spring.data.query.Sort parseSort(RepositoryMetadata repositoryMetadata, Method method, DocumentReader reader) {
+    private com.mmnaseri.utils.spring.data.query.Sort parseSort(RepositoryMetadata repositoryMetadata, Method method,
+                                                                DocumentReader reader) {
         final com.mmnaseri.utils.spring.data.query.Sort sort;
         //let's figure out if there is a sort requirement embedded in the query definition
         if (reader.read("OrderBy") != null) {
@@ -263,27 +279,34 @@ public class MethodQueryDescriptionExtractor implements QueryDescriptionExtracto
         return sort;
     }
 
-    private int parseParameterIndices(Method method, String methodName, int index, Operator operator, PropertyDescriptor propertyDescriptor, int[] indices) {
+    private int parseParameterIndices(Method method, String methodName, int index, Operator operator,
+                                      PropertyDescriptor propertyDescriptor, int[] indices) {
         int parameterIndex = index;
         for (int i = 0; i < operator.getOperands(); i++) {
             if (parameterIndex >= method.getParameterTypes().length) {
-                throw new QueryParserException(method.getDeclaringClass(), "Expected to see parameter with index " + parameterIndex);
+                throw new QueryParserException(method.getDeclaringClass(),
+                                               "Expected to see parameter with index " + parameterIndex);
             }
             if (!propertyDescriptor.getType().isAssignableFrom(method.getParameterTypes()[parameterIndex])) {
-                throw new QueryParserException(method.getDeclaringClass(), "Expected parameter " + parameterIndex + " on method " + methodName + " to be a descendant of " + propertyDescriptor.getType());
+                throw new QueryParserException(method.getDeclaringClass(),
+                                               "Expected parameter " + parameterIndex + " on method " + methodName
+                                                       + " to be a descendant of " + propertyDescriptor.getType());
             }
-            indices[i] = parameterIndex ++;
+            indices[i] = parameterIndex++;
         }
         return parameterIndex;
     }
 
-    private PropertyDescriptor getPropertyDescriptor(RepositoryMetadata repositoryMetadata, Method method, String property) {
+    private PropertyDescriptor getPropertyDescriptor(RepositoryMetadata repositoryMetadata, Method method,
+                                                     String property) {
         //let's get the property descriptor
         final PropertyDescriptor propertyDescriptor;
         try {
             propertyDescriptor = PropertyUtils.getPropertyDescriptor(repositoryMetadata.getEntityType(), property);
         } catch (Exception e) {
-            throw new QueryParserException(method.getDeclaringClass(), "Could not find property `" + StringUtils.uncapitalize(property) + "` on `" + repositoryMetadata.getEntityType() + "`", e);
+            throw new QueryParserException(method.getDeclaringClass(),
+                                           "Could not find property `" + StringUtils.uncapitalize(property) + "` on `"
+                                                   + repositoryMetadata.getEntityType() + "`", e);
         }
         return propertyDescriptor;
     }
@@ -352,10 +375,13 @@ public class MethodQueryDescriptionExtractor implements QueryDescriptionExtracto
         try {
             propertyDescriptor = PropertyUtils.getPropertyDescriptor(repositoryMetadata.getEntityType(), expression);
         } catch (Exception e) {
-            throw new QueryParserException(method.getDeclaringClass(), "Failed to get a property descriptor for expression: " + expression, e);
+            throw new QueryParserException(method.getDeclaringClass(),
+                                           "Failed to get a property descriptor for expression: " + expression, e);
         }
         if (!Comparable.class.isAssignableFrom(propertyDescriptor.getType())) {
-            throw new QueryParserException(method.getDeclaringClass(), "Sort property `" + propertyDescriptor.getPath() + "` is not comparable in `" + method.getName() + "`");
+            throw new QueryParserException(method.getDeclaringClass(),
+                                           "Sort property `" + propertyDescriptor.getPath() + "` is not comparable in `"
+                                                   + method.getName() + "`");
         }
         return new ImmutableOrder(direction, propertyDescriptor.getPath(), NullHandling.DEFAULT);
     }
@@ -385,7 +411,8 @@ public class MethodQueryDescriptionExtractor implements QueryDescriptionExtracto
             //if the next word is Top, then we are setting a limit
             if (reader.has("First")) {
                 if (limit > 0) {
-                    throw new QueryParserException(method.getDeclaringClass(), "There is already a limit of " + limit + " specified for this query: " + method);
+                    throw new QueryParserException(method.getDeclaringClass(), "There is already a limit of " + limit
+                            + " specified for this query: " + method);
                 }
                 reader.expect("First");
                 if (reader.has("\\d+")) {
@@ -396,7 +423,8 @@ public class MethodQueryDescriptionExtractor implements QueryDescriptionExtracto
                 continue;
             } else if (reader.has("Top")) {
                 if (limit > 0) {
-                    throw new QueryParserException(method.getDeclaringClass(), "There is already a limit of " + limit + " specified for this query: " + method);
+                    throw new QueryParserException(method.getDeclaringClass(), "There is already a limit of " + limit
+                            + " specified for this query: " + method);
                 }
                 reader.expect("Top");
                 limit = Integer.parseInt(reader.expect("\\d+"));
@@ -404,7 +432,9 @@ public class MethodQueryDescriptionExtractor implements QueryDescriptionExtracto
             } else if (reader.has("Distinct")) {
                 //if the next word is 'Distinct', we are saying we should return distinct results
                 if (distinct) {
-                    throw new QueryParserException(method.getDeclaringClass(), "You have already stated that this query should return distinct items: " + method);
+                    throw new QueryParserException(method.getDeclaringClass(),
+                                                   "You have already stated that this query should return distinct items: "
+                                                           + method);
                 }
                 distinct = true;
             }

@@ -2,11 +2,7 @@ package com.mmnaseri.utils.spring.data.tools;
 
 import com.mmnaseri.utils.spring.data.error.ParserException;
 import com.mmnaseri.utils.spring.data.query.PropertyDescriptor;
-import com.mmnaseri.utils.spring.data.sample.models.Address;
-import com.mmnaseri.utils.spring.data.sample.models.NoAccessorPerson;
-import com.mmnaseri.utils.spring.data.sample.models.Person;
-import com.mmnaseri.utils.spring.data.sample.models.State;
-import com.mmnaseri.utils.spring.data.sample.models.Zip;
+import com.mmnaseri.utils.spring.data.sample.models.*;
 import com.mmnaseri.utils.spring.data.sample.usecases.tools.ClassWithErrorThrowingAccessors;
 import com.mmnaseri.utils.spring.data.sample.usecases.tools.ClassWithFinalId;
 import com.mmnaseri.utils.spring.data.sample.usecases.tools.ClassWithNoGetters;
@@ -19,13 +15,10 @@ import java.lang.reflect.Field;
 import java.math.BigDecimal;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.*;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/30/15)
  */
 public class PropertyUtilsTest extends AbstractUtilityClassTest {
@@ -35,7 +28,8 @@ public class PropertyUtilsTest extends AbstractUtilityClassTest {
         return PropertyUtils.class;
     }
 
-    @Test(expectedExceptions = ParserException.class, expectedExceptionsMessageRegExp = "Expected pattern '.*?' was not encountered.*")
+    @Test(expectedExceptions = ParserException.class,
+          expectedExceptionsMessageRegExp = "Expected pattern '.*?' was not encountered.*")
     public void testPropertyPathThatDoesNotStartWithCapitalLetter() throws Exception {
         PropertyUtils.getPropertyDescriptor(Person.class, "address");
     }
@@ -80,12 +74,14 @@ public class PropertyUtilsTest extends AbstractUtilityClassTest {
         assertThat(descriptor.getType(), equalTo((Class) String.class));
     }
 
-    @Test(expectedExceptions = IllegalStateException.class, expectedExceptionsMessageRegExp = "Could not find property `xyz` on `class .*?\\.Person`")
+    @Test(expectedExceptions = IllegalStateException.class,
+          expectedExceptionsMessageRegExp = "Could not find property `xyz` on `class .*?\\.Person`")
     public void testNonExistingFirstLevelProperty() throws Exception {
         PropertyUtils.getPropertyDescriptor(Person.class, "Xyz");
     }
 
-    @Test(expectedExceptions = IllegalStateException.class, expectedExceptionsMessageRegExp = "Could not find property `xyz` on `class .*?\\.Zip`")
+    @Test(expectedExceptions = IllegalStateException.class,
+          expectedExceptionsMessageRegExp = "Could not find property `xyz` on `class .*?\\.Zip`")
     public void testNonExistingThirdLevelProperty() throws Exception {
         PropertyUtils.getPropertyDescriptor(Person.class, "Address_ZipXyz");
     }
@@ -100,7 +96,8 @@ public class PropertyUtilsTest extends AbstractUtilityClassTest {
 
     @Test
     public void testPropertyWithExplicitBreakingUsingFields() throws Exception {
-        final PropertyDescriptor descriptor = PropertyUtils.getPropertyDescriptor(NoAccessorPerson.class, "Address_Zip");
+        final PropertyDescriptor descriptor = PropertyUtils.getPropertyDescriptor(NoAccessorPerson.class,
+                                                                                  "Address_Zip");
         assertThat(descriptor, is(notNullValue()));
         assertThat(descriptor.getPath(), is("address.zip"));
         assertThat(descriptor.getType(), equalTo((Class) Zip.class));
@@ -108,7 +105,8 @@ public class PropertyUtilsTest extends AbstractUtilityClassTest {
 
     @Test
     public void testMultiLevelPropertyWithoutExplicitBreakingUsingFields() throws Exception {
-        final PropertyDescriptor descriptor = PropertyUtils.getPropertyDescriptor(NoAccessorPerson.class, "AddressZipPrefix");
+        final PropertyDescriptor descriptor = PropertyUtils.getPropertyDescriptor(NoAccessorPerson.class,
+                                                                                  "AddressZipPrefix");
         assertThat(descriptor, is(notNullValue()));
         assertThat(descriptor.getPath(), is("addressZip.prefix"));
         assertThat(descriptor.getType(), equalTo((Class) String.class));
@@ -116,18 +114,21 @@ public class PropertyUtilsTest extends AbstractUtilityClassTest {
 
     @Test
     public void testMultiLevelPropertyWithExplicitBreakingUsingFields() throws Exception {
-        final PropertyDescriptor descriptor = PropertyUtils.getPropertyDescriptor(NoAccessorPerson.class, "Address_ZipPrefix");
+        final PropertyDescriptor descriptor = PropertyUtils.getPropertyDescriptor(NoAccessorPerson.class,
+                                                                                  "Address_ZipPrefix");
         assertThat(descriptor, is(notNullValue()));
         assertThat(descriptor.getPath(), is("address.zip.prefix"));
         assertThat(descriptor.getType(), equalTo((Class) String.class));
     }
 
-    @Test(expectedExceptions = IllegalStateException.class, expectedExceptionsMessageRegExp = "Could not find property `xyz` on `class .*?\\.NoAccessorPerson`")
+    @Test(expectedExceptions = IllegalStateException.class,
+          expectedExceptionsMessageRegExp = "Could not find property `xyz` on `class .*?\\.NoAccessorPerson`")
     public void testNonExistingFirstLevelPropertyUsingFields() throws Exception {
         PropertyUtils.getPropertyDescriptor(NoAccessorPerson.class, "Xyz");
     }
 
-    @Test(expectedExceptions = IllegalStateException.class, expectedExceptionsMessageRegExp = "Could not find property `xyz` on `class .*?\\.Zip`")
+    @Test(expectedExceptions = IllegalStateException.class,
+          expectedExceptionsMessageRegExp = "Could not find property `xyz` on `class .*?\\.Zip`")
     public void testNonExistingThirdLevelPropertyUsingFields() throws Exception {
         PropertyUtils.getPropertyDescriptor(NoAccessorPerson.class, "Address_ZipXyz");
     }
@@ -141,9 +142,12 @@ public class PropertyUtilsTest extends AbstractUtilityClassTest {
         person.getAddress().getState().setName("Teheran");
         person.getAddress().getState().setAbbreviation("TEH");
         assertThat(PropertyUtils.getPropertyValue(person, "address"), Matchers.<Object>is(person.getAddress()));
-        assertThat(PropertyUtils.getPropertyValue(person, "address.city"), Matchers.<Object>is(person.getAddress().getCity()));
-        assertThat(PropertyUtils.getPropertyValue(person, "address.state.name"), Matchers.<Object>is(person.getAddress().getState().getName()));
-        assertThat(PropertyUtils.getPropertyValue(person, "address.state.abbreviation"), Matchers.<Object>is(person.getAddress().getState().getAbbreviation()));
+        assertThat(PropertyUtils.getPropertyValue(person, "address.city"),
+                   Matchers.<Object>is(person.getAddress().getCity()));
+        assertThat(PropertyUtils.getPropertyValue(person, "address.state.name"),
+                   Matchers.<Object>is(person.getAddress().getState().getName()));
+        assertThat(PropertyUtils.getPropertyValue(person, "address.state.abbreviation"),
+                   Matchers.<Object>is(person.getAddress().getState().getAbbreviation()));
         assertThat(PropertyUtils.getPropertyValue(person, "firstName"), is(nullValue()));
     }
 
@@ -169,8 +173,10 @@ public class PropertyUtilsTest extends AbstractUtilityClassTest {
 
     @Test
     public void testPropertyNameFromGetterMethod() throws Exception {
-        assertThat(PropertyUtils.getPropertyName(ReflectionUtils.findMethod(Person.class, "getAddress")), is("address"));
-        assertThat(PropertyUtils.getPropertyName(ReflectionUtils.findMethod(Person.class, "getAddressZip")), is("addressZip"));
+        assertThat(PropertyUtils.getPropertyName(ReflectionUtils.findMethod(Person.class, "getAddress")),
+                   is("address"));
+        assertThat(PropertyUtils.getPropertyName(ReflectionUtils.findMethod(Person.class, "getAddressZip")),
+                   is("addressZip"));
     }
 
     @Test
@@ -196,7 +202,8 @@ public class PropertyUtilsTest extends AbstractUtilityClassTest {
 
     @Test
     public void testReadingWhenMiddlePropertyIsNull() throws Exception {
-        assertThat(PropertyUtils.getPropertyValue(new Person().setAddress(new Address()), "address.zip.prefix"), is(nullValue()));
+        assertThat(PropertyUtils.getPropertyValue(new Person().setAddress(new Address()), "address.zip.prefix"),
+                   is(nullValue()));
     }
 
     @Test
@@ -249,7 +256,8 @@ public class PropertyUtilsTest extends AbstractUtilityClassTest {
         assertThat(person.getId(), is(nullValue()));
     }
 
-    @Test(expectedExceptions = IllegalStateException.class, expectedExceptionsMessageRegExp = "Failed to set property value through the field .*")
+    @Test(expectedExceptions = IllegalStateException.class,
+          expectedExceptionsMessageRegExp = "Failed to set property value through the field .*")
     public void testSettingPrimitiveValueToNullThroughSetter() throws Exception {
         PropertyUtils.setPropertyValue(new ClassWithPrimitiveField(), "position", null);
     }

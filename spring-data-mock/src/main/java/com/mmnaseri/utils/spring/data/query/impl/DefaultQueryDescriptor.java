@@ -1,17 +1,8 @@
 package com.mmnaseri.utils.spring.data.query.impl;
 
-import com.mmnaseri.utils.spring.data.domain.Invocation;
-import com.mmnaseri.utils.spring.data.domain.InvocationMatcher;
-import com.mmnaseri.utils.spring.data.domain.Modifier;
-import com.mmnaseri.utils.spring.data.domain.Operator;
-import com.mmnaseri.utils.spring.data.domain.Parameter;
-import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
+import com.mmnaseri.utils.spring.data.domain.*;
 import com.mmnaseri.utils.spring.data.proxy.RepositoryFactoryConfiguration;
-import com.mmnaseri.utils.spring.data.query.Page;
-import com.mmnaseri.utils.spring.data.query.PageParameterExtractor;
-import com.mmnaseri.utils.spring.data.query.QueryDescriptor;
-import com.mmnaseri.utils.spring.data.query.Sort;
-import com.mmnaseri.utils.spring.data.query.SortParameterExtractor;
+import com.mmnaseri.utils.spring.data.query.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.BeanWrapper;
@@ -22,7 +13,7 @@ import java.util.List;
 /**
  * This is a mutable query descriptor that you can use to describe what a query does.
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/20/15)
  */
 public class DefaultQueryDescriptor implements QueryDescriptor {
@@ -38,7 +29,9 @@ public class DefaultQueryDescriptor implements QueryDescriptor {
     private final RepositoryFactoryConfiguration configuration;
     private final RepositoryMetadata repositoryMetadata;
 
-    public DefaultQueryDescriptor(boolean distinct, String function, int limit, PageParameterExtractor pageExtractor, SortParameterExtractor sortExtractor, List<List<Parameter>> branches, RepositoryFactoryConfiguration configuration, RepositoryMetadata repositoryMetadata) {
+    public DefaultQueryDescriptor(boolean distinct, String function, int limit, PageParameterExtractor pageExtractor,
+                                  SortParameterExtractor sortExtractor, List<List<Parameter>> branches,
+                                  RepositoryFactoryConfiguration configuration, RepositoryMetadata repositoryMetadata) {
         this.distinct = distinct;
         this.function = function;
         this.limit = limit;

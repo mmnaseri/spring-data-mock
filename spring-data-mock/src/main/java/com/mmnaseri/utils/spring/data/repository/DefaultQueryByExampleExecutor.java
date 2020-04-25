@@ -1,10 +1,6 @@
 package com.mmnaseri.utils.spring.data.repository;
 
-import com.mmnaseri.utils.spring.data.domain.DataStoreAware;
-import com.mmnaseri.utils.spring.data.domain.Invocation;
-import com.mmnaseri.utils.spring.data.domain.Parameter;
-import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
-import com.mmnaseri.utils.spring.data.domain.RepositoryMetadataAware;
+import com.mmnaseri.utils.spring.data.domain.*;
 import com.mmnaseri.utils.spring.data.domain.impl.ImmutableInvocation;
 import com.mmnaseri.utils.spring.data.domain.impl.SelectDataStoreOperation;
 import com.mmnaseri.utils.spring.data.error.InvalidArgumentException;
@@ -15,11 +11,7 @@ import com.mmnaseri.utils.spring.data.proxy.RepositoryFactoryConfigurationAware;
 import com.mmnaseri.utils.spring.data.query.QueryDescriptor;
 import com.mmnaseri.utils.spring.data.store.DataStore;
 import com.mmnaseri.utils.spring.data.tools.PropertyUtils;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -27,10 +19,12 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * @author Milad Naseri (milad.naseri@cdk.com)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (6/8/16, 11:57 AM)
  */
-public class DefaultQueryByExampleExecutor implements DataStoreAware, RepositoryConfigurationAware, RepositoryMetadataAware, RepositoryFactoryConfigurationAware {
+public class DefaultQueryByExampleExecutor
+        implements DataStoreAware, RepositoryConfigurationAware, RepositoryMetadataAware,
+                   RepositoryFactoryConfigurationAware {
 
     private DataStore<Object, Object> dataStore;
     private final ExampleMatcherQueryDescriptionExtractor queryDescriptionExtractor;
@@ -47,7 +41,8 @@ public class DefaultQueryByExampleExecutor implements DataStoreAware, Repository
         if (found.isEmpty()) {
             return null;
         } else if (found.size() > 1) {
-            throw new InvalidArgumentException("Expected to see exactly one item found, but found " + found.size() + ". You should use a better example.");
+            throw new InvalidArgumentException("Expected to see exactly one item found, but found " + found.size()
+                                                       + ". You should use a better example.");
         }
         return found.iterator().next();
     }
@@ -95,21 +90,24 @@ public class DefaultQueryByExampleExecutor implements DataStoreAware, Repository
 
     /**
      * Retrieves all entities that match the given example
-     * @param example    the example for finding the entities
+     *
+     * @param example the example for finding the entities
      * @return a collection of matched entities
      */
     private Collection<?> retrieveAll(Example example) {
-        final QueryDescriptor descriptor = queryDescriptionExtractor.extract(repositoryMetadata, configuration, example);
+        final QueryDescriptor descriptor = queryDescriptionExtractor.extract(repositoryMetadata, configuration,
+                                                                             example);
         final Invocation invocation = createInvocation(descriptor, example);
         final SelectDataStoreOperation<Object, Object> select = new SelectDataStoreOperation<>(descriptor);
         return select.execute(dataStore, repositoryConfiguration, invocation);
     }
 
     /**
-     * This method will create an invocation that had it occurred on a query method would provide sufficient
-     * data for a parsed query method expression to be evaluated
-     * @param descriptor    the query descriptor
-     * @param example       the example that is used for evaluation
+     * This method will create an invocation that had it occurred on a query method would provide sufficient data for a
+     * parsed query method expression to be evaluated
+     *
+     * @param descriptor the query descriptor
+     * @param example    the example that is used for evaluation
      * @return the fake method invocation corresponding to the example probe
      */
     private Invocation createInvocation(QueryDescriptor descriptor, Example example) {
@@ -121,8 +119,11 @@ public class DefaultQueryByExampleExecutor implements DataStoreAware, Repository
         for (Parameter parameter : parameters) {
             final String propertyPath = parameter.getPath();
             final Object propertyValue = PropertyUtils.getPropertyValue(example.getProbe(), propertyPath);
-            final ExampleMatcher.PropertySpecifier specifier = example.getMatcher().getPropertySpecifiers().getForPath(propertyPath);
-            values.add(specifier == null ? propertyValue : specifier.getPropertyValueTransformer().apply(Optional.ofNullable(propertyValue)).orElse(null));
+            final ExampleMatcher.PropertySpecifier specifier = example.getMatcher().getPropertySpecifiers().getForPath(
+                    propertyPath);
+            values.add(specifier == null ? propertyValue
+                               : specifier.getPropertyValueTransformer().apply(Optional.ofNullable(propertyValue))
+                                          .orElse(null));
         }
         return new ImmutableInvocation(null, values.toArray());
     }

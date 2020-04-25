@@ -1,10 +1,6 @@
 package com.mmnaseri.utils.spring.data.repository;
 
-import com.mmnaseri.utils.spring.data.domain.Modifier;
-import com.mmnaseri.utils.spring.data.domain.Operator;
-import com.mmnaseri.utils.spring.data.domain.OperatorContext;
-import com.mmnaseri.utils.spring.data.domain.Parameter;
-import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
+import com.mmnaseri.utils.spring.data.domain.*;
 import com.mmnaseri.utils.spring.data.domain.impl.ImmutableParameter;
 import com.mmnaseri.utils.spring.data.domain.impl.QueryDescriptionExtractor;
 import com.mmnaseri.utils.spring.data.proxy.RepositoryFactoryConfiguration;
@@ -17,22 +13,17 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 
 import java.beans.PropertyDescriptor;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
- * @author Milad Naseri (milad.naseri@cdk.com)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (6/8/16, 12:45 PM)
  */
 public class ExampleMatcherQueryDescriptionExtractor implements QueryDescriptionExtractor<Example> {
 
     @Override
-    public QueryDescriptor extract(RepositoryMetadata repositoryMetadata, RepositoryFactoryConfiguration configuration, Example example) {
+    public QueryDescriptor extract(RepositoryMetadata repositoryMetadata, RepositoryFactoryConfiguration configuration,
+                                   Example example) {
         final OperatorContext operatorContext = configuration.getDescriptionExtractor().getOperatorContext();
         final Map<String, Object> values = extractValues(example.getProbe());
         final ExampleMatcher matcher = example.getMatcher();
@@ -68,9 +59,10 @@ public class ExampleMatcherQueryDescriptionExtractor implements QueryDescription
                     operator = operatorContext.getBySuffix("Is");
                 }
             }
-            parameters.add(new ImmutableParameter(propertyPath, modifiers, new int[]{index ++}, operator));
+            parameters.add(new ImmutableParameter(propertyPath, modifiers, new int[]{index++}, operator));
         }
-        return new DefaultQueryDescriptor(false, null, 0, null, null, Collections.singletonList(parameters), configuration, repositoryMetadata);
+        return new DefaultQueryDescriptor(false, null, 0, null, null, Collections.singletonList(parameters),
+                                          configuration, repositoryMetadata);
     }
 
     private ExampleMatcher.StringMatcher stringMatcher(ExampleMatcher matcher, String path) {
@@ -85,6 +77,7 @@ public class ExampleMatcherQueryDescriptionExtractor implements QueryDescription
 
     /**
      * Given an input object, this method will return a map from the property paths to their corresponding values
+     *
      * @param object the input object
      * @return the map of values
      */
@@ -114,15 +107,17 @@ public class ExampleMatcherQueryDescriptionExtractor implements QueryDescription
     }
 
     /**
-     * This method is used to determine if a given value should be broken down further
-     * or should it be passed in as it is
-     * @param descriptor    the descriptor for the property
-     * @param value         the value for the property
+     * This method is used to determine if a given value should be broken down further or should it be passed in as it
+     * is
+     *
+     * @param descriptor the descriptor for the property
+     * @param value      the value for the property
      * @return {@literal true} if the value should be left alone
      */
     private boolean isIntractable(PropertyDescriptor descriptor, Object value) {
         final Class<?> type = descriptor.getPropertyType();
-        return type.isPrimitive() || type.getName().startsWith("java.lang.") || value instanceof Iterable || value instanceof Map;
+        return type.isPrimitive() || type.getName().startsWith("java.lang.") || value instanceof Iterable
+                || value instanceof Map;
     }
 
 }

@@ -10,10 +10,10 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * This is the default implementation of the data store registry that supports caching a data store based on
- * the type of entity the data store supports.
+ * This is the default implementation of the data store registry that supports caching a data store based on the type of
+ * entity the data store supports.
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/29/15)
  */
 public class DefaultDataStoreRegistry implements DataStoreRegistry {

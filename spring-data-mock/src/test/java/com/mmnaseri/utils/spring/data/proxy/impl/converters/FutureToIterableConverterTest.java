@@ -11,12 +11,10 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.FutureTask;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.*;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (10/6/15)
  */
 public class FutureToIterableConverterTest {
@@ -25,19 +23,21 @@ public class FutureToIterableConverterTest {
     public void testConvertingFutureValueToIterable() throws Exception {
         final FutureToIterableConverter converter = new FutureToIterableConverter();
         final Object original = new Object();
-        //noinspection unchecked
-        final FutureTask task = new FutureTask(new Callable() {
+        final FutureTask<Object> task = new FutureTask<>(new Callable<Object>() {
+
             @Override
             public Object call() throws Exception {
                 return original;
             }
         });
         task.run();
-        final Object converted = converter.convert(new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findLong"), null), task);
+        final Object converted = converter.convert(
+                new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findLong"), null), task);
         assertThat(converted, is(notNullValue()));
         assertThat(converted, is(instanceOf(Iterable.class)));
-        final Iterable iterable = (Iterable) converted;
-        final Iterator iterator = iterable.iterator();
+        //noinspection unchecked
+        final Iterable<Object> iterable = (Iterable<Object>) converted;
+        final Iterator<Object> iterator = iterable.iterator();
         assertThat(iterator.hasNext(), is(true));
         final Object value = iterator.next();
         assertThat(value, is(notNullValue()));
@@ -48,8 +48,7 @@ public class FutureToIterableConverterTest {
     @Test(expectedExceptions = ResultConversionFailureException.class)
     public void testConvertingFutureError() throws Exception {
         final FutureToIterableConverter converter = new FutureToIterableConverter();
-        //noinspection unchecked
-        final FutureTask task = new FutureTask(new ErrorThrowingCallable());
+        final FutureTask<Object> task = new FutureTask<>(new ErrorThrowingCallable());
         task.run();
         converter.convert(new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findLong"), null), task);
     }

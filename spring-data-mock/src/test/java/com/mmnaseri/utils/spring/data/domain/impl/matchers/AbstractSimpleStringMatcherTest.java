@@ -12,7 +12,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/10/16)
  */
 public class AbstractSimpleStringMatcherTest {
@@ -38,7 +38,8 @@ public class AbstractSimpleStringMatcherTest {
     @Test
     public void testWhenIgnoringCase() throws Exception {
         final NotMatchingStringMatcher matcher = new NotMatchingStringMatcher();
-        matcher.matches(new ImmutableParameter("x.y.z", Collections.singleton(Modifier.IGNORE_CASE), null, null), "test", "TEST");
+        matcher.matches(new ImmutableParameter("x.y.z", Collections.singleton(Modifier.IGNORE_CASE), null, null),
+                        "test", "TEST");
         assertThat(matcher.getActual(), is("test"));
         assertThat(matcher.getArgument(), is("test"));
     }

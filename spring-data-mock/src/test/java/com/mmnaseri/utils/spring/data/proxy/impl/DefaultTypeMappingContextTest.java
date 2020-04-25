@@ -2,18 +2,8 @@ package com.mmnaseri.utils.spring.data.proxy.impl;
 
 import com.mmnaseri.utils.spring.data.error.RepositoryDefinitionException;
 import com.mmnaseri.utils.spring.data.proxy.TypeMapping;
-import com.mmnaseri.utils.spring.data.repository.DefaultCrudRepository;
-import com.mmnaseri.utils.spring.data.repository.DefaultGemfireRepository;
-import com.mmnaseri.utils.spring.data.repository.DefaultJpaRepository;
-import com.mmnaseri.utils.spring.data.repository.DefaultPagingAndSortingRepository;
-import com.mmnaseri.utils.spring.data.repository.DefaultQueryByExampleExecutor;
-import com.mmnaseri.utils.spring.data.repository.DefaultQueryDslPredicateExecutor;
-import com.mmnaseri.utils.spring.data.sample.usecases.proxy.ErrorThrowingImplementation;
-import com.mmnaseri.utils.spring.data.sample.usecases.proxy.HighPriorityMapping;
-import com.mmnaseri.utils.spring.data.sample.usecases.proxy.ImplementationWithPrivateConstructor;
-import com.mmnaseri.utils.spring.data.sample.usecases.proxy.ImplementationWithoutADefaultConstructor;
-import com.mmnaseri.utils.spring.data.sample.usecases.proxy.LowerPriorityMapping;
-import com.mmnaseri.utils.spring.data.sample.usecases.proxy.ProperImplementation;
+import com.mmnaseri.utils.spring.data.repository.*;
+import com.mmnaseri.utils.spring.data.sample.usecases.proxy.*;
 import org.hamcrest.Matchers;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -21,15 +11,10 @@ import org.testng.annotations.Test;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.lessThan;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.*;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/10/16)
  */
 public class DefaultTypeMappingContextTest {
@@ -43,19 +28,19 @@ public class DefaultTypeMappingContextTest {
                 DefaultJpaRepository.class,
                 DefaultPagingAndSortingRepository.class,
                 DefaultCrudRepository.class,
-                DefaultQueryDslPredicateExecutor.class,
                 DefaultQueryByExampleExecutor.class
         };
     }
 
     @Test
-    public void testDefaultMappings() throws Exception {
+    public void testDefaultMappings() {
         final DefaultTypeMappingContext context = new DefaultTypeMappingContext();
-        assertThat(context.getImplementations(Object.class), Matchers.<Class<?>>containsInAnyOrder(defaultImplementations));
+        assertThat(context.getImplementations(Object.class),
+                   Matchers.<Class<?>>containsInAnyOrder(defaultImplementations));
     }
 
     @Test
-    public void testRegisteringMappings() throws Exception {
+    public void testRegisteringMappings() {
         final DefaultTypeMappingContext context = new DefaultTypeMappingContext();
         assertThat(context.getImplementations(Double.class), hasSize(defaultImplementations.length));
         context.register(Double.class, Float.class);
@@ -81,7 +66,8 @@ public class DefaultTypeMappingContextTest {
         assertThat(context.getImplementations(Double.class), hasSize(defaultImplementations.length + 2));
         assertThat(context.getImplementations(Double.class), hasItem(LowerPriorityMapping.class));
         assertThat(context.getImplementations(Double.class), hasItem(HighPriorityMapping.class));
-        assertThat(context.getImplementations(Double.class).indexOf(LowerPriorityMapping.class), is(lessThan(context.getImplementations(Double.class).indexOf(HighPriorityMapping.class))));
+        assertThat(context.getImplementations(Double.class).indexOf(LowerPriorityMapping.class),
+                   is(lessThan(context.getImplementations(Double.class).indexOf(HighPriorityMapping.class))));
     }
 
     @Test
@@ -152,10 +138,16 @@ public class DefaultTypeMappingContextTest {
         assertThat(implementation.pi(), is(Math.PI));
     }
 
-    private static abstract class AbstractImplementation {}
+    private static abstract class AbstractImplementation {
 
-    private interface InterfaceImplementation {}
+    }
 
-    private static class PrivateImplementationClass {}
+    private interface InterfaceImplementation {
+
+    }
+
+    private static class PrivateImplementationClass {
+
+    }
 
 }

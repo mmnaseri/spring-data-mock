@@ -5,7 +5,7 @@ import com.mmnaseri.utils.spring.data.sample.models.EmptyEntity;
 import com.mmnaseri.utils.spring.data.sample.models.EntityWithoutAnnotatedIdGetter;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/29/15)
  */
 @SuppressWarnings("unused")

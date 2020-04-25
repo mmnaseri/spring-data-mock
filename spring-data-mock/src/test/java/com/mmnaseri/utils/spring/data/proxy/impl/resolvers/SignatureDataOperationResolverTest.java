@@ -3,11 +3,7 @@ package com.mmnaseri.utils.spring.data.proxy.impl.resolvers;
 import com.mmnaseri.utils.spring.data.domain.impl.MethodInvocationDataStoreOperation;
 import com.mmnaseri.utils.spring.data.proxy.TypeMapping;
 import com.mmnaseri.utils.spring.data.proxy.impl.ImmutableTypeMapping;
-import com.mmnaseri.utils.spring.data.sample.usecases.proxy.resolvers.ChildClass;
-import com.mmnaseri.utils.spring.data.sample.usecases.proxy.resolvers.ProxiedClass;
-import com.mmnaseri.utils.spring.data.sample.usecases.proxy.resolvers.SuperClass;
-import com.mmnaseri.utils.spring.data.sample.usecases.proxy.resolvers.SuperInterface;
-import com.mmnaseri.utils.spring.data.sample.usecases.proxy.resolvers.SuperInterfaceImpl;
+import com.mmnaseri.utils.spring.data.sample.usecases.proxy.resolvers.*;
 import com.mmnaseri.utils.spring.data.store.DataStoreOperation;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -16,13 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.*;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/10/16)
  */
 public class SignatureDataOperationResolverTest {
@@ -39,32 +32,38 @@ public class SignatureDataOperationResolverTest {
 
     @Test
     public void testLookingForExactMatchViaInterface() throws Exception {
-        final DataStoreOperation<?, ?, ?> operation = resolver.resolve(ProxiedClass.class.getMethod("saySomething", String.class, Double.class));
+        final DataStoreOperation<?, ?, ?> operation = resolver.resolve(
+                ProxiedClass.class.getMethod("saySomething", String.class, Double.class));
         assertThat(operation, is(notNullValue()));
         assertThat(operation, is(instanceOf(MethodInvocationDataStoreOperation.class)));
         final MethodInvocationDataStoreOperation invocationOperation = (MethodInvocationDataStoreOperation) operation;
         assertThat(invocationOperation.getInstance(), is(instanceOf(SuperInterface.class)));
-        assertThat(invocationOperation.getMethod(), is(SuperInterface.class.getMethod("saySomething", CharSequence.class, Double.class)));
+        assertThat(invocationOperation.getMethod(),
+                   is(SuperInterface.class.getMethod("saySomething", CharSequence.class, Double.class)));
     }
 
     @Test
     public void testLookingForExactMatchViaClass() throws Exception {
-        final DataStoreOperation<?, ?, ?> operation = resolver.resolve(ProxiedClass.class.getMethod("saySomething", String.class, Integer.class));
+        final DataStoreOperation<?, ?, ?> operation = resolver.resolve(
+                ProxiedClass.class.getMethod("saySomething", String.class, Integer.class));
         assertThat(operation, is(notNullValue()));
         assertThat(operation, is(instanceOf(MethodInvocationDataStoreOperation.class)));
         final MethodInvocationDataStoreOperation invocationOperation = (MethodInvocationDataStoreOperation) operation;
         assertThat(invocationOperation.getInstance(), is(instanceOf(ChildClass.class)));
-        assertThat(invocationOperation.getMethod(), is(ChildClass.class.getMethod("saySomething", String.class, Integer.class)));
+        assertThat(invocationOperation.getMethod(),
+                   is(ChildClass.class.getMethod("saySomething", String.class, Integer.class)));
     }
 
     @Test
     public void testLookingForMatchViaSuperClassSuperSignature() throws Exception {
-        final DataStoreOperation<?, ?, ?> operation = resolver.resolve(ProxiedClass.class.getMethod("saySomething", String.class, float.class));
+        final DataStoreOperation<?, ?, ?> operation = resolver.resolve(
+                ProxiedClass.class.getMethod("saySomething", String.class, float.class));
         assertThat(operation, is(notNullValue()));
         assertThat(operation, is(instanceOf(MethodInvocationDataStoreOperation.class)));
         final MethodInvocationDataStoreOperation invocationOperation = (MethodInvocationDataStoreOperation) operation;
         assertThat(invocationOperation.getInstance(), is(instanceOf(SuperClass.class)));
-        assertThat(invocationOperation.getMethod(), is(SuperClass.class.getMethod("saySomething", CharSequence.class, Number.class)));
+        assertThat(invocationOperation.getMethod(),
+                   is(SuperClass.class.getMethod("saySomething", CharSequence.class, Number.class)));
     }
 
     @Test
@@ -79,7 +78,8 @@ public class SignatureDataOperationResolverTest {
 
     @Test
     public void testLookingForMethodThatDoesNotMatch() throws Exception {
-        final DataStoreOperation<?, ?, ?> resolved = resolver.resolve(ProxiedClass.class.getMethod("saySomething", String.class, Boolean.class));
+        final DataStoreOperation<?, ?, ?> resolved = resolver.resolve(
+                ProxiedClass.class.getMethod("saySomething", String.class, Boolean.class));
         assertThat(resolved, is(nullValue()));
     }
 

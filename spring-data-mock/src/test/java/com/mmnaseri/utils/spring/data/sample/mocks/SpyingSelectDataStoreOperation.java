@@ -9,7 +9,7 @@ import com.mmnaseri.utils.spring.data.store.DataStore;
 import java.util.List;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/12/16, 6:38 PM)
  */
 public class SpyingSelectDataStoreOperation<K, E> extends SelectDataStoreOperation<K, E> {
