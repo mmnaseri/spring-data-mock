@@ -100,7 +100,19 @@ There you can get more information on how to download the framework, as well as 
 incorporate it in your project to have hassle-free data store mocking capabilities added to
 your shiny applications.
 
+## Breaking Changes since v2.0
+
+`v2.0` introduces compatibility with Spring Boot 2.0, but also creates some incompatibilities with prior versions.
+
+- As well it should, it is now adopting all the new method signatures for the new Spring Data, meaning that those
+are now automatic breaking changes.
+- We have now dropped support for Querydsl repositories until further notice, due to compiler issues with the EJC
+dependency used by Querydsl.
+- The library now runs on Java 8+, meaning we do not support JDK 7 anymore.
+
 ## History
+
+- 2.0 Upgrade to Spring Boot 2.0 (many thanks to binakot@). This is a major release and breaks some stuff.
 
 - 1.1 Add QueryDSL and findByExample support
 
