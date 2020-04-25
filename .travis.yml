@@ -3,12 +3,10 @@ jdk:
   - oraclejdk7
   - oraclejdk8
   - oraclejdk9
-  - oraclejdk10
   - oraclejdk11
   - openjdk7
   - openjdk8
   - openjdk9
-  - openjdk10
   - openjdk11
 script:
   - cd spring-data-mock
@@ -19,7 +17,7 @@ after_success:
   - '[[ $TRAVIS_BRANCH == "master" && ( "x${TRAVIS_PULL_REQUEST}" == "xfalse" || "x${TRAVIS_PULL_REQUEST}" == "x" ) && ( "x$(echo $JAVA_HOME | grep -o 8)" == "x8" ) ]] && sudo apt-get install gnupg2'
   - '[[ $TRAVIS_BRANCH == "master" && ( "x${TRAVIS_PULL_REQUEST}" == "xfalse" || "x${TRAVIS_PULL_REQUEST}" == "x" ) && ( "x$(echo $JAVA_HOME | grep -o 8)" == "x8" ) ]] && bash ../deployment/deploy.sh eb1a6f34f056 ../deployment/key.asc.enc ../deployment/settings.xml'
 os: linux
-dist: bionic
+dist: xenial
 env:
   global:
   - secure: DPkao3yJ4hhEsUOfs2VQJ8WCV3VdR3ToFiGB1l461PUstjaytTeXYK3bW2PmZqYJs6Hxxwyl8UHFvgBvWLb/yQV/dqyyJAV8XRb9UC37e4ddLoi8HE7NSGQIiXq0tySiMaOTyd2NtRTepfNAMEMDP746Nrox1giPEq1FPv+K98o=
