@@ -6,30 +6,30 @@ import com.mmnaseri.utils.spring.data.tools.PropertyUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import java.io.Serializable;
-
 /**
  * <p>This implementation is used to factor out the commonalities between various Spring interfaces extending the
  * {@link org.springframework.data.repository.CrudRepository} interface.</p>
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (2015/11/09, 21:40)
  */
 @SuppressWarnings("WeakerAccess")
-public class CrudRepositorySupport implements DataStoreAware, RepositoryMetadataAware, KeyGeneratorAware<Serializable> {
+public class CrudRepositorySupport implements DataStoreAware, RepositoryMetadataAware, KeyGeneratorAware<Object> {
 
     private static final Log log = LogFactory.getLog(CrudRepositorySupport.class);
-    private KeyGenerator<? extends Serializable> keyGenerator;
+    private KeyGenerator<?> keyGenerator;
     private DataStore dataStore;
     private RepositoryMetadata repositoryMetadata;
 
-    protected CrudRepositorySupport() {}
+    protected CrudRepositorySupport() {
+    }
 
     /**
      * Saves the entity in the underlying data store, creating keys in the process, if necessary.
-     * @param entity    the entity to save
-     * @return the saved entity (the exact same instance, with the difference that if the entity was
-     * newly inserted, it will have a key).
+     *
+     * @param entity the entity to save
+     * @return the saved entity (the exact same instance, with the difference that if the entity was newly inserted, it
+     * will have a key).
      */
     public Object save(Object entity) {
         Object key = PropertyUtils.getPropertyValue(entity, repositoryMetadata.getIdentifierProperty());
@@ -41,10 +41,12 @@ public class CrudRepositorySupport implements DataStoreAware, RepositoryMetadata
             PropertyUtils.setPropertyValue(entity, repositoryMetadata.getIdentifierProperty(), key);
         }
         if (key == null) {
-            log.warn("Attempting to save an entity without a key. This might result in an error. To fix this, specify a key generator.");
+            log.warn(
+                    "Attempting to save an entity without a key. This might result in an error. To fix this, specify "
+                            + "a key generator.");
         }
         //noinspection unchecked
-        dataStore.save((Serializable) key, entity);
+        dataStore.save(key, entity);
         return entity;
     }
 
@@ -54,7 +56,7 @@ public class CrudRepositorySupport implements DataStoreAware, RepositoryMetadata
     }
 
     @Override
-    public final void setKeyGenerator(KeyGenerator<? extends Serializable> keyGenerator) {
+    public final void setKeyGenerator(KeyGenerator<?> keyGenerator) {
         this.keyGenerator = keyGenerator;
     }
 
@@ -63,7 +65,7 @@ public class CrudRepositorySupport implements DataStoreAware, RepositoryMetadata
         this.repositoryMetadata = repositoryMetadata;
     }
 
-    protected KeyGenerator<? extends Serializable> getKeyGenerator() {
+    protected KeyGenerator<?> getKeyGenerator() {
         return keyGenerator;
     }
 

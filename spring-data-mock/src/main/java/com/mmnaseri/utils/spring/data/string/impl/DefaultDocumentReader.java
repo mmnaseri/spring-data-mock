@@ -7,7 +7,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/19/15)
  */
 public class DefaultDocumentReader implements DocumentReader {
@@ -17,7 +17,8 @@ public class DefaultDocumentReader implements DocumentReader {
 
     /**
      * Instantiates the reader while taking in the document to be read through
-     * @param document    the document
+     *
+     * @param document the document
      */
     public DefaultDocumentReader(String document) {
         this.document = document;
@@ -26,6 +27,7 @@ public class DefaultDocumentReader implements DocumentReader {
 
     /**
      * This will return the parts of document not yet read through by the reader
+     *
      * @return the part of the document not processed by the reader
      */
     @Override
@@ -35,7 +37,8 @@ public class DefaultDocumentReader implements DocumentReader {
 
     /**
      * This method will determine whether the indicated pattern can be found at this point in the document or not
-     * @param pattern    the lookup pattern
+     *
+     * @param pattern the lookup pattern
      * @return <code>true</code> if the pattern can be found
      */
     @Override
@@ -46,16 +49,19 @@ public class DefaultDocumentReader implements DocumentReader {
 
     /**
      * This method will determine whether the indicated pattern can be found at this point in the document or not
-     * @param pattern    the lookup pattern
+     *
+     * @param pattern the lookup pattern
      * @return <code>true</code> if the pattern can be found
      */
     @Override
     public boolean has(String pattern) {
-        return has(Pattern.compile(pattern.startsWith("^") ? pattern : "^" + pattern, Pattern.DOTALL | Pattern.MULTILINE));
+        return has(
+                Pattern.compile(pattern.startsWith("^") ? pattern : "^" + pattern, Pattern.DOTALL | Pattern.MULTILINE));
     }
 
     /**
      * Determines whether we have hit the end of the document or not
+     *
      * @return <code>true</code> if we have no more to go
      */
     @Override
@@ -64,9 +70,10 @@ public class DefaultDocumentReader implements DocumentReader {
     }
 
     /**
-     * Will attempt to read the string matching the given parameter. If the string matched with this pattern
-     * does not start at the current point in the document, the result will be considered to be negative.
-     * @param pattern            the compiled pattern to be matched against
+     * Will attempt to read the string matching the given parameter. If the string matched with this pattern does not
+     * start at the current point in the document, the result will be considered to be negative.
+     *
+     * @param pattern the compiled pattern to be matched against
      * @return the string read by the method, or <code>null</code> if it cannot be found
      * @see Pattern#compile(String)
      * @see Pattern#compile(String, int)
@@ -82,9 +89,10 @@ public class DefaultDocumentReader implements DocumentReader {
     }
 
     /**
-     * Will attempt to read the string matching the given parameter. If the string matched with this pattern
-     * does not start at the current point in the document, the result will be considered to be negative.
-     * @param pattern            the compiled pattern to be matched against
+     * Will attempt to read the string matching the given parameter. If the string matched with this pattern does not
+     * start at the current point in the document, the result will be considered to be negative.
+     *
+     * @param pattern the compiled pattern to be matched against
      * @return the string read by the method, or <code>null</code> if it cannot be found
      * @see Pattern#compile(String)
      * @see Pattern#compile(String, int)
@@ -95,16 +103,18 @@ public class DefaultDocumentReader implements DocumentReader {
     }
 
     /**
-     * This will attempt to read string matching the given pattern from the document at the current point
-     * indicated by the cursor. If failed to do so, the method will be expected to throw an exception or take corrective measures.
-     * @param pattern            the regular to query for
+     * This will attempt to read string matching the given pattern from the document at the current point indicated by
+     * the cursor. If failed to do so, the method will be expected to throw an exception or take corrective measures.
+     *
+     * @param pattern the regular to query for
      * @return the read string
      */
     @Override
     public String expect(Pattern pattern) {
         final String token = read(pattern);
         if (token == null) {
-            throw new ParserException("Expected pattern '" + pattern.pattern() + "' was not encountered in document: " + document);
+            throw new ParserException(
+                    "Expected pattern '" + pattern.pattern() + "' was not encountered in document: " + document);
         }
         return token;
     }
@@ -115,8 +125,8 @@ public class DefaultDocumentReader implements DocumentReader {
     }
 
     /**
-     * This will cause the state of the reading to be reset. The cursor will be set back to the beginning of the document,
-     * and the line/column positioning data will be reset to their initial value.
+     * This will cause the state of the reading to be reset. The cursor will be set back to the beginning of the
+     * document, and the line/column positioning data will be reset to their initial value.
      */
     @Override
     public void reset() {
@@ -125,6 +135,7 @@ public class DefaultDocumentReader implements DocumentReader {
 
     /**
      * Moves back the specified number of characters
+     *
      * @param count character count to backtrack by
      */
     @Override

@@ -3,7 +3,6 @@ package com.mmnaseri.utils.spring.data.domain.impl;
 import com.mmnaseri.utils.spring.data.domain.KeyGenerator;
 import org.testng.annotations.Test;
 
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -11,10 +10,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (10/8/15)
  */
-public abstract class BaseKeyGeneratorTest<S extends Serializable> {
+public abstract class BaseKeyGeneratorTest<S> {
 
     protected abstract KeyGenerator<S> getKeyGenerator();
 

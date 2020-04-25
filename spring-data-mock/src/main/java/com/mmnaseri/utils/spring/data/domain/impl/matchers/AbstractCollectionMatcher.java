@@ -11,7 +11,7 @@ import java.util.LinkedList;
 /**
  * This class paves the way for matching a value against a collection of items
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/29/15)
  */
 public abstract class AbstractCollectionMatcher extends AbstractSimpleMatcher {
@@ -54,9 +54,10 @@ public abstract class AbstractCollectionMatcher extends AbstractSimpleMatcher {
 
     /**
      * Used to find out if a collection satisfies the condition set forth by this matcher
-     * @param parameter     the parameter
-     * @param actual        the actual value
-     * @param collection    the collection
+     *
+     * @param parameter  the parameter
+     * @param actual     the actual value
+     * @param collection the collection
      * @return {@literal true} if the match was a success
      */
     protected abstract boolean matches(Parameter parameter, Object actual, Collection collection);

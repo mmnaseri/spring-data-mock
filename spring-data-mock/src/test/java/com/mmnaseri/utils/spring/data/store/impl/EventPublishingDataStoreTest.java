@@ -13,7 +13,6 @@ import org.hamcrest.Matchers;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
@@ -22,7 +21,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/9/16)
  */
 @SuppressWarnings("WeakerAccess")
@@ -37,7 +36,8 @@ public class EventPublishingDataStoreTest {
 
     @BeforeMethod
     public void setUp() throws Exception {
-        repositoryMetadata = new ImmutableRepositoryMetadata(String.class, Person.class, SimplePersonRepository.class, "id");
+        repositoryMetadata = new ImmutableRepositoryMetadata(String.class, Person.class, SimplePersonRepository.class,
+                                                             "id");
         listenerContext = new SpyingListenerContext(counter);
         delegate = new MemoryDataStore<>(Person.class);
         delegateSpy = new SpyingDataStore<>(delegate, counter);
@@ -85,13 +85,15 @@ public class EventPublishingDataStoreTest {
     @Test
     public void testKeysDelegation() throws Exception {
         final AtomicBoolean called = new AtomicBoolean(false);
-        final DataStore<String, Person> localDataStore = new EventPublishingDataStore<>(new MemoryDataStore<String, Person>(Person.class) {
-            @Override
-            public Collection<String> keys() {
-                called.set(true);
-                return super.keys();
-            }
-        }, repositoryMetadata, listenerContext);
+        final DataStore<String, Person> localDataStore = new EventPublishingDataStore<>(
+                new MemoryDataStore<String, Person>(Person.class) {
+
+                    @Override
+                    public Collection<String> keys() {
+                        called.set(true);
+                        return super.keys();
+                    }
+                }, repositoryMetadata, listenerContext);
         assertThat(called.get(), is(false));
         localDataStore.keys();
         assertThat(called.get(), is(true));
@@ -118,7 +120,7 @@ public class EventPublishingDataStoreTest {
         assertThat(delegateSpy.getRequests(), hasSize(2));
         final OperationRequest save = delegateSpy.getRequests().get(1);
         assertThat(save.getOperation(), is(Operation.SAVE));
-        assertThat(save.getKey(), Matchers.<Serializable>is(key));
+        assertThat(save.getKey(), Matchers.<Object>is(key));
         assertThat(save.getEntity(), Matchers.<Object>is(entity));
         final EventTrigger before = listenerContext.getEvents().get(0);
         final EventTrigger after = listenerContext.getEvents().get(1);
@@ -142,7 +144,7 @@ public class EventPublishingDataStoreTest {
         assertThat(delegateSpy.getRequests(), hasSize(2));
         final OperationRequest request = delegateSpy.getRequests().get(1);
         assertThat(request.getOperation(), is(Operation.SAVE));
-        assertThat(request.getKey(), Matchers.<Serializable>is(key));
+        assertThat(request.getKey(), Matchers.<Object>is(key));
         assertThat(request.getEntity(), Matchers.<Object>is(entity));
         final EventTrigger before = listenerContext.getEvents().get(0);
         final EventTrigger after = listenerContext.getEvents().get(1);
@@ -173,7 +175,7 @@ public class EventPublishingDataStoreTest {
         assertThat(delegateSpy.getRequests(), hasSize(3));
         final OperationRequest request = delegateSpy.getRequests().get(2);
         assertThat(request.getOperation(), is(Operation.DELETE));
-        assertThat(request.getKey(), Matchers.<Serializable>is(key));
+        assertThat(request.getKey(), Matchers.<Object>is(key));
         assertThat(request.getEntity(), is(nullValue()));
         final EventTrigger before = listenerContext.getEvents().get(0);
         final EventTrigger after = listenerContext.getEvents().get(1);

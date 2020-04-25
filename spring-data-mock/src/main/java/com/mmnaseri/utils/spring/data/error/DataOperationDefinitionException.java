@@ -3,7 +3,7 @@ package com.mmnaseri.utils.spring.data.error;
 import java.lang.reflect.Method;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/8/16)
  */
 public class DataOperationDefinitionException extends DataOperationException {

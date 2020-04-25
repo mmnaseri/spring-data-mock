@@ -8,7 +8,7 @@ import java.util.Arrays;
 /**
  * This is an immutable invocation.
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/23/15)
  */
 public class ImmutableInvocation implements Invocation {

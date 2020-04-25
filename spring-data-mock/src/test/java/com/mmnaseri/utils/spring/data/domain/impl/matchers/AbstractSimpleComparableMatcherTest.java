@@ -6,7 +6,7 @@ import com.mmnaseri.utils.spring.data.sample.mocks.NotMatchingSimpleComparableMa
 import org.testng.annotations.Test;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/10/16)
  */
 public class AbstractSimpleComparableMatcherTest {

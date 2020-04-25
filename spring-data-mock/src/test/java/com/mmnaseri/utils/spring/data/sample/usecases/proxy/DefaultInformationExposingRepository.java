@@ -4,7 +4,7 @@ import com.mmnaseri.utils.spring.data.proxy.RepositoryConfiguration;
 import com.mmnaseri.utils.spring.data.proxy.RepositoryFactoryConfiguration;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/12/16, 11:13 AM)
  */
 public class DefaultInformationExposingRepository implements InformationExposingRepository {
@@ -12,7 +12,8 @@ public class DefaultInformationExposingRepository implements InformationExposing
     private final RepositoryConfiguration configuration;
     private final RepositoryFactoryConfiguration factoryConfiguration;
 
-    public DefaultInformationExposingRepository(RepositoryConfiguration configuration, RepositoryFactoryConfiguration factoryConfiguration) {
+    public DefaultInformationExposingRepository(RepositoryConfiguration configuration,
+                                                RepositoryFactoryConfiguration factoryConfiguration) {
         this.configuration = configuration;
         this.factoryConfiguration = factoryConfiguration;
     }

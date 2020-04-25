@@ -10,22 +10,26 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/30/15)
  */
 public class AbstractRepositoryMetadataResolverTest {
 
-    @Test(expectedExceptions = RepositoryDefinitionException.class, expectedExceptionsMessageRegExp = ".*?: Repository interface must not be null")
+    @Test(expectedExceptions = RepositoryDefinitionException.class,
+          expectedExceptionsMessageRegExp = ".*?: Repository interface must not be null")
     public void testThatItDoesNotAcceptNull() throws Exception {
         new NullReturningRepositoryMetadataResolver().resolve(null);
     }
 
-    @Test(expectedExceptions = RepositoryDefinitionException.class, expectedExceptionsMessageRegExp = ".*?: Cannot resolve repository metadata for a class object that isn't an interface")
+    @Test(expectedExceptions = RepositoryDefinitionException.class,
+          expectedExceptionsMessageRegExp = ".*?: Cannot resolve repository metadata for a class object that isn't an"
+                  + " interface")
     public void testThatItOnlyAcceptsInterfaces() throws Exception {
         new NullReturningRepositoryMetadataResolver().resolve(EmptyEntity.class);
     }
 
-    @Test(expectedExceptions = RepositoryDefinitionException.class, expectedExceptionsMessageRegExp = ".*?: Repository interface needs to be declared as public")
+    @Test(expectedExceptions = RepositoryDefinitionException.class,
+          expectedExceptionsMessageRegExp = ".*?: Repository interface needs to be declared as public")
     public void testThatItOnlyAcceptsPublicInterfaces() throws Exception {
         new NullReturningRepositoryMetadataResolver().resolve(SamplePrivateInterface.class);
     }
@@ -37,6 +41,8 @@ public class AbstractRepositoryMetadataResolverTest {
         assertThat(resolver.getRepositoryInterface(), equalTo((Class) Repository.class));
     }
 
-    private interface SamplePrivateInterface {}
+    private interface SamplePrivateInterface {
+
+    }
 
 }
