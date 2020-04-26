@@ -6,7 +6,7 @@ import com.mmnaseri.utils.spring.data.store.DataStore;
 /**
  * This class is the base class for any data store event that indicates a particular entity was involved in the evnet.
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (10/6/15)
  */
 @SuppressWarnings("WeakerAccess")
@@ -14,7 +14,8 @@ public abstract class AbstractEntityDataStoreEvent extends AbstractDataStoreEven
 
     private final Object entity;
 
-    public AbstractEntityDataStoreEvent(RepositoryMetadata repositoryMetadata, DataStore<?, ?> dataStore, Object entity) {
+    public AbstractEntityDataStoreEvent(RepositoryMetadata repositoryMetadata, DataStore<?, ?> dataStore,
+                                        Object entity) {
         super(repositoryMetadata, dataStore);
         this.entity = entity;
     }

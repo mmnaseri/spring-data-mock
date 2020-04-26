@@ -12,7 +12,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/12/16, 1:51 PM)
  */
 public class ImmutableRepositoryFactoryConfigurationTest {
@@ -38,5 +38,5 @@ public class ImmutableRepositoryFactoryConfigurationTest {
         assertThat(copy.getDescriptionExtractor(), is(original.getDescriptionExtractor()));
         assertThat(copy.getDataStoreRegistry(), is(original.getDataStoreRegistry()));
     }
-    
+
 }

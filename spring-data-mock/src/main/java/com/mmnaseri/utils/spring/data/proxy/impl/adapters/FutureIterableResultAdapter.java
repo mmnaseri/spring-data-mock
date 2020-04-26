@@ -16,7 +16,7 @@ import java.util.concurrent.FutureTask;
  *
  * <p>This adapter will execute at priority {@literal -100}.</p>
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/28/15)
  */
 public class FutureIterableResultAdapter extends AbstractIterableResultAdapter<Future> {
@@ -29,6 +29,7 @@ public class FutureIterableResultAdapter extends AbstractIterableResultAdapter<F
     protected Future doAdapt(Invocation invocation, final Iterable iterable) {
         //noinspection unchecked
         final FutureTask task = new FutureTask(new Callable() {
+
             @Override
             public Object call() throws Exception {
                 return iterable;
@@ -40,7 +41,8 @@ public class FutureIterableResultAdapter extends AbstractIterableResultAdapter<F
 
     @Override
     public boolean accepts(Invocation invocation, Object originalValue) {
-        return originalValue != null && originalValue instanceof Iterable && invocation.getMethod().getReturnType().equals(Future.class);
+        return originalValue != null && originalValue instanceof Iterable && invocation.getMethod().getReturnType()
+                                                                                       .equals(Future.class);
     }
 
 }

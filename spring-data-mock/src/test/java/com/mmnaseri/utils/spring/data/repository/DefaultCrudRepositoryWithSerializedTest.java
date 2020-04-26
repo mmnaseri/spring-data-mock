@@ -10,13 +10,12 @@ import org.hamcrest.Matchers;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-import static org.testng.Assert.fail;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/11/16, 10:15 AM)
  */
 public class DefaultCrudRepositoryWithSerializedTest {
@@ -28,7 +27,9 @@ public class DefaultCrudRepositoryWithSerializedTest {
     public void setUp() throws Exception {
         dataStore = new MemoryDataStore<>(PersonSerializable.class);
         repository = new DefaultCrudRepository();
-        repository.setRepositoryMetadata(new ImmutableRepositoryMetadata(String.class, PersonSerializable.class, SimplePersonSerializableRepository.class, "id"));
+        repository.setRepositoryMetadata(new ImmutableRepositoryMetadata(String.class, PersonSerializable.class,
+                                                                         SimplePersonSerializableRepository.class,
+                                                                         "id"));
         repository.setDataStore(dataStore);
         repository.setKeyGenerator(new UUIDKeyGenerator());
     }
@@ -46,6 +47,5 @@ public class DefaultCrudRepositoryWithSerializedTest {
         assertThat(deleted, is(notNullValue()));
         assertThat(deleted, Matchers.<Object>is(original));
     }
-
 
 }

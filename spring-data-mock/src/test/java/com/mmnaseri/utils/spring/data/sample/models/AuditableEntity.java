@@ -1,27 +1,29 @@
 package com.mmnaseri.utils.spring.data.sample.models;
 
-import org.joda.time.DateTime;
 import org.springframework.data.domain.Auditable;
 
+import java.time.Instant;
+import java.util.Optional;
+
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/12/16, 5:23 PM)
  */
-public class AuditableEntity implements Auditable<String, String> {
+public class AuditableEntity implements Auditable<String, String, Instant> {
 
     private String id;
     private String createdBy;
     private String lastModifiedBy;
-    private DateTime createdDate;
-    private DateTime lastModifiedDate;
+    private Instant createdDate;
+    private Instant lastModifiedDate;
 
     public void setId(String id) {
         this.id = id;
     }
 
     @Override
-    public String getCreatedBy() {
-        return createdBy;
+    public Optional<String> getCreatedBy() {
+        return Optional.ofNullable(createdBy);
     }
 
     @Override
@@ -30,8 +32,8 @@ public class AuditableEntity implements Auditable<String, String> {
     }
 
     @Override
-    public String getLastModifiedBy() {
-        return lastModifiedBy;
+    public Optional<String> getLastModifiedBy() {
+        return Optional.ofNullable(lastModifiedBy);
     }
 
     @Override
@@ -40,22 +42,22 @@ public class AuditableEntity implements Auditable<String, String> {
     }
 
     @Override
-    public DateTime getCreatedDate() {
-        return createdDate;
+    public Optional<Instant> getCreatedDate() {
+        return Optional.ofNullable(createdDate);
     }
 
     @Override
-    public void setCreatedDate(DateTime createdDate) {
+    public void setCreatedDate(Instant createdDate) {
         this.createdDate = createdDate;
     }
 
     @Override
-    public DateTime getLastModifiedDate() {
-        return lastModifiedDate;
+    public Optional<Instant> getLastModifiedDate() {
+        return Optional.ofNullable(lastModifiedDate);
     }
 
     @Override
-    public void setLastModifiedDate(DateTime lastModifiedDate) {
+    public void setLastModifiedDate(Instant lastModifiedDate) {
         this.lastModifiedDate = lastModifiedDate;
     }
 

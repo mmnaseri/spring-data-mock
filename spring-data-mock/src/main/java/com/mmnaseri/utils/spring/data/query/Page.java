@@ -3,7 +3,7 @@ package com.mmnaseri.utils.spring.data.query;
 /**
  * This interface represents metadata about a pagination request
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/17/15)
  */
 public interface Page {

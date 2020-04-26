@@ -5,10 +5,10 @@ import com.mmnaseri.utils.spring.data.error.InvalidArgumentException;
 import com.mmnaseri.utils.spring.data.query.Sort;
 
 /**
- * This extractor will expect to receive a {@link org.springframework.data.domain.Sort} object via
- * the very last parameter of a query method invocation.
+ * This extractor will expect to receive a {@link org.springframework.data.domain.Sort} object via the very last
+ * parameter of a query method invocation.
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/19/15)
  */
 public class DirectSortParameterExtractor extends AbstractSortParameterExtractor {

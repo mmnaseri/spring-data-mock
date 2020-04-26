@@ -6,7 +6,7 @@ import com.mmnaseri.utils.spring.data.sample.mocks.NotMatchingBinaryComparableMa
 import org.testng.annotations.Test;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/10/16)
  */
 public class AbstractBinaryComparableMatcherTest {

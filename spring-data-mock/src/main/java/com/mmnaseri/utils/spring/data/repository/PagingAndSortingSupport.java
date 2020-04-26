@@ -6,7 +6,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.Collection;
 
 /**
- * @author Milad Naseri (milad.naseri@cdk.com)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (6/8/16, 11:50 AM)
  */
 public abstract class PagingAndSortingSupport {

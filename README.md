@@ -4,7 +4,6 @@
 [![Donae](https://img.shields.io/badge/paypal-donate-yellow.svg)](https://paypal.me/mmnaseri)
 [![MIT license](http://img.shields.io/badge/license-MIT-brightgreen.svg)](http://opensource.org/licenses/MIT)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.mmnaseri.utils/spring-data-mock/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.mmnaseri.utils/spring-data-mock)
-[![Dependency Status](https://www.versioneye.com/user/projects/5722a8f5ba37ce0031fc17f0/badge.svg?style=flat)](https://www.versioneye.com/user/projects/5722a8f5ba37ce0031fc17f0)
 [![Build Status](https://travis-ci.org/mmnaseri/spring-data-mock.svg?branch=master)](https://travis-ci.org/mmnaseri/spring-data-mock)
 [![Codacy Badge](https://api.codacy.com/project/badge/grade/ad9f174fa0654a2b8c925b86973f272d)](https://www.codacy.com/app/mmnaseri/spring-data-mock)
 [![Coverage Status](https://coveralls.io/repos/github/mmnaseri/spring-data-mock/badge.svg?branch=master)](https://coveralls.io/github/mmnaseri/spring-data-mock?branch=master)
@@ -100,7 +99,19 @@ There you can get more information on how to download the framework, as well as 
 incorporate it in your project to have hassle-free data store mocking capabilities added to
 your shiny applications.
 
+## Breaking Changes since v2.0
+
+`v2.0` introduces compatibility with Spring Boot 2.0, but also creates some incompatibilities with prior versions.
+
+- As well it should, it is now adopting all the new method signatures for the new Spring Data, meaning that those
+are now automatic breaking changes.
+- We have now dropped support for Querydsl repositories until further notice, due to compiler issues with the EJC
+dependency used by Querydsl.
+- The library now runs on Java 8+, meaning we do not support JDK 7 anymore.
+
 ## History
+
+- 2.0 Upgrade to Spring Boot 2.0 (many thanks to binakot@). This is a major release and breaks some stuff.
 
 - 1.1 Add QueryDSL and findByExample support
 
@@ -124,13 +135,13 @@ FAQ
   Also, the people behind Spring rock. I felt like I was selling tickets to the concert of rockstars by releasing
   this.
 
-  3. What is the main design decision behind this framework?
+  3. What is the main design principle behind this framework?
 
   > Make you do as little as possible.
 
   4. When should I use this?
 
-  > You should only use this to write you *unit* tests. For anything else, you would want the whole application to
+  > You should only use this to write your *unit* tests. For anything else, you would want the whole application to
   come alive and work. Using mocks for that is a bad idea.
 
   5. This is going to be used at the level of code testing. Is it really well written?
@@ -143,7 +154,7 @@ Some Numbers and Facts
 
   * This project has *1000+* individual unit tests.
 
-  * This project has **100%** [code coverage](https://coveralls.io/github/mmnaseri/spring-data-mock)
+  * This project has effective **100%** (deprecated code is not tested) [code coverage](https://coveralls.io/github/mmnaseri/spring-data-mock)
 
   * This project has **95%** branch coverage rate.
 
@@ -160,8 +171,8 @@ Some Numbers and Facts
 Contribution
 ------------
 
-Since this project is aimed at the testing phase of your code, it is paramount that it is written with the best of
-qualities and that it maintains the highest standard.
+Since this project aims to help you in the testing phase of your code, it is paramount that it is
+written with the best of qualities and that it maintains the highest standard.
 
 Contributors are more than welcome. In fact, I flag most of the issues I receive as `help wanted` and
 there are really generous people out there who do take care of some issues.
@@ -169,6 +180,17 @@ there are really generous people out there who do take care of some issues.
 If you see a piece of code that you don't like for whatever reason -- so long as that reason can be backed
 by pioneers and standards -- feel free to dig in and change the code to your heart's content and create a
 pull request.
+
+### Building the Code
+
+To make the code builds universal and canonical, I have a Docker configuration attached to this project
+which installs OpenJDK 8 on Ubuntu Xenial. This is the build environment I will be using to test and release
+the code.
+
+```bash
+docker build -t spring-data-mock:jdk8 .
+docker run -it --rm -v $(pwd):/src spring-data-mock:jdk8
+```
 
 Donation
 --------

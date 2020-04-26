@@ -14,7 +14,6 @@ import org.hamcrest.Matchers;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -26,7 +25,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/11/16, 1:16 PM)
  */
 public class DefaultJpaRepositoryTest {
@@ -37,7 +36,8 @@ public class DefaultJpaRepositoryTest {
 
     @BeforeMethod
     public void setUp() throws Exception {
-        repositoryMetadata = new ImmutableRepositoryMetadata(String.class, Person.class, SimplePersonRepository.class, "id");
+        repositoryMetadata = new ImmutableRepositoryMetadata(String.class, Person.class, SimplePersonRepository.class,
+                                                             "id");
         dataStore = new MemoryDataStore<>(Person.class);
         repository = new DefaultJpaRepository();
         repository.setDataStore(dataStore);
@@ -50,7 +50,7 @@ public class DefaultJpaRepositoryTest {
         final DefaultJpaRepository repository = new DefaultJpaRepository();
         repository.setKeyGenerator(new UUIDKeyGenerator());
         repository.setRepositoryMetadata(repositoryMetadata);
-        final SpyingDataStore<Serializable, Object> dataStore = new SpyingDataStore<>(null, new AtomicLong());
+        final SpyingDataStore<Object, Object> dataStore = new SpyingDataStore<>(null, new AtomicLong());
         repository.setDataStore(dataStore);
         repository.flush();
         assertThat(dataStore.getRequests(), hasSize(1));
@@ -105,7 +105,8 @@ public class DefaultJpaRepositoryTest {
 
     @Test
     public void testDeleteInBatchWithQueueing() throws Exception {
-        final SpyingDataStore<String, Person> dataStore = new SpyingDataStore<>(new MemoryDataStore<String, Person>(Person.class), new AtomicLong());
+        final SpyingDataStore<String, Person> dataStore = new SpyingDataStore<>(
+                new MemoryDataStore<String, Person>(Person.class), new AtomicLong());
         dataStore.save("1", new Person());
         dataStore.save("2", new Person());
         dataStore.save("3", new Person());

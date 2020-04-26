@@ -8,12 +8,13 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/30/15)
  */
 public class IsGreaterThanMatcherTest {
 
-    @Test(expectedExceptions = InvalidArgumentException.class, expectedExceptionsMessageRegExp = "Expected property to be comparable: xyz")
+    @Test(expectedExceptions = InvalidArgumentException.class,
+          expectedExceptionsMessageRegExp = "Expected property to be comparable: xyz")
     public void testValueIsNotComparable() throws Exception {
         new IsGreaterThanMatcher().matches(new ImmutableParameter("xyz", null, null, null), new Object(), new Object());
     }

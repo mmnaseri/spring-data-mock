@@ -5,7 +5,7 @@ import com.mmnaseri.utils.spring.data.query.PropertyDescriptor;
 /**
  * This is an immutable property descriptor
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/20/15)
  */
 public class ImmutablePropertyDescriptor implements PropertyDescriptor {

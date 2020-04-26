@@ -10,23 +10,23 @@ import com.mmnaseri.utils.spring.data.store.DataStoreOperation;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**
- * This is a data store operation that has a description attached to it. This means that it is a select operation that is
- * capable of taking care of applying a function to a given selection of objects.
+ * This is a data store operation that has a description attached to it. This means that it is a select operation that
+ * is capable of taking care of applying a function to a given selection of objects.
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/29/15)
  */
-public class DescribedDataStoreOperation<K extends Serializable, E> implements DataStoreOperation<Object, K, E> {
+public class DescribedDataStoreOperation<K, E> implements DataStoreOperation<Object, K, E> {
 
     private static final Log log = LogFactory.getLog(DescribedDataStoreOperation.class);
     private final SelectDataStoreOperation<K, E> selectOperation;
     private final DataFunctionRegistry functionRegistry;
 
-    public DescribedDataStoreOperation(SelectDataStoreOperation<K, E> selectOperation, DataFunctionRegistry functionRegistry) {
+    public DescribedDataStoreOperation(SelectDataStoreOperation<K, E> selectOperation,
+                                       DataFunctionRegistry functionRegistry) {
         this.selectOperation = selectOperation;
         this.functionRegistry = functionRegistry;
     }

@@ -12,14 +12,15 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/9/16)
  */
 public class SmartDataStoreEventListenerTest {
 
     @Test
     public void testEventTypeRecognition() throws Exception {
-        final SmartDataStoreEventListener<DataStoreEvent> listener = new SmartDataStoreEventListener<>(new AllCatchingEventListener());
+        final SmartDataStoreEventListener<DataStoreEvent> listener = new SmartDataStoreEventListener<>(
+                new AllCatchingEventListener());
         assertThat(listener.getEventType(), is(notNullValue()));
         assertThat(listener.getEventType(), is(equalTo(DataStoreEvent.class)));
     }
@@ -37,5 +38,5 @@ public class SmartDataStoreEventListenerTest {
         assertThat(events.get(0), Matchers.<DataStoreEvent>is(first));
         assertThat(events.get(1), Matchers.<DataStoreEvent>is(second));
     }
-    
+
 }

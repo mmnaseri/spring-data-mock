@@ -13,7 +13,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/10/16)
  */
 public class WrappedSortParameterExtractorTest {
@@ -25,7 +25,8 @@ public class WrappedSortParameterExtractorTest {
 
     @Test(expectedExceptions = InvalidArgumentException.class)
     public void testNullInvocation() throws Exception {
-        final WrappedSortParameterExtractor extractor = new WrappedSortParameterExtractor(new ImmutableSort(new ArrayList<Order>()));
+        final WrappedSortParameterExtractor extractor = new WrappedSortParameterExtractor(
+                new ImmutableSort(new ArrayList<Order>()));
         extractor.extract(null);
     }
 

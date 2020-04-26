@@ -17,7 +17,7 @@ import java.util.Map;
 /**
  * Utility class for taking care of all common property/reflection related operations
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/17/15)
  */
 public final class PropertyUtils {
@@ -44,8 +44,8 @@ public final class PropertyUtils {
 
     /**
      * <p>Given a property path will find out the proper way of accessing that property and
-     * return the value given the current context. The property path can use the "dot notation"
-     * to indicate nested properties (so that "x.y.z" would mean {@literal context.getX().getY().getZ()}).</p>
+     * return the value given the current context. The property path can use the "dot notation" to indicate nested
+     * properties (so that "x.y.z" would mean {@literal context.getX().getY().getZ()}).</p>
      *
      * <p>Properties can be accessed via getter methods or fields, with getter methods taking precedence. If a property
      * doesn't exist at any given point, an error will be raised. If any property is set to {@literal null}, the chain
@@ -53,8 +53,8 @@ public final class PropertyUtils {
      * valid nested property {@literal x.y.z}, and {@literal y} is {@literal null}, instead of failing with an error,
      * the reader will return {@literal null}.</p>
      *
-     * @param context     the object to evaluate the property path against
-     * @param property    the property path as outlined above
+     * @param context  the object to evaluate the property path against
+     * @param property the property path as outlined above
      * @return the value of the property
      */
     public static Object getPropertyValue(Object context, String property) {
@@ -78,7 +78,8 @@ public final class PropertyUtils {
                     accessors.add(field);
                     type = field.getType();
                 } else {
-                    throw new IllegalStateException("Cannot find property `" + path + "` on type `" + context.getClass() + "`");
+                    throw new IllegalStateException(
+                            "Cannot find property `" + path + "` on type `" + context.getClass() + "`");
                 }
             }
         }
@@ -103,17 +104,17 @@ public final class PropertyUtils {
     }
 
     /**
-     * Sets the value of the given property to the provided value. The property path will follow
-     * the same rules as defined in {@link #getPropertyValue(Object, String)}, with the exception that if any
-     * of the parent properties in the nested path leading to the very last property (the one being modified)
-     * is {@literal null} an exception is thrown.
+     * Sets the value of the given property to the provided value. The property path will follow the same rules as
+     * defined in {@link #getPropertyValue(Object, String)}, with the exception that if any of the parent properties in
+     * the nested path leading to the very last property (the one being modified) is {@literal null} an exception is
+     * thrown.
      *
-     * @param context     the context against which the property path will be evaluated
-     * @param property    the property path
-     * @param value       the value to set for the property
-     * @return the actual object that was changed. So, if the property path was {@literal x.y.z} on object
-     * {@literal context}, the returned value would be equivalent to {@literal context.getX().getY()}, since we are
-     * modifying the {@literal z} property of the {@literal y} object accessible by the mentioned chain of accessors.
+     * @param context  the context against which the property path will be evaluated
+     * @param property the property path
+     * @param value    the value to set for the property
+     * @return the actual object that was changed. So, if the property path was {@literal x.y.z} on object {@literal
+     * context}, the returned value would be equivalent to {@literal context.getX().getY()}, since we are modifying the
+     * {@literal z} property of the {@literal y} object accessible by the mentioned chain of accessors.
      */
     public static Object setPropertyValue(Object context, String property, Object value) {
         if (property.contains(".")) {
@@ -130,7 +131,8 @@ public final class PropertyUtils {
             setter = ReflectionUtils.findMethod(context.getClass(), setterName, value.getClass());
         } else {
             for (Method method : ReflectionUtils.getAllDeclaredMethods(context.getClass())) {
-                if (method.getName().equals(setterName) && method.getParameterTypes().length == 1 && !method.getParameterTypes()[0].isPrimitive()) {
+                if (method.getName().equals(setterName) && method.getParameterTypes().length == 1 && !method
+                        .getParameterTypes()[0].isPrimitive()) {
                     setter = method;
                     break;
                 }
@@ -162,17 +164,18 @@ public final class PropertyUtils {
 
     /**
      * <p>Given a property expression which contains CamelCase words will try to look up the property path
-     * leading up to the appropriate nested property. Property names will be matched eagerly, so that
-     * expression {@literal XxYy} will match property {@literal XxYy} if it exists, rather than {@literal Xx} first.</p>
+     * leading up to the appropriate nested property. Property names will be matched eagerly, so that expression
+     * {@literal XxYy} will match property {@literal XxYy} if it exists, rather than {@literal Xx} first.</p>
      *
-     * <p>If you wan to force the parser to avoid eager evaluation, you can insert an underscore ({@literal _}) character
+     * <p>If you wan to force the parser to avoid eager evaluation, you can insert an underscore ({@literal _})
+     * character
      * in place of the nested property separator. Thus, {@literal Xx_Yy} will force the parser to consider {@literal Xx}
      * and only that property will satisfy the parser.</p>
      *
-     * @param domainType    the domain type that will be used to evaluate the property expression
-     * @param expression    the property expression as explained above
-     * @return a property descriptor equipped with a proper property path (as described in {@link #getPropertyValue(Object, String)})
-     * to let us read from and write to the described property.
+     * @param domainType the domain type that will be used to evaluate the property expression
+     * @param expression the property expression as explained above
+     * @return a property descriptor equipped with a proper property path (as described in {@link
+     * #getPropertyValue(Object, String)}) to let us read from and write to the described property.
      */
     public static PropertyDescriptor getPropertyDescriptor(Class<?> domainType, String expression) {
         String search = expression;
@@ -214,12 +217,15 @@ public final class PropertyUtils {
                 }
             }
             if (!found) {
-                throw new IllegalStateException("Could not find property `" + getPropertyName(tokens, cursor, tokens.size()) + "` on `" + context + "`");
+                throw new IllegalStateException(
+                        "Could not find property `" + getPropertyName(tokens, cursor, tokens.size()) + "` on `"
+                                + context + "`");
             }
         }
         if (!followUp.isEmpty()) {
             final PropertyDescriptor descriptor = getPropertyDescriptor(context, followUp);
-            return new ImmutablePropertyDescriptor(path.substring(1) + "." + descriptor.getPath(), descriptor.getType());
+            return new ImmutablePropertyDescriptor(path.substring(1) + "." + descriptor.getPath(),
+                                                   descriptor.getType());
         }
         return new ImmutablePropertyDescriptor(path.substring(1), context);
     }
@@ -227,9 +233,10 @@ public final class PropertyUtils {
     /**
      * Given a list of tokens (all of which are capitalized) this method composes a possible property name, so that
      * {@literal ["Xx", "Yy", "Zz"]} becomes {@literal "xxYyZz"}.
-     * @param tokens    the list of all tokens
-     * @param from      the start index
-     * @param to        the end index
+     *
+     * @param tokens the list of all tokens
+     * @param from   the start index
+     * @param to     the end index
      * @return composed property name
      */
     private static String getPropertyName(List<String> tokens, int from, int to) {
@@ -242,7 +249,8 @@ public final class PropertyUtils {
 
     /**
      * Returns the object type for the provided type.
-     * @param type    the type to find out the object type for
+     *
+     * @param type the type to find out the object type for
      * @return the object type for the type if it is a primitive, or the type itself if it is not.
      */
     public static Class<?> getTypeOf(Class<?> type) {
@@ -255,7 +263,8 @@ public final class PropertyUtils {
 
     /**
      * Given a getter method finds out the property name for the getter
-     * @param getter    the getter method
+     *
+     * @param getter the getter method
      * @return the name of the property for the getter method
      */
     public static String getPropertyName(Method getter) {

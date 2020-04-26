@@ -7,7 +7,7 @@ import com.mmnaseri.utils.spring.data.store.DataStoreEvent;
 /**
  * This base class sets up the grounds for defining data store events
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (10/6/15)
  */
 @SuppressWarnings("WeakerAccess")

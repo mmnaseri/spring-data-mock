@@ -16,7 +16,7 @@ import java.util.List;
  *     <li>{@link SingleValueToIterableConverter}</li>
  * </ol>
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/28/15)
  */
 @SuppressWarnings("WeakerAccess")
@@ -33,7 +33,8 @@ public class DefaultResultConverter implements ResultConverter {
 
     /**
      * Instantiates the converter
-     * @param registerDefaults    whether or not default converters should be registered
+     *
+     * @param registerDefaults whether or not default converters should be registered
      */
     public DefaultResultConverter(boolean registerDefaults) {
         converters = new LinkedList<>();

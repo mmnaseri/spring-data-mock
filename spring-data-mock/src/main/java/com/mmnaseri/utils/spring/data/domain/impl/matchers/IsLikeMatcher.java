@@ -5,7 +5,7 @@ import com.mmnaseri.utils.spring.data.domain.Parameter;
 /**
  * This matcher checks to see if the two values are the same, barring case differences.
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/29/15)
  */
 public class IsLikeMatcher extends AbstractSimpleStringMatcher {
