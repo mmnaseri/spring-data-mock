@@ -28,6 +28,7 @@ public final class IdPropertyResolverUtils {
     static {
         ID_ANNOTATIONS.add("org.springframework.data.annotation.Id");
         ID_ANNOTATIONS.add("javax.persistence.Id");
+        ID_ANNOTATIONS.add("javax.persistence.EmbeddedId");
     }
 
     private IdPropertyResolverUtils() {
