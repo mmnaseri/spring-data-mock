@@ -72,6 +72,15 @@ public class CrudRepositorySupport implements DataStoreAware, RepositoryMetadata
         return list;
     }
 
+    /**
+     * Inserts the given entity via the {@link #save(Object)} method.
+     * @param entity the entity to be inserted.
+     * @return the saved entity. This should result in the entity having a key.
+     */
+    public Object insert(Object entity) {
+        return save(entity);
+    }
+
     @Override
     public final void setDataStore(DataStore dataStore) {
         this.dataStore = dataStore;

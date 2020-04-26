@@ -84,6 +84,7 @@
         <spring-data-commons.version>2.2.6.RELEASE</spring-data-commons.version>
         <spring-data-gemfire.version>2.2.6.RELEASE</spring-data-gemfire.version>
         <spring-data-jpa.version>2.2.6.RELEASE</spring-data-jpa.version>
+        <spring-data-mongo.version>2.2.6.RELEASE</spring-data-mongo.version>
         <querydsl.version>4.3.1</querydsl.version>
         <cglib.version>3.3.0</cglib.version>
         <persistence-api.version>1.0.2</persistence-api.version>
@@ -143,6 +144,13 @@
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-jpa</artifactId>
             <version>${spring-data-jpa.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <!-- Spring Data support for JPA-->
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-mongodb</artifactId>
+            <version>${spring-data-mongo.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

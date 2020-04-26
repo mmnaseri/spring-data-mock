@@ -3,11 +3,9 @@ package com.mmnaseri.utils.spring.data.dsl.mock;
 import com.mmnaseri.utils.spring.data.domain.KeyGenerator;
 import com.mmnaseri.utils.spring.data.domain.impl.key.*;
 import org.springframework.core.GenericTypeResolver;
+import org.springframework.util.ClassUtils;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -21,6 +19,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @SuppressWarnings("WeakerAccess")
 class KeyGeneratorProvider {
 
+    private static final String OBJECT_ID_CLASS = "org.bson.types.ObjectId";
     private final Map<Class<?>, List<Class<? extends KeyGenerator>>> generators;
 
     KeyGeneratorProvider() {
@@ -37,15 +36,18 @@ class KeyGeneratorProvider {
     }
 
     private List<Class<? extends KeyGenerator>> getKeyGeneratorTypes() {
-        return Arrays.<Class<? extends KeyGenerator>>asList(
+        final List<Class<? extends KeyGenerator>> classes = new ArrayList<>(Arrays.asList(
                 RandomIntegerKeyGenerator.class,
                 RandomLongKeyGenerator.class,
                 SequentialIntegerKeyGenerator.class,
                 SequentialLongKeyGenerator.class,
                 ConfigurableSequentialIntegerKeyGenerator.class,
                 ConfigurableSequentialLongKeyGenerator.class,
-                UUIDKeyGenerator.class
-                                                           );
+                UUIDKeyGenerator.class));
+        if (ClassUtils.isPresent(OBJECT_ID_CLASS, ClassUtils.getDefaultClassLoader())) {
+            classes.add(BsonObjectIdKeyGenerator.class);
+        }
+        return classes;
     }
 
     @SuppressWarnings("unchecked")

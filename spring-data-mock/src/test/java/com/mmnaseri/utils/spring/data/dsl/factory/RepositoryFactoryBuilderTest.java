@@ -381,7 +381,7 @@ public class RepositoryFactoryBuilderTest {
     public void testSaveIterable() throws Exception {
         final JpaPersonRepository repository = RepositoryFactoryBuilder.builder().mock(JpaPersonRepository.class);
         final Iterable iterable = Arrays.asList(new Person().setId("1"), new Person().setId("2"), new Person().setId("3"));
-        repository.save(iterable);
+        repository.saveAll(iterable);
         assertThat(repository.findAll(), hasSize(3));
         assertThat(repository.findAll(), containsInAnyOrder(((List) iterable).toArray()));
     }
