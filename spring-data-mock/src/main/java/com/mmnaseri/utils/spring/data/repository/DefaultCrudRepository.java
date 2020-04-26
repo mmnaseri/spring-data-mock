@@ -18,7 +18,7 @@ import java.util.Optional;
  * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (10/6/15)
  */
-@SuppressWarnings({"unchecked", "WeakerAccess"})
+@SuppressWarnings({"unchecked", "WeakerAccess", "UnusedReturnValue"})
 public class DefaultCrudRepository extends CrudRepositorySupport {
 
     private static final Log log = LogFactory.getLog(DefaultCrudRepository.class);
@@ -30,13 +30,7 @@ public class DefaultCrudRepository extends CrudRepositorySupport {
      * @return saved entities
      */
     public Iterable<Object> saveAll(Iterable entities) {
-        final List<Object> list = new LinkedList<>();
-        log.info("Going to save a number of entities in the underlying data store");
-        log.debug(entities);
-        for (Object entity : entities) {
-            list.add(save(entity));
-        }
-        return list;
+        return save(entities);
     }
 
     /**

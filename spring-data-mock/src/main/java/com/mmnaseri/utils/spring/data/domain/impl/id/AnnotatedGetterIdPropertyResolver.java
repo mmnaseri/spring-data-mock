@@ -24,16 +24,12 @@ public class AnnotatedGetterIdPropertyResolver implements IdPropertyResolver {
     @Override
     public String resolve(final Class<?> entityType, Class<?> idType) {
         final AtomicReference<Method> found = new AtomicReference<>();
-        ReflectionUtils.doWithMethods(entityType, new ReflectionUtils.MethodCallback() {
-
-            @Override
-            public void doWith(Method method) throws IllegalArgumentException, IllegalAccessException {
-                if (isAnnotated(method)) {
-                    if (found.get() == null) {
-                        found.set(method);
-                    } else {
-                        throw new MultipleIdPropertiesException(entityType);
-                    }
+        ReflectionUtils.doWithMethods(entityType, method -> {
+            if (isAnnotated(method)) {
+                if (found.get() == null) {
+                    found.set(method);
+                } else {
+                    throw new MultipleIdPropertiesException(entityType);
                 }
             }
         }, new GetterMethodFilter());

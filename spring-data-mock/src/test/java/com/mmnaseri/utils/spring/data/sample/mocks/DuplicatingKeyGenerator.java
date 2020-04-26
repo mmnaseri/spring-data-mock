@@ -11,7 +11,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class DuplicatingKeyGenerator extends AbstractRandomKeyGenerator<Integer> {
 
     private boolean repeat = false;
-    private AtomicInteger counter = new AtomicInteger(0);
+    private final AtomicInteger counter = new AtomicInteger(0);
 
     @Override
     protected Integer getNext() {

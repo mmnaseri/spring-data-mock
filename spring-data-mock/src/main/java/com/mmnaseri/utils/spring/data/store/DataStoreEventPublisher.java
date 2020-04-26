@@ -6,6 +6,7 @@ package com.mmnaseri.utils.spring.data.store;
  * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (10/6/15)
  */
+@SuppressWarnings("unused")
 public interface DataStoreEventPublisher {
 
     /**

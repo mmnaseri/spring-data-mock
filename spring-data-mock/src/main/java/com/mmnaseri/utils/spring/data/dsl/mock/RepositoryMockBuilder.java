@@ -25,7 +25,7 @@ public class RepositoryMockBuilder implements Start, ImplementationAnd, KeyGener
     private final KeyGenerator<?> keyGenerator;
 
     public RepositoryMockBuilder() {
-        this(null, new LinkedList<Class<?>>(), null);
+        this(null, new LinkedList<>(), null);
     }
 
     private RepositoryMockBuilder(RepositoryFactory factory, List<Class<?>> implementations,
@@ -77,7 +77,7 @@ public class RepositoryMockBuilder implements Start, ImplementationAnd, KeyGener
     private KeyGenerator<?> createKeyGenerator(Class<? extends KeyGenerator> generatorType) {
         final KeyGenerator instance;
         try {
-            instance = generatorType.newInstance();
+            instance = generatorType.getDeclaredConstructor().newInstance();
         } catch (Exception e) {
             throw new MockBuilderException("Failed to instantiate key generator of type " + generatorType, e);
         }
@@ -109,7 +109,7 @@ public class RepositoryMockBuilder implements Start, ImplementationAnd, KeyGener
             return generateKeysUsing(evaluatedKeyGenerator).mock(repositoryInterface);
         } else {
             return repositoryFactory.getInstance(keyGenerator, repositoryInterface,
-                                                 implementations.toArray(new Class[implementations.size()]));
+                                                 implementations.toArray(new Class[0]));
         }
     }
 

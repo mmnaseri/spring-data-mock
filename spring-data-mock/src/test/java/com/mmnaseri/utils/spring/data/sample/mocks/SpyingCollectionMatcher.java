@@ -1,6 +1,5 @@
 package com.mmnaseri.utils.spring.data.sample.mocks;
 
-import com.mmnaseri.utils.spring.data.domain.Parameter;
 import com.mmnaseri.utils.spring.data.domain.impl.matchers.AbstractCollectionMatcher;
 
 import java.util.Collection;
@@ -14,7 +13,7 @@ public class SpyingCollectionMatcher extends AbstractCollectionMatcher {
     private Collection collection;
 
     @Override
-    protected boolean matches(Parameter parameter, Object actual, Collection collection) {
+    protected boolean matches(Object actual, Collection collection) {
         this.collection = collection;
         return false;
     }

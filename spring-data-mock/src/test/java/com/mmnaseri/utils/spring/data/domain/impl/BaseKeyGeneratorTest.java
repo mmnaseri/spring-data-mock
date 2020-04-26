@@ -18,7 +18,7 @@ public abstract class BaseKeyGeneratorTest<S> {
     protected abstract KeyGenerator<S> getKeyGenerator();
 
     @Test(invocationCount = 100)
-    public void testThatKeysAreUnique() throws Exception {
+    public void testThatKeysAreUnique() {
         final KeyGenerator<S> keyGenerator = getKeyGenerator();
         final Set<S> keys = new HashSet<>();
         for (int i = 0; i < 200; i++) {

@@ -28,7 +28,7 @@ public class FutureIterableResultAdapterTest {
         assertThat(value.get(), is(instanceOf((Class) Collection.class)));
         final Collection<?> collection = (Collection<?>) value.get();
         assertThat(collection, hasSize(4));
-        assertThat(collection, containsInAnyOrder((Object) 1, 2, 3, 4));
+        assertThat(collection, containsInAnyOrder(1, 2, 3, 4));
     }
 
     @Test

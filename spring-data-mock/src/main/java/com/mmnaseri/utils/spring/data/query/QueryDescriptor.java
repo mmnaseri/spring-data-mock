@@ -52,7 +52,7 @@ public interface QueryDescriptor extends InvocationMatcher {
     Page getPage(Invocation invocation);
 
     /**
-     * Given an actual, runtime invocation, returns the sort metadata for that invocation as per this qery, or returns
+     * Given an actual, runtime invocation, returns the sort metadata for that invocation as per this query, or returns
      * {@literal null} to indicate no ordering is required.
      *
      * @param invocation the invocation

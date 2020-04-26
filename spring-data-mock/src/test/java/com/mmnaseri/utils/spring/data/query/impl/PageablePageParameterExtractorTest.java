@@ -17,26 +17,26 @@ import static org.hamcrest.Matchers.notNullValue;
 public class PageablePageParameterExtractorTest {
 
     @Test(expectedExceptions = InvalidArgumentException.class)
-    public void testNullInvocation() throws Exception {
+    public void testNullInvocation() {
         final PageablePageParameterExtractor extractor = new PageablePageParameterExtractor(0);
         extractor.extract(null);
     }
 
 
     @Test(expectedExceptions = InvalidArgumentException.class)
-    public void testPassingNullValue() throws Exception {
+    public void testPassingNullValue() {
         final PageablePageParameterExtractor extractor = new PageablePageParameterExtractor(0);
         extractor.extract(new ImmutableInvocation(null, new Object[]{null}));
     }
 
     @Test(expectedExceptions = InvalidArgumentException.class)
-    public void testPassingWrongType() throws Exception {
+    public void testPassingWrongType() {
         final PageablePageParameterExtractor extractor = new PageablePageParameterExtractor(0);
         extractor.extract(new ImmutableInvocation(null, new Object[]{new Object()}));
     }
 
     @Test
-    public void testPassingPageRequest() throws Exception {
+    public void testPassingPageRequest() {
         final PageablePageParameterExtractor extractor = new PageablePageParameterExtractor(0);
         final PageRequest pageRequest = PageRequest.of(3, 7);
         final Page extracted = extractor.extract(new ImmutableInvocation(null, new Object[]{pageRequest}));

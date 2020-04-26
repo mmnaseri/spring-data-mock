@@ -17,25 +17,25 @@ import static org.hamcrest.Matchers.*;
 public class DirectSortParameterExtractorTest {
 
     @Test(expectedExceptions = InvalidArgumentException.class)
-    public void testNullInvocation() throws Exception {
+    public void testNullInvocation() {
         final DirectSortParameterExtractor extractor = new DirectSortParameterExtractor(0);
         extractor.extract(null);
     }
 
     @Test(expectedExceptions = InvalidArgumentException.class)
-    public void testPassingNullSort() throws Exception {
+    public void testPassingNullSort() {
         final DirectSortParameterExtractor extractor = new DirectSortParameterExtractor(0);
         extractor.extract(new ImmutableInvocation(null, new Object[]{null}));
     }
 
     @Test(expectedExceptions = InvalidArgumentException.class)
-    public void testPassingWrongTypeOfArgument() throws Exception {
+    public void testPassingWrongTypeOfArgument() {
         final DirectSortParameterExtractor extractor = new DirectSortParameterExtractor(0);
         extractor.extract(new ImmutableInvocation(null, new Object[]{new Object()}));
     }
 
     @Test
-    public void testPassingSortValue() throws Exception {
+    public void testPassingSortValue() {
         final DirectSortParameterExtractor extractor = new DirectSortParameterExtractor(0);
         final com.mmnaseri.utils.spring.data.query.Sort extracted = extractor.extract(
                 new ImmutableInvocation(null, new Object[]{Sort.by("a", "b")}));

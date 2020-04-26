@@ -8,6 +8,7 @@ import javax.persistence.Id;
  * @since 1.0 (6/14/16, 11:34 PM)
  */
 @Entity
+@SuppressWarnings("unused")
 public class Plane extends SerialAwareEntity {
 
     @Id

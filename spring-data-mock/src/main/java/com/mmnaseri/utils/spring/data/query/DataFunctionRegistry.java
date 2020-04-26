@@ -1,5 +1,7 @@
 package com.mmnaseri.utils.spring.data.query;
 
+import com.mmnaseri.utils.spring.data.error.FunctionNotFoundException;
+
 import java.util.Set;
 
 /**
@@ -8,6 +10,7 @@ import java.util.Set;
  * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/29/15)
  */
+@SuppressWarnings("unused")
 public interface DataFunctionRegistry {
 
     /**
@@ -24,7 +27,7 @@ public interface DataFunctionRegistry {
      *
      * @param name the name of the function.
      * @return the data function
-     * @throws com.mmnaseri.utils.spring.data.error.FunctionNotFoundException
+     * @throws FunctionNotFoundException If no function for the provided name can be found.
      */
     DataFunction<?> getFunction(String name);
 

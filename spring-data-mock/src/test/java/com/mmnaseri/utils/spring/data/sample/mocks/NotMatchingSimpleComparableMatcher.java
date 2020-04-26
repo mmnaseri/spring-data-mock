@@ -1,6 +1,5 @@
 package com.mmnaseri.utils.spring.data.sample.mocks;
 
-import com.mmnaseri.utils.spring.data.domain.Parameter;
 import com.mmnaseri.utils.spring.data.domain.impl.matchers.AbstractSimpleComparableMatcher;
 
 /**
@@ -10,7 +9,7 @@ import com.mmnaseri.utils.spring.data.domain.impl.matchers.AbstractSimpleCompara
 public class NotMatchingSimpleComparableMatcher extends AbstractSimpleComparableMatcher {
 
     @Override
-    protected boolean matches(Parameter parameter, Comparable actual, Comparable pivot) {
+    protected boolean matches(Comparable actual, Comparable pivot) {
         return false;
     }
 

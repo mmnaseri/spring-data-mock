@@ -4,8 +4,6 @@ import com.mmnaseri.utils.spring.data.domain.Invocation;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.util.concurrent.ListenableFutureTask;
 
-import java.util.concurrent.Callable;
-
 /**
  * <p>This adapter will try to adapt a {@literal null} value to a listenable future.</p>
  *
@@ -31,13 +29,7 @@ public class NullToListenableFutureResultAdapter extends AbstractResultAdapter<L
     @Override
     public ListenableFuture adapt(Invocation invocation, Object originalValue) {
         //noinspection unchecked
-        final ListenableFutureTask task = new ListenableFutureTask(new Callable() {
-
-            @Override
-            public Object call() throws Exception {
-                return null;
-            }
-        });
+        final ListenableFutureTask task = new ListenableFutureTask(() -> null);
         task.run();
         return task;
     }

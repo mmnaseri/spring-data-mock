@@ -18,33 +18,33 @@ import static org.hamcrest.Matchers.*;
 public class PageableSortParameterExtractorTest {
 
     @Test(expectedExceptions = InvalidArgumentException.class)
-    public void testNullInvocation() throws Exception {
+    public void testNullInvocation() {
         final PageableSortParameterExtractor extractor = new PageableSortParameterExtractor(0);
         extractor.extract(null);
     }
 
 
     @Test(expectedExceptions = InvalidArgumentException.class)
-    public void testPassingNullValue() throws Exception {
+    public void testPassingNullValue() {
         final PageableSortParameterExtractor extractor = new PageableSortParameterExtractor(0);
         extractor.extract(new ImmutableInvocation(null, new Object[]{null}));
     }
 
     @Test(expectedExceptions = InvalidArgumentException.class)
-    public void testPassingWrongType() throws Exception {
+    public void testPassingWrongType() {
         final PageableSortParameterExtractor extractor = new PageableSortParameterExtractor(0);
         extractor.extract(new ImmutableInvocation(null, new Object[]{new Object()}));
     }
 
     @Test
-    public void testPassingPageableWithNullSort() throws Exception {
+    public void testPassingPageableWithNullSort() {
         final PageableSortParameterExtractor extractor = new PageableSortParameterExtractor(0);
         final Sort extracted = extractor.extract(new ImmutableInvocation(null, new Object[]{PageRequest.of(0, 1)}));
         assertThat(extracted instanceof ImmutableSort, is(true));
     }
 
     @Test
-    public void testPassingPageableWithNullProperSort() throws Exception {
+    public void testPassingPageableWithNullProperSort() {
         final PageableSortParameterExtractor extractor = new PageableSortParameterExtractor(0);
         final Sort extracted = extractor.extract(new ImmutableInvocation(null, new Object[]{
                 PageRequest.of(0, 1, org.springframework.data.domain.Sort.Direction.DESC, "a", "b")}));

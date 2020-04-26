@@ -25,7 +25,7 @@ public class AuditDataEventListener implements DataStoreEventListener<DataStoreE
         this.auditorAware = auditorAware;
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "ConstantConditions"})
     @Override
     public void onEvent(DataStoreEvent event) {
         if (event instanceof BeforeInsertDataStoreEvent) {

@@ -34,7 +34,7 @@ public class SimpleIterableResultAdapterTest {
                 new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findOther"), null),
                 Collections.singletonList(1));
         assertThat(value, is(notNullValue()));
-        assertThat(value, is((Object) 1));
+        assertThat(value, is(1));
     }
 
     @Test(expectedExceptions = ResultAdapterFailureException.class,

@@ -1,10 +1,7 @@
 package com.mmnaseri.utils.spring.data.domain.impl.id;
 
 import com.mmnaseri.utils.spring.data.error.PropertyTypeMismatchException;
-import com.mmnaseri.utils.spring.data.sample.models.EntityWithAnnotatedIdField;
-import com.mmnaseri.utils.spring.data.sample.models.EntityWithAnnotatedIdFieldFromJPA;
-import com.mmnaseri.utils.spring.data.sample.models.EntityWithAnnotatedIdGetter;
-import com.mmnaseri.utils.spring.data.sample.models.EntityWithAnnotatedIdGetterFromJPA;
+import com.mmnaseri.utils.spring.data.sample.models.*;
 import com.mmnaseri.utils.spring.data.tools.AbstractUtilityClassTest;
 import org.testng.annotations.Test;
 
@@ -28,20 +25,18 @@ public class IdPropertyResolverUtilsTest extends AbstractUtilityClassTest {
 
     @Test
     public void testReadingAnnotationFromField() throws Exception {
-        assertThat(IdPropertyResolverUtils
-                           .isAnnotated(EntityWithAnnotatedIdFieldFromJPA.class.getDeclaredField("customIdProperty")),
-                   is(true));
-        assertThat(IdPropertyResolverUtils.isAnnotated(EntityWithAnnotatedIdField.class.getDeclaredField("id")),
-                   is(true));
+        assertThat(IdPropertyResolverUtils.isAnnotated(EntityWithAnnotatedIdFieldFromJPA.class.getDeclaredField("customIdProperty")), is(true));
+        assertThat(IdPropertyResolverUtils.isAnnotated(EntityWithAnnotatedEmbeddedIdFieldFromJPA.class.getDeclaredField("customIdProperty")), is(true));
+        assertThat(IdPropertyResolverUtils.isAnnotated(EntityWithAnnotatedIdField.class.getDeclaredField("id")), is(true));
+        assertThat(IdPropertyResolverUtils.isAnnotated(EntityWithAnnotatedEmbeddedIdField.class.getDeclaredField("id")), is(true));
     }
 
     @Test
     public void testReadingAnnotationFromMethod() throws Exception {
-        assertThat(IdPropertyResolverUtils
-                           .isAnnotated(EntityWithAnnotatedIdGetterFromJPA.class.getDeclaredMethod("getMyCustomId")),
-                   is(true));
-        assertThat(IdPropertyResolverUtils.isAnnotated(EntityWithAnnotatedIdGetter.class.getDeclaredMethod("getId")),
-                   is(true));
+        assertThat(IdPropertyResolverUtils.isAnnotated(EntityWithAnnotatedIdGetterFromJPA.class.getDeclaredMethod("getMyCustomId")), is(true));
+        assertThat(IdPropertyResolverUtils.isAnnotated(EntityWithAnnotatedEmbeddedIdGetterFromJPA.class.getDeclaredMethod("getMyCustomId")), is(true));
+        assertThat(IdPropertyResolverUtils.isAnnotated(EntityWithAnnotatedIdGetter.class.getDeclaredMethod("getId")), is(true));
+        assertThat(IdPropertyResolverUtils.isAnnotated(EntityWithAnnotatedEmbeddedIdGetter.class.getDeclaredMethod("getId")), is(true));
     }
 
     @Test(expectedExceptions = PropertyTypeMismatchException.class)
@@ -56,6 +51,13 @@ public class IdPropertyResolverUtilsTest extends AbstractUtilityClassTest {
         final String propertyName = IdPropertyResolverUtils.getPropertyNameFromAnnotatedMethod(
                 EntityWithAnnotatedIdGetterFromJPA.class, Integer.class,
                 EntityWithAnnotatedIdGetterFromJPA.class.getDeclaredMethod("getMyCustomId"));
+        assertThat(propertyName, is(notNullValue()));
+        assertThat(propertyName, is("myCustomId"));
+    }
+
+    @Test
+    public void testPropertyNameFromMethodWithEmbeddedId() throws Exception {
+        final String propertyName = IdPropertyResolverUtils.getPropertyNameFromAnnotatedMethod(EntityWithAnnotatedEmbeddedIdGetterFromJPA.class, Integer.class, EntityWithAnnotatedIdGetterFromJPA.class.getDeclaredMethod("getMyCustomId"));
         assertThat(propertyName, is(notNullValue()));
         assertThat(propertyName, is("myCustomId"));
     }

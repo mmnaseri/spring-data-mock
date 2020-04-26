@@ -35,7 +35,7 @@ public class DefaultJpaRepositoryTest {
     private DataStore<String, Person> dataStore;
 
     @BeforeMethod
-    public void setUp() throws Exception {
+    public void setUp() {
         repositoryMetadata = new ImmutableRepositoryMetadata(String.class, Person.class, SimplePersonRepository.class,
                                                              "id");
         dataStore = new MemoryDataStore<>(Person.class);
@@ -46,7 +46,7 @@ public class DefaultJpaRepositoryTest {
     }
 
     @Test
-    public void testFlushing() throws Exception {
+    public void testFlushing() {
         final DefaultJpaRepository repository = new DefaultJpaRepository();
         repository.setKeyGenerator(new UUIDKeyGenerator());
         repository.setRepositoryMetadata(repositoryMetadata);
@@ -58,7 +58,7 @@ public class DefaultJpaRepositoryTest {
     }
 
     @Test
-    public void testDeleteInBatch() throws Exception {
+    public void testDeleteInBatch() {
         dataStore.save("1", new Person());
         dataStore.save("2", new Person());
         dataStore.save("3", new Person());
@@ -88,12 +88,12 @@ public class DefaultJpaRepositoryTest {
     }
 
     @Test(expectedExceptions = EntityMissingKeyException.class)
-    public void testDeleteInBatchWhenIdIsNull() throws Exception {
+    public void testDeleteInBatchWhenIdIsNull() {
         repository.deleteInBatch(Collections.singleton(new Person()));
     }
 
     @Test
-    public void testDeleteAllInBatch() throws Exception {
+    public void testDeleteAllInBatch() {
         dataStore.save("1", new Person());
         dataStore.save("2", new Person());
         dataStore.save("3", new Person());
@@ -104,9 +104,9 @@ public class DefaultJpaRepositoryTest {
     }
 
     @Test
-    public void testDeleteInBatchWithQueueing() throws Exception {
+    public void testDeleteInBatchWithQueueing() {
         final SpyingDataStore<String, Person> dataStore = new SpyingDataStore<>(
-                new MemoryDataStore<String, Person>(Person.class), new AtomicLong());
+                new MemoryDataStore<>(Person.class), new AtomicLong());
         dataStore.save("1", new Person());
         dataStore.save("2", new Person());
         dataStore.save("3", new Person());
@@ -119,16 +119,16 @@ public class DefaultJpaRepositoryTest {
     }
 
     @Test
-    public void testGetOne() throws Exception {
+    public void testGetOne() {
         final String key = "1234";
         assertThat(repository.getOne(key), is(nullValue()));
         final Person person = new Person();
         dataStore.save("1234", person);
-        assertThat(repository.getOne(key), Matchers.<Object>is(person));
+        assertThat(repository.getOne(key), Matchers.is(person));
     }
 
     @Test
-    public void testSaveAndFlush() throws Exception {
+    public void testSaveAndFlush() {
         final DefaultJpaRepository repository = new DefaultJpaRepository();
         repository.setKeyGenerator(new UUIDKeyGenerator());
         repository.setRepositoryMetadata(repositoryMetadata);

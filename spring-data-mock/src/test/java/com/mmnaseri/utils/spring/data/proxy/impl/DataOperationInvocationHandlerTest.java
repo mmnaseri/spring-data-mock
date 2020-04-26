@@ -10,7 +10,6 @@ import com.mmnaseri.utils.spring.data.sample.models.Person;
 import com.mmnaseri.utils.spring.data.sample.repositories.SimplePersonRepository;
 import com.mmnaseri.utils.spring.data.sample.usecases.proxy.ReturnTypeSampleRepository;
 import com.mmnaseri.utils.spring.data.store.impl.MemoryDataStore;
-import org.hamcrest.Matchers;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -27,13 +26,13 @@ public class DataOperationInvocationHandlerTest {
     private List<InvocationMapping<String, Person>> mappings;
 
     @BeforeMethod
-    public void setUp() throws Exception {
+    public void setUp() {
         final RepositoryMetadata repositoryMetadata = new ImmutableRepositoryMetadata(String.class, Person.class,
                                                                                       SimplePersonRepository.class,
                                                                                       "id");
         final RepositoryConfiguration repositoryConfiguration = new ImmutableRepositoryConfiguration(repositoryMetadata,
                                                                                                      new UUIDKeyGenerator(),
-                                                                                                     Collections.<Class<?>>emptyList());
+                                                                                                     Collections.emptyList());
         final MemoryDataStore<String, Person> dataStore = new MemoryDataStore<>(Person.class);
         final DefaultResultAdapterContext adapterContext = new DefaultResultAdapterContext();
         final NonDataOperationInvocationHandler invocationHandler = new NonDataOperationInvocationHandler();
@@ -45,20 +44,18 @@ public class DataOperationInvocationHandlerTest {
     /**
      * Regression test to reproduce #12
      *
-     * @throws Throwable
+     * @throws Throwable in case the method can't be found.
      */
     @Test
     public void testCallingHashCode() throws Throwable {
         final Object proxy = new Object();
         final Object result = handler.invoke(proxy, Object.class.getMethod("hashCode"), new Object[]{});
         assertThat(result, is(notNullValue()));
-        assertThat(result, Matchers.<Object>is(proxy.hashCode()));
+        assertThat(result, is(proxy.hashCode()));
     }
 
     /**
      * Regression test to reproduce #12
-     *
-     * @throws Throwable
      */
     @Test
     public void testCallingEqualsWhenTheyAreIdentical() throws Throwable {
@@ -66,13 +63,13 @@ public class DataOperationInvocationHandlerTest {
         final Object result = handler.invoke(proxy, Object.class.getMethod("equals", Object.class),
                                              new Object[]{proxy});
         assertThat(result, is(notNullValue()));
-        assertThat(result, Matchers.<Object>is(true));
+        assertThat(result, is(instanceOf(Boolean.class)));
+        //noinspection ConstantConditions
+        assertThat(result, is(true));
     }
 
     /**
      * Regression test to reproduce #12
-     *
-     * @throws Throwable
      */
     @Test
     public void testCallingEqualsWhenTheyAreNotIdentical() throws Throwable {
@@ -80,20 +77,18 @@ public class DataOperationInvocationHandlerTest {
         final Object result = handler.invoke(proxy, Object.class.getMethod("equals", Object.class),
                                              new Object[]{new Object()});
         assertThat(result, is(notNullValue()));
-        assertThat(result, Matchers.<Object>is(false));
+        assertThat(result, is(false));
     }
 
     /**
      * Regression test to reproduce #12
-     *
-     * @throws Throwable
      */
     @Test
     public void testCallingToString() throws Throwable {
         final Object proxy = new Object();
         final Object result = handler.invoke(proxy, Object.class.getMethod("toString"), new Object[]{});
         assertThat(result, is(notNullValue()));
-        assertThat(result, Matchers.<Object>is(proxy.toString()));
+        assertThat(result, is(proxy.toString()));
     }
 
     @Test

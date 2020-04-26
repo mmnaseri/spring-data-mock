@@ -96,7 +96,7 @@ public class DefaultQueryDescriptor implements QueryDescriptor {
                 final boolean ignoreCase;
                 ignoreCase = parameter.getModifiers().contains(Modifier.IGNORE_CASE);
                 Object value = wrapper.getPropertyValue(parameter.getPath());
-                if (ignoreCase && value != null && value instanceof String) {
+                if (ignoreCase && value instanceof String) {
                     value = ((String) value).toLowerCase();
                 }
                 final Operator operator = parameter.getOperator();

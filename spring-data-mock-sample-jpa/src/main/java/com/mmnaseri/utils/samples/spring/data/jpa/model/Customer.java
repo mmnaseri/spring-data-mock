@@ -11,6 +11,7 @@ import java.util.Date;
  * @since 1.0 (6/12/16, 1:50 PM)
  */
 @Entity
+@SuppressWarnings("unused")
 public class Customer {
 
     @Id

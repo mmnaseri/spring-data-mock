@@ -8,6 +8,7 @@ import java.lang.reflect.Method;
  * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/8/16)
  */
+@SuppressWarnings("unused")
 public interface NonDataOperationHandler {
 
     /**

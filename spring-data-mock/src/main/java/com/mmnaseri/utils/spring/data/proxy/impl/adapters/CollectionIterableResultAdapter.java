@@ -39,7 +39,7 @@ public class CollectionIterableResultAdapter extends AbstractIterableResultAdapt
 
     @Override
     public boolean accepts(Invocation invocation, Object originalValue) {
-        return originalValue != null && originalValue instanceof Iterable && Collection.class.isAssignableFrom(
+        return originalValue instanceof Iterable && Collection.class.isAssignableFrom(
                 invocation.getMethod().getReturnType());
     }
 }

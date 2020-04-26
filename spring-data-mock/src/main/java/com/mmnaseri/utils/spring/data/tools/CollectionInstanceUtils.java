@@ -21,43 +21,43 @@ public final class CollectionInstanceUtils {
      */
     public static Collection<?> getCollection(Class<?> collectionType) {
         if (HashSet.class.equals(collectionType)) {
-            return new HashSet<Object>();
+            return new HashSet<>();
         } else if (TreeSet.class.equals(collectionType)) {
-            return new TreeSet<Object>();
+            return new TreeSet<>();
         } else if (CopyOnWriteArraySet.class.equals(collectionType)) {
-            return new CopyOnWriteArraySet<Object>();
+            return new CopyOnWriteArraySet<>();
         } else if (LinkedHashSet.class.equals(collectionType)) {
-            return new LinkedHashSet<Object>();
+            return new LinkedHashSet<>();
         } else if (ArrayList.class.equals(collectionType)) {
-            return new ArrayList<Object>();
+            return new ArrayList<>();
         } else if (LinkedList.class.equals(collectionType)) {
-            return new LinkedList<Object>();
+            return new LinkedList<>();
         } else if (Vector.class.equals(collectionType)) {
-            return new Vector<Object>();
+            return new Vector<>();
         } else if (Stack.class.equals(collectionType)) {
-            return new Stack<Object>();
+            return new Stack<>();
         } else if (PriorityQueue.class.equals(collectionType)) {
-            return new PriorityQueue<Object>();
+            return new PriorityQueue<>();
         } else if (PriorityBlockingQueue.class.equals(collectionType)) {
-            return new PriorityBlockingQueue<Object>();
+            return new PriorityBlockingQueue<>();
         } else if (ArrayDeque.class.equals(collectionType)) {
-            return new ArrayDeque<Object>();
+            return new ArrayDeque<>();
         } else if (ConcurrentLinkedQueue.class.equals(collectionType)) {
-            return new ConcurrentLinkedQueue<Object>();
+            return new ConcurrentLinkedQueue<>();
         } else if (LinkedBlockingQueue.class.equals(collectionType)) {
-            return new LinkedBlockingQueue<Object>();
+            return new LinkedBlockingQueue<>();
         } else if (LinkedBlockingDeque.class.equals(collectionType)) {
-            return new LinkedBlockingDeque<Object>();
+            return new LinkedBlockingDeque<>();
         } else if (List.class.equals(collectionType)) {
-            return new LinkedList<Object>();
+            return new LinkedList<>();
         } else if (Set.class.equals(collectionType)) {
-            return new HashSet<Object>();
+            return new HashSet<>();
         } else if (Queue.class.equals(collectionType)) {
-            return new PriorityQueue<Object>();
+            return new PriorityQueue<>();
         } else if (Deque.class.equals(collectionType)) {
-            return new ArrayDeque<Object>();
+            return new ArrayDeque<>();
         } else if (Collection.class.equals(collectionType)) {
-            return new LinkedList<Object>();
+            return new LinkedList<>();
         }
         throw new IllegalArgumentException("Unsupported collection type: " + collectionType);
     }

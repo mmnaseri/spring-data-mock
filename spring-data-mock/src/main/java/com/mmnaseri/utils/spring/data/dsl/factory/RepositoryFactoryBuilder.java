@@ -21,6 +21,7 @@ import com.mmnaseri.utils.spring.data.store.impl.DefaultDataStoreEventListenerCo
 import com.mmnaseri.utils.spring.data.store.impl.DefaultDataStoreRegistry;
 import org.springframework.data.domain.AuditorAware;
 
+import javax.annotation.Nonnull;
 import java.util.Optional;
 
 /**
@@ -323,6 +324,7 @@ public class RepositoryFactoryBuilder
          * @return {@link #DEFAULT_USER}
          */
         @Override
+        @Nonnull
         public Optional<String> getCurrentAuditor() {
             return Optional.of(DEFAULT_USER);
         }

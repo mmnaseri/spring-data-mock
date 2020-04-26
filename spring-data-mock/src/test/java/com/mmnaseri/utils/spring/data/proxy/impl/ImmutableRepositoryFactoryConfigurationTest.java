@@ -18,7 +18,7 @@ import static org.hamcrest.Matchers.is;
 public class ImmutableRepositoryFactoryConfigurationTest {
 
     @Test
-    public void testCopyConstructor() throws Exception {
+    public void testCopyConstructor() {
         final DefaultRepositoryFactoryConfiguration original = new DefaultRepositoryFactoryConfiguration();
         original.setDescriptionExtractor(new MethodQueryDescriptionExtractor(new DefaultOperatorContext()));
         original.setEventListenerContext(new DefaultDataStoreEventListenerContext());

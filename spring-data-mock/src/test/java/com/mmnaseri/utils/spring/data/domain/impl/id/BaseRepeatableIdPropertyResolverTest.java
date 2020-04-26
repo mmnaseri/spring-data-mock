@@ -13,7 +13,7 @@ public abstract class BaseRepeatableIdPropertyResolverTest extends BaseIdPropert
     protected abstract Class<?> entityWithMultipleProperties();
 
     @Test(expectedExceptions = MultipleIdPropertiesException.class)
-    public void testFindingTheIdFieldOnEntityWithMultipleAnnotatedFields() throws Exception {
+    public void testFindingTheIdFieldOnEntityWithMultipleAnnotatedFields() {
         final IdPropertyResolver resolver = getIdPropertyResolver();
         resolver.resolve(entityWithMultipleProperties(), Object.class);
     }

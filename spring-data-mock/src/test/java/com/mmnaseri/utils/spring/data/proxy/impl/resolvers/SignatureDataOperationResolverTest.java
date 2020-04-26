@@ -23,7 +23,7 @@ public class SignatureDataOperationResolverTest {
     private SignatureDataOperationResolver resolver;
 
     @BeforeMethod
-    public void setUp() throws Exception {
+    public void setUp() {
         final List<TypeMapping<?>> mappings = new ArrayList<>();
         mappings.add(new ImmutableTypeMapping<>(SuperInterface.class, new SuperInterfaceImpl()));
         mappings.add(new ImmutableTypeMapping<>(ChildClass.class, new ChildClass()));

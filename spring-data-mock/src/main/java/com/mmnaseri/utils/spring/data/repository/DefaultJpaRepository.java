@@ -15,7 +15,7 @@ import java.util.List;
  * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (10/13/15)
  */
-@SuppressWarnings({"unchecked", "WeakerAccess"})
+@SuppressWarnings({"unchecked", "WeakerAccess", "UnusedReturnValue"})
 public class DefaultJpaRepository extends CrudRepositorySupport {
 
     private static final Log log = LogFactory.getLog(DefaultJpaRepository.class);

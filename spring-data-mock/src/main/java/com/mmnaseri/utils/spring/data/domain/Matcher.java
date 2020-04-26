@@ -19,4 +19,5 @@ public interface Matcher {
      */
     boolean matches(Parameter parameter, Object value, Object... properties);
 
+    boolean isApplicableTo(Class<?> parameterType, Class<?>[] propertiesTypes);
 }

@@ -38,8 +38,8 @@ public class GeoPageIterableResultAdapter extends AbstractIterableResultAdapter<
 
     @Override
     public boolean accepts(Invocation invocation, Object originalValue) {
-        return originalValue != null && originalValue instanceof Iterable && invocation.getMethod().getReturnType()
-                                                                                       .equals(GeoPage.class);
+        return originalValue instanceof Iterable && invocation.getMethod().getReturnType()
+                                                              .equals(GeoPage.class);
     }
 
 }

@@ -1,6 +1,5 @@
 package com.mmnaseri.utils.samples.spring.data.jpa.service.impl;
 
-import com.mmnaseri.utils.samples.spring.data.jpa.model.Group;
 import com.mmnaseri.utils.samples.spring.data.jpa.model.User;
 import com.mmnaseri.utils.samples.spring.data.jpa.repository.GroupRepository;
 import com.mmnaseri.utils.samples.spring.data.jpa.repository.MembershipRepository;
@@ -31,7 +30,7 @@ public class DefaultUserServiceTest {
     private GroupRepository groupRepository;
 
     @BeforeMethod
-    public void setUp() throws Exception {
+    public void setUp() {
         final Start builder = RepositoryFactoryBuilder.builder();
         groupRepository = builder.mock(GroupRepository.class);
         final MembershipRepository membershipRepository = builder.mock(MembershipRepository.class);
@@ -41,7 +40,7 @@ public class DefaultUserServiceTest {
     }
 
     @Test
-    public void testCreatingAUser() throws Exception {
+    public void testCreatingAUser() {
         assertThat(repository.count(), is(0L));
         final String username = "milad";
         final String email = "milad@mmnaseri.com";
@@ -61,13 +60,13 @@ public class DefaultUserServiceTest {
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testCreatingADuplicateUser() throws Exception {
+    public void testCreatingADuplicateUser() {
         service.createUser("milad", "email1", "123456");
         service.createUser("milad", "email2", "123456");
     }
 
     @Test
-    public void testLookingUpAUserByEmail() throws Exception {
+    public void testLookingUpAUserByEmail() {
         final String id = service.createUser("milad", "milad@domain.com", "123456").getId();
         final User found = service.lookup("MILAD@domain.com");
         assertThat(found, is(notNullValue()));
@@ -75,7 +74,7 @@ public class DefaultUserServiceTest {
     }
 
     @Test
-    public void testLookingUpAUserByUsername() throws Exception {
+    public void testLookingUpAUserByUsername() {
         final String id = service.createUser("milad", "milad@domain.com", "123456").getId();
         final User found = service.lookup("MILAD");
         assertThat(found, is(notNullValue()));
@@ -83,20 +82,20 @@ public class DefaultUserServiceTest {
     }
 
     @Test
-    public void testLookingForNonExistentUser() throws Exception {
+    public void testLookingForNonExistentUser() {
         final User user = service.lookup("milad");
         assertThat(user, is(nullValue()));
     }
 
     @Test
-    public void testAuthenticatingWithUsername() throws Exception {
+    public void testAuthenticatingWithUsername() {
         final String id = service.createUser("milad", "milad@domain.com", "123456").getId();
         final User user = service.authenticate("Milad", "123456");
         assertThat(user, is(notNullValue()));
         assertThat(user.getId(), is(id));
     }
     @Test
-    public void testAuthenticatingWithEmail() throws Exception {
+    public void testAuthenticatingWithEmail() {
         final String id = service.createUser("milad", "milad@domain.com", "123456").getId();
         final User user = service.authenticate("milad@DOMAIN.com", "123456");
         assertThat(user, is(notNullValue()));
@@ -104,21 +103,21 @@ public class DefaultUserServiceTest {
     }
 
     @Test
-    public void testAuthenticatingWithWrongHandle() throws Exception {
-        service.createUser("milad", "milad@domain.com", "123456").getId();
+    public void testAuthenticatingWithWrongHandle() {
+        service.createUser("milad", "milad@domain.com", "123456");
         final User user = service.authenticate("milad@DOMAIN", "123456");
         assertThat(user, is(nullValue()));
     }
 
     @Test
-    public void testAuthenticatingWithWrongPassword() throws Exception {
-        service.createUser("milad", "milad@domain.com", "123456").getId();
+    public void testAuthenticatingWithWrongPassword() {
+        service.createUser("milad", "milad@domain.com", "123456");
         final User user = service.authenticate("milad", "987654");
         assertThat(user, is(nullValue()));
     }
 
     @Test
-    public void testDeletingAUser() throws Exception {
+    public void testDeletingAUser() {
         service.createUser("milad", "milad@mmaseri.com", "123456");
         assertThat(repository.count(), is(1L));
         service.deleteUser("milad");
@@ -126,7 +125,7 @@ public class DefaultUserServiceTest {
     }
 
     @Test
-    public void testChangingUserPassword() throws Exception {
+    public void testChangingUserPassword() {
         service.createUser("milad", "milad@mmnaseri.com", "123456");
         assertThat(service.authenticate("milad", "123456"), is(notNullValue()));
         service.updatePassword("milad", "123456", "987654");
@@ -135,7 +134,7 @@ public class DefaultUserServiceTest {
     }
 
     @Test
-    public void testDeletingAUserThatIsPartOfMultipleGroups() throws Exception {
+    public void testDeletingAUserThatIsPartOfMultipleGroups() {
         final User user = service.createUser("milad", "milad@mmnaseri.com", "123456");
         groupService.join(groupService.createGroup("Group 1"), user);
         groupService.join(groupService.createGroup("Group 2"), user);
@@ -143,7 +142,7 @@ public class DefaultUserServiceTest {
         groupService.join(groupService.createGroup("Group 4"), user);
         assertThat(groupService.groups(user), hasSize(4));
         service.deleteUser(user.getUsername());
-        assertThat(groupService.groups(user), is(Matchers.<Group>empty()));
+        assertThat(groupService.groups(user), is(Matchers.empty()));
         assertThat(groupRepository.count(), is(4L));
     }
 

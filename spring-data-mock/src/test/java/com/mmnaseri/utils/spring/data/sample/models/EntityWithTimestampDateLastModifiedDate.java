@@ -8,6 +8,7 @@ import java.sql.Timestamp;
  * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/12/16, 5:20 PM)
  */
+@SuppressWarnings("unused")
 public class EntityWithTimestampDateLastModifiedDate {
 
     private String id;

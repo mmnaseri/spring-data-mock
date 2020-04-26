@@ -19,12 +19,12 @@ public class EntityIdPropertyResolverTest {
     private EntityIdPropertyResolver resolver;
 
     @BeforeMethod
-    public void setUp() throws Exception {
+    public void setUp() {
         resolver = new EntityIdPropertyResolver();
     }
 
     @Test
-    public void testThatAnnotatedGetterHasPrecedence() throws Exception {
+    public void testThatAnnotatedGetterHasPrecedence() {
         final String resolved = resolver.resolve(EntityWithAnnotationOnIdFieldAndGetterAndAnIdField.class,
                                                  Object.class);
         assertThat(resolved, is(notNullValue()));
@@ -32,21 +32,21 @@ public class EntityIdPropertyResolverTest {
     }
 
     @Test
-    public void testThatAnnotatedPropertyIsSecond() throws Exception {
+    public void testThatAnnotatedPropertyIsSecond() {
         final String resolved = resolver.resolve(EntityWithIdFieldAndAnAnnotatedIdField.class, Object.class);
         assertThat(resolved, is(notNullValue()));
         assertThat(resolved, is("annotatedId"));
     }
 
     @Test
-    public void testThatNamedGetterIsThird() throws Exception {
+    public void testThatNamedGetterIsThird() {
         final String resolved = resolver.resolve(EntityWithUnderscorePrecedingIdField.class, Object.class);
         assertThat(resolved, is(notNullValue()));
         assertThat(resolved, is("id"));
     }
 
     @Test
-    public void testThatNamedFieldIsFourth() throws Exception {
+    public void testThatNamedFieldIsFourth() {
         final String resolved = resolver.resolve(EntityWithIdFieldHiddenBehindDifferentlyNamedAccessors.class,
                                                  Object.class);
         assertThat(resolved, is(notNullValue()));
@@ -54,17 +54,16 @@ public class EntityIdPropertyResolverTest {
     }
 
     @Test(expectedExceptions = NoIdPropertyException.class)
-    public void testThatNoOtherValueIsHonored() throws Exception {
+    public void testThatNoOtherValueIsHonored() {
         resolver.resolve(EntityWithNoImmediatelyResolvableIdProperty.class, Object.class);
     }
 
     /**
      * see https://github.com/mmnaseri/spring-data-mock/issues/83
      *
-     * @throws Exception
      */
     @Test(expectedExceptions = PrimitiveIdTypeException.class)
-    public void testPrimitiveIdTypeDoesNotWork() throws Exception {
+    public void testPrimitiveIdTypeDoesNotWork() {
         resolver.resolve(EntityWithPrimitiveIdProperty.class, Long.class);
     }
 

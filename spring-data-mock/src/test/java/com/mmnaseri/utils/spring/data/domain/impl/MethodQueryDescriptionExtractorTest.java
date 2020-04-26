@@ -16,6 +16,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.lang.reflect.Method;
+import java.util.Collection;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -33,7 +34,7 @@ public class MethodQueryDescriptionExtractorTest {
     private RepositoryFactoryConfiguration configuration;
 
     @BeforeMethod
-    public void setUp() throws Exception {
+    public void setUp() {
         extractor = new MethodQueryDescriptionExtractor(new DefaultOperatorContext());
         malformedRepositoryMetadata = new ImmutableRepositoryMetadata(String.class, Person.class,
                                                                       MalformedRepository.class, "id");
@@ -112,8 +113,7 @@ public class MethodQueryDescriptionExtractorTest {
                           MalformedRepository.class.getMethod("findByFirstNameOr", String.class));
     }
 
-    @Test(expectedExceptions = QueryParserException.class,
-          expectedExceptionsMessageRegExp = ".*?: Expected parameter 0 on .*? to be a descendant of class .*?\\.String")
+    @Test(expectedExceptions = QueryParserException.class, expectedExceptionsMessageRegExp = ".*: Invalid parameter types for operator IS on property firstName: \\[class java\\.lang\\.Object]")
     public void testBadParameterType() throws Exception {
         extractor.extract(malformedRepositoryMetadata, configuration,
                           MalformedRepository.class.getMethod("findByFirstName", Object.class));
@@ -165,7 +165,7 @@ public class MethodQueryDescriptionExtractorTest {
     }
 
     @Test
-    public void testIntegrity() throws Exception {
+    public void testIntegrity() {
         assertThat(((MethodQueryDescriptionExtractor) extractor).getOperatorContext(), is(notNullValue()));
     }
 
@@ -426,4 +426,15 @@ public class MethodQueryDescriptionExtractorTest {
         assertThat(descriptor.getLimit(), is(0));
     }
 
+    @Test
+    public void testInOperator() throws Exception {
+        final QueryDescriptor descriptor = extractor.extract(sampleRepositoryMetadata, configuration,
+                RepositoryWithValidMethods.class.getMethod("findByFirstNameIn", Collection.class));
+        assertThat(descriptor, is(notNullValue()));
+        assertThat(descriptor.getBranches(), hasSize(1));
+        assertThat(descriptor.getBranches().get(0), hasSize(1));
+        assertThat(descriptor.getBranches().get(0).get(0).getIndices().length, is(1));
+        assertThat(descriptor.getBranches().get(0).get(0).getOperator().getName(), is("IN"));
+        assertThat(descriptor.getBranches().get(0).get(0).getPath(), is("firstName"));
+    }
 }

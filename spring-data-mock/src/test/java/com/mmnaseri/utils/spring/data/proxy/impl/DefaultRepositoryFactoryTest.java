@@ -4,7 +4,6 @@ import com.mmnaseri.utils.spring.data.domain.impl.DefaultOperatorContext;
 import com.mmnaseri.utils.spring.data.domain.impl.DefaultRepositoryMetadataResolver;
 import com.mmnaseri.utils.spring.data.domain.impl.MethodQueryDescriptionExtractor;
 import com.mmnaseri.utils.spring.data.domain.impl.key.NoOpKeyGenerator;
-import com.mmnaseri.utils.spring.data.proxy.RepositoryFactoryConfiguration;
 import com.mmnaseri.utils.spring.data.query.impl.DefaultDataFunctionRegistry;
 import com.mmnaseri.utils.spring.data.sample.models.Person;
 import com.mmnaseri.utils.spring.data.sample.repositories.ClearableSimpleCrudPersonRepository;
@@ -27,7 +26,7 @@ import static org.hamcrest.Matchers.*;
 public class DefaultRepositoryFactoryTest {
 
     @Test
-    public void testRepositoryInstance() throws Exception {
+    public void testRepositoryInstance() {
         final DefaultRepositoryFactoryConfiguration configuration = new DefaultRepositoryFactoryConfiguration();
         final DefaultDataStoreRegistry dataStoreRegistry = new DefaultDataStoreRegistry();
         configuration.setDataStoreRegistry(dataStoreRegistry);
@@ -40,7 +39,7 @@ public class DefaultRepositoryFactoryTest {
         configuration.setTypeMappingContext(new DefaultTypeMappingContext());
         configuration.setDefaultKeyGenerator(null);
         final DefaultRepositoryFactory factory = new DefaultRepositoryFactory(configuration);
-        assertThat(factory.getConfiguration(), Matchers.<RepositoryFactoryConfiguration>is(configuration));
+        assertThat(factory.getConfiguration(), Matchers.is(configuration));
         assertThat(dataStoreRegistry.has(Person.class), is(false));
         factory.getInstance(null, ClearableSimpleCrudPersonRepository.class, RepositoryClearerMapping.class);
         assertThat(dataStoreRegistry.has(Person.class), is(true));
@@ -70,7 +69,7 @@ public class DefaultRepositoryFactoryTest {
     }
 
     @Test
-    public void testRepositoryInstanceWithKeyGenerationFallback() throws Exception {
+    public void testRepositoryInstanceWithKeyGenerationFallback() {
         final DefaultRepositoryFactoryConfiguration configuration = new DefaultRepositoryFactoryConfiguration();
         final DefaultDataStoreRegistry dataStoreRegistry = new DefaultDataStoreRegistry();
         configuration.setDataStoreRegistry(dataStoreRegistry);
@@ -83,7 +82,7 @@ public class DefaultRepositoryFactoryTest {
         configuration.setTypeMappingContext(new DefaultTypeMappingContext());
         configuration.setDefaultKeyGenerator(new NoOpKeyGenerator<>());
         final DefaultRepositoryFactory factory = new DefaultRepositoryFactory(configuration);
-        assertThat(factory.getConfiguration(), Matchers.<RepositoryFactoryConfiguration>is(configuration));
+        assertThat(factory.getConfiguration(), Matchers.is(configuration));
         assertThat(dataStoreRegistry.has(Person.class), is(false));
         factory.getInstance(null, ClearableSimpleCrudPersonRepository.class, RepositoryClearerMapping.class);
         assertThat(dataStoreRegistry.has(Person.class), is(true));

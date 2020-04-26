@@ -77,7 +77,7 @@ public class DefaultRepositoryFactory implements RepositoryFactory {
         final RepositoryMetadata metadata = getRepositoryMetadata(repositoryInterface);
         //get the underlying data store
         log.info("Resolving the data store for " + repositoryInterface);
-        final DataStore<Object, Object> dataStore = getDataStore(metadata);
+        final DataStore<Object, ?> dataStore = getDataStore(metadata);
         //figure out type mappings
         log.info("Trying to find all the proper type mappings for entity repository " + repositoryInterface);
         final List<TypeMapping<?>> typeMappings = getTypeMappings(metadata, dataStore, actualKeyGenerator,
@@ -151,14 +151,13 @@ public class DefaultRepositoryFactory implements RepositoryFactory {
      * @param implementations the implementations specified by the user
      * @return the resolved list of type mappings
      */
-    private List<TypeMapping<?>> getTypeMappings(RepositoryMetadata metadata, DataStore<Object, Object> dataStore,
+    private List<TypeMapping<?>> getTypeMappings(RepositoryMetadata metadata, DataStore<Object, ?> dataStore,
                                                  KeyGenerator<?> keyGenerator, Class[] implementations) {
-        final List<TypeMapping<?>> typeMappings = new LinkedList<>();
         final TypeMappingContext localContext = new DefaultTypeMappingContext(typeMappingContext);
         for (Class implementation : implementations) {
             localContext.register(metadata.getRepositoryInterface(), implementation);
         }
-        typeMappings.addAll(localContext.getMappings(metadata.getRepositoryInterface()));
+        final List<TypeMapping<?>> typeMappings = new LinkedList<>(localContext.getMappings(metadata.getRepositoryInterface()));
         for (TypeMapping<?> mapping : typeMappings) {
             if (mapping.getInstance() instanceof DataStoreAware<?, ?>) {
                 DataStoreAware instance = (DataStoreAware<?, ?>) mapping.getInstance();
@@ -214,11 +213,10 @@ public class DefaultRepositoryFactory implements RepositoryFactory {
      * @param metadata the metadata
      * @return the data store
      */
-    private DataStore<Object, Object> getDataStore(RepositoryMetadata metadata) {
-        DataStore<Object, Object> dataStore;
+    private DataStore<Object, ?> getDataStore(RepositoryMetadata metadata) {
+        DataStore<Object, ?> dataStore;
         if (dataStoreRegistry.has(metadata.getEntityType())) {
-            //noinspection unchecked
-            dataStore = (DataStore<Object, Object>) dataStoreRegistry.getDataStore(metadata.getEntityType());
+            dataStore = dataStoreRegistry.getDataStore(metadata.getEntityType());
         } else {
             //noinspection unchecked
             dataStore = new MemoryDataStore<>((Class<Object>) metadata.getEntityType());

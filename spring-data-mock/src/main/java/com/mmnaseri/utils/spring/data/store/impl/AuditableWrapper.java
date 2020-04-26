@@ -11,6 +11,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.domain.Auditable;
 import org.springframework.util.ReflectionUtils;
 
+import javax.annotation.Nonnull;
 import java.beans.PropertyDescriptor;
 import java.lang.annotation.Annotation;
 import java.time.Instant;
@@ -33,10 +34,10 @@ public class AuditableWrapper implements Auditable {
 
     private final BeanWrapper wrapper;
     private final RepositoryMetadata repositoryMetadata;
-    private String createdBy;
-    private String createdDate;
-    private String lastModifiedBy;
-    private String lastModifiedDate;
+    private final String createdBy;
+    private final String createdDate;
+    private final String lastModifiedBy;
+    private final String lastModifiedDate;
 
     private static String findProperty(Class<?> entityType, Class<? extends Annotation> annotationType) {
         final PropertyVisitor visitor = new PropertyVisitor(annotationType);
@@ -104,42 +105,46 @@ public class AuditableWrapper implements Auditable {
     }
 
     @Override
+    @Nonnull
     public Optional<Object> getCreatedBy() {
         return Optional.ofNullable(getProperty(Object.class, wrapper, createdBy));
     }
 
     @Override
-    public void setCreatedBy(Object createdBy) {
+    public void setCreatedBy(@Nonnull Object createdBy) {
         setProperty(wrapper, this.createdBy, createdBy);
     }
 
     @Override
+    @Nonnull
     public Optional<Instant> getCreatedDate() {
         return Optional.ofNullable(getProperty(Instant.class, wrapper, createdDate));
     }
 
     @Override
-    public void setCreatedDate(TemporalAccessor creationDate) {
+    public void setCreatedDate(@Nonnull TemporalAccessor creationDate) {
         setProperty(wrapper, createdDate, creationDate);
     }
 
     @Override
+    @Nonnull
     public Optional<Object> getLastModifiedBy() {
         return Optional.ofNullable(getProperty(Object.class, wrapper, lastModifiedBy));
     }
 
     @Override
-    public void setLastModifiedBy(Object lastModifiedBy) {
+    public void setLastModifiedBy(@Nonnull Object lastModifiedBy) {
         setProperty(wrapper, this.lastModifiedBy, lastModifiedBy);
     }
 
     @Override
+    @Nonnull
     public Optional<Instant> getLastModifiedDate() {
         return Optional.ofNullable(getProperty(Instant.class, wrapper, lastModifiedDate));
     }
 
     @Override
-    public void setLastModifiedDate(TemporalAccessor lastModifiedDate) {
+    public void setLastModifiedDate(@Nonnull TemporalAccessor lastModifiedDate) {
         setProperty(wrapper, this.lastModifiedDate, lastModifiedDate);
     }
 

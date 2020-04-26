@@ -24,7 +24,7 @@ public class DefaultPlaneServiceTest {
     private DefaultPlaneService service;
 
     @BeforeMethod
-    public void setUp() throws Exception {
+    public void setUp() {
         final RepositoryFactoryConfiguration configuration = RepositoryConfigUtils.getConfiguration();
         repository = new RepositoryMockBuilder()
                 .useConfiguration(configuration)
@@ -33,7 +33,7 @@ public class DefaultPlaneServiceTest {
     }
 
     @AfterMethod
-    public void tearDown() throws Exception {
+    public void tearDown() {
         final RepositoryFactoryConfiguration configuration = RepositoryConfigUtils.getConfiguration();
         //because the configuration is now shared, it means that the data store registry is shared across all
         //the tests, too.
@@ -44,7 +44,7 @@ public class DefaultPlaneServiceTest {
     }
 
     @Test
-    public void testCreate() throws Exception {
+    public void testCreate() {
         assertThat(repository.count(), is(0L));
         final String model = "F-22";
         final String serial = "123456";
@@ -57,7 +57,7 @@ public class DefaultPlaneServiceTest {
     }
 
     @Test
-    public void testLookupById() throws Exception {
+    public void testLookupById() {
         final Plane entity = new Plane();
         entity.setModel("Boeing 747");
         entity.setSerial("123456");
@@ -69,7 +69,7 @@ public class DefaultPlaneServiceTest {
     }
 
     @Test
-    public void testLookupBySerial() throws Exception {
+    public void testLookupBySerial() {
         final Plane entity = new Plane();
         entity.setModel("Boeing 747");
         entity.setSerial("123456");

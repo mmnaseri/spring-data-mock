@@ -18,12 +18,12 @@ public class AssignableRepositoryMetadataResolverTest {
 
     @Test(expectedExceptions = RepositoryDefinitionException.class,
           expectedExceptionsMessageRegExp = ".*?: Expected interface to extend .*?\\.Repository")
-    public void testResolvingFromNonInheritingRepository() throws Exception {
+    public void testResolvingFromNonInheritingRepository() {
         new AssignableRepositoryMetadataResolver().resolve(MalformedRepository.class);
     }
 
     @Test
-    public void testResolvingFromInheritingRepository() throws Exception {
+    public void testResolvingFromInheritingRepository() {
         final RepositoryMetadata metadata = new AssignableRepositoryMetadataResolver().resolve(
                 SimplePersonRepository.class);
         assertThat(metadata, is(notNullValue()));

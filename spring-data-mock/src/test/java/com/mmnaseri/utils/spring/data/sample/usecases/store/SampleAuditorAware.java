@@ -2,6 +2,7 @@ package com.mmnaseri.utils.spring.data.sample.usecases.store;
 
 import org.springframework.data.domain.AuditorAware;
 
+import javax.annotation.Nonnull;
 import java.util.Optional;
 
 /**
@@ -13,6 +14,7 @@ public class SampleAuditorAware implements AuditorAware<String> {
     public static final String AUDITOR = "AUDITOR";
 
     @Override
+    @Nonnull
     public Optional<String> getCurrentAuditor() {
         return Optional.of(AUDITOR);
     }

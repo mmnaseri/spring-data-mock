@@ -1,7 +1,5 @@
 package com.mmnaseri.utils.spring.data.domain.impl.matchers;
 
-import com.mmnaseri.utils.spring.data.domain.Parameter;
-
 /**
  * This matcher will determine if the value on the object (a string) matches the pattern being passed.
  *
@@ -11,7 +9,7 @@ import com.mmnaseri.utils.spring.data.domain.Parameter;
 public class RegexMatcher extends AbstractSimpleStringMatcher {
 
     @Override
-    protected boolean matches(Parameter parameter, String actual, String argument) {
+    protected boolean matches(String actual, String argument) {
         return actual != null && argument != null && actual.matches(argument);
     }
 

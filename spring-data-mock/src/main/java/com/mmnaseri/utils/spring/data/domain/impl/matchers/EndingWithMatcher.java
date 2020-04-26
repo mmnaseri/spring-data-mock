@@ -1,7 +1,5 @@
 package com.mmnaseri.utils.spring.data.domain.impl.matchers;
 
-import com.mmnaseri.utils.spring.data.domain.Parameter;
-
 /**
  * This class is used to find out if the given value ends with the passed argument. Remember that this will convert both
  * the needle and the haystack to lower case, so the search is case-insensitive.
@@ -12,7 +10,7 @@ import com.mmnaseri.utils.spring.data.domain.Parameter;
 public class EndingWithMatcher extends AbstractSimpleStringMatcher {
 
     @Override
-    protected boolean matches(Parameter parameter, String actual, String argument) {
+    protected boolean matches(String actual, String argument) {
         return actual != null && argument != null && actual.toLowerCase().endsWith(argument.toLowerCase());
     }
 

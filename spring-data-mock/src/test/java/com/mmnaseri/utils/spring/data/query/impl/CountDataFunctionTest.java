@@ -17,13 +17,13 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class CountDataFunctionTest {
 
     @Test(expectedExceptions = InvalidArgumentException.class)
-    public void testThatNullSelectionResultsInError() throws Exception {
+    public void testThatNullSelectionResultsInError() {
         final DataFunction function = new CountDataFunction();
         function.apply(null, null, null, null);
     }
 
     @Test
-    public void testThatItReflectsTheSizeOfTheCollection() throws Exception {
+    public void testThatItReflectsTheSizeOfTheCollection() {
         final DataFunction<Long> function = new CountDataFunction();
         final List<Object> selection = new LinkedList<>();
         for (int i = 0; i < 10; i++) {

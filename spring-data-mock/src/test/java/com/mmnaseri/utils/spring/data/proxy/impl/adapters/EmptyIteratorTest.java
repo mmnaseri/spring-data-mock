@@ -12,17 +12,17 @@ import static org.hamcrest.Matchers.is;
 public class EmptyIteratorTest {
 
     @Test
-    public void testHasNext() throws Exception {
+    public void testHasNext() {
         assertThat(EmptyIterator.INSTANCE.hasNext(), is(false));
     }
 
     @Test(expectedExceptions = IndexOutOfBoundsException.class)
-    public void testNext() throws Exception {
+    public void testNext() {
         EmptyIterator.INSTANCE.next();
     }
 
     @Test(expectedExceptions = IndexOutOfBoundsException.class)
-    public void testRemove() throws Exception {
+    public void testRemove() {
         EmptyIterator.INSTANCE.remove();
     }
 

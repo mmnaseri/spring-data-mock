@@ -55,6 +55,7 @@
     <modules>
         <module>../spring-data-mock/</module>
         <module>../spring-data-mock-sample-jpa</module>
+        <module>../spring-data-mock-sample-mongo</module>
     </modules>
 
     <scm>

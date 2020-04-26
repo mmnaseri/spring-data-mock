@@ -18,25 +18,25 @@ public class MemoryDataStoreTest {
     private MemoryDataStore<String, Person> dataStore;
 
     @BeforeMethod
-    public void setUp() throws Exception {
+    public void setUp() {
         dataStore = new MemoryDataStore<>(Person.class);
     }
 
     @Test
-    public void testEntityType() throws Exception {
+    public void testEntityType() {
         assertThat(dataStore.getEntityType(), is(equalTo(Person.class)));
     }
 
     @Test
-    public void testSaveAndRetrieve() throws Exception {
-        assertThat(dataStore.retrieveAll(), is(Matchers.<Person>empty()));
+    public void testSaveAndRetrieve() {
+        assertThat(dataStore.retrieveAll(), is(Matchers.empty()));
         final Person person = new Person();
         dataStore.save("key", person);
         assertThat(dataStore.retrieveAll(), hasSize(1));
     }
 
     @Test
-    public void testRetrievalByKey() throws Exception {
+    public void testRetrievalByKey() {
         final Person person = new Person();
         final String key = "key";
         assertThat(dataStore.retrieve(key), is(nullValue()));
@@ -47,7 +47,7 @@ public class MemoryDataStoreTest {
     }
 
     @Test
-    public void testExistence() throws Exception {
+    public void testExistence() {
         final Person person = new Person();
         final String key = "key";
         assertThat(dataStore.hasKey(key), is(false));
@@ -58,12 +58,12 @@ public class MemoryDataStoreTest {
     }
 
     @Test
-    public void testSaveAndDelete() throws Exception {
+    public void testSaveAndDelete() {
         final Person person1 = new Person();
         final Person person2 = new Person();
         final String key1 = "key1";
         final String key2 = "key2";
-        assertThat(dataStore.retrieveAll(), is(Matchers.<Person>empty()));
+        assertThat(dataStore.retrieveAll(), is(Matchers.empty()));
         dataStore.save(key1, person1);
         assertThat(dataStore.hasKey(key1), is(true));
         dataStore.save(key2, person2);
@@ -82,11 +82,11 @@ public class MemoryDataStoreTest {
         dataStore.delete(key2);
         assertThat(dataStore.hasKey(key1), is(false));
         assertThat(dataStore.hasKey(key2), is(false));
-        assertThat(dataStore.retrieveAll(), is(Matchers.<Person>empty()));
+        assertThat(dataStore.retrieveAll(), is(Matchers.empty()));
     }
 
     @Test
-    public void testKeys() throws Exception {
+    public void testKeys() {
         dataStore.save("1", new Person());
         dataStore.save("2", new Person());
         dataStore.save("3", new Person());
@@ -94,33 +94,33 @@ public class MemoryDataStoreTest {
     }
 
     @Test(expectedExceptions = DataStoreException.class)
-    public void testSavingWithNullKey() throws Exception {
+    public void testSavingWithNullKey() {
         dataStore.save(null, new Person());
     }
 
     @Test(expectedExceptions = DataStoreException.class)
-    public void testSavingWithNullEntity() throws Exception {
+    public void testSavingWithNullEntity() {
         dataStore.save("1", null);
     }
 
     @Test(expectedExceptions = DataStoreException.class)
-    public void testDeletingWithNullKey() throws Exception {
+    public void testDeletingWithNullKey() {
         dataStore.delete(null);
     }
 
     @Test(expectedExceptions = DataStoreException.class)
-    public void testRetrievingWithNullKey() throws Exception {
+    public void testRetrievingWithNullKey() {
         dataStore.retrieve(null);
     }
 
     @Test
-    public void testTruncating() throws Exception {
+    public void testTruncating() {
         dataStore.save("1", new Person());
         dataStore.save("2", new Person());
         dataStore.save("3", new Person());
         assertThat(dataStore.retrieveAll(), hasSize(3));
         dataStore.truncate();
-        assertThat(dataStore.retrieveAll(), is(Matchers.<Person>empty()));
+        assertThat(dataStore.retrieveAll(), is(Matchers.empty()));
     }
 
 }

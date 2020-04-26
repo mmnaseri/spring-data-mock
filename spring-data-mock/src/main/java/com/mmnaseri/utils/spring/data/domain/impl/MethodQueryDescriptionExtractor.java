@@ -1,5 +1,6 @@
 package com.mmnaseri.utils.spring.data.domain.impl;
 
+import com.google.common.base.Joiner;
 import com.mmnaseri.utils.spring.data.domain.*;
 import com.mmnaseri.utils.spring.data.error.QueryParserException;
 import com.mmnaseri.utils.spring.data.proxy.RepositoryFactoryConfiguration;
@@ -18,9 +19,7 @@ import java.util.regex.Pattern;
 
 /**
  * <p>This class will parse a query method's name and extract a
- * {@link com.mmnaseri.utils.spring.data.dsl.factory.QueryDescription
- * query description}
- * from that name.</p>
+ * {@link com.mmnaseri.utils.spring.data.dsl.factory.QueryDescription query description} from that name.</p>
  *
  * <p>In parsing the name, words are considered as being tokens in a camel case name.</p>
  *
@@ -108,7 +107,7 @@ import java.util.regex.Pattern;
 public class MethodQueryDescriptionExtractor implements QueryDescriptionExtractor<Method> {
 
     private static final String ALL_IGNORE_CASE_SUFFIX = "(AllIgnoreCase|AllIgnoresCase|AllIgnoringCase)$";
-    private static final String IGNORE_CASE_SUFFIX = "(IgnoreCase|IgnoresCase|IgnoringCase)$";
+    private static final String IGNORE_CASE_PARTIAL = "(IgnoreCase|IgnoresCase|IgnoringCase)";
     private static final String ASC_SUFFIX = "Asc";
     private static final String DESC_SUFFIX = "Desc";
     private static final String DEFAULT_OPERATOR_SUFFIX = "Is";
@@ -150,14 +149,13 @@ public class MethodQueryDescriptionExtractor implements QueryDescriptionExtracto
         //if the method name simply was the function name, no metadata can be extracted
         if (!reader.hasMore()) {
             pageExtractor = null;
-            sortExtractor = null;
         } else {
             reader.expect("By");
             if (!reader.hasMore()) {
                 throw new QueryParserException(method.getDeclaringClass(), "Query method name cannot end with `By`");
             }
             //current parameter index
-            int index = parseExpression(repositoryMetadata, method, methodName, allIgnoreCase, reader, branches);
+            int index = parseExpression(repositoryMetadata, method, allIgnoreCase, reader, branches);
             final com.mmnaseri.utils.spring.data.query.Sort sort = parseSort(repositoryMetadata, method, reader);
             pageExtractor = getPageParameterExtractor(method, index, sort);
             sortExtractor = getSortParameterExtractor(method, index, sort);
@@ -207,10 +205,10 @@ public class MethodQueryDescriptionExtractor implements QueryDescriptionExtracto
         return pageExtractor;
     }
 
-    private int parseExpression(RepositoryMetadata repositoryMetadata, Method method, String methodName,
+    private int parseExpression(RepositoryMetadata repositoryMetadata, Method method,
                                 boolean allIgnoreCase, DocumentReader reader, List<List<Parameter>> branches) {
         int index = 0;
-        branches.add(new LinkedList<Parameter>());
+        branches.add(new LinkedList<>());
         while (reader.hasMore()) {
             final Parameter parameter;
             //read a full expression
@@ -244,7 +242,7 @@ public class MethodQueryDescriptionExtractor implements QueryDescriptionExtracto
             final String property = propertyDescriptor.getPath();
             //we need to match the method parameters with the operands for the designated operator
             final int[] indices = new int[operator.getOperands()];
-            index = parseParameterIndices(method, methodName, index, operator, propertyDescriptor, indices);
+            index = parseParameterIndices(method, index, operator, propertyDescriptor, indices);
             //create a parameter definition for the given expression
             parameter = new ImmutableParameter(property, modifiers, indices, operator);
             //get the current branch
@@ -253,7 +251,7 @@ public class MethodQueryDescriptionExtractor implements QueryDescriptionExtracto
             currentBranch.add(parameter);
             //if the branch has ended with "OR", we set up a new branch
             if (branchEnd) {
-                branches.add(new LinkedList<Parameter>());
+                branches.add(new LinkedList<>());
             }
             //if this is the end of expression, so we need to jump out
             if (expressionEnd) {
@@ -279,20 +277,24 @@ public class MethodQueryDescriptionExtractor implements QueryDescriptionExtracto
         return sort;
     }
 
-    private int parseParameterIndices(Method method, String methodName, int index, Operator operator,
+    private int parseParameterIndices(Method method, int index, Operator operator,
                                       PropertyDescriptor propertyDescriptor, int[] indices) {
         int parameterIndex = index;
+        Class<?>[] parameterTypes = new Class[operator.getOperands()];
         for (int i = 0; i < operator.getOperands(); i++) {
             if (parameterIndex >= method.getParameterTypes().length) {
                 throw new QueryParserException(method.getDeclaringClass(),
                                                "Expected to see parameter with index " + parameterIndex);
             }
-            if (!propertyDescriptor.getType().isAssignableFrom(method.getParameterTypes()[parameterIndex])) {
-                throw new QueryParserException(method.getDeclaringClass(),
-                                               "Expected parameter " + parameterIndex + " on method " + methodName
-                                                       + " to be a descendant of " + propertyDescriptor.getType());
-            }
+            parameterTypes[i] = method.getParameterTypes()[parameterIndex];
             indices[i] = parameterIndex++;
+        }
+        if (!operator.getMatcher().isApplicableTo(propertyDescriptor.getType(), parameterTypes)) {
+            throw new QueryParserException(method.getDeclaringClass(),
+                                           String.format("Invalid parameter types for operator %s on property %s: [%s]",
+                                                         operator.getName(),
+                                                         propertyDescriptor.getPath(),
+                                                         Joiner.on(",").join(parameterTypes)));
         }
         return parameterIndex;
     }
@@ -327,10 +329,10 @@ public class MethodQueryDescriptionExtractor implements QueryDescriptionExtracto
 
     private String parseModifiers(boolean allIgnoreCase, String originalExpression, Set<Modifier> modifiers) {
         String expression = originalExpression;
-        if (expression.matches(".*" + IGNORE_CASE_SUFFIX)) {
-            //if the expression ended in IgnoreCase, we need to strip that off
+        if (expression.matches(".*" + IGNORE_CASE_PARTIAL + ".*")) {
+            //if the expression contains IgnoreCase, we need to strip that off
             modifiers.add(Modifier.IGNORE_CASE);
-            expression = expression.replaceFirst(IGNORE_CASE_SUFFIX, "");
+            expression = expression.replaceFirst(IGNORE_CASE_PARTIAL, "");
         } else if (allIgnoreCase) {
             //if we had already set "AllIgnoreCase", we will still add the modifier
             modifiers.add(Modifier.IGNORE_CASE);
@@ -433,7 +435,8 @@ public class MethodQueryDescriptionExtractor implements QueryDescriptionExtracto
                 //if the next word is 'Distinct', we are saying we should return distinct results
                 if (distinct) {
                     throw new QueryParserException(method.getDeclaringClass(),
-                                                   "You have already stated that this query should return distinct items: "
+                                                   "You have already stated that this query should return distinct "
+                                                           + "items: "
                                                            + method);
                 }
                 distinct = true;

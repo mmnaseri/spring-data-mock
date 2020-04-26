@@ -12,28 +12,28 @@ import static org.hamcrest.Matchers.is;
 public class RegexMatcherTest {
 
     @Test
-    public void testWhenActualIsNull() throws Exception {
-        assertThat(new RegexMatcher().matches(null, null, ""), is(false));
+    public void testWhenActualIsNull() {
+        assertThat(new RegexMatcher().matches(null, ""), is(false));
     }
 
     @Test
-    public void testWhenPatternIsNull() throws Exception {
-        assertThat(new RegexMatcher().matches(null, "", (String) null), is(false));
+    public void testWhenPatternIsNull() {
+        assertThat(new RegexMatcher().matches("", null), is(false));
     }
 
     @Test
-    public void testWhenItemMatchesPatternPartially() throws Exception {
-        assertThat(new RegexMatcher().matches(null, "hello", "lo"), is(false));
+    public void testWhenItemMatchesPatternPartially() {
+        assertThat(new RegexMatcher().matches("hello", "lo"), is(false));
     }
 
     @Test
-    public void testWhenItemDoesNotMatchPatternInAnyWay() throws Exception {
-        assertThat(new RegexMatcher().matches(null, "hello", "\\d+"), is(false));
+    public void testWhenItemDoesNotMatchPatternInAnyWay() {
+        assertThat(new RegexMatcher().matches("hello", "\\d+"), is(false));
     }
 
     @Test
-    public void testWhenItemMatchesPattern() throws Exception {
-        assertThat(new RegexMatcher().matches(null, "12345", "\\d+"), is(true));
+    public void testWhenItemMatchesPattern() {
+        assertThat(new RegexMatcher().matches("12345", "\\d+"), is(true));
     }
 
 }

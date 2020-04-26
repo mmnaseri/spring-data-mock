@@ -18,12 +18,12 @@ public class AnnotationRepositoryMetadataResolverTest {
 
     @Test(expectedExceptions = RepositoryDefinitionException.class,
           expectedExceptionsMessageRegExp = ".*?: Expected the repository to be annotated with @RepositoryDefinition")
-    public void testResolvingFromRepositoryWithoutAnnotations() throws Exception {
+    public void testResolvingFromRepositoryWithoutAnnotations() {
         new AnnotationRepositoryMetadataResolver().resolve(Repository.class);
     }
 
     @Test
-    public void testResolvingFromAnnotatedRepository() throws Exception {
+    public void testResolvingFromAnnotatedRepository() {
         final RepositoryMetadata metadata = new AnnotationRepositoryMetadataResolver().resolve(
                 SampleAnnotatedRepository.class);
         assertThat(metadata, is(notNullValue()));

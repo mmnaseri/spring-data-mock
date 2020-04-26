@@ -13,7 +13,7 @@ import static org.hamcrest.Matchers.is;
 public class ConfigurableSequentialLongKeyGeneratorTest {
 
     @Test
-    public void testKeyGenerationWithDefaultSettings() throws Exception {
+    public void testKeyGenerationWithDefaultSettings() {
         final KeyGenerator<Long> generator = new ConfigurableSequentialLongKeyGenerator();
         assertThat(generator.generate(), is(1L));
         assertThat(generator.generate(), is(2L));
@@ -21,7 +21,7 @@ public class ConfigurableSequentialLongKeyGeneratorTest {
     }
 
     @Test
-    public void testKeyGenerationWithDefaultStepAndCustomInitialValue() throws Exception {
+    public void testKeyGenerationWithDefaultStepAndCustomInitialValue() {
         final long initialValue = 100L;
         final KeyGenerator<Long> generator = new ConfigurableSequentialLongKeyGenerator(initialValue);
         assertThat(generator.generate(), is(initialValue));
@@ -30,7 +30,7 @@ public class ConfigurableSequentialLongKeyGeneratorTest {
     }
 
     @Test
-    public void testKeyGenerationWithCustomStepAndCustomInitialValue() throws Exception {
+    public void testKeyGenerationWithCustomStepAndCustomInitialValue() {
         final long initialValue = 100L;
         final long step = 3L;
         final KeyGenerator<Long> generator = new ConfigurableSequentialLongKeyGenerator(initialValue, step);

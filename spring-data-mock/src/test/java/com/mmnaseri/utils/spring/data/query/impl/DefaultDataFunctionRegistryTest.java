@@ -20,7 +20,7 @@ import static org.hamcrest.Matchers.*;
 public class DefaultDataFunctionRegistryTest {
 
     @Test
-    public void testDefaultFunctions() throws Exception {
+    public void testDefaultFunctions() {
         final DefaultDataFunctionRegistry registry = new DefaultDataFunctionRegistry();
         final Set<String> functions = registry.getFunctions();
         final Set<String> expected = new HashSet<>(Arrays.asList("count", "delete"));
@@ -29,23 +29,23 @@ public class DefaultDataFunctionRegistryTest {
             assertThat(function, isIn(expected));
             expected.remove(function);
         }
-        assertThat(expected, is(Matchers.<String>empty()));
+        assertThat(expected, is(Matchers.empty()));
     }
 
     @Test(expectedExceptions = FunctionNotFoundException.class)
-    public void testNonExistentFunction() throws Exception {
+    public void testNonExistentFunction() {
         final DefaultDataFunctionRegistry registry = new DefaultDataFunctionRegistry();
         registry.getFunction("xyz");
     }
 
     @Test(expectedExceptions = DuplicateFunctionException.class)
-    public void testRegisteringDuplicateFunction() throws Exception {
+    public void testRegisteringDuplicateFunction() {
         final DefaultDataFunctionRegistry registry = new DefaultDataFunctionRegistry();
         registry.register("count", new DeleteDataFunction());
     }
 
     @Test
-    public void testRegisteringLegitimateFunction() throws Exception {
+    public void testRegisteringLegitimateFunction() {
         final DefaultDataFunctionRegistry registry = new DefaultDataFunctionRegistry();
         final String item = "size";
         final DataFunction function = new CountDataFunction();

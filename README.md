@@ -135,13 +135,13 @@ FAQ
   Also, the people behind Spring rock. I felt like I was selling tickets to the concert of rockstars by releasing
   this.
 
-  3. What is the main design decision behind this framework?
+  3. What is the main design principle behind this framework?
 
   > Make you do as little as possible.
 
   4. When should I use this?
 
-  > You should only use this to write you *unit* tests. For anything else, you would want the whole application to
+  > You should only use this to write your *unit* tests. For anything else, you would want the whole application to
   come alive and work. Using mocks for that is a bad idea.
 
   5. This is going to be used at the level of code testing. Is it really well written?
@@ -154,7 +154,7 @@ Some Numbers and Facts
 
   * This project has *1000+* individual unit tests.
 
-  * This project has **100%** [code coverage](https://coveralls.io/github/mmnaseri/spring-data-mock)
+  * This project has effective **100%** (deprecated code is not tested) [code coverage](https://coveralls.io/github/mmnaseri/spring-data-mock)
 
   * This project has **95%** branch coverage rate.
 
@@ -171,8 +171,8 @@ Some Numbers and Facts
 Contribution
 ------------
 
-Since this project is aimed at the testing phase of your code, it is paramount that it is written with the best of
-qualities and that it maintains the highest standard.
+Since this project aims to help you in the testing phase of your code, it is paramount that it is
+written with the best of qualities and that it maintains the highest standard.
 
 Contributors are more than welcome. In fact, I flag most of the issues I receive as `help wanted` and
 there are really generous people out there who do take care of some issues.
@@ -180,6 +180,17 @@ there are really generous people out there who do take care of some issues.
 If you see a piece of code that you don't like for whatever reason -- so long as that reason can be backed
 by pioneers and standards -- feel free to dig in and change the code to your heart's content and create a
 pull request.
+
+### Building the Code
+
+To make the code builds universal and canonical, I have a Docker configuration attached to this project
+which installs OpenJDK 8 on Ubuntu Xenial. This is the build environment I will be using to test and release
+the code.
+
+```bash
+docker build -t spring-data-mock:jdk8 .
+docker run -it --rm -v $(pwd):/src spring-data-mock:jdk8
+```
 
 Donation
 --------

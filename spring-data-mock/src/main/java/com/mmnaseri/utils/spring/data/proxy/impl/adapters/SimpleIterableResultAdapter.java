@@ -28,7 +28,7 @@ public class SimpleIterableResultAdapter extends AbstractIterableResultAdapter<O
 
     @Override
     public boolean accepts(Invocation invocation, Object originalValue) {
-        if (originalValue == null || !(originalValue instanceof Iterable)) {
+        if (!(originalValue instanceof Iterable)) {
             return false;
         }
         final Class<?> returnType = invocation.getMethod().getReturnType();

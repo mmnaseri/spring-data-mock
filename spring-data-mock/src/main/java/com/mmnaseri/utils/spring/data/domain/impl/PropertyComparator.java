@@ -7,7 +7,6 @@ import com.mmnaseri.utils.spring.data.query.Sort;
 import com.mmnaseri.utils.spring.data.query.SortDirection;
 import com.mmnaseri.utils.spring.data.tools.PropertyUtils;
 
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -32,7 +31,6 @@ public class PropertyComparator implements Comparator<Object> {
         direction = order.getDirection();
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public int compare(Object first, Object second) {
         final Object firstValue = safeReadPropertyValue(first);
@@ -52,7 +50,7 @@ public class PropertyComparator implements Comparator<Object> {
      *
      * @param object the object to read the property from
      * @return the value of the property
-     * @throws InvalidArgumentException
+     * @throws InvalidArgumentException If the value of the property cannot be read.
      */
     private Object safeReadPropertyValue(Object object) {
         Object firstValue;
@@ -89,7 +87,7 @@ public class PropertyComparator implements Comparator<Object> {
      * @param first  the first item
      * @param second the second item
      * @return comparison results as defined by {@link Comparable#compareTo(Object)}
-     * @throws InvalidArgumentException
+     * @throws InvalidArgumentException If the values of the two properties are not of the same type.
      */
     @SuppressWarnings("unchecked")
     private int compareIfCompatible(Object first, Object second) {
@@ -124,7 +122,7 @@ public class PropertyComparator implements Comparator<Object> {
      */
     public static void sort(List<?> collection, Sort sort) {
         for (int i = sort.getOrders().size() - 1; i >= 0; i--) {
-            Collections.sort(collection, new PropertyComparator(sort.getOrders().get(i)));
+            collection.sort(new PropertyComparator(sort.getOrders().get(i)));
         }
     }
 

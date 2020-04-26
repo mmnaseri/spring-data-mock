@@ -84,6 +84,7 @@
         <spring-data-commons.version>2.2.6.RELEASE</spring-data-commons.version>
         <spring-data-gemfire.version>2.2.6.RELEASE</spring-data-gemfire.version>
         <spring-data-jpa.version>2.2.6.RELEASE</spring-data-jpa.version>
+        <spring-data-mongo.version>2.2.6.RELEASE</spring-data-mongo.version>
         <querydsl.version>4.3.1</querydsl.version>
         <cglib.version>3.3.0</cglib.version>
         <persistence-api.version>1.0.2</persistence-api.version>
@@ -146,6 +147,13 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <!-- Spring Data support for JPA-->
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-mongodb</artifactId>
+            <version>${spring-data-mongo.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <!-- Support for QueryDSL supported repositories -->
             <groupId>com.querydsl</groupId>
             <artifactId>querydsl-core</artifactId>
@@ -160,21 +168,6 @@
             <scope>provided</scope>
         </dependency>
     </dependencies>
-
-    <repositories>
-        <!-- this is so that we can pull down com.gemstone.gemfire:gemfire since it's no longer available in central -->
-        <repository>
-            <id>gemfire-repository</id>
-            <name>Gemfire Repository</name>
-            <url>http://dist.gemstone.com/maven/release</url>
-        </repository>
-        <!-- this is so that we can pull down org.testng:testng:6.9.11 and stop VersionEye complaining about testng version -->
-        <repository>
-            <id>gradle-repository</id>
-            <name>Gradle Repository</name>
-            <url>http://gradle.artifactoryonline.com/gradle/libs/</url>
-        </repository>
-    </repositories>
 
     <build>
         <plugins>
@@ -215,6 +208,8 @@
                             <executable>gpg2</executable>
                             <gpgArguments>
                                 <arg>--batch</arg>
+                                <arg>--pinentry-mode</arg>
+                                <arg>loopback</arg>
                             </gpgArguments>
                         </configuration>
                         <executions>

@@ -21,13 +21,13 @@ public class ImmutableMatchedOperatorTest {
     private MatchedOperator matchedOperator;
 
     @BeforeMethod
-    public void setUp() throws Exception {
+    public void setUp() {
         original = new ImmutableOperator("operator", new Random().nextInt(), new IsFalseMatcher(), "a", "b", "c");
         matchedOperator = new ImmutableMatchedOperator(original, "a");
     }
 
     @Test
-    public void testDelegation() throws Exception {
+    public void testDelegation() {
         assertThat(matchedOperator.getMatcher(), is(original.getMatcher()));
         assertThat(matchedOperator.getName(), is(original.getName()));
         assertThat(matchedOperator.getOperands(), is(original.getOperands()));
@@ -35,7 +35,7 @@ public class ImmutableMatchedOperatorTest {
     }
 
     @Test
-    public void testMatchedToken() throws Exception {
+    public void testMatchedToken() {
         assertThat(matchedOperator.getMatchedToken(), is("a"));
     }
 }

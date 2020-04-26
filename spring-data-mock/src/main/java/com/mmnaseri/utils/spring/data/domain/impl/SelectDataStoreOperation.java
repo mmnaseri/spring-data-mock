@@ -63,20 +63,14 @@ public class SelectDataStoreOperation<K, E> implements DataStoreOperation<List<E
             if (start > selection.size()) {
                 selection.clear();
             } else {
-                final List<E> view = new ArrayList<>();
-                for (E item : selection.subList(start, finish)) {
-                    view.add(item);
-                }
+                final List<E> view = new ArrayList<>(selection.subList(start, finish));
                 selection.clear();
                 selection.addAll(view);
             }
         }
         if (descriptor.getLimit() > 0) {
             log.info("Going to limit the result to " + descriptor.getLimit() + " items");
-            final List<E> view = new ArrayList<>();
-            for (E item : selection.subList(0, Math.min(selection.size(), descriptor.getLimit()))) {
-                view.add(item);
-            }
+            final List<E> view = new ArrayList<>(selection.subList(0, Math.min(selection.size(), descriptor.getLimit())));
             selection.clear();
             selection.addAll(view);
         }

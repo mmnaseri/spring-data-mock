@@ -43,7 +43,7 @@ public class DefaultDataStoreEventListenerContext implements DataStoreEventListe
     @Override
     public <E extends DataStoreEvent> void register(DataStoreEventListener<E> listener) {
         final SmartDataStoreEventListener<E> eventListener = new SmartDataStoreEventListener<>(listener);
-        listeners.putIfAbsent(eventListener.getEventType(), new CopyOnWriteArrayList<DataStoreEventListener<?>>());
+        listeners.putIfAbsent(eventListener.getEventType(), new CopyOnWriteArrayList<>());
         log.info("Registering an event listener for type " + eventListener.getEventType());
         listeners.get(eventListener.getEventType()).add(eventListener);
     }

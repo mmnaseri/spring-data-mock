@@ -24,7 +24,7 @@ public class IteratorIterableResultAdapter extends AbstractIterableResultAdapter
 
     @Override
     public boolean accepts(Invocation invocation, Object originalValue) {
-        return originalValue != null && originalValue instanceof Iterable && Iterator.class.equals(
+        return originalValue instanceof Iterable && Iterator.class.equals(
                 invocation.getMethod().getReturnType());
     }
 

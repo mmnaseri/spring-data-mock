@@ -28,22 +28,15 @@ public class ListenableFutureIterableResultAdapter extends AbstractIterableResul
 
     @Override
     protected ListenableFuture doAdapt(Invocation invocation, final Iterable iterable) {
-        final ListenableFutureTask task = new ListenableFutureTask<>(new Callable<Object>() {
-
-            @Override
-            public Object call() throws Exception {
-                return iterable;
-            }
-        });
+        final ListenableFutureTask task = new ListenableFutureTask<>((Callable<Object>) () -> iterable);
         task.run();
-        //noinspection unchecked
         return task;
     }
 
     @Override
     public boolean accepts(Invocation invocation, Object originalValue) {
-        return originalValue != null && originalValue instanceof Iterable && invocation.getMethod().getReturnType()
-                                                                                       .equals(ListenableFuture.class);
+        return originalValue instanceof Iterable && invocation.getMethod().getReturnType()
+                                                              .equals(ListenableFuture.class);
     }
 
 }

@@ -60,7 +60,7 @@ public class DefaultQueryByExampleExecutor
     }
 
     public long count(Example example) {
-        return (long) retrieveAll(example).size();
+        return retrieveAll(example).size();
     }
 
     public boolean exists(Example example) {
@@ -121,6 +121,7 @@ public class DefaultQueryByExampleExecutor
             final Object propertyValue = PropertyUtils.getPropertyValue(example.getProbe(), propertyPath);
             final ExampleMatcher.PropertySpecifier specifier = example.getMatcher().getPropertySpecifiers().getForPath(
                     propertyPath);
+            //noinspection ConstantConditions
             values.add(specifier == null ? propertyValue
                                : specifier.getPropertyValueTransformer().apply(Optional.ofNullable(propertyValue))
                                           .orElse(null));

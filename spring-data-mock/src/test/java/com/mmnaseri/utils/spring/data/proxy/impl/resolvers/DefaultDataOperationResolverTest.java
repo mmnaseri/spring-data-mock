@@ -28,7 +28,7 @@ public class DefaultDataOperationResolverTest {
     private DefaultDataOperationResolver resolver;
 
     @BeforeMethod
-    public void setUp() throws Exception {
+    public void setUp() {
         final ArrayList<TypeMapping<?>> mappings = new ArrayList<>();
         mappings.add(new ImmutableTypeMapping<>(MappedType.class, new MappedType()));
         final MethodQueryDescriptionExtractor descriptionExtractor = new MethodQueryDescriptionExtractor(

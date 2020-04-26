@@ -30,7 +30,7 @@ public class InformationExposingRepositoryFactory implements RepositoryFactory {
         //noinspection unchecked
         final RepositoryConfiguration configuration = new ImmutableRepositoryConfiguration(
                 this.configuration.getRepositoryMetadataResolver().resolve(repositoryInterface), keyGenerator,
-                Arrays.<Class<?>>asList(implementations));
+                Arrays.asList(implementations));
         final DefaultInformationExposingRepository implementation = new DefaultInformationExposingRepository(
                 configuration, getConfiguration());
         final InformationExposingInvocationHandler<E> handler = new InformationExposingInvocationHandler<>(

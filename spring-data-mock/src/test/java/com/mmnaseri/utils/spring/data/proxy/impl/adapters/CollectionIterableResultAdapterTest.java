@@ -28,7 +28,7 @@ public class CollectionIterableResultAdapterTest {
         assertThat(value, is(notNullValue()));
         assertThat(value, hasSize(5));
         assertThat(value, is(instanceOf(Set.class)));
-        assertThat(value, containsInAnyOrder((Object) 1, 2, 3, 4, 5));
+        assertThat(value, containsInAnyOrder(1, 2, 3, 4, 5));
     }
 
     @Test(expectedExceptions = ResultAdapterFailureException.class)

@@ -12,28 +12,28 @@ import static org.hamcrest.Matchers.is;
 public class IsNotLikeMatcherTest {
 
     @Test
-    public void testWhenBothSubjectAndReferenceAreNull() throws Exception {
-        assertThat(new IsNotLikeMatcher().matches(null, null, (String) null), is(false));
+    public void testWhenBothSubjectAndReferenceAreNull() {
+        assertThat(new IsNotLikeMatcher().matches(null, null), is(false));
     }
 
     @Test
 
-    public void testWhenSubjectIsNullAndReferenceIsNotNull() throws Exception {
-        assertThat(new IsNotLikeMatcher().matches(null, null, ""), is(true));
+    public void testWhenSubjectIsNullAndReferenceIsNotNull() {
+        assertThat(new IsNotLikeMatcher().matches(null, ""), is(true));
     }
 
     @Test
-    public void testWhenReferenceIsNullAndSubjectIsNotNull() throws Exception {
-        assertThat(new IsNotLikeMatcher().matches(null, "", (String) null), is(true));
+    public void testWhenReferenceIsNullAndSubjectIsNotNull() {
+        assertThat(new IsNotLikeMatcher().matches("", null), is(true));
     }
 
     @Test
-    public void testWhenTheyAreNotAlike() throws Exception {
-        assertThat(new IsNotLikeMatcher().matches(null, "Hello World", "World"), is(true));
+    public void testWhenTheyAreNotAlike() {
+        assertThat(new IsNotLikeMatcher().matches("Hello World", "World"), is(true));
     }
 
     @Test
-    public void testWhenTheyAreAlike() throws Exception {
-        assertThat(new IsNotLikeMatcher().matches(null, "Hello world!", "hello WORLD!"), is(false));
+    public void testWhenTheyAreAlike() {
+        assertThat(new IsNotLikeMatcher().matches("Hello world!", "hello WORLD!"), is(false));
     }
 }

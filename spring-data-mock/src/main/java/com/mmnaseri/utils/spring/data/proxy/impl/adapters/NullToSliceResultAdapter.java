@@ -3,7 +3,6 @@ package com.mmnaseri.utils.spring.data.proxy.impl.adapters;
 import com.mmnaseri.utils.spring.data.domain.Invocation;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.geo.GeoPage;
-import org.springframework.data.geo.GeoResult;
 import org.springframework.data.geo.GeoResults;
 
 import java.util.Collections;
@@ -32,7 +31,7 @@ public class NullToSliceResultAdapter extends AbstractResultAdapter<Slice> {
     @Override
     public Slice adapt(Invocation invocation, Object originalValue) {
         //noinspection unchecked
-        return new GeoPage(new GeoResults(Collections.<GeoResult>emptyList()));
+        return new GeoPage(new GeoResults(Collections.emptyList()));
     }
 
 }

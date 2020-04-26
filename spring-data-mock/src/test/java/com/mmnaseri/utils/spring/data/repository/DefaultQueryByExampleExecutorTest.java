@@ -37,7 +37,7 @@ public class DefaultQueryByExampleExecutorTest {
     private DataStore<Object, Person> dataStore;
 
     @BeforeMethod
-    public void setUp() throws Exception {
+    public void setUp() {
         dataStore = new MemoryDataStore<>(Person.class);
         dataStore.save("1",
                        new Person()
@@ -115,26 +115,26 @@ public class DefaultQueryByExampleExecutorTest {
     }
 
     @Test
-    public void testFindOneWhenThereIsNoMatch() throws Exception {
+    public void testFindOneWhenThereIsNoMatch() {
         final Object result = executor.findOne(Example.of(new Person().setFirstName("Gigili").setLastName("Magooli")));
         assertThat(result, is(nullValue()));
     }
 
     @Test(expectedExceptions = InvalidArgumentException.class)
-    public void testFindOneWhenThereIsMoreThanOneMatch() throws Exception {
+    public void testFindOneWhenThereIsMoreThanOneMatch() {
         executor.findOne(Example.of(new Person().setAddress(new Address().setCity("Tehran"))));
     }
 
     @Test
-    public void testFindOne() throws Exception {
+    public void testFindOne() {
         final Object found = executor.findOne(
                 Example.of(new Person().setAddress(new Address().setCity("Tehran")).setFirstName("Milad")));
         assertThat(found, is(notNullValue()));
-        assertThat(found, is((Object) dataStore.retrieve("1")));
+        assertThat(found, is(dataStore.retrieve("1")));
     }
 
     @Test
-    public void testFindByExampleUsingEndingWithMatcher() throws Exception {
+    public void testFindByExampleUsingEndingWithMatcher() {
         final Person probe = new Person().setAddress(new Address().setState(new State().setName("ran")));
         final ExampleMatcher matching = ExampleMatcher.matching().withMatcher("address.state.name",
                                                                               ExampleMatcher.GenericPropertyMatchers
@@ -147,7 +147,7 @@ public class DefaultQueryByExampleExecutorTest {
     }
 
     @Test
-    public void testFindByExampleUsingStartingWithMatcher() throws Exception {
+    public void testFindByExampleUsingStartingWithMatcher() {
         final Person probe = new Person().setAddress(new Address().setState(new State().setName("Teh")));
         final ExampleMatcher matching = ExampleMatcher.matching().withMatcher("address.state.name",
                                                                               ExampleMatcher.GenericPropertyMatchers
@@ -160,7 +160,7 @@ public class DefaultQueryByExampleExecutorTest {
     }
 
     @Test
-    public void testFindByExampleUsingContainingMatcher() throws Exception {
+    public void testFindByExampleUsingContainingMatcher() {
         final Person probe = new Person().setAddress(new Address().setState(new State().setName("ehe")));
         final ExampleMatcher matching = ExampleMatcher.matching().withMatcher("address.state.name",
                                                                               ExampleMatcher.GenericPropertyMatchers
@@ -173,7 +173,7 @@ public class DefaultQueryByExampleExecutorTest {
     }
 
     @Test
-    public void testFindByExampleUsingRegexMatcher() throws Exception {
+    public void testFindByExampleUsingRegexMatcher() {
         final Person probe = new Person().setAddress(new Address().setState(new State().setName("(WA|Teheran)")));
         final ExampleMatcher matching = ExampleMatcher.matching().withMatcher("address.state.name",
                                                                               ExampleMatcher.GenericPropertyMatchers
@@ -186,7 +186,7 @@ public class DefaultQueryByExampleExecutorTest {
     }
 
     @Test
-    public void testFindByExampleWithSorting() throws Exception {
+    public void testFindByExampleWithSorting() {
         final Person probe = new Person().setAddress(new Address().setState(new State().setName("(WA|Teheran)")));
         final ExampleMatcher matching = ExampleMatcher.matching().withMatcher("address.state.name",
                                                                               ExampleMatcher.GenericPropertyMatchers
@@ -197,14 +197,14 @@ public class DefaultQueryByExampleExecutorTest {
         assertThat(found, is(notNullValue()));
         final List<?> list = TestUtils.iterableToList(found);
         assertThat(list, hasSize(4));
-        assertThat(list.get(0), is((Object) dataStore.retrieve("1")));
-        assertThat(list.get(1), is((Object) dataStore.retrieve("4")));
-        assertThat(list.get(2), is((Object) dataStore.retrieve("3")));
-        assertThat(list.get(3), is((Object) dataStore.retrieve("2")));
+        assertThat(list.get(0), is(dataStore.retrieve("1")));
+        assertThat(list.get(1), is(dataStore.retrieve("4")));
+        assertThat(list.get(2), is(dataStore.retrieve("3")));
+        assertThat(list.get(3), is(dataStore.retrieve("2")));
     }
 
     @Test
-    public void testFindByExampleWithSortingAndPaging() throws Exception {
+    public void testFindByExampleWithSortingAndPaging() {
         final Person probe = new Person().setAddress(new Address().setState(new State().setName("Teheran")));
         final ExampleMatcher matching = ExampleMatcher.matching().withMatcher("address.state.name",
                                                                               ExampleMatcher.GenericPropertyMatchers
@@ -216,11 +216,11 @@ public class DefaultQueryByExampleExecutorTest {
         assertThat(found, is(notNullValue()));
         final List<?> list = TestUtils.iterableToList(found);
         assertThat(list, hasSize(1));
-        assertThat(list.get(0), is((Object) dataStore.retrieve("3")));
+        assertThat(list.get(0), is(dataStore.retrieve("3")));
     }
 
     @Test
-    public void testCount() throws Exception {
+    public void testCount() {
         final Person probe = new Person().setAddress(new Address().setState(new State().setName("ehe")));
         final ExampleMatcher matching = ExampleMatcher.matching().withMatcher("address.state.name",
                                                                               ExampleMatcher.GenericPropertyMatchers
@@ -231,7 +231,7 @@ public class DefaultQueryByExampleExecutorTest {
     }
 
     @Test
-    public void testExists() throws Exception {
+    public void testExists() {
         final Person probe = new Person().setAddress(new Address().setState(new State().setName("ehe")));
         final ExampleMatcher matching = ExampleMatcher.matching()
                                                       .withMatcher("address.state.name",
@@ -242,7 +242,7 @@ public class DefaultQueryByExampleExecutorTest {
     }
 
     @Test
-    public void testWithNullsKept() throws Exception {
+    public void testWithNullsKept() {
         final Person probe = new Person().setAddress(new Address().setState(new State().setName("ehe")));
         final ExampleMatcher matching = ExampleMatcher.matching()
                                                       .withMatcher("address.state.name",

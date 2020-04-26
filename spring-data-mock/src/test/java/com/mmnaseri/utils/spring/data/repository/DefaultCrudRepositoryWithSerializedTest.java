@@ -24,7 +24,7 @@ public class DefaultCrudRepositoryWithSerializedTest {
     private DataStore<String, PersonSerializable> dataStore;
 
     @BeforeMethod
-    public void setUp() throws Exception {
+    public void setUp() {
         dataStore = new MemoryDataStore<>(PersonSerializable.class);
         repository = new DefaultCrudRepository();
         repository.setRepositoryMetadata(new ImmutableRepositoryMetadata(String.class, PersonSerializable.class,
@@ -36,7 +36,7 @@ public class DefaultCrudRepositoryWithSerializedTest {
 
 
     @Test
-    public void testDeleteByEntityWhenEntityHasKey() throws Exception {
+    public void testDeleteByEntityWhenEntityHasKey() {
         final PersonSerializable original = new PersonSerializable();
         dataStore.save("1", original);
         assertThat(dataStore.hasKey("1"), is(true));
@@ -45,7 +45,7 @@ public class DefaultCrudRepositoryWithSerializedTest {
         final Object deleted = repository.delete(personToDelete);
         assertThat(dataStore.hasKey("1"), is(false));
         assertThat(deleted, is(notNullValue()));
-        assertThat(deleted, Matchers.<Object>is(original));
+        assertThat(deleted, Matchers.is(original));
     }
 
 }

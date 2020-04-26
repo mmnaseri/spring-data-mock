@@ -33,4 +33,10 @@ public abstract class AbstractBinaryMatcher implements Matcher {
      */
     protected abstract boolean matches(Parameter parameter, Object value, Object first, Object second);
 
+    @Override
+    public boolean isApplicableTo(Class<?> parameterType, Class<?>... propertiesTypes) {
+        return propertiesTypes.length == 2
+                && parameterType.isAssignableFrom(propertiesTypes[0])
+                && parameterType.isAssignableFrom(propertiesTypes[1]);
+    }
 }

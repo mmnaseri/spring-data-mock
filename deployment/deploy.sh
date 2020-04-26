@@ -2,9 +2,9 @@
 #
 # Deploy to sonatype by installing gnupg2, decrypting and installing a gpg secret key, and invoking mvn deploy.
 
-function die() {
+die() {
   echo "$@" >&2
-  exit -1
+  exit 1
 }
 
 #######################################
@@ -16,7 +16,7 @@ function die() {
 # Returns:
 #   None
 #######################################
-function checkTravisSecure() {
+checkTravisSecure() {
     if [[ $TRAVIS_SECURE_ENV_VARS != "true" ]]; then
         echo "no secure env vars available, skipping deployment"
         exit
@@ -32,7 +32,7 @@ function checkTravisSecure() {
 # Returns:
 #   None
 #######################################
-function usage() {
+usage() {
     echo "${0} gpg-decryption-hash gpg-key-file"
 }
 
@@ -46,7 +46,7 @@ function usage() {
 # Returns:
 #   The value of the encrypted variable
 #######################################
-function encryption_value() {
+encryption_value() {
     local -r HASH="$1"
     local -r NAME="$2"
     local -r ENCRYPTED_VARIABLE="encrypted_${HASH}_${NAME}"
@@ -65,7 +65,7 @@ function encryption_value() {
 # Returns:
 #   None
 #######################################
-function install_gpg_key() {
+install_gpg_key() {
     local -r KEY="$1"
     local -r IV="$2"
     local -r ENC_KEY_FILE="$3"
@@ -84,7 +84,7 @@ function install_gpg_key() {
 # Returns:
 #   None
 #######################################
-function install_gpg() {
+install_gpg() {
     sudo apt-get update -qq
     sudo apt-get install -y gnupg2
 }
@@ -98,8 +98,11 @@ function install_gpg() {
 # Returns:
 #   None
 #######################################
-function mvn_deploy() {
+mvn_deploy() {
     local -r SETTINGS_FILE="$1"
+    # Allowing loopback entry on GnuPG 2.1+
+    echo "allow-loopback-pinentry" > ~/.gnupg/gpg-agent.conf
+    gpgconf --reload gpg-agent
     mvn -P release clean deploy -Drelease -s "$SETTINGS_FILE"
 }
 
@@ -114,18 +117,18 @@ function mvn_deploy() {
 # Returns:
 #   None
 #######################################
-function main() {
+main() {
     checkTravisSecure
 
     if (($# < 3)); then
-        die $(usage)
+        die "$(usage)"
     fi
     local -r HASH="$1"
     local -r ENC_GPG_KEY_FILE="$2"
     local -r MVN_SETTINGS_FILE="$3"
 
     install_gpg
-    install_gpg_key $(encryption_value "$HASH" key) $(encryption_value "$HASH" iv) "$ENC_GPG_KEY_FILE" "${ENC_GPG_KEY_FILE/.asc}"
+    install_gpg_key "$(encryption_value "$HASH" key)" "$(encryption_value "$HASH" iv)" "$ENC_GPG_KEY_FILE" "${ENC_GPG_KEY_FILE/.asc}"
     mvn_deploy "$MVN_SETTINGS_FILE"
 }
 

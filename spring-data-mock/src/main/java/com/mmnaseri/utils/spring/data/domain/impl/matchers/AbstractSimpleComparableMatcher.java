@@ -16,17 +16,16 @@ public abstract class AbstractSimpleComparableMatcher extends AbstractSimpleMatc
         if (!(actual instanceof Comparable) || !(expected instanceof Comparable)) {
             throw new InvalidArgumentException("Expected property to be comparable: " + parameter.getPath());
         }
-        return matches(parameter, (Comparable) actual, (Comparable) expected);
+        return matches((Comparable) actual, (Comparable) expected);
     }
 
     /**
      * Does comparison and returns the result.
      *
-     * @param parameter the parameter
      * @param actual    the actual value
      * @param pivot     the pivot
      * @return {@literal true} if the match succeeded
      */
-    protected abstract boolean matches(Parameter parameter, Comparable actual, Comparable pivot);
+    protected abstract boolean matches(Comparable actual, Comparable pivot);
 
 }

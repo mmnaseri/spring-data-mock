@@ -45,7 +45,7 @@ public class ListenableFutureIterableResultAdapterTest {
         assertThat(adapted, is(notNullValue()));
         final Object result = adapted.get();
         assertThat(result, is(notNullValue()));
-        assertThat(result, Matchers.<Object>is(originalValue));
+        assertThat(result, Matchers.is(originalValue));
     }
 
 }
