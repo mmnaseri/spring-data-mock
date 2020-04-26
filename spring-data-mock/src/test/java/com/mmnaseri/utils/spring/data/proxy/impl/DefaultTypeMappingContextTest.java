@@ -22,7 +22,7 @@ public class DefaultTypeMappingContextTest {
     private Class[] defaultImplementations;
 
     @BeforeMethod
-    public void setUp() throws Exception {
+    public void setUp() {
         defaultImplementations = new Class[]{
                 DefaultGemfireRepository.class,
                 DefaultJpaRepository.class,
@@ -49,7 +49,7 @@ public class DefaultTypeMappingContextTest {
     }
 
     @Test
-    public void testRegisteringMappingForSupertype() throws Exception {
+    public void testRegisteringMappingForSupertype() {
         final DefaultTypeMappingContext context = new DefaultTypeMappingContext();
         assertThat(context.getImplementations(Double.class), hasSize(defaultImplementations.length));
         context.register(Number.class, Float.class);
@@ -58,7 +58,7 @@ public class DefaultTypeMappingContextTest {
     }
 
     @Test
-    public void testRegisteringOrderedMappings() throws Exception {
+    public void testRegisteringOrderedMappings() {
         final DefaultTypeMappingContext context = new DefaultTypeMappingContext();
         assertThat(context.getImplementations(Double.class), hasSize(defaultImplementations.length));
         context.register(Number.class, HighPriorityMapping.class);
@@ -71,7 +71,7 @@ public class DefaultTypeMappingContextTest {
     }
 
     @Test
-    public void testRegisteringWithParent() throws Exception {
+    public void testRegisteringWithParent() {
         final DefaultTypeMappingContext parent = new DefaultTypeMappingContext();
         final DefaultTypeMappingContext context = new DefaultTypeMappingContext(parent);
         assertThat(context.getImplementations(Double.class), hasSize(defaultImplementations.length));
@@ -81,47 +81,47 @@ public class DefaultTypeMappingContextTest {
     }
 
     @Test(expectedExceptions = RepositoryDefinitionException.class)
-    public void testRegisteringAbstractImplementation() throws Exception {
+    public void testRegisteringAbstractImplementation() {
         final DefaultTypeMappingContext context = new DefaultTypeMappingContext();
         context.register(Object.class, AbstractImplementation.class);
     }
 
     @Test(expectedExceptions = RepositoryDefinitionException.class)
-    public void testRegisteringInterfaceImplementation() throws Exception {
+    public void testRegisteringInterfaceImplementation() {
         final DefaultTypeMappingContext context = new DefaultTypeMappingContext();
         context.register(Object.class, InterfaceImplementation.class);
     }
 
     @Test(expectedExceptions = RepositoryDefinitionException.class)
-    public void testGettingMappingsWhenConstructorIsPrivate() throws Exception {
+    public void testGettingMappingsWhenConstructorIsPrivate() {
         final DefaultTypeMappingContext context = new DefaultTypeMappingContext();
         context.register(Number.class, ImplementationWithPrivateConstructor.class);
         context.getMappings(Double.class);
     }
 
     @Test(expectedExceptions = RepositoryDefinitionException.class)
-    public void testGettingMappingsWhenClassIsPrivate() throws Exception {
+    public void testGettingMappingsWhenClassIsPrivate() {
         final DefaultTypeMappingContext context = new DefaultTypeMappingContext();
         context.register(Number.class, PrivateImplementationClass.class);
         context.getMappings(Double.class);
     }
 
     @Test(expectedExceptions = RepositoryDefinitionException.class)
-    public void testGettingMappingsWhenClassHasNoDefaultConstructor() throws Exception {
+    public void testGettingMappingsWhenClassHasNoDefaultConstructor() {
         final DefaultTypeMappingContext context = new DefaultTypeMappingContext();
         context.register(Number.class, ImplementationWithoutADefaultConstructor.class);
         context.getMappings(Double.class);
     }
 
     @Test(expectedExceptions = RepositoryDefinitionException.class)
-    public void testGettingMappingsWhenClassThrowsErrors() throws Exception {
+    public void testGettingMappingsWhenClassThrowsErrors() {
         final DefaultTypeMappingContext context = new DefaultTypeMappingContext();
         context.register(Number.class, ErrorThrowingImplementation.class);
         context.getMappings(Double.class);
     }
 
     @Test
-    public void testRegisteringAProperImplementation() throws Exception {
+    public void testRegisteringAProperImplementation() {
         final DefaultTypeMappingContext context = new DefaultTypeMappingContext();
         context.register(Number.class, ProperImplementation.class);
         final List<TypeMapping<?>> mappings = context.getMappings(Double.class);
@@ -134,7 +134,6 @@ public class DefaultTypeMappingContextTest {
             }
         }
         assertThat(implementation, is(notNullValue()));
-        assert implementation != null;
         assertThat(implementation.pi(), is(Math.PI));
     }
 
