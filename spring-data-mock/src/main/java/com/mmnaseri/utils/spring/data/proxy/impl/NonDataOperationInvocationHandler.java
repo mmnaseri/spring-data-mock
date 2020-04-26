@@ -40,7 +40,7 @@ public class NonDataOperationInvocationHandler implements InvocationHandler {
     }
 
     @Override
-    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+    public Object invoke(Object proxy, Method method, Object[] args) {
         log.info("Intercepting non-data method " + method);
         for (NonDataOperationHandler handler : handlers) {
             if (handler.handles(proxy, method, args)) {

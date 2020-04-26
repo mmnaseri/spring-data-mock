@@ -6,6 +6,7 @@ import java.util.regex.Pattern;
  * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/19/15)
  */
+@SuppressWarnings("unused")
 public interface DocumentReader {
 
     /**

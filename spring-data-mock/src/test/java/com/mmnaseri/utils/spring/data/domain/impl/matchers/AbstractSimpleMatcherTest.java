@@ -15,19 +15,19 @@ import static org.testng.Assert.assertTrue;
 public class AbstractSimpleMatcherTest {
 
     @Test(expectedExceptions = InvalidArgumentException.class, expectedExceptionsMessageRegExp = ".*x.y.z.*")
-    public void testWhenHasNoParameters() throws Exception {
+    public void testWhenHasNoParameters() {
         final NotMatchingSimpleMatcher matcher = new NotMatchingSimpleMatcher();
         matcher.matches(new ImmutableParameter("x.y.z", null, null, null), new Object());
     }
 
     @Test(expectedExceptions = InvalidArgumentException.class, expectedExceptionsMessageRegExp = ".*x.y.z.*")
-    public void testWhenHasMoreThanOneParameters() throws Exception {
+    public void testWhenHasMoreThanOneParameters() {
         final NotMatchingSimpleMatcher matcher = new NotMatchingSimpleMatcher();
         matcher.matches(new ImmutableParameter("x.y.z", null, null, null), new Object(), 1, 2, 3);
     }
 
     @Test
-    public void testWhenHasOneParameter() throws Exception {
+    public void testWhenHasOneParameter() {
         final NotMatchingSimpleMatcher matcher = new NotMatchingSimpleMatcher();
         matcher.matches(new ImmutableParameter("x.y.z", null, null, null), new Object(), 1);
     }

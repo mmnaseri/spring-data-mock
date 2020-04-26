@@ -30,10 +30,4 @@ public class GetterMethodFilterTest {
         assertThat(filter.matches(SampleClass.class.getDeclaredMethod("getValue")), is(true));
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testMethodIsNull() throws Exception {
-        final GetterMethodFilter filter = new GetterMethodFilter();
-        filter.matches(null);
-    }
-
 }

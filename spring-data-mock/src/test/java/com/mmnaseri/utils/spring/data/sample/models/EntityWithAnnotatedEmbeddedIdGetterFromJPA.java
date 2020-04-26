@@ -5,6 +5,7 @@ import javax.persistence.EmbeddedId;
 /**
  * @author Balthasar Biedermann
  */
+@SuppressWarnings("unused")
 public class EntityWithAnnotatedEmbeddedIdGetterFromJPA {
 
     private EmbeddableId myCustomId;

@@ -25,16 +25,12 @@ public class AnnotatedFieldIdPropertyResolver implements IdPropertyResolver {
     public String resolve(final Class<?> entityType, Class<?> idType) {
         final AtomicReference<Field> found = new AtomicReference<>();
         //try to find the ID field
-        ReflectionUtils.doWithFields(entityType, new ReflectionUtils.FieldCallback() {
-
-            @Override
-            public void doWith(Field field) throws IllegalArgumentException, IllegalAccessException {
-                if (isAnnotated(field)) {
-                    if (found.get() == null) {
-                        found.set(field);
-                    } else {
-                        throw new MultipleIdPropertiesException(entityType);
-                    }
+        ReflectionUtils.doWithFields(entityType, field -> {
+            if (isAnnotated(field)) {
+                if (found.get() == null) {
+                    found.set(field);
+                } else {
+                    throw new MultipleIdPropertiesException(entityType);
                 }
             }
         });

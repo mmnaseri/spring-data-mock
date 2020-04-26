@@ -15,33 +15,33 @@ public class IsGreaterThanMatcherTest {
 
     @Test(expectedExceptions = InvalidArgumentException.class,
           expectedExceptionsMessageRegExp = "Expected property to be comparable: xyz")
-    public void testValueIsNotComparable() throws Exception {
+    public void testValueIsNotComparable() {
         new IsGreaterThanMatcher().matches(new ImmutableParameter("xyz", null, null, null), new Object(), new Object());
     }
 
     @Test
-    public void testValuesAreEqual() throws Exception {
-        assertThat(new IsGreaterThanMatcher().matches(null, 5, 5), is(false));
+    public void testValuesAreEqual() {
+        assertThat(new IsGreaterThanMatcher().matches(5, 5), is(false));
     }
 
     @Test
-    public void testActualIsLessThanPivot() throws Exception {
-        assertThat(new IsGreaterThanMatcher().matches(null, 1, 5), is(false));
+    public void testActualIsLessThanPivot() {
+        assertThat(new IsGreaterThanMatcher().matches(1, 5), is(false));
     }
 
     @Test
-    public void testActualIsGreaterThanPivot() throws Exception {
-        assertThat(new IsGreaterThanMatcher().matches(null, 10, 5), is(true));
+    public void testActualIsGreaterThanPivot() {
+        assertThat(new IsGreaterThanMatcher().matches(10, 5), is(true));
     }
 
     @Test
-    public void testActualIsNull() throws Exception {
-        assertThat(new IsGreaterThanMatcher().matches(null, null, 5), is(false));
+    public void testActualIsNull() {
+        assertThat(new IsGreaterThanMatcher().matches(null, 5), is(false));
     }
 
     @Test
-    public void testPivotIsNull() throws Exception {
-        assertThat(new IsGreaterThanMatcher().matches(null, 5, (Comparable) null), is(false));
+    public void testPivotIsNull() {
+        assertThat(new IsGreaterThanMatcher().matches(5, null), is(false));
     }
 
 }

@@ -25,6 +25,7 @@ import static org.hamcrest.Matchers.*;
  * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/28/16)
  */
+@SuppressWarnings("deprecation")
 @Ignore
 public class DefaultQueryDslPredicateExecutorTest {
 
@@ -32,14 +33,14 @@ public class DefaultQueryDslPredicateExecutorTest {
     private DefaultQueryDslPredicateExecutor executor;
 
     @BeforeMethod
-    public void setUp() throws Exception {
+    public void setUp() {
         dataStore = new MemoryDataStore<>(Person.class);
         executor = new DefaultQueryDslPredicateExecutor();
         executor.setDataStore(dataStore);
     }
 
     @Test
-    public void testFindOne() throws Exception {
+    public void testFindOne() {
         final Person saved = new Person().setId("1").setAge(10);
         dataStore.save("1", saved);
         dataStore.save("2", new Person().setId("2"));
@@ -47,11 +48,11 @@ public class DefaultQueryDslPredicateExecutorTest {
         final BooleanExpression predicate = $(person.getId()).eq("1");
         final Object one = executor.findOne(predicate);
         assertThat(one, is(notNullValue()));
-        assertThat(one, Matchers.<Object>is(saved));
+        assertThat(one, Matchers.is(saved));
     }
 
     @Test
-    public void testFindOneWhenNoneExists() throws Exception {
+    public void testFindOneWhenNoneExists() {
         final Person person = alias(Person.class);
         final BooleanExpression predicate = $(person.getId()).eq("1");
         final Object one = executor.findOne(predicate);
@@ -59,7 +60,7 @@ public class DefaultQueryDslPredicateExecutorTest {
     }
 
     @Test(expectedExceptions = NonUniqueResultException.class)
-    public void testFindOneWhenMoreThanOneMatches() throws Exception {
+    public void testFindOneWhenMoreThanOneMatches() {
         dataStore.save("1", new Person().setId("1").setFirstName("Milad").setLastName("Naseri"));
         dataStore.save("2", new Person().setId("2").setFirstName("Hassan").setLastName("Naseri"));
         final Person person = alias(Person.class);
@@ -69,7 +70,7 @@ public class DefaultQueryDslPredicateExecutorTest {
     }
 
     @Test
-    public void testFindAllUsingAPredicate() throws Exception {
+    public void testFindAllUsingAPredicate() {
         dataStore.save("1", new Person().setId("1").setAge(10));
         dataStore.save("2", new Person().setId("2").setAge(15));
         dataStore.save("3", new Person().setId("3").setAge(20));
@@ -87,11 +88,11 @@ public class DefaultQueryDslPredicateExecutorTest {
             assertThat(loaded.getId(), isIn(ids));
             ids.remove(loaded.getId());
         }
-        assertThat(ids, is(Matchers.<String>empty()));
+        assertThat(ids, is(Matchers.empty()));
     }
 
     @Test
-    public void testFindAllWithSort() throws Exception {
+    public void testFindAllWithSort() {
         dataStore.save("1", new Person().setId("1").setAge(30));
         dataStore.save("2", new Person().setId("2").setAge(25));
         dataStore.save("3", new Person().setId("3").setAge(20));
@@ -103,13 +104,13 @@ public class DefaultQueryDslPredicateExecutorTest {
         assertThat(result, is(notNullValue()));
         final List<?> list = TestUtils.iterableToList(result);
         assertThat(list, hasSize(3));
-        assertThat(list.get(0), Matchers.<Object>is(dataStore.retrieve("3")));
-        assertThat(list.get(1), Matchers.<Object>is(dataStore.retrieve("2")));
-        assertThat(list.get(2), Matchers.<Object>is(dataStore.retrieve("1")));
+        assertThat(list.get(0), Matchers.is(dataStore.retrieve("3")));
+        assertThat(list.get(1), Matchers.is(dataStore.retrieve("2")));
+        assertThat(list.get(2), Matchers.is(dataStore.retrieve("1")));
     }
 
     @Test
-    public void testFindAllWithPagingAndSorting() throws Exception {
+    public void testFindAllWithPagingAndSorting() {
         dataStore.save("1", new Person().setId("1").setAge(30));
         dataStore.save("2", new Person().setId("2").setAge(25));
         dataStore.save("3", new Person().setId("3").setAge(20));
@@ -121,12 +122,12 @@ public class DefaultQueryDslPredicateExecutorTest {
         assertThat(result, is(notNullValue()));
         final List<?> list = TestUtils.iterableToList(result);
         assertThat(list, hasSize(2));
-        assertThat(list.get(0), Matchers.<Object>is(dataStore.retrieve("3")));
-        assertThat(list.get(1), Matchers.<Object>is(dataStore.retrieve("2")));
+        assertThat(list.get(0), Matchers.is(dataStore.retrieve("3")));
+        assertThat(list.get(1), Matchers.is(dataStore.retrieve("2")));
     }
 
     @Test
-    public void testFindAllWithPaging() throws Exception {
+    public void testFindAllWithPaging() {
         dataStore.save("1", new Person().setId("1").setAge(30));
         dataStore.save("2", new Person().setId("2").setAge(25));
         dataStore.save("3", new Person().setId("3").setAge(20));
@@ -146,7 +147,7 @@ public class DefaultQueryDslPredicateExecutorTest {
     }
 
     @Test
-    public void testCount() throws Exception {
+    public void testCount() {
         dataStore.save("1", new Person().setId("1").setAge(30));
         dataStore.save("2", new Person().setId("2").setAge(25));
         dataStore.save("3", new Person().setId("3").setAge(20));
@@ -158,7 +159,7 @@ public class DefaultQueryDslPredicateExecutorTest {
     }
 
     @Test
-    public void testExists() throws Exception {
+    public void testExists() {
         dataStore.save("1", new Person().setId("1").setAge(30));
         dataStore.save("2", new Person().setId("2").setAge(25));
         dataStore.save("3", new Person().setId("3").setAge(20));
@@ -172,7 +173,7 @@ public class DefaultQueryDslPredicateExecutorTest {
     }
 
     @Test
-    public void testFindAllWithExplicitOrdering() throws Exception {
+    public void testFindAllWithExplicitOrdering() {
         dataStore.save("1", new Person().setId("1").setAge(30));
         dataStore.save("2", new Person().setId("2").setAge(25));
         dataStore.save("3", new Person().setId("3").setAge(20));
@@ -183,15 +184,15 @@ public class DefaultQueryDslPredicateExecutorTest {
         assertThat(all, is(notNullValue()));
         final List<?> list = TestUtils.iterableToList(all);
         assertThat(list, hasSize(5));
-        assertThat(list.get(0), Matchers.<Object>is(dataStore.retrieve("5")));
-        assertThat(list.get(1), Matchers.<Object>is(dataStore.retrieve("4")));
-        assertThat(list.get(2), Matchers.<Object>is(dataStore.retrieve("3")));
-        assertThat(list.get(3), Matchers.<Object>is(dataStore.retrieve("2")));
-        assertThat(list.get(4), Matchers.<Object>is(dataStore.retrieve("1")));
+        assertThat(list.get(0), Matchers.is(dataStore.retrieve("5")));
+        assertThat(list.get(1), Matchers.is(dataStore.retrieve("4")));
+        assertThat(list.get(2), Matchers.is(dataStore.retrieve("3")));
+        assertThat(list.get(3), Matchers.is(dataStore.retrieve("2")));
+        assertThat(list.get(4), Matchers.is(dataStore.retrieve("1")));
     }
 
     @Test
-    public void testFindAllWithPredicateAndExplicitOrdering() throws Exception {
+    public void testFindAllWithPredicateAndExplicitOrdering() {
         dataStore.save("1", new Person().setId("1").setAge(30));
         dataStore.save("2", new Person().setId("2").setAge(25));
         dataStore.save("3", new Person().setId("3").setAge(20));
@@ -202,8 +203,8 @@ public class DefaultQueryDslPredicateExecutorTest {
         assertThat(all, is(notNullValue()));
         final List<?> list = TestUtils.iterableToList(all);
         assertThat(list, hasSize(2));
-        assertThat(list.get(0), Matchers.<Object>is(dataStore.retrieve("2")));
-        assertThat(list.get(1), Matchers.<Object>is(dataStore.retrieve("1")));
+        assertThat(list.get(0), Matchers.is(dataStore.retrieve("2")));
+        assertThat(list.get(1), Matchers.is(dataStore.retrieve("1")));
     }
 
 }

@@ -44,7 +44,7 @@ public class DefaultResultAdapterContextTest {
         assertThat(first.getCheck(), is(lessThan(second.getCheck())));
         assertThat(first.getRequest(), is(nullValue()));
         assertThat(second.getCheck(), is(lessThan(second.getRequest())));
-        assertThat(result, Matchers.<Object>is(person));
+        assertThat(result, Matchers.is(person));
     }
 
 }

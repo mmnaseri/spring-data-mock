@@ -29,7 +29,7 @@ class KeyGeneratorProvider {
             final Class<?> keyType = GenericTypeResolver.resolveTypeArgument(generatorType, KeyGenerator.class);
             assert keyType != null;
             if (!generators.containsKey(keyType)) {
-                generators.put(keyType, new CopyOnWriteArrayList<Class<? extends KeyGenerator>>());
+                generators.put(keyType, new CopyOnWriteArrayList<>());
             }
             generators.get(keyType).add(generatorType);
         }
@@ -50,24 +50,25 @@ class KeyGeneratorProvider {
         return classes;
     }
 
-    @SuppressWarnings("unchecked")
     private <S> List<Class<? extends KeyGenerator<S>>> getKeyGenerators(Class<S> keyType) {
         final LinkedList<Class<? extends KeyGenerator<S>>> keyGenerators = new LinkedList<>();
         if (generators.containsKey(keyType)) {
-            final List<Class<? extends KeyGenerator>> classes = generators.get(keyType);
-            for (Class<? extends KeyGenerator> type : classes) {
-                keyGenerators.add((Class<? extends KeyGenerator<S>>) type);
-            }
+            addKeyGenerators(keyGenerators, keyType);
         }
         for (Class<?> generatorKeyType : generators.keySet()) {
             if (keyType.isAssignableFrom(generatorKeyType)) {
-                final List<Class<? extends KeyGenerator>> classes = generators.get(generatorKeyType);
-                for (Class<? extends KeyGenerator> type : classes) {
-                    keyGenerators.add((Class<? extends KeyGenerator<S>>) type);
-                }
+                addKeyGenerators(keyGenerators, generatorKeyType);
             }
         }
         return keyGenerators;
+    }
+
+    private <S> void addKeyGenerators(final LinkedList<Class<? extends KeyGenerator<S>>> keyGenerators,
+                                      final Class<?> generatorKeyType) {
+        final List<Class<? extends KeyGenerator>> classes = generators.get(generatorKeyType);
+        for (Class<? extends KeyGenerator> type : classes) {
+            keyGenerators.add((Class<? extends KeyGenerator<S>>) type);
+        }
     }
 
     /**

@@ -20,18 +20,18 @@ import static org.testng.Assert.assertTrue;
 public class IsInMatcherTest {
 
     @Test
-    public void testWhenItemIsNull() throws Exception {
-        assertThat(new IsInMatcher().matches(null, null, Collections.emptyList()), is(false));
+    public void testWhenItemIsNull() {
+        assertThat(new IsInMatcher().matches(null, Collections.emptyList()), is(false));
     }
 
     @Test
-    public void testWhenItemIsInCollection() throws Exception {
-        assertThat(new IsInMatcher().matches(null, 1, Arrays.asList(1, 2, 3, 4)), is(true));
+    public void testWhenItemIsInCollection() {
+        assertThat(new IsInMatcher().matches(1, Arrays.asList(1, 2, 3, 4)), is(true));
     }
 
     @Test
-    public void testWhenItemIsNotInCollection() throws Exception {
-        assertThat(new IsInMatcher().matches(null, 1, Arrays.asList(3, 4, 5, 6)), is(false));
+    public void testWhenItemIsNotInCollection() {
+        assertThat(new IsInMatcher().matches(1, Arrays.asList(3, 4, 5, 6)), is(false));
     }
 
     @DataProvider

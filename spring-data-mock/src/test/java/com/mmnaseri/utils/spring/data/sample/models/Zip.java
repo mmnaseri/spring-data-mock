@@ -4,6 +4,7 @@ package com.mmnaseri.utils.spring.data.sample.models;
  * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/21/15)
  */
+@SuppressWarnings("unused")
 public class Zip implements Comparable<Zip> {
 
     private String prefix;

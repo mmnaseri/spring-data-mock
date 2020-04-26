@@ -17,7 +17,7 @@ import static org.hamcrest.Matchers.*;
 public class DefaultGemfireRepositoryTest {
 
     @Test
-    public void testSave() throws Exception {
+    public void testSave() {
         final MemoryDataStore<Object, Person> dataStore = new MemoryDataStore<>(Person.class);
         final ImmutableRepositoryMetadata repositoryMetadata = new ImmutableRepositoryMetadata(String.class,
                                                                                                Person.class,

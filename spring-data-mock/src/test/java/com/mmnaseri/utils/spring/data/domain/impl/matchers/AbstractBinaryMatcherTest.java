@@ -16,21 +16,21 @@ import static org.testng.Assert.assertTrue;
 public class AbstractBinaryMatcherTest {
 
     @Test(expectedExceptions = InvalidArgumentException.class, expectedExceptionsMessageRegExp = ".*x.y.z.*")
-    public void testWhenHasLessThanTwoParameters() throws Exception {
+    public void testWhenHasLessThanTwoParameters() {
         final NotMatchingBinaryMatcher matcher = new NotMatchingBinaryMatcher();
         matcher.matches(new ImmutableParameter("x.y.z", null, null, new ImmutableOperator("sample", 2, null)),
                         new Object());
     }
 
     @Test(expectedExceptions = InvalidArgumentException.class, expectedExceptionsMessageRegExp = ".*x.y.z.*")
-    public void testWhenHasMoreThanTwoParameters() throws Exception {
+    public void testWhenHasMoreThanTwoParameters() {
         final NotMatchingBinaryMatcher matcher = new NotMatchingBinaryMatcher();
         matcher.matches(new ImmutableParameter("x.y.z", null, null, new ImmutableOperator("sample", 2, null)),
                         new Object(), new Object(), new Object(), new Object());
     }
 
     @Test
-    public void testWhenHasTwoParameters() throws Exception {
+    public void testWhenHasTwoParameters() {
         final NotMatchingBinaryMatcher matcher = new NotMatchingBinaryMatcher();
         //we are creating the varargs array explicitly to call to the proper method signature
         //noinspection RedundantArrayCreation

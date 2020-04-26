@@ -6,6 +6,7 @@ package com.mmnaseri.utils.spring.data.sample.usecases.proxy;
  */
 public class ProperImplementation {
 
+    @SuppressWarnings("SameReturnValue")
     public Double pi() {
         return Math.PI;
     }

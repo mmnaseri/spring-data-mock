@@ -17,18 +17,17 @@ public abstract class AbstractBinaryComparableMatcher extends AbstractBinaryMatc
         if (!(value instanceof Comparable) || !(first instanceof Comparable) || !(second instanceof Comparable)) {
             throw new InvalidArgumentException("Expected values to be comparable: " + parameter.getPath());
         }
-        return matches(parameter, (Comparable) value, (Comparable) first, (Comparable) second);
+        return matches((Comparable) value, (Comparable) first, (Comparable) second);
     }
 
     /**
      * Is called to determine when the two comparable items fit the criteria of this matcher
      *
-     * @param parameter the parameter for which the matching is being performed
      * @param value     the value against which the comparison is being performed
      * @param first     the first value
      * @param second    the second value
      * @return {@literal true} if it was a match
      */
-    protected abstract boolean matches(Parameter parameter, Comparable value, Comparable first, Comparable second);
+    protected abstract boolean matches(Comparable value, Comparable first, Comparable second);
 
 }

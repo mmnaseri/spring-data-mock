@@ -15,9 +15,6 @@ public class GetterMethodFilter implements ReflectionUtils.MethodFilter {
 
     @Override
     public boolean matches(Method method) {
-        if (method == null) {
-            throw new IllegalArgumentException("Method cannot be null");
-        }
         return method.getName().matches("get[A-Z].*") && !void.class.equals(method.getReturnType())
                 && method.getParameterTypes().length == 0;
     }

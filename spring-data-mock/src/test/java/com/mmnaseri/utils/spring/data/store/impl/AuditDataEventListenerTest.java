@@ -21,7 +21,7 @@ import static org.hamcrest.Matchers.*;
 public class AuditDataEventListenerTest {
 
     @Test
-    public void testBeforeInsertForImplicitAuditing() throws Exception {
+    public void testBeforeInsertForImplicitAuditing() {
         final AuditDataEventListener listener = new AuditDataEventListener(new SampleAuditorAware());
         final RepositoryMetadata repositoryMetadata = new ImmutableRepositoryMetadata(String.class,
                                                                                       ImplicitlyAuditableEntity.class,
@@ -40,7 +40,7 @@ public class AuditDataEventListenerTest {
     }
 
     @Test
-    public void testBeforeUpdateForImplicitAuditing() throws Exception {
+    public void testBeforeUpdateForImplicitAuditing() {
         final AuditDataEventListener listener = new AuditDataEventListener(new SampleAuditorAware());
         final RepositoryMetadata repositoryMetadata = new ImmutableRepositoryMetadata(String.class,
                                                                                       ImplicitlyAuditableEntity.class,
@@ -59,7 +59,7 @@ public class AuditDataEventListenerTest {
     }
 
     @Test
-    public void testBeforeInsertForExplicitAuditing() throws Exception {
+    public void testBeforeInsertForExplicitAuditing() {
         final AuditDataEventListener listener = new AuditDataEventListener(new SampleAuditorAware());
         final RepositoryMetadata repositoryMetadata = new ImmutableRepositoryMetadata(String.class,
                                                                                       AuditableEntity.class, null,
@@ -68,8 +68,10 @@ public class AuditDataEventListenerTest {
         final Date before = new Date();
         listener.onEvent(new BeforeInsertDataStoreEvent(repositoryMetadata, null, entity));
         final Date after = new Date();
+        assertThat(entity.getCreatedBy().isPresent(), is(true));
         assertThat(entity.getCreatedBy().get(), is(notNullValue()));
         assertThat(entity.getCreatedBy().get(), is(AUDITOR));
+        assertThat(entity.getCreatedDate().isPresent(), is(true));
         assertThat(entity.getCreatedDate().get(), is(notNullValue()));
         assertThat(entity.getCreatedDate().get().toEpochMilli(), is(greaterThanOrEqualTo(before.getTime())));
         assertThat(entity.getCreatedDate().get().toEpochMilli(), is(lessThanOrEqualTo(after.getTime())));
@@ -78,7 +80,7 @@ public class AuditDataEventListenerTest {
     }
 
     @Test
-    public void testBeforeUpdateForExplicitAuditing() throws Exception {
+    public void testBeforeUpdateForExplicitAuditing() {
         final AuditDataEventListener listener = new AuditDataEventListener(new SampleAuditorAware());
         final RepositoryMetadata repositoryMetadata = new ImmutableRepositoryMetadata(String.class,
                                                                                       AuditableEntity.class, null,
@@ -87,8 +89,10 @@ public class AuditDataEventListenerTest {
         final Date before = new Date();
         listener.onEvent(new BeforeUpdateDataStoreEvent(repositoryMetadata, null, entity));
         final Date after = new Date();
+        assertThat(entity.getLastModifiedBy().isPresent(), is(true));
         assertThat(entity.getLastModifiedBy().get(), is(notNullValue()));
         assertThat(entity.getLastModifiedBy().get(), is(AUDITOR));
+        assertThat(entity.getLastModifiedDate().isPresent(), is(true));
         assertThat(entity.getLastModifiedDate().get(), is(notNullValue()));
         assertThat(entity.getLastModifiedDate().get().toEpochMilli(), is(greaterThanOrEqualTo(before.getTime())));
         assertThat(entity.getLastModifiedDate().get().toEpochMilli(), is(lessThanOrEqualTo(after.getTime())));

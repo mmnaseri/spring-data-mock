@@ -12,28 +12,28 @@ import static org.hamcrest.Matchers.is;
 public class StartingWithMatcherTest {
 
     @Test
-    public void testWhenActualIsNull() throws Exception {
-        assertThat(new StartingWithMatcher().matches(null, null, ""), is(false));
+    public void testWhenActualIsNull() {
+        assertThat(new StartingWithMatcher().matches(null, ""), is(false));
     }
 
     @Test
-    public void testWhenParameterIsNull() throws Exception {
-        assertThat(new StartingWithMatcher().matches(null, "", (String) null), is(false));
+    public void testWhenParameterIsNull() {
+        assertThat(new StartingWithMatcher().matches("", null), is(false));
     }
 
     @Test
-    public void testWhenBothAreNull() throws Exception {
-        assertThat(new StartingWithMatcher().matches(null, null, (String) null), is(false));
+    public void testWhenBothAreNull() {
+        assertThat(new StartingWithMatcher().matches(null, null), is(false));
     }
 
     @Test
-    public void testWhenActualDoesNotStartWithParameter() throws Exception {
-        assertThat(new StartingWithMatcher().matches(null, "xyz", "abc"), is(false));
+    public void testWhenActualDoesNotStartWithParameter() {
+        assertThat(new StartingWithMatcher().matches("xyz", "abc"), is(false));
     }
 
     @Test
-    public void testWhenActualStartsWithParameter() throws Exception {
-        assertThat(new StartingWithMatcher().matches(null, "HelloWorld", "HELLO"), is(true));
+    public void testWhenActualStartsWithParameter() {
+        assertThat(new StartingWithMatcher().matches("HelloWorld", "HELLO"), is(true));
     }
 
 }

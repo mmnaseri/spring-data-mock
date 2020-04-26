@@ -8,6 +8,7 @@ import javax.persistence.Id;
  * @since 1.0 (6/29/16, 4:03 PM)
  */
 @Entity
+@SuppressWarnings("unused")
 public class User {
 
     @Id

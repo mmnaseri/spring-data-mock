@@ -12,6 +12,7 @@ import java.util.List;
  * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/10/16)
  */
+@SuppressWarnings("unused")
 public class SpyingDataFunction<R> implements DataFunction<R> {
 
     private final List<DataFunctionInvocation<?, ?>> invocations = new ArrayList<>();

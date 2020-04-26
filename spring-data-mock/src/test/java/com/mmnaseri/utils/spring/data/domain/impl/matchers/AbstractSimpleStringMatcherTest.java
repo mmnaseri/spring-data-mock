@@ -18,25 +18,25 @@ import static org.hamcrest.Matchers.is;
 public class AbstractSimpleStringMatcherTest {
 
     @Test(expectedExceptions = InvalidArgumentException.class, expectedExceptionsMessageRegExp = ".*x.y.z.*")
-    public void testValueNotAString() throws Exception {
+    public void testValueNotAString() {
         final NotMatchingStringMatcher matcher = new NotMatchingStringMatcher();
         matcher.matches(new ImmutableParameter("x.y.z", null, null, null), 1, "");
     }
 
     @Test(expectedExceptions = InvalidArgumentException.class, expectedExceptionsMessageRegExp = ".*x.y.z.*")
-    public void testParameterNotAString() throws Exception {
+    public void testParameterNotAString() {
         final NotMatchingStringMatcher matcher = new NotMatchingStringMatcher();
         matcher.matches(new ImmutableParameter("x.y.z", null, null, null), "", 1);
     }
 
     @Test
-    public void testWhenBothAreStrings() throws Exception {
+    public void testWhenBothAreStrings() {
         final NotMatchingStringMatcher matcher = new NotMatchingStringMatcher();
         matcher.matches(new ImmutableParameter("x.y.z", null, null, null), "", "");
     }
 
     @Test
-    public void testWhenIgnoringCase() throws Exception {
+    public void testWhenIgnoringCase() {
         final NotMatchingStringMatcher matcher = new NotMatchingStringMatcher();
         matcher.matches(new ImmutableParameter("x.y.z", Collections.singleton(Modifier.IGNORE_CASE), null, null),
                         "test", "TEST");

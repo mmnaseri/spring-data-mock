@@ -4,7 +4,7 @@ import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
 import com.mmnaseri.utils.spring.data.store.DataStore;
 
 /**
- * This class is the base class for any data store event that indicates a particular entity was involved in the evnet.
+ * This class is the base class for any data store event that indicates a particular entity was involved in the event.
  *
  * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (10/6/15)

@@ -6,7 +6,6 @@ import com.mmnaseri.utils.spring.data.tools.PropertyUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 /**
@@ -16,7 +15,7 @@ import java.util.List;
  * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (2015/11/09, 21:40)
  */
-@SuppressWarnings("WeakerAccess")
+@SuppressWarnings({"WeakerAccess", "unused"})
 public class CrudRepositorySupport implements DataStoreAware, RepositoryMetadataAware, KeyGeneratorAware<Object> {
 
     private static final Log log = LogFactory.getLog(CrudRepositorySupport.class);

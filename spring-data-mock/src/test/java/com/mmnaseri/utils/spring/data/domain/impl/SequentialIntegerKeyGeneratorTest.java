@@ -19,7 +19,7 @@ public class SequentialIntegerKeyGeneratorTest extends BaseKeyGeneratorTest<Inte
     }
 
     @Test
-    public void testKeysBeingSequential() throws Exception {
+    public void testKeysBeingSequential() {
         final KeyGenerator<Integer> keyGenerator = getKeyGenerator();
         Integer last = 0;
         for (int i = 0; i < 100; i++) {

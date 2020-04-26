@@ -36,7 +36,7 @@ public class SliceIterableResultAdapterTest {
     @Test
     public void testAdapting() throws Exception {
         final SliceIterableResultAdapter adapter = new SliceIterableResultAdapter();
-        final List<Object> originalValue = Arrays.<Object>asList(1, 2, 3, 4);
+        final List<Object> originalValue = Arrays.asList(1, 2, 3, 4);
         final Slice slice = adapter.adapt(
                 new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findSlice"), new Object[]{}),
                 originalValue);

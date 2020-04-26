@@ -16,7 +16,7 @@ import static org.hamcrest.Matchers.*;
 public class AbstractResultConverterTest {
 
     @Test
-    public void testConversionWhenInputIsNull() throws Exception {
+    public void testConversionWhenInputIsNull() {
         final Object converted = new NoOpResultConverter().convert(null, null);
         assertThat(converted, is(nullValue()));
     }
@@ -35,7 +35,7 @@ public class AbstractResultConverterTest {
                 new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findPerson"), null), original);
         assertThat(converted, is(notNullValue()));
         assertThat(converted, is(instanceOf(Person.class)));
-        assertThat((Person) converted, is(original));
+        assertThat(converted, is(original));
     }
 
     @Test

@@ -20,13 +20,13 @@ public abstract class BaseIdPropertyResolverTest {
     protected abstract Class<?> entityWithNoProperty();
 
     @Test(expectedExceptions = PropertyTypeMismatchException.class)
-    public void testFindingTheIdFieldWithWrongType() throws Exception {
+    public void testFindingTheIdFieldWithWrongType() {
         final IdPropertyResolver resolver = getIdPropertyResolver();
         resolver.resolve(properEntity(), Long.class);
     }
 
     @Test
-    public void testFindingTheIdFieldWithSuperType() throws Exception {
+    public void testFindingTheIdFieldWithSuperType() {
         final IdPropertyResolver resolver = getIdPropertyResolver();
         final String resolved = resolver.resolve(properEntity(), Object.class);
         assertThat(resolved, is(notNullValue()));
@@ -34,7 +34,7 @@ public abstract class BaseIdPropertyResolverTest {
     }
 
     @Test
-    public void testFindingTheIdFieldWithCorrectType() throws Exception {
+    public void testFindingTheIdFieldWithCorrectType() {
         final IdPropertyResolver resolver = getIdPropertyResolver();
         final String resolved = resolver.resolve(properEntity(), String.class);
         assertThat(resolved, is(notNullValue()));
@@ -42,7 +42,7 @@ public abstract class BaseIdPropertyResolverTest {
     }
 
     @Test
-    public void testFindingTheIdFieldOnEntityWithoutAnnotations() throws Exception {
+    public void testFindingTheIdFieldOnEntityWithoutAnnotations() {
         final IdPropertyResolver resolver = getIdPropertyResolver();
         final String resolved = resolver.resolve(entityWithNoProperty(), Object.class);
         assertThat(resolved, is(nullValue()));

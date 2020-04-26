@@ -35,10 +35,11 @@ import static org.hamcrest.Matchers.*;
  * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/11/16, 2:38 PM)
  */
+@SuppressWarnings("unused")
 public class RepositoryMockBuilderTest {
 
     @Test
-    public void testOutOfTheBoxMocking() throws Exception {
+    public void testOutOfTheBoxMocking() {
         final SimpleCrudPersonRepository repository = new RepositoryMockBuilder().useConfiguration(
                 RepositoryFactoryBuilder.defaultConfiguration()).mock(SimpleCrudPersonRepository.class);
         assertThat(repository, is(notNullValue()));
@@ -51,7 +52,7 @@ public class RepositoryMockBuilderTest {
     }
 
     @Test
-    public void testMockingWithoutKeyGeneration() throws Exception {
+    public void testMockingWithoutKeyGeneration() {
         final SimpleCrudPersonRepository repository = new RepositoryMockBuilder().withoutGeneratingKeys().mock(
                 SimpleCrudPersonRepository.class);
         assertThat(repository, is(notNullValue()));
@@ -74,7 +75,7 @@ public class RepositoryMockBuilderTest {
     }
 
     @Test
-    public void testMockingWithFallbackKeyGenerator() throws Exception {
+    public void testMockingWithFallbackKeyGenerator() {
         final DefaultRepositoryFactoryConfiguration configuration = new DefaultRepositoryFactoryConfiguration(
                 RepositoryFactoryBuilder.defaultConfiguration());
         configuration.setDefaultKeyGenerator(new UUIDKeyGenerator());
@@ -87,7 +88,7 @@ public class RepositoryMockBuilderTest {
     }
 
     @Test
-    public void testCustomKeyGeneration() throws Exception {
+    public void testCustomKeyGeneration() {
         final SimpleCrudPersonRepository repository = new RepositoryMockBuilder().generateKeysUsing(
                 CustomStringKeyGenerator.class).mock(SimpleCrudPersonRepository.class);
         assertThat(repository, is(notNullValue()));
@@ -100,12 +101,12 @@ public class RepositoryMockBuilderTest {
     }
 
     @Test(expectedExceptions = MockBuilderException.class)
-    public void testUsingInvalidKeyGenerator() throws Exception {
+    public void testUsingInvalidKeyGenerator() {
         new RepositoryMockBuilder().generateKeysUsing(InaccessibleKeyGenerator.class);
     }
 
     @Test
-    public void testUsingCustomImplementations() throws Exception {
+    public void testUsingCustomImplementations() {
         final MappedSimpleCrudPersonRepository repository = new RepositoryMockBuilder().usingImplementation(
                 ValueHashMapper.class).and(ValueStringMapper.class).mock(MappedSimpleCrudPersonRepository.class);
         assertThat(repository, is(notNullValue()));
@@ -126,10 +127,9 @@ public class RepositoryMockBuilderTest {
      * something we need bound to the repository specifically for the tests, however, it should be noted that adding
      * functionality to your repositories for the purpose of testing is not really the greatest idea.
      *
-     * @throws Exception
      */
     @Test
-    public void testUsingCustomFactory() throws Exception {
+    public void testUsingCustomFactory() {
         final DefaultRepositoryFactoryConfiguration configuration = new DefaultRepositoryFactoryConfiguration();
         configuration.setDataStoreRegistry(new DefaultDataStoreRegistry());
         configuration.setDescriptionExtractor(new MethodQueryDescriptionExtractor(new DefaultOperatorContext()));
@@ -145,24 +145,24 @@ public class RepositoryMockBuilderTest {
         final InformationExposingRepository informationExposingRepository = (InformationExposingRepository) repository;
         assertThat(informationExposingRepository.getFactoryConfiguration(), is(notNullValue()));
         assertThat(informationExposingRepository.getFactoryConfiguration(),
-                   Matchers.<RepositoryFactoryConfiguration>is(configuration));
+                   Matchers.is(configuration));
         assertThat(informationExposingRepository.getConfiguration(), is(notNullValue()));
         assertThat(informationExposingRepository.getConfiguration().getBoundImplementations(), is(notNullValue()));
         assertThat(informationExposingRepository.getConfiguration().getBoundImplementations(), is(empty()));
         assertThat(informationExposingRepository.getConfiguration().getKeyGenerator(), is(notNullValue()));
         assertThat(informationExposingRepository.getConfiguration().getRepositoryMetadata(), is(notNullValue()));
         assertThat(informationExposingRepository.getConfiguration().getRepositoryMetadata().getEntityType(),
-                   is(Matchers.<Class<?>>equalTo(Person.class)));
+                   is(Matchers.equalTo(Person.class)));
         assertThat(informationExposingRepository.getConfiguration().getRepositoryMetadata().getIdentifierType(),
-                   is(Matchers.<Class<?>>equalTo(String.class)));
+                   is(Matchers.equalTo(String.class)));
         assertThat(informationExposingRepository.getConfiguration().getRepositoryMetadata().getRepositoryInterface(),
-                   is(Matchers.<Class<?>>equalTo(SimpleCrudPersonRepository.class)));
+                   is(Matchers.equalTo(SimpleCrudPersonRepository.class)));
         assertThat(informationExposingRepository.getConfiguration().getRepositoryMetadata().getIdentifierProperty(),
                    is("id"));
     }
 
     @Test
-    public void testUsingCustomConfiguration() throws Exception {
+    public void testUsingCustomConfiguration() {
         final DefaultTypeMappingContext mappingContext = new DefaultTypeMappingContext();
         mappingContext.register(ConfiguredSimpleCrudPersonRepository.class, ConfigurationAwareMapper.class);
         final DefaultRepositoryFactoryConfiguration configuration = new DefaultRepositoryFactoryConfiguration();
@@ -177,11 +177,11 @@ public class RepositoryMockBuilderTest {
         final ConfiguredSimpleCrudPersonRepository repository = new RepositoryMockBuilder().useConfiguration(
                 configuration).mock(ConfiguredSimpleCrudPersonRepository.class);
         assertThat(repository.getConfiguration(), is(notNullValue()));
-        assertThat(repository.getConfiguration(), Matchers.<RepositoryFactoryConfiguration>is(configuration));
+        assertThat(repository.getConfiguration(), Matchers.is(configuration));
     }
 
     @Test
-    public void testNoOpKeyGeneration() throws Exception {
+    public void testNoOpKeyGeneration() {
         final NoOpKeyGenerator<Object> generator = new NoOpKeyGenerator<>();
         assertThat(generator.generate(), is(nullValue()));
     }

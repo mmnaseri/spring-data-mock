@@ -10,6 +10,7 @@ import java.util.List;
  * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (6/12/16, 5:30 PM)
  */
+@SuppressWarnings("unused")
 public class CustomerRepositoryExampleSupport implements RepositoryAware<CustomerRepository> {
 
     private CustomerRepository repository;

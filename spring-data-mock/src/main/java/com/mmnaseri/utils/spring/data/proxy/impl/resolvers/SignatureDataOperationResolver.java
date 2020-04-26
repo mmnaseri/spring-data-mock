@@ -44,7 +44,7 @@ public class SignatureDataOperationResolver implements DataOperationResolver {
             if (declaration != null) {
                 log.info("Setting the resolution as a method invocation on the previously prepared type mapping");
                 final Object instance = mapping.getInstance();
-                return new MethodInvocationDataStoreOperation<Object, Object>(instance, declaration);
+                return new MethodInvocationDataStoreOperation<>(instance, declaration);
             }
         }
         return null;

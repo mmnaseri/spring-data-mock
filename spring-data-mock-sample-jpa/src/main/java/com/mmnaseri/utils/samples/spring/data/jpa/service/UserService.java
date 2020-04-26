@@ -6,6 +6,7 @@ import com.mmnaseri.utils.samples.spring.data.jpa.model.User;
  * @author Milad Naseri (milad.naseri@cdk.com)
  * @since 1.0 (6/29/16, 4:06 PM)
  */
+@SuppressWarnings("unused")
 public interface UserService {
 
     User createUser(String username, String email, String password);

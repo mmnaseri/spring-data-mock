@@ -13,6 +13,7 @@ import static org.hamcrest.Matchers.*;
  * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/12/16, 6:48 PM)
  */
+@SuppressWarnings("unused")
 public class RepositoryClearerMapping
         implements RepositoryAware<ClearableSimpleCrudPersonRepository>, RepositoryFactoryConfigurationAware,
                    RepositoryConfigurationAware, RepositoryFactoryAware {
@@ -40,12 +41,12 @@ public class RepositoryClearerMapping
         assertThat(repositoryConfiguration.getKeyGenerator(), is(instanceOf(NoOpKeyGenerator.class)));
         assertThat(repositoryConfiguration.getRepositoryMetadata(), is(notNullValue()));
         assertThat(repositoryConfiguration.getRepositoryMetadata().getEntityType(),
-                   is(Matchers.<Class<?>>equalTo(Person.class)));
+                   is(Matchers.equalTo(Person.class)));
         assertThat(repositoryConfiguration.getRepositoryMetadata().getIdentifierProperty(), is("id"));
         assertThat(repositoryConfiguration.getRepositoryMetadata().getIdentifierType(),
-                   is(Matchers.<Class<?>>equalTo(String.class)));
+                   is(Matchers.equalTo(String.class)));
         assertThat(repositoryConfiguration.getRepositoryMetadata().getRepositoryInterface(),
-                   is(Matchers.<Class<?>>equalTo(ClearableSimpleCrudPersonRepository.class)));
+                   is(Matchers.equalTo(ClearableSimpleCrudPersonRepository.class)));
         assertThat(repositoryConfiguration.getBoundImplementations(), is(not(empty())));
         assertThat(repositoryConfiguration.getBoundImplementations(), hasItem(RepositoryClearerMapping.class));
     }

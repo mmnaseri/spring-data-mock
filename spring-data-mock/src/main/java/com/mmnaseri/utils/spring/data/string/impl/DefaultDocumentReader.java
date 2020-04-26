@@ -10,6 +10,7 @@ import java.util.regex.Pattern;
  * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/19/15)
  */
+@SuppressWarnings("unused")
 public class DefaultDocumentReader implements DocumentReader {
 
     private final String document;
@@ -55,8 +56,10 @@ public class DefaultDocumentReader implements DocumentReader {
      */
     @Override
     public boolean has(String pattern) {
-        return has(
-                Pattern.compile(pattern.startsWith("^") ? pattern : "^" + pattern, Pattern.DOTALL | Pattern.MULTILINE));
+        if (!pattern.startsWith("^")) {
+            pattern = "^" + pattern;
+        }
+        return has(Pattern.compile(pattern, Pattern.DOTALL | Pattern.MULTILINE));
     }
 
     /**

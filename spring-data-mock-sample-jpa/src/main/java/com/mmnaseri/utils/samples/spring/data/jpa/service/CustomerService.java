@@ -10,6 +10,7 @@ import java.util.List;
  * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (6/12/16, 1:51 PM)
  */
+@SuppressWarnings("unused")
 public interface CustomerService {
 
     long register(String firstName, String lastName, Date birthday);

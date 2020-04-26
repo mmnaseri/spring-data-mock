@@ -8,6 +8,7 @@ package com.mmnaseri.utils.spring.data.sample.models;
 /**
  * @author blackleg
  */
+@SuppressWarnings({"unused", "EmptyMethod"})
 public class PersonSerializable extends Person {
 
     @Override

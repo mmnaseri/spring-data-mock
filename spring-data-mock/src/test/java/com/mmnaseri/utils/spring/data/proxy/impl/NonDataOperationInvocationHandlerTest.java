@@ -19,13 +19,13 @@ public class NonDataOperationInvocationHandlerTest {
         final NonDataOperationInvocationHandler handler = new NonDataOperationInvocationHandler();
         final Object proxy = new Object();
         assertThat(handler.invoke(proxy, Object.class.getMethod("hashCode"), new Object[]{}),
-                   Matchers.<Object>is(proxy.hashCode()));
+                   Matchers.is(proxy.hashCode()));
         assertThat(handler.invoke(proxy, Object.class.getMethod("toString"), new Object[]{}),
-                   Matchers.<Object>is(proxy.toString()));
+                   Matchers.is(proxy.toString()));
         assertThat(handler.invoke(proxy, Object.class.getMethod("equals", Object.class), new Object[]{proxy}),
-                   Matchers.<Object>is(true));
+                   Matchers.is(true));
         assertThat(handler.invoke(proxy, Object.class.getMethod("equals", Object.class), new Object[]{new Object()}),
-                   Matchers.<Object>is(false));
+                   Matchers.is(false));
     }
 
     @Test(expectedExceptions = UnknownDataOperationException.class)

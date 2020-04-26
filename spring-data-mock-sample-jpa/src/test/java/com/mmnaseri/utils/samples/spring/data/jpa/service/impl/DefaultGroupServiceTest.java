@@ -32,7 +32,7 @@ public class DefaultGroupServiceTest {
     private MembershipRepository membershipRepository;
 
     @BeforeMethod
-    public void setUp() throws Exception {
+    public void setUp() {
         final Start builder = RepositoryFactoryBuilder.builder();
         groupRepository = builder.mock(GroupRepository.class);
         membershipRepository = builder.mock(MembershipRepository.class);
@@ -42,7 +42,7 @@ public class DefaultGroupServiceTest {
     }
 
     @Test
-    public void testCreatingAGroup() throws Exception {
+    public void testCreatingAGroup() {
         assertThat(groupRepository.count(), is(0L));
         final String name = "My Group";
         final Group group = service.createGroup(name);
@@ -55,7 +55,7 @@ public class DefaultGroupServiceTest {
     }
 
     @Test
-    public void testDeletingAnEmptyGroup() throws Exception {
+    public void testDeletingAnEmptyGroup() {
         Group group = new Group();
         group.setName("My Group");
         group = groupRepository.save(group);
@@ -64,7 +64,7 @@ public class DefaultGroupServiceTest {
     }
 
     @Test
-    public void testEstablishingMembership() throws Exception {
+    public void testEstablishingMembership() {
         Group group = new Group();
         group.setName("My Group");
         group = groupRepository.save(group);
@@ -80,7 +80,7 @@ public class DefaultGroupServiceTest {
     }
 
     @Test
-    public void testBreakingAMembership() throws Exception {
+    public void testBreakingAMembership() {
         Group group = new Group();
         group.setName("My Group");
         group = groupRepository.save(group);
@@ -94,7 +94,7 @@ public class DefaultGroupServiceTest {
     }
 
     @Test
-    public void testListingGroupMembers() throws Exception {
+    public void testListingGroupMembers() {
         Group group = new Group();
         group.setName("My Group");
         group = groupRepository.save(group);
@@ -111,7 +111,7 @@ public class DefaultGroupServiceTest {
     }
 
     @Test
-    public void testListingUserGroups() throws Exception {
+    public void testListingUserGroups() {
         Group group = new Group();
         group.setName("My Group");
         group = groupRepository.save(group);
@@ -128,7 +128,7 @@ public class DefaultGroupServiceTest {
     }
 
     @Test
-    public void testDeletingAGroupWithMembers() throws Exception {
+    public void testDeletingAGroupWithMembers() {
         Group group = new Group();
         group.setName("My Group");
         group = groupRepository.save(group);

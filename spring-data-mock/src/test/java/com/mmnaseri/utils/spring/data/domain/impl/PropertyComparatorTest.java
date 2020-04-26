@@ -17,21 +17,23 @@ import static org.hamcrest.Matchers.is;
 public class PropertyComparatorTest {
 
     @Test(expectedExceptions = InvalidArgumentException.class)
-    public void testWhenFirstValueDoesNotExist() throws Exception {
+    public void testWhenFirstValueDoesNotExist() {
         final PropertyComparator comparator = new PropertyComparator(
                 new ImmutableOrder(SortDirection.ASCENDING, "address.city", NullHandling.DEFAULT));
+        //noinspection ResultOfMethodCallIgnored
         comparator.compare(new Address(), new Person());
     }
 
     @Test(expectedExceptions = InvalidArgumentException.class)
-    public void testWhenSecondValueDoesNotExist() throws Exception {
+    public void testWhenSecondValueDoesNotExist() {
         final PropertyComparator comparator = new PropertyComparator(
                 new ImmutableOrder(SortDirection.ASCENDING, "address.city", NullHandling.DEFAULT));
+        //noinspection ResultOfMethodCallIgnored
         comparator.compare(new Person(), new Address());
     }
 
     @Test
-    public void testNullFirst() throws Exception {
+    public void testNullFirst() {
         final PropertyComparator comparator = new PropertyComparator(
                 new ImmutableOrder(SortDirection.ASCENDING, "address.city", NullHandling.NULLS_FIRST));
         assertThat(comparator.compare(new Person().setAddress(new Address().setCity("A")), new Person()), is(1));
@@ -39,7 +41,7 @@ public class PropertyComparatorTest {
     }
 
     @Test
-    public void testNullLast() throws Exception {
+    public void testNullLast() {
         final PropertyComparator comparator = new PropertyComparator(
                 new ImmutableOrder(SortDirection.ASCENDING, "address.city", NullHandling.NULLS_LAST));
         assertThat(comparator.compare(new Person().setAddress(new Address().setCity("A")), new Person()), is(-1));
@@ -47,21 +49,22 @@ public class PropertyComparatorTest {
     }
 
     @Test
-    public void testBothAreNull() throws Exception {
+    public void testBothAreNull() {
         final PropertyComparator comparator = new PropertyComparator(
                 new ImmutableOrder(SortDirection.ASCENDING, "address.city", NullHandling.NULLS_LAST));
         assertThat(comparator.compare(new Person(), new Person()), is(0));
     }
 
     @Test(expectedExceptions = InvalidArgumentException.class)
-    public void testWhenValuesAreNotComparable() throws Exception {
+    public void testWhenValuesAreNotComparable() {
         final PropertyComparator comparator = new PropertyComparator(
                 new ImmutableOrder(SortDirection.ASCENDING, "address", NullHandling.NULLS_LAST));
+        //noinspection ResultOfMethodCallIgnored
         comparator.compare(new Person().setAddress(new Address()), new Person().setAddress(new Address()));
     }
 
     @Test
-    public void testWhenSecondIsSubTypeOfFirst() throws Exception {
+    public void testWhenSecondIsSubTypeOfFirst() {
         final PropertyComparator comparator = new PropertyComparator(
                 new ImmutableOrder(SortDirection.ASCENDING, "addressZip", NullHandling.NULLS_FIRST));
         final int comparison = comparator.compare(new Person().setAddressZip(new Zip().setPrefix("a")),
@@ -70,7 +73,7 @@ public class PropertyComparatorTest {
     }
 
     @Test
-    public void testWhenFirstIsSubTypeOfSecond() throws Exception {
+    public void testWhenFirstIsSubTypeOfSecond() {
         final PropertyComparator comparator = new PropertyComparator(
                 new ImmutableOrder(SortDirection.ASCENDING, "addressZip", NullHandling.NULLS_FIRST));
         final int comparison = comparator.compare(new Person().setAddressZip(new ChildZip().setPrefix("b")),
@@ -79,9 +82,10 @@ public class PropertyComparatorTest {
     }
 
     @Test(expectedExceptions = InvalidArgumentException.class)
-    public void testWhenValuesAreNotOfTheSameType() throws Exception {
+    public void testWhenValuesAreNotOfTheSameType() {
         final PropertyComparator comparator = new PropertyComparator(
                 new ImmutableOrder(SortDirection.ASCENDING, "addressZip", NullHandling.NULLS_FIRST));
+        //noinspection ResultOfMethodCallIgnored
         comparator.compare(new Person().setAddressZip(new ChildZip().setPrefix("b")),
                            new Person().setAddressZip(new OtherChildZip().setPrefix("a")));
     }

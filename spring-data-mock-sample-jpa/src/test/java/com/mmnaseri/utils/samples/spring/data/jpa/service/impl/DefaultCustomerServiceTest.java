@@ -29,7 +29,7 @@ public class DefaultCustomerServiceTest {
     private CustomerRepository repository;
 
     @BeforeMethod
-    public void setUp() throws Exception {
+    public void setUp() {
         repository = builder()
                 .usingImplementation(CustomerRepositoryExampleSupport.class)
                 .mock(CustomerRepository.class);
@@ -37,7 +37,7 @@ public class DefaultCustomerServiceTest {
     }
 
     @Test
-    public void testCustomerRegistration() throws Exception {
+    public void testCustomerRegistration() {
         final Date date = date(1988, 0, 1);
         //let's make sure that the database is empty
         assertThat(repository.count(), is(0L));
@@ -47,7 +47,7 @@ public class DefaultCustomerServiceTest {
         final long id = service.register(firstName, lastName, date);
         //after registration, we should have exactly one record
         assertThat(repository.count(), is(1L));
-        //and we should be able to load the cutomer by it's ID
+        //and we should be able to load the customer by it's ID
         final Customer customer = repository.findById(id).orElse(null);
         //and that customer should be the one we registered
         assertThat(customer, is(notNullValue()));
@@ -58,7 +58,7 @@ public class DefaultCustomerServiceTest {
     }
 
     @Test
-    public void testLoadingCustomerById() throws Exception {
+    public void testLoadingCustomerById() {
         //let's save a customer to the database first
         final Customer customer = createCustomer("Milad", "Naseri", date(1988, 1, 1));
         //we should be able to locate that via the service
@@ -71,7 +71,7 @@ public class DefaultCustomerServiceTest {
     }
 
     @Test
-    public void testLoadingCustomersByBirthday() throws Exception {
+    public void testLoadingCustomersByBirthday() {
         //let's register three customers, two of which are born within [88/1/1 .. 89/12/28]
         final Customer first = createCustomer("Milad", "Naseri", date(1988, 1, 1));
         final Customer second = createCustomer("Zohreh", "Sadeghi", date(1989, 9, 22));
@@ -85,7 +85,7 @@ public class DefaultCustomerServiceTest {
     }
 
     @Test
-    public void testLoadingCustomersByFirstNameAndLastName() throws Exception {
+    public void testLoadingCustomersByFirstNameAndLastName() {
         //let's save three customers ...
         final Customer customer = createCustomer("Milad", "Naseri", date(1988, 1, 1));
         createCustomer("Zohreh", "Sadeghi", date(1989, 9, 22));
@@ -98,7 +98,7 @@ public class DefaultCustomerServiceTest {
     }
 
     @Test
-    public void testLoadingCustomersByFirstNames() throws Exception {
+    public void testLoadingCustomersByFirstNames() {
         createCustomer("Milad", "Naseri", null);
         final Customer customer = createCustomer("Mateusz", "Stefek", null);
 

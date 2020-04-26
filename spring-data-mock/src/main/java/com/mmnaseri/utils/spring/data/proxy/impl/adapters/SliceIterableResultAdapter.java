@@ -38,8 +38,8 @@ public class SliceIterableResultAdapter extends AbstractIterableResultAdapter<Sl
 
     @Override
     public boolean accepts(Invocation invocation, Object originalValue) {
-        return originalValue != null && originalValue instanceof Iterable && invocation.getMethod().getReturnType()
-                                                                                       .equals(Slice.class);
+        return originalValue instanceof Iterable && invocation.getMethod().getReturnType()
+                                                              .equals(Slice.class);
     }
 
 }

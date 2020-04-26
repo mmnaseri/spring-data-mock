@@ -26,11 +26,10 @@ import static org.hamcrest.Matchers.is;
 public class DescribedDataStoreOperationTest {
 
     @Test
-    public void testExecutionWithoutAnyFunctions() throws Exception {
+    public void testExecutionWithoutAnyFunctions() {
         final DefaultQueryDescriptor descriptor = new DefaultQueryDescriptor(false, null, 0, null, null, null, null,
                                                                              null);
         final List<Object> selection = new ArrayList<>();
-        //noinspection unchecked
         final SpyingSelectDataStoreOperation<Object, Object> operationSpy = new SpyingSelectDataStoreOperation<>(
                 descriptor, selection);
         final DescribedDataStoreOperation<Object, Object> operation = new DescribedDataStoreOperation<>(operationSpy,
@@ -38,11 +37,11 @@ public class DescribedDataStoreOperationTest {
         assertThat(operationSpy.isCalled(), is(false));
         final Object result = operation.execute(new MemoryDataStore<>(Object.class), null, null);
         assertThat(operationSpy.isCalled(), is(true));
-        assertThat(result, Matchers.<Object>is(selection));
+        assertThat(result, Matchers.is(selection));
     }
 
     @Test
-    public void testExecutionWithCustomFunction() throws Exception {
+    public void testExecutionWithCustomFunction() {
         final DefaultQueryDescriptor descriptor = new DefaultQueryDescriptor(false, "xyz", 0, null, null, null, null,
                                                                              null);
         final List<Object> selection = new ArrayList<>();
@@ -57,7 +56,6 @@ public class DescribedDataStoreOperationTest {
             }
         });
         functionRegistry.register("xyz", spy);
-        //noinspection unchecked
         final SpyingSelectDataStoreOperation<Object, Object> operationSpy = new SpyingSelectDataStoreOperation<>(
                 descriptor, selection);
         final DescribedDataStoreOperation<Object, Object> operation = new DescribedDataStoreOperation<>(operationSpy,
@@ -71,7 +69,7 @@ public class DescribedDataStoreOperationTest {
     }
 
     @Test
-    public void testToString() throws Exception {
+    public void testToString() {
         final SelectDataStoreOperation<Object, Object> selectOperation = new SelectDataStoreOperation<>(
                 new DefaultQueryDescriptor(false, null, 0, null, null, null, null, null));
         final DescribedDataStoreOperation<Object, Object> describedOperation = new DescribedDataStoreOperation<>(

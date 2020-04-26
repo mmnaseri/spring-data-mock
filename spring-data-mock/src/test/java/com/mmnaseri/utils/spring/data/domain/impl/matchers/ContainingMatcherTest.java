@@ -12,23 +12,23 @@ import static org.hamcrest.Matchers.is;
 public class ContainingMatcherTest {
 
     @Test
-    public void testMatchingWhenActualIsNull() throws Exception {
-        assertThat(new ContainingMatcher().matches(null, null, ""), is(false));
+    public void testMatchingWhenActualIsNull() {
+        assertThat(new ContainingMatcher().matches(null, ""), is(false));
     }
 
     @Test
-    public void testMatchingWhenParameterIsNull() throws Exception {
-        assertThat(new ContainingMatcher().matches(null, "", (String) null), is(false));
+    public void testMatchingWhenParameterIsNull() {
+        assertThat(new ContainingMatcher().matches("", null), is(false));
     }
 
     @Test
-    public void testMatchingWhenParameterDoesNotContainActual() throws Exception {
-        assertThat(new ContainingMatcher().matches(null, "xyz", "abc"), is(false));
+    public void testMatchingWhenParameterDoesNotContainActual() {
+        assertThat(new ContainingMatcher().matches("xyz", "abc"), is(false));
     }
 
     @Test
-    public void testMatchingWhenParameterContainsActual() throws Exception {
-        assertThat(new ContainingMatcher().matches(null, "HelloWorld", "owo"), is(true));
+    public void testMatchingWhenParameterContainsActual() {
+        assertThat(new ContainingMatcher().matches("HelloWorld", "owo"), is(true));
     }
 
 }

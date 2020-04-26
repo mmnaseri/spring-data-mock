@@ -20,7 +20,7 @@ public class CollectionInstanceUtilsTest extends AbstractUtilityClassTest {
     }
 
     @Test
-    public void testSupportedConcreteTypes() throws Exception {
+    public void testSupportedConcreteTypes() {
         final List<? extends Class<?>> collectionTypes = Arrays.asList(HashSet.class,
                                                                        TreeSet.class,
                                                                        CopyOnWriteArraySet.class,
@@ -43,7 +43,7 @@ public class CollectionInstanceUtilsTest extends AbstractUtilityClassTest {
     }
 
     @Test
-    public void testSupportedAbstractTypes() throws Exception {
+    public void testSupportedAbstractTypes() {
         assertThat(CollectionInstanceUtils.getCollection(Set.class), is(instanceOf(Set.class)));
         assertThat(CollectionInstanceUtils.getCollection(List.class), is(instanceOf(List.class)));
         assertThat(CollectionInstanceUtils.getCollection(Queue.class), is(instanceOf(Queue.class)));
@@ -52,12 +52,12 @@ public class CollectionInstanceUtilsTest extends AbstractUtilityClassTest {
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testUnknownType() throws Exception {
+    public void testUnknownType() {
         CollectionInstanceUtils.getCollection(Class.class);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testNullValue() throws Exception {
+    public void testNullValue() {
         CollectionInstanceUtils.getCollection(null);
     }
 

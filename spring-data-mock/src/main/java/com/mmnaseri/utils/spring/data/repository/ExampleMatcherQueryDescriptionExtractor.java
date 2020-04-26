@@ -67,11 +67,13 @@ public class ExampleMatcherQueryDescriptionExtractor implements QueryDescription
 
     private ExampleMatcher.StringMatcher stringMatcher(ExampleMatcher matcher, String path) {
         final ExampleMatcher.PropertySpecifier specifier = matcher.getPropertySpecifiers().getForPath(path);
+        //noinspection ConstantConditions
         return specifier != null ? specifier.getStringMatcher() : matcher.getDefaultStringMatcher();
     }
 
     private boolean ignoreCase(ExampleMatcher matcher, String path) {
         final ExampleMatcher.PropertySpecifier specifier = matcher.getPropertySpecifiers().getForPath(path);
+        //noinspection ConstantConditions
         return matcher.isIgnoreCaseEnabled() || specifier != null && Boolean.TRUE.equals(specifier.getIgnoreCase());
     }
 

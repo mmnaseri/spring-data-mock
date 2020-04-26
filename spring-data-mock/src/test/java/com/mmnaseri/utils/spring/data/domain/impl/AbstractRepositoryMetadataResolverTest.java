@@ -17,25 +17,25 @@ public class AbstractRepositoryMetadataResolverTest {
 
     @Test(expectedExceptions = RepositoryDefinitionException.class,
           expectedExceptionsMessageRegExp = ".*?: Repository interface must not be null")
-    public void testThatItDoesNotAcceptNull() throws Exception {
+    public void testThatItDoesNotAcceptNull() {
         new NullReturningRepositoryMetadataResolver().resolve(null);
     }
 
     @Test(expectedExceptions = RepositoryDefinitionException.class,
           expectedExceptionsMessageRegExp = ".*?: Cannot resolve repository metadata for a class object that isn't an"
                   + " interface")
-    public void testThatItOnlyAcceptsInterfaces() throws Exception {
+    public void testThatItOnlyAcceptsInterfaces() {
         new NullReturningRepositoryMetadataResolver().resolve(EmptyEntity.class);
     }
 
     @Test(expectedExceptions = RepositoryDefinitionException.class,
           expectedExceptionsMessageRegExp = ".*?: Repository interface needs to be declared as public")
-    public void testThatItOnlyAcceptsPublicInterfaces() throws Exception {
+    public void testThatItOnlyAcceptsPublicInterfaces() {
         new NullReturningRepositoryMetadataResolver().resolve(SamplePrivateInterface.class);
     }
 
     @Test
-    public void testThatItPassesAPublicInterfaceToTheSubClass() throws Exception {
+    public void testThatItPassesAPublicInterfaceToTheSubClass() {
         final NullReturningRepositoryMetadataResolver resolver = new NullReturningRepositoryMetadataResolver();
         resolver.resolve(Repository.class);
         assertThat(resolver.getRepositoryInterface(), equalTo((Class) Repository.class));

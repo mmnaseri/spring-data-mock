@@ -9,7 +9,7 @@ import java.util.concurrent.Callable;
 public class ErrorThrowingCallable implements Callable {
 
     @Override
-    public Object call() throws Exception {
+    public Object call() {
         throw new RuntimeException();
     }
 }

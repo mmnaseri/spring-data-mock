@@ -1,7 +1,5 @@
 package com.mmnaseri.utils.spring.data.domain.impl.matchers;
 
-import com.mmnaseri.utils.spring.data.domain.Parameter;
-
 /**
  * This matcher checks to see if the two values are the same, barring case differences.
  *
@@ -11,8 +9,8 @@ import com.mmnaseri.utils.spring.data.domain.Parameter;
 public class IsLikeMatcher extends AbstractSimpleStringMatcher {
 
     @Override
-    protected boolean matches(Parameter parameter, String actual, String argument) {
-        return actual != null && argument != null && actual.equalsIgnoreCase(argument);
+    protected boolean matches(String actual, String argument) {
+        return actual != null && actual.equalsIgnoreCase(argument);
     }
 
 }

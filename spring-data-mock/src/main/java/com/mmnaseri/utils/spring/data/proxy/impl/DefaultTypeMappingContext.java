@@ -10,7 +10,6 @@ import org.springframework.core.annotation.AnnotationAwareOrderComparator;
 import org.springframework.util.ClassUtils;
 
 import java.lang.reflect.Modifier;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -32,7 +31,7 @@ public class DefaultTypeMappingContext implements TypeMappingContext {
     private static final String QUERY_BY_EXAMPLE_SUPPORT_CLASS =
             "org.springframework.data.repository.query.QueryByExampleExecutor";
     private final TypeMappingContext parent;
-    private ConcurrentMap<Class<?>, List<Class<?>>> mappings = new ConcurrentHashMap<>();
+    private final ConcurrentMap<Class<?>, List<Class<?>>> mappings = new ConcurrentHashMap<>();
 
     /**
      * Instantiates the context and registers all the default converters
@@ -86,7 +85,7 @@ public class DefaultTypeMappingContext implements TypeMappingContext {
         log.info("Registering implementation " + implementation + " to super type " + repositoryType +
                          "; this means any repository of this type will inherit functionality defined in the " +
                          "bound implementation class.");
-        mappings.putIfAbsent(repositoryType, new LinkedList<Class<?>>());
+        mappings.putIfAbsent(repositoryType, new LinkedList<>());
         mappings.get(repositoryType).add(implementation);
     }
 
@@ -98,7 +97,7 @@ public class DefaultTypeMappingContext implements TypeMappingContext {
                 classes.addAll(mappings.get(repositorySuperType));
             }
         }
-        Collections.sort(classes, AnnotationAwareOrderComparator.INSTANCE);
+        classes.sort(AnnotationAwareOrderComparator.INSTANCE);
         if (parent != null) {
             classes.addAll(parent.getImplementations(repositoryType));
         }
@@ -113,7 +112,7 @@ public class DefaultTypeMappingContext implements TypeMappingContext {
         for (Class<?> implementation : implementations) {
             final Object instance;
             try {
-                instance = implementation.newInstance();
+                instance = implementation.getDeclaredConstructor().newInstance();
             } catch (InstantiationException e) {
                 log.error("Failed to instantiate class " + implementation
                                   + " because there was an error in the constructor");

@@ -4,6 +4,7 @@ import com.mmnaseri.utils.spring.data.tools.PropertyUtils;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.ReflectionUtils;
 
+import javax.annotation.Nonnull;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -25,7 +26,7 @@ class PropertyVisitor implements ReflectionUtils.MethodCallback, ReflectionUtils
     }
 
     @Override
-    public void doWith(Method method) throws IllegalArgumentException, IllegalAccessException {
+    public void doWith(@Nonnull Method method) throws IllegalArgumentException {
         if (property != null) {
             return;
         }
@@ -35,7 +36,7 @@ class PropertyVisitor implements ReflectionUtils.MethodCallback, ReflectionUtils
     }
 
     @Override
-    public void doWith(Field field) throws IllegalArgumentException, IllegalAccessException {
+    public void doWith(@Nonnull Field field) throws IllegalArgumentException {
         if (property != null) {
             return;
         }

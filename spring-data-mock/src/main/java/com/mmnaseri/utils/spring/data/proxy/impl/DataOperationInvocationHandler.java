@@ -57,7 +57,7 @@ public class DataOperationInvocationHandler<K, E> implements InvocationHandler {
     }
 
     @Override
-    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+    public Object invoke(Object proxy, Method method, Object[] args) {
         log.info("A method call to " + method
                          + " has been intercepted. We will now try to find an appropriate invocation.");
         final Invocation methodInvocation = new ImmutableInvocation(method, args);

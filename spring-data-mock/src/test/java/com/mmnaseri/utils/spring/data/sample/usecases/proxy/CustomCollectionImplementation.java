@@ -10,9 +10,11 @@ import java.util.Iterator;
  * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/12/16, 5:31 PM)
  */
+@SuppressWarnings("unused")
 class CustomCollectionImplementation extends AbstractCollection {
 
     @Override
+    @Nonnull
     public Iterator iterator() {
         return EmptyIterator.INSTANCE;
     }

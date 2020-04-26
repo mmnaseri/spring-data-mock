@@ -12,25 +12,25 @@ import org.testng.annotations.Test;
 public class AbstractBinaryComparableMatcherTest {
 
     @Test(expectedExceptions = InvalidArgumentException.class, expectedExceptionsMessageRegExp = ".*x.y.z.*")
-    public void testWhenValueIsNotComparable() throws Exception {
+    public void testWhenValueIsNotComparable() {
         final NotMatchingBinaryComparableMatcher matcher = new NotMatchingBinaryComparableMatcher();
         matcher.matches(new ImmutableParameter("x.y.z", null, null, null), new Object(), 1, 2);
     }
 
     @Test(expectedExceptions = InvalidArgumentException.class, expectedExceptionsMessageRegExp = ".*x.y.z.*")
-    public void testWhenFirstParameterIsNotComparable() throws Exception {
+    public void testWhenFirstParameterIsNotComparable() {
         final NotMatchingBinaryComparableMatcher matcher = new NotMatchingBinaryComparableMatcher();
         matcher.matches(new ImmutableParameter("x.y.z", null, null, null), 1, new Object(), 2);
     }
 
     @Test(expectedExceptions = InvalidArgumentException.class, expectedExceptionsMessageRegExp = ".*x.y.z.*")
-    public void testWhenSecondParameterIsNotComparable() throws Exception {
+    public void testWhenSecondParameterIsNotComparable() {
         final NotMatchingBinaryComparableMatcher matcher = new NotMatchingBinaryComparableMatcher();
         matcher.matches(new ImmutableParameter("x.y.z", null, null, null), 1, 2, new Object());
     }
 
     @Test
-    public void testWhenAllAreComparable() throws Exception {
+    public void testWhenAllAreComparable() {
         final NotMatchingBinaryComparableMatcher matcher = new NotMatchingBinaryComparableMatcher();
         matcher.matches(new ImmutableParameter("x.y.z", null, null, null), 1, 2, 3);
     }

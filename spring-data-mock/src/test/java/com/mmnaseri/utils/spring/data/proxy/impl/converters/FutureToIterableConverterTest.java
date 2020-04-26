@@ -7,7 +7,6 @@ import com.mmnaseri.utils.spring.data.sample.usecases.proxy.ReturnTypeSampleRepo
 import org.testng.annotations.Test;
 
 import java.util.Iterator;
-import java.util.concurrent.Callable;
 import java.util.concurrent.FutureTask;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -23,13 +22,7 @@ public class FutureToIterableConverterTest {
     public void testConvertingFutureValueToIterable() throws Exception {
         final FutureToIterableConverter converter = new FutureToIterableConverter();
         final Object original = new Object();
-        final FutureTask<Object> task = new FutureTask<>(new Callable<Object>() {
-
-            @Override
-            public Object call() throws Exception {
-                return original;
-            }
-        });
+        final FutureTask<Object> task = new FutureTask<>(() -> original);
         task.run();
         final Object converted = converter.convert(
                 new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findLong"), null), task);

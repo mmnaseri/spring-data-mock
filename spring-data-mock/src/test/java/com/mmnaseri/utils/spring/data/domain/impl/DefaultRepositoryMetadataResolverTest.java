@@ -19,25 +19,25 @@ import static org.hamcrest.Matchers.notNullValue;
 public class DefaultRepositoryMetadataResolverTest {
 
     @Test
-    public void testThatItResolvesUsingAnnotations() throws Exception {
+    public void testThatItResolvesUsingAnnotations() {
         final RepositoryMetadata metadata = new DefaultRepositoryMetadataResolver().resolveFromInterface(
                 SampleAnnotatedRepository.class);
         assertThat(metadata, is(notNullValue()));
     }
 
     @Test
-    public void testThatItResolvesUsingInheritance() throws Exception {
+    public void testThatItResolvesUsingInheritance() {
         final RepositoryMetadata metadata = new DefaultRepositoryMetadataResolver().resolveFromInterface(
                 SimplePersonRepository.class);
         assertThat(metadata, is(notNullValue()));
     }
 
     @Test
-    public void testThatAnnotationTakesPrecedenceOverInheritance() throws Exception {
+    public void testThatAnnotationTakesPrecedenceOverInheritance() {
         final RepositoryMetadata metadata = new DefaultRepositoryMetadataResolver().resolveFromInterface(
                 AnnotatedInheritingRepository.class);
         assertThat(metadata, is(notNullValue()));
-        assertThat(metadata.getEntityType(), is(Matchers.<Class<?>>equalTo(Person.class)));
+        assertThat(metadata.getEntityType(), is(Matchers.equalTo(Person.class)));
     }
 
 }

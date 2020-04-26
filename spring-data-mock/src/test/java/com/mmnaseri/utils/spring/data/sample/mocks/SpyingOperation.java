@@ -10,6 +10,7 @@ import com.mmnaseri.utils.spring.data.store.DataStoreOperation;
  * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/12/16, 6:37 PM)
  */
+@SuppressWarnings("unused")
 public class SpyingOperation implements DataStoreOperation<Object, String, Person> {
 
     private DataStore<String, Person> store;

@@ -49,18 +49,17 @@ public abstract class AbstractCollectionMatcher extends AbstractSimpleMatcher {
             //otherwise, we just don't know how to convert it!
             throw new InvalidArgumentException("Expected an array, an iterator, or an iterable object");
         }
-        return matches(parameter, actual, collection);
+        return matches(actual, collection);
     }
 
     /**
      * Used to find out if a collection satisfies the condition set forth by this matcher
      *
-     * @param parameter  the parameter
      * @param actual     the actual value
      * @param collection the collection
      * @return {@literal true} if the match was a success
      */
-    protected abstract boolean matches(Parameter parameter, Object actual, Collection collection);
+    protected abstract boolean matches(Object actual, Collection collection);
 
     @Override
     public boolean isApplicableTo(Class<?> parameterType, Class<?>... propertiesTypes) {

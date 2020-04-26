@@ -12,28 +12,28 @@ import static org.hamcrest.Matchers.is;
 public class EndingWithMatcherTest {
 
     @Test
-    public void testWhenActualIsNull() throws Exception {
-        assertThat(new EndingWithMatcher().matches(null, null, ""), is(false));
+    public void testWhenActualIsNull() {
+        assertThat(new EndingWithMatcher().matches(null, ""), is(false));
     }
 
     @Test
-    public void testWhenParameterIsNull() throws Exception {
-        assertThat(new EndingWithMatcher().matches(null, "", (String) null), is(false));
+    public void testWhenParameterIsNull() {
+        assertThat(new EndingWithMatcher().matches("", null), is(false));
     }
 
     @Test
-    public void testWhenBothAreNull() throws Exception {
-        assertThat(new EndingWithMatcher().matches(null, null, (String) null), is(false));
+    public void testWhenBothAreNull() {
+        assertThat(new EndingWithMatcher().matches(null, null), is(false));
     }
 
     @Test
-    public void testWhenActualDoesNotEndWithParameter() throws Exception {
-        assertThat(new EndingWithMatcher().matches(null, "xyz", "abc"), is(false));
+    public void testWhenActualDoesNotEndWithParameter() {
+        assertThat(new EndingWithMatcher().matches("xyz", "abc"), is(false));
     }
 
     @Test
-    public void testWhenActualEndsWithParameter() throws Exception {
-        assertThat(new EndingWithMatcher().matches(null, "HelloWorld", "WORLD"), is(true));
+    public void testWhenActualEndsWithParameter() {
+        assertThat(new EndingWithMatcher().matches("HelloWorld", "WORLD"), is(true));
     }
 
 }

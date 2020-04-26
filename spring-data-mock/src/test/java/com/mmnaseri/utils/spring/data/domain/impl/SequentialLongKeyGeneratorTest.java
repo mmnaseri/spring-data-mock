@@ -19,7 +19,7 @@ public class SequentialLongKeyGeneratorTest extends BaseKeyGeneratorTest<Long> {
     }
 
     @Test
-    public void testKeysBeingSequential() throws Exception {
+    public void testKeysBeingSequential() {
         final KeyGenerator<Long> keyGenerator = getKeyGenerator();
         Long last = 0L;
         for (int i = 0; i < 100; i++) {

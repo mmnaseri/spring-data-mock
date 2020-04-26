@@ -27,13 +27,13 @@ public class IteratorToIterableConverterTest {
         final Iterable iterable = (Iterable) converted;
         final Iterator iterator = iterable.iterator();
         assertThat(iterator.hasNext(), is(true));
-        assertThat(iterator.next(), equalTo((Object) 1));
+        assertThat(iterator.next(), equalTo(1));
         assertThat(iterator.hasNext(), is(true));
-        assertThat(iterator.next(), equalTo((Object) 2));
+        assertThat(iterator.next(), equalTo(2));
         assertThat(iterator.hasNext(), is(true));
-        assertThat(iterator.next(), equalTo((Object) 3));
+        assertThat(iterator.next(), equalTo(3));
         assertThat(iterator.hasNext(), is(true));
-        assertThat(iterator.next(), equalTo((Object) 4));
+        assertThat(iterator.next(), equalTo(4));
         assertThat(iterator.hasNext(), is(false));
     }
 

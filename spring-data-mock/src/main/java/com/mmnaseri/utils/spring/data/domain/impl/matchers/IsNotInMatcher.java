@@ -1,7 +1,5 @@
 package com.mmnaseri.utils.spring.data.domain.impl.matchers;
 
-import com.mmnaseri.utils.spring.data.domain.Parameter;
-
 import java.util.Collection;
 
 /**
@@ -14,7 +12,7 @@ import java.util.Collection;
 public class IsNotInMatcher extends AbstractCollectionMatcher {
 
     @Override
-    protected boolean matches(Parameter parameter, Object actual, Collection collection) {
+    protected boolean matches(Object actual, Collection collection) {
         return !collection.contains(actual);
     }
 

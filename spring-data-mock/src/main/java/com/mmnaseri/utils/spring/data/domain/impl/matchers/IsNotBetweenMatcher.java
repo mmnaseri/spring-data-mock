@@ -1,7 +1,5 @@
 package com.mmnaseri.utils.spring.data.domain.impl.matchers;
 
-import com.mmnaseri.utils.spring.data.domain.Parameter;
-
 /**
  * <p>This comparing matcher will determine if the passed value is smaller or equal to the first passed argument and
  * larger or equal to the second passed argument, thus determining if it does not fall between the two values (if they
@@ -17,7 +15,7 @@ import com.mmnaseri.utils.spring.data.domain.Parameter;
 public class IsNotBetweenMatcher extends AbstractBinaryComparableMatcher {
 
     @Override
-    protected boolean matches(Parameter parameter, Comparable value, Comparable first, Comparable second) {
+    protected boolean matches(Comparable value, Comparable first, Comparable second) {
         //noinspection unchecked
         return first != null && second != null && (value == null || first.compareTo(value) > 0 || second.compareTo(
                 value) < 0);

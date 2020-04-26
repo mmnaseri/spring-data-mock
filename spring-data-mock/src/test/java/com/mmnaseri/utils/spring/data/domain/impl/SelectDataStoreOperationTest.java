@@ -1,9 +1,7 @@
 package com.mmnaseri.utils.spring.data.domain.impl;
 
-import com.mmnaseri.utils.spring.data.domain.Modifier;
 import com.mmnaseri.utils.spring.data.domain.Parameter;
 import com.mmnaseri.utils.spring.data.query.NullHandling;
-import com.mmnaseri.utils.spring.data.query.Order;
 import com.mmnaseri.utils.spring.data.query.PageParameterExtractor;
 import com.mmnaseri.utils.spring.data.query.SortDirection;
 import com.mmnaseri.utils.spring.data.query.impl.*;
@@ -35,7 +33,7 @@ public class SelectDataStoreOperationTest {
     private DataStore<String, Person> dataStore;
 
     @BeforeMethod
-    public void setUp() throws Exception {
+    public void setUp() {
         dataStore = new MemoryDataStore<>(Person.class);
         dataStore.save("k1", new Person().setId("k1").setFirstName("Milad").setLastName("Naseri")
                                          .setAddress(new Address().setCity("Tehran")).setAge(10));
@@ -51,20 +49,20 @@ public class SelectDataStoreOperationTest {
     public void testSimpleSelection() throws Exception {
         final List<List<Parameter>> branches = new ArrayList<>();
         final DefaultOperatorContext operatorContext = new DefaultOperatorContext();
-        branches.add(Arrays.<Parameter>asList(
-                new ImmutableParameter("firstName", Collections.<Modifier>emptySet(), new int[]{0},
+        branches.add(Arrays.asList(
+                new ImmutableParameter("firstName", Collections.emptySet(), new int[]{0},
                                        operatorContext.getBySuffix("Is")),
-                new ImmutableParameter("lastName", Collections.<Modifier>emptySet(), new int[]{1},
+                new ImmutableParameter("lastName", Collections.emptySet(), new int[]{1},
                                        operatorContext.getBySuffix("Is"))
-                                             ));
-        branches.add(Collections.<Parameter>singletonList(
-                new ImmutableParameter("address.city", Collections.<Modifier>emptySet(), new int[]{2},
+                                  ));
+        branches.add(Collections.singletonList(
+                new ImmutableParameter("address.city", Collections.emptySet(), new int[]{2},
                                        operatorContext.getBySuffix("Is"))
-                                                         ));
-        branches.add(Collections.<Parameter>singletonList(
-                new ImmutableParameter("age", Collections.<Modifier>emptySet(), new int[]{3},
+                                              ));
+        branches.add(Collections.singletonList(
+                new ImmutableParameter("age", Collections.emptySet(), new int[]{3},
                                        operatorContext.getBySuffix("GreaterThan"))
-                                                         ));
+                                              ));
         final DefaultQueryDescriptor descriptor = new DefaultQueryDescriptor(false, null, 0, null, null, branches, null,
                                                                              null);
         final DataStoreOperation<List<Person>, String, Person> operation = new SelectDataStoreOperation<>(descriptor);
@@ -83,7 +81,7 @@ public class SelectDataStoreOperationTest {
     public void testSorting() throws Exception {
         final ImmutableOrder first = new ImmutableOrder(SortDirection.ASCENDING, "address.city", NullHandling.DEFAULT);
         final ImmutableOrder second = new ImmutableOrder(SortDirection.ASCENDING, "lastName", NullHandling.DEFAULT);
-        final ImmutableSort sort = new ImmutableSort(Arrays.<Order>asList(first, second));
+        final ImmutableSort sort = new ImmutableSort(Arrays.asList(first, second));
         final WrappedSortParameterExtractor sortExtractor = new WrappedSortParameterExtractor(sort);
         final List<List<Parameter>> branches = new ArrayList<>();
         final DefaultQueryDescriptor descriptor = new DefaultQueryDescriptor(false, null, 0, null, sortExtractor,
@@ -161,7 +159,7 @@ public class SelectDataStoreOperationTest {
     }
 
     @Test
-    public void testToString() throws Exception {
+    public void testToString() {
         final List<List<Parameter>> branches = Collections.emptyList();
         final DefaultQueryDescriptor descriptor = new DefaultQueryDescriptor(false, null, 0, null, null, branches, null,
                                                                              null);

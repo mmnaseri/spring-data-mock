@@ -13,6 +13,7 @@ import static org.hamcrest.Matchers.*;
  * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/10/16)
  */
+@SuppressWarnings("unused")
 public class SpyingDataStore<K, E> implements QueueingDataStore<K, E, Object> {
 
     private final DataStore<K, E> delegate;

@@ -31,7 +31,7 @@ public class PageIterableResultAdapterTest {
         assertThat(value.getSize(), is(4));
         assertThat(value.getSort(), is(Sort.unsorted()));
         assertThat(value.getContent(), hasSize(4));
-        assertThat(value.getContent(), containsInAnyOrder((Object) 1, 2, 3, 4));
+        assertThat(value.getContent(), containsInAnyOrder(1, 2, 3, 4));
     }
 
     @Test

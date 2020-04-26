@@ -12,13 +12,13 @@ import static org.hamcrest.Matchers.is;
 public class IsNotNullMatcherTest {
 
     @Test
-    public void testSubjectIsNull() throws Exception {
-        assertThat(new IsNotNullMatcher().matches(null, null), is(false));
+    public void testSubjectIsNull() {
+        assertThat(new IsNotNullMatcher().matches(null), is(false));
     }
 
     @Test
-    public void testSubjectIsNotNull() throws Exception {
-        assertThat(new IsNotNullMatcher().matches(null, new Object()), is(true));
+    public void testSubjectIsNotNull() {
+        assertThat(new IsNotNullMatcher().matches(new Object()), is(true));
     }
 
 }

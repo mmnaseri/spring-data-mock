@@ -1,7 +1,5 @@
 package com.mmnaseri.utils.spring.data.domain.impl.matchers;
 
-import com.mmnaseri.utils.spring.data.domain.Parameter;
-
 /**
  * This matcher will return {@literal true} if the argument passed is not equal to the value on the object, even when
  * their case differences are ignored.
@@ -12,7 +10,7 @@ import com.mmnaseri.utils.spring.data.domain.Parameter;
 public class IsNotLikeMatcher extends AbstractSimpleStringMatcher {
 
     @Override
-    protected boolean matches(Parameter parameter, String actual, String argument) {
+    protected boolean matches(String actual, String argument) {
         return (actual == null && argument != null) || (actual != null && argument == null) || (actual != null
                 && !actual.equalsIgnoreCase(argument));
     }

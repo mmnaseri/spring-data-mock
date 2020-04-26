@@ -37,18 +37,16 @@ public class AnnotatedFieldIdPropertyResolverTest extends BaseRepeatableIdProper
 
     /**
      * Regression test for https://github.com/mmnaseri/spring-data-mock/issues/55
-     *
-     * @throws Exception
      */
     @Test
-    public void testResolvingIdPropertyWhenIdAnnotationOnFieldIsFromJPA() throws Exception {
+    public void testResolvingIdPropertyWhenIdAnnotationOnFieldIsFromJPA() {
         final String property = getIdPropertyResolver().resolve(EntityWithAnnotatedIdFieldFromJPA.class, Long.class);
         assertThat(property, is(notNullValue()));
         assertThat(property, is("customIdProperty"));
     }
 
     @Test
-    public void testResolvingEmbeddedIdPropertyWhenIdAnnotationOnFieldIsFromJPA() throws Exception {
+    public void testResolvingEmbeddedIdPropertyWhenIdAnnotationOnFieldIsFromJPA() {
         final String property = getIdPropertyResolver().resolve(EntityWithAnnotatedEmbeddedIdFieldFromJPA.class, EmbeddableId.class);
         assertThat(property, is(notNullValue()));
         assertThat(property, is("customIdProperty"));

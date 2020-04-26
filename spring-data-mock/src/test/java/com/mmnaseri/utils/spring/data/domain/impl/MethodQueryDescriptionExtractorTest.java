@@ -34,7 +34,7 @@ public class MethodQueryDescriptionExtractorTest {
     private RepositoryFactoryConfiguration configuration;
 
     @BeforeMethod
-    public void setUp() throws Exception {
+    public void setUp() {
         extractor = new MethodQueryDescriptionExtractor(new DefaultOperatorContext());
         malformedRepositoryMetadata = new ImmutableRepositoryMetadata(String.class, Person.class,
                                                                       MalformedRepository.class, "id");
@@ -113,7 +113,7 @@ public class MethodQueryDescriptionExtractorTest {
                           MalformedRepository.class.getMethod("findByFirstNameOr", String.class));
     }
 
-    @Test(expectedExceptions = QueryParserException.class, expectedExceptionsMessageRegExp = ".*\\: Invalid parameter types for operator IS on property firstName: \\[class java\\.lang\\.Object\\]")
+    @Test(expectedExceptions = QueryParserException.class, expectedExceptionsMessageRegExp = ".*: Invalid parameter types for operator IS on property firstName: \\[class java\\.lang\\.Object]")
     public void testBadParameterType() throws Exception {
         extractor.extract(malformedRepositoryMetadata, configuration,
                           MalformedRepository.class.getMethod("findByFirstName", Object.class));
@@ -165,7 +165,7 @@ public class MethodQueryDescriptionExtractorTest {
     }
 
     @Test
-    public void testIntegrity() throws Exception {
+    public void testIntegrity() {
         assertThat(((MethodQueryDescriptionExtractor) extractor).getOperatorContext(), is(notNullValue()));
     }
 

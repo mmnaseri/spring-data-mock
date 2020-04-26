@@ -2,6 +2,7 @@ package com.mmnaseri.utils.samples.spring.data.mongo.model;
 
 import org.bson.types.ObjectId;
 
+@SuppressWarnings("unused")
 public class Store {
 
     private ObjectId id;

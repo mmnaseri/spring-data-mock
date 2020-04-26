@@ -4,7 +4,6 @@ import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
 import com.mmnaseri.utils.spring.data.domain.impl.ImmutableRepositoryMetadata;
 import com.mmnaseri.utils.spring.data.sample.models.*;
 import com.mmnaseri.utils.spring.data.sample.usecases.store.SampleAuditorAware;
-import org.hamcrest.Matchers;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.util.ReflectionUtils;
 import org.testng.annotations.BeforeMethod;
@@ -15,6 +14,7 @@ import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.Objects;
 import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -30,12 +30,12 @@ public class AuditableWrapperTest {
     private AuditorAware<?> auditorAware;
 
     @BeforeMethod
-    public void setUp() throws Exception {
+    public void setUp() {
         auditorAware = new SampleAuditorAware();
     }
 
     @Test
-    public void testCreatedBy() throws Exception {
+    public void testCreatedBy() {
         final RepositoryMetadata repositoryMetadata = new ImmutableRepositoryMetadata(String.class,
                                                                                       EntityWithCreatedBy.class, null,
                                                                                       "id");
@@ -43,13 +43,15 @@ public class AuditableWrapperTest {
         final AuditableWrapper wrapper = new AuditableWrapper(entity, repositoryMetadata);
         assertThat(entity.getCreatedBy(), is(nullValue()));
         assertThat(wrapper.getCreatedBy(), is(Optional.empty()));
-        wrapper.setCreatedBy(auditorAware.getCurrentAuditor().orElse(null));
-        assertThat(wrapper.getCreatedBy().get(), Matchers.<Object>is(SampleAuditorAware.AUDITOR));
+        assertThat(auditorAware.getCurrentAuditor().isPresent(), is(true));
+        wrapper.setCreatedBy(auditorAware.getCurrentAuditor().get());
+        assertThat(wrapper.getCreatedBy().isPresent(), is(true));
+        assertThat(wrapper.getCreatedBy().get(), is(SampleAuditorAware.AUDITOR));
         assertThat(entity.getCreatedBy(), is(SampleAuditorAware.AUDITOR));
     }
 
     @Test
-    public void testLastModifiedBy() throws Exception {
+    public void testLastModifiedBy() {
         final RepositoryMetadata repositoryMetadata = new ImmutableRepositoryMetadata(String.class,
                                                                                       EntityWithLastModifiedBy.class,
                                                                                       null, "id");
@@ -57,13 +59,15 @@ public class AuditableWrapperTest {
         final AuditableWrapper wrapper = new AuditableWrapper(entity, repositoryMetadata);
         assertThat(entity.getLastModifiedBy(), is(nullValue()));
         assertThat(wrapper.getLastModifiedBy(), is(Optional.empty()));
-        wrapper.setLastModifiedBy(auditorAware.getCurrentAuditor().orElse(null));
-        assertThat(wrapper.getLastModifiedBy().get(), Matchers.<Object>is(SampleAuditorAware.AUDITOR));
+        assertThat(auditorAware.getCurrentAuditor().isPresent(), is(true));
+        wrapper.setLastModifiedBy(auditorAware.getCurrentAuditor().get());
+        assertThat(wrapper.getLastModifiedBy().isPresent(), is(true));
+        assertThat(wrapper.getLastModifiedBy().get(), is(SampleAuditorAware.AUDITOR));
         assertThat(entity.getLastModifiedBy(), is(SampleAuditorAware.AUDITOR));
     }
 
     @Test
-    public void testCreatedDate() throws Exception {
+    public void testCreatedDate() {
         final RepositoryMetadata repositoryMetadata = new ImmutableRepositoryMetadata(String.class,
                                                                                       EntityWithCreatedDate.class, null,
                                                                                       "id");
@@ -79,7 +83,7 @@ public class AuditableWrapperTest {
     }
 
     @Test
-    public void testUtilDateLastModifiedDate() throws Exception {
+    public void testUtilDateLastModifiedDate() {
         final RepositoryMetadata repositoryMetadata = new ImmutableRepositoryMetadata(String.class,
                                                                                       EntityWithUtilDateLastModifiedDate.class,
                                                                                       null, "id");
@@ -95,7 +99,7 @@ public class AuditableWrapperTest {
     }
 
     @Test
-    public void testSqlDateLastModifiedDate() throws Exception {
+    public void testSqlDateLastModifiedDate() {
         final RepositoryMetadata repositoryMetadata = new ImmutableRepositoryMetadata(String.class,
                                                                                       EntityWithSqlDateLastModifiedDate.class,
                                                                                       null, "id");
@@ -111,7 +115,7 @@ public class AuditableWrapperTest {
     }
 
     @Test
-    public void testTimestampLastModifiedDate() throws Exception {
+    public void testTimestampLastModifiedDate() {
         final RepositoryMetadata repositoryMetadata = new ImmutableRepositoryMetadata(String.class,
                                                                                       EntityWithTimestampDateLastModifiedDate.class,
                                                                                       null, "id");
@@ -127,7 +131,7 @@ public class AuditableWrapperTest {
     }
 
     @Test
-    public void testTimeLastModifiedDate() throws Exception {
+    public void testTimeLastModifiedDate() {
         final RepositoryMetadata repositoryMetadata = new ImmutableRepositoryMetadata(String.class,
                                                                                       EntityWithTimeLastModifiedDate.class,
                                                                                       null, "id");
@@ -143,7 +147,7 @@ public class AuditableWrapperTest {
     }
 
     @Test
-    public void testDateTimeLastModifiedDate() throws Exception {
+    public void testDateTimeLastModifiedDate() {
         final RepositoryMetadata repositoryMetadata = new ImmutableRepositoryMetadata(String.class,
                                                                                       EntityWithDateTimeLastModifiedDate.class,
                                                                                       null, "id");
@@ -153,24 +157,26 @@ public class AuditableWrapperTest {
         assertThat(entity.getLastModifiedDate(), is(nullValue()));
         assertThat(wrapper.getLastModifiedDate(), is(Optional.empty()));
         wrapper.setLastModifiedDate(time);
+        assertThat(wrapper.getLastModifiedDate().isPresent(), is(true));
         assertThat(wrapper.getLastModifiedDate().get(), is(time));
         assertThat(entity.getLastModifiedDate(), is(time));
     }
 
     @Test
-    public void testSettingNullValue() throws Exception {
+    public void testSettingNullValue() {
         final RepositoryMetadata repositoryMetadata = new ImmutableRepositoryMetadata(String.class,
                                                                                       EntityWithCreatedBy.class, null,
                                                                                       "id");
         final EntityWithCreatedBy entity = new EntityWithCreatedBy();
         final AuditableWrapper wrapper = new AuditableWrapper(entity, repositoryMetadata);
         assertThat(entity.getCreatedBy(), is(nullValue()));
+        //noinspection ConstantConditions
         wrapper.setCreatedBy(null);
         assertThat(entity.getCreatedBy(), is(nullValue()));
     }
 
     @Test
-    public void testGettingIdentifier() throws Exception {
+    public void testGettingIdentifier() {
         final RepositoryMetadata repositoryMetadata = new ImmutableRepositoryMetadata(String.class,
                                                                                       EntityWithCreatedBy.class, null,
                                                                                       "id");
@@ -179,11 +185,11 @@ public class AuditableWrapperTest {
         assertThat(wrapper.getId(), is(nullValue()));
         entity.setId("some identifier");
         assertThat(wrapper.getId(), is(notNullValue()));
-        assertThat(wrapper.getId(), Matchers.<Object>is(entity.getId()));
+        assertThat(wrapper.getId(), is(entity.getId()));
     }
 
     @Test
-    public void testDirtyChecking() throws Exception {
+    public void testDirtyChecking() {
         final RepositoryMetadata repositoryMetadata = new ImmutableRepositoryMetadata(String.class,
                                                                                       EntityWithCreatedBy.class, null,
                                                                                       "id");
@@ -195,7 +201,7 @@ public class AuditableWrapperTest {
     }
 
     @Test
-    public void testSettingReadOnlyProperty() throws Exception {
+    public void testSettingReadOnlyProperty() {
         final RepositoryMetadata repositoryMetadata = new ImmutableRepositoryMetadata(String.class,
                                                                                       EntityWithFinalCreatedBy.class,
                                                                                       null, "id");
@@ -216,14 +222,15 @@ public class AuditableWrapperTest {
         final EntityWithWriteOnlyCreatedBy entity = new EntityWithWriteOnlyCreatedBy();
         final AuditableWrapper wrapper = new AuditableWrapper(entity, repositoryMetadata);
         final Field createdBy = ReflectionUtils.findField(EntityWithWriteOnlyCreatedBy.class, "createdBy");
-        createdBy.setAccessible(true);
+        Objects.requireNonNull(createdBy).setAccessible(true);
         assertThat(createdBy.get(entity), is(nullValue()));
         assertThat(wrapper.getCreatedBy(), is(Optional.empty()));
-        wrapper.setCreatedBy(auditorAware.getCurrentAuditor().orElse(null));
+        assertThat(auditorAware.getCurrentAuditor().isPresent(), is(true));
+        wrapper.setCreatedBy(auditorAware.getCurrentAuditor().get());
         //the wrapper will not be able to read the value ...
         assertThat(wrapper.getCreatedBy(), is(Optional.empty()));
         //... but the value is set anyway
-        assertThat(createdBy.get(entity), Matchers.<Object>is(SampleAuditorAware.AUDITOR));
+        assertThat(createdBy.get(entity), is(SampleAuditorAware.AUDITOR));
     }
 
 }

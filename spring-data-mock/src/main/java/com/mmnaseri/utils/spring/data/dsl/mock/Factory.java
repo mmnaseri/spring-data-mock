@@ -8,7 +8,7 @@ import com.mmnaseri.utils.spring.data.proxy.RepositoryFactory;
  * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (10/14/15)
  */
-@SuppressWarnings("WeakerAccess")
+@SuppressWarnings({"WeakerAccess", "unused"})
 public interface Factory {
 
     /**
