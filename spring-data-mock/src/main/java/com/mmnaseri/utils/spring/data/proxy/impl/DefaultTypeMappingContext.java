@@ -113,11 +113,6 @@ public class DefaultTypeMappingContext implements TypeMappingContext {
             final Object instance;
             try {
                 instance = implementation.getDeclaredConstructor().newInstance();
-            } catch (InstantiationException e) {
-                log.error("Failed to instantiate class " + implementation
-                                  + " because there was an error in the constructor");
-                throw new RepositoryDefinitionException(repositoryType,
-                                                        "Failed to instantiate an object of type " + implementation, e);
             } catch (IllegalAccessException e) {
                 log.error("The constructor for the implementation class is not accessible: " + implementation);
                 throw new RepositoryDefinitionException(repositoryType,
