@@ -13,6 +13,7 @@ import com.mmnaseri.utils.spring.data.store.impl.MemoryDataStore;
 import org.hamcrest.Matchers;
 import org.testng.annotations.Test;
 
+import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -58,10 +59,6 @@ public class CrudRepositorySupportTest {
         assertThat(dataStore.getRequests().get(0).getKey(), Matchers.is(entity.getId()));
     }
 
-    /**
-     * This needs to have the root cause logged. See #29
-     *
-     */
     @Test(expectedExceptions = DataStoreException.class)
     public void testPerformingInsertsWhenNoKeyGeneratorIsPresent() {
         final CrudRepositorySupport support = new CrudRepositorySupport();
@@ -90,4 +87,28 @@ public class CrudRepositorySupportTest {
         assertThat(dataStore.getRequests().get(0).getKey(), is(notNullValue()));
     }
 
+    @Test
+    public void testInsertingMultipleEntities() {
+        final CrudRepositorySupport support = new CrudRepositorySupport();
+        final MemoryDataStore<String, Person> actualDataStore = new MemoryDataStore<>(Person.class);
+        final SpyingDataStore<String, Person> dataStore = new SpyingDataStore<>(actualDataStore, new AtomicLong());
+        support.setDataStore(dataStore);
+        support.setRepositoryMetadata(
+                new ImmutableRepositoryMetadata(String.class, Person.class, SimplePersonRepository.class, "id"));
+        support.setKeyGenerator(new UUIDKeyGenerator());
+
+        final Person first = new Person();
+        final Person second = new Person();
+        final Person third = new Person();
+
+        support.insert(Arrays.asList(first, second, third));
+
+        assertThat(dataStore.getRequests(), hasSize(3));
+        assertThat(dataStore.getRequests().get(0).getOperation(), is(Operation.SAVE));
+        assertThat(dataStore.getRequests().get(0).getEntity(), is(first));
+        assertThat(dataStore.getRequests().get(1).getOperation(), is(Operation.SAVE));
+        assertThat(dataStore.getRequests().get(1).getEntity(), is(second));
+        assertThat(dataStore.getRequests().get(2).getOperation(), is(Operation.SAVE));
+        assertThat(dataStore.getRequests().get(2).getEntity(), is(third));
+    }
 }
