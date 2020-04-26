@@ -7,7 +7,7 @@ import com.mmnaseri.utils.spring.data.error.InvalidArgumentException;
 /**
  * This matcher is used to determine if a condition holds for a single parameter
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/17/15)
  */
 public abstract class AbstractSimpleMatcher implements Matcher {
@@ -15,13 +15,15 @@ public abstract class AbstractSimpleMatcher implements Matcher {
     @Override
     public final boolean matches(Parameter parameter, Object value, Object... properties) {
         if (properties.length != 1) {
-            throw new InvalidArgumentException("Expected exactly one parameter to be passed down: " + parameter.getPath());
+            throw new InvalidArgumentException(
+                    "Expected exactly one parameter to be passed down: " + parameter.getPath());
         }
         return matches(parameter, value, properties[0]);
     }
 
     /**
      * Called to see if the condition holds
+     *
      * @param parameter the parameter
      * @param actual    the actual value
      * @param expected  the expectation

@@ -12,7 +12,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/29/15)
  */
 @SuppressWarnings("unused")
@@ -40,11 +40,13 @@ public class AnnotatedGetterIdPropertyResolverTest extends BaseRepeatableIdPrope
 
     /**
      * Regression test for https://github.com/mmnaseri/spring-data-mock/issues/55
+     *
      * @throws Exception
      */
     @Test
     public void testResolvingIdPropertyWhenIdAnnotationOnGetterIsFromJPA() throws Exception {
-        final String property = getIdPropertyResolver().resolve(EntityWithAnnotatedIdGetterFromJPA.class, Integer.class);
+        final String property = getIdPropertyResolver().resolve(EntityWithAnnotatedIdGetterFromJPA.class,
+                                                                Integer.class);
         assertThat(property, is(notNullValue()));
         assertThat(property, is("myCustomId"));
     }

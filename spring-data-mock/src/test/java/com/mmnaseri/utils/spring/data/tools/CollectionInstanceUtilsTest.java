@@ -9,7 +9,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/8/16)
  */
 public class CollectionInstanceUtilsTest extends AbstractUtilityClassTest {
@@ -22,19 +22,19 @@ public class CollectionInstanceUtilsTest extends AbstractUtilityClassTest {
     @Test
     public void testSupportedConcreteTypes() throws Exception {
         final List<? extends Class<?>> collectionTypes = Arrays.asList(HashSet.class,
-                TreeSet.class,
-                CopyOnWriteArraySet.class,
-                LinkedHashSet.class,
-                ArrayList.class,
-                LinkedList.class,
-                Vector.class,
-                Stack.class,
-                PriorityQueue.class,
-                PriorityBlockingQueue.class,
-                ArrayDeque.class,
-                ConcurrentLinkedQueue.class,
-                LinkedBlockingQueue.class,
-                LinkedBlockingDeque.class);
+                                                                       TreeSet.class,
+                                                                       CopyOnWriteArraySet.class,
+                                                                       LinkedHashSet.class,
+                                                                       ArrayList.class,
+                                                                       LinkedList.class,
+                                                                       Vector.class,
+                                                                       Stack.class,
+                                                                       PriorityQueue.class,
+                                                                       PriorityBlockingQueue.class,
+                                                                       ArrayDeque.class,
+                                                                       ConcurrentLinkedQueue.class,
+                                                                       LinkedBlockingQueue.class,
+                                                                       LinkedBlockingDeque.class);
         for (Class<?> collectionType : collectionTypes) {
             final Collection<?> collection = CollectionInstanceUtils.getCollection(collectionType);
             assertThat(collection, is(notNullValue()));

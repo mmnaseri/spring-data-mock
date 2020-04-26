@@ -10,7 +10,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/10/16)
  */
 public class NullToListenableFutureResultAdapterTest {
@@ -19,14 +19,20 @@ public class NullToListenableFutureResultAdapterTest {
     public void testAccepting() throws Exception {
         final ResultAdapter<ListenableFuture> adapter = new NullToListenableFutureResultAdapter();
         assertThat(adapter.accepts(null, new Object()), is(false));
-        assertThat(adapter.accepts(new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findOther"), new Object[]{}), null), is(false));
-        assertThat(adapter.accepts(new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findListenableFuture"), new Object[]{}), null), is(true));
+        assertThat(adapter.accepts(
+                new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findOther"), new Object[]{}), null),
+                   is(false));
+        assertThat(adapter.accepts(
+                new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findListenableFuture"),
+                                        new Object[]{}), null), is(true));
     }
 
     @Test
     public void testAdaptingTheResult() throws Exception {
         final ResultAdapter<ListenableFuture> adapter = new NullToListenableFutureResultAdapter();
-        final ListenableFuture adapted = adapter.adapt(new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findListenableFuture"), new Object[]{}), null);
+        final ListenableFuture adapted = adapter.adapt(
+                new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findListenableFuture"),
+                                        new Object[]{}), null);
         assertThat(adapted, is(notNullValue()));
         assertThat(adapted.get(), is(nullValue()));
     }

@@ -8,11 +8,11 @@ import java.util.concurrent.ThreadLocalRandom;
 /**
  * This class will help with generating unique, random integers.
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (10/6/15)
  */
 public class RandomIntegerKeyGenerator extends AbstractRandomKeyGenerator<Integer> {
-    
+
     private final Random random = ThreadLocalRandom.current();
 
     @Override

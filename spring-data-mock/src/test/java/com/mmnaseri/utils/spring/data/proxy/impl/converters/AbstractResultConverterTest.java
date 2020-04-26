@@ -10,7 +10,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (10/6/15)
  */
 public class AbstractResultConverterTest {
@@ -23,14 +23,16 @@ public class AbstractResultConverterTest {
 
     @Test
     public void testConversionWhenTargetReturnsVoid() throws Exception {
-        final Object converted = new NoOpResultConverter().convert(new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("doSomething"), null), new Object());
+        final Object converted = new NoOpResultConverter().convert(
+                new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("doSomething"), null), new Object());
         assertThat(converted, is(nullValue()));
     }
 
     @Test
     public void testWhenTypeMatchesTheReturnType() throws Exception {
         final Person original = new Person();
-        final Object converted = new NoOpResultConverter().convert(new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findPerson"), null), original);
+        final Object converted = new NoOpResultConverter().convert(
+                new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findPerson"), null), original);
         assertThat(converted, is(notNullValue()));
         assertThat(converted, is(instanceOf(Person.class)));
         assertThat((Person) converted, is(original));
@@ -40,7 +42,8 @@ public class AbstractResultConverterTest {
     public void testThatPassesToSubClassOtherwise() throws Exception {
         final Object original = new Object();
         final NoOpResultConverter converter = new NoOpResultConverter();
-        final Object converted = converter.convert(new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findPerson"), null), original);
+        final Object converted = converter.convert(
+                new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findPerson"), null), original);
         assertThat(converted, is(notNullValue()));
         assertThat(converted, is(original));
         assertThat(converter.getOriginal(), is(original));

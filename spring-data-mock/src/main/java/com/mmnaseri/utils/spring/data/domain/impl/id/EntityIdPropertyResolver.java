@@ -9,8 +9,6 @@ import com.mmnaseri.utils.spring.data.tools.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import java.io.Serializable;
-
 /**
  * <p>This class will use all the magic implemented in the other ID property resolvers to find out the ID property
  * for an entity.</p>
@@ -27,19 +25,21 @@ import java.io.Serializable;
  * <p>After all the above are considered, if nothing is found, a {@link NoIdPropertyException NoIdPropertyException}
  * is thrown to show that the promised ID property was not found on the entity class.</p>
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/23/15)
  */
 public class EntityIdPropertyResolver implements IdPropertyResolver {
 
     private static final Log log = LogFactory.getLog(EntityIdPropertyResolver.class);
-    private final AnnotatedGetterIdPropertyResolver annotatedGetterIdPropertyResolver = new AnnotatedGetterIdPropertyResolver();
-    private final AnnotatedFieldIdPropertyResolver annotatedFieldIdPropertyResolver = new AnnotatedFieldIdPropertyResolver();
+    private final AnnotatedGetterIdPropertyResolver annotatedGetterIdPropertyResolver =
+            new AnnotatedGetterIdPropertyResolver();
+    private final AnnotatedFieldIdPropertyResolver annotatedFieldIdPropertyResolver =
+            new AnnotatedFieldIdPropertyResolver();
     private final NamedGetterIdPropertyResolver namedGetterIdPropertyResolver = new NamedGetterIdPropertyResolver();
     private final NamedFieldIdPropertyResolver namedFieldIdPropertyResolver = new NamedFieldIdPropertyResolver();
 
     @Override
-    public String resolve(Class<?> entityType, Class<? extends Serializable> idType) {
+    public String resolve(Class<?> entityType, Class<?> idType) {
         log.info("Trying to resolve the ID property for entity " + entityType + " using the annotated getter method");
         String idProperty = annotatedGetterIdPropertyResolver.resolve(entityType, idType);
         if (idProperty == null) {
@@ -58,7 +58,8 @@ public class EntityIdPropertyResolver implements IdPropertyResolver {
             log.error("No ID property was found for entity " + entityType);
             throw new NoIdPropertyException(entityType);
         }
-        final PropertyDescriptor descriptor = PropertyUtils.getPropertyDescriptor(entityType, StringUtils.capitalize(idProperty));
+        final PropertyDescriptor descriptor = PropertyUtils.getPropertyDescriptor(entityType,
+                                                                                  StringUtils.capitalize(idProperty));
         if (descriptor.getType().isPrimitive()) {
             throw new PrimitiveIdTypeException(entityType, idProperty);
         }

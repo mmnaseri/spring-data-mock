@@ -1,7 +1,7 @@
 package com.mmnaseri.utils.spring.data.error;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/10/16)
  */
 public abstract class FunctionRegistryException extends RepositoryMockException {

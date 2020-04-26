@@ -7,12 +7,11 @@ import com.mmnaseri.utils.spring.data.proxy.RepositoryFactoryConfiguration;
 import com.mmnaseri.utils.spring.data.proxy.impl.DefaultRepositoryFactory;
 import com.mmnaseri.utils.spring.data.proxy.impl.ImmutableRepositoryConfiguration;
 
-import java.io.Serializable;
 import java.lang.reflect.Proxy;
 import java.util.Arrays;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/12/16, 11:10 AM)
  */
 public class InformationExposingRepositoryFactory implements RepositoryFactory {
@@ -26,12 +25,16 @@ public class InformationExposingRepositoryFactory implements RepositoryFactory {
     }
 
     @Override
-    public <E> E getInstance(KeyGenerator<? extends Serializable> keyGenerator, Class<E> repositoryInterface, Class... implementations) {
+    public <E> E getInstance(KeyGenerator<?> keyGenerator, Class<E> repositoryInterface, Class... implementations) {
         final E instance = delegate.getInstance(keyGenerator, repositoryInterface, implementations);
         //noinspection unchecked
-        final RepositoryConfiguration configuration = new ImmutableRepositoryConfiguration(this.configuration.getRepositoryMetadataResolver().resolve(repositoryInterface), keyGenerator, Arrays.<Class<?>>asList(implementations));
-        final DefaultInformationExposingRepository implementation = new DefaultInformationExposingRepository(configuration, getConfiguration());
-        final InformationExposingInvocationHandler<E> handler = new InformationExposingInvocationHandler<>(implementation, instance);
+        final RepositoryConfiguration configuration = new ImmutableRepositoryConfiguration(
+                this.configuration.getRepositoryMetadataResolver().resolve(repositoryInterface), keyGenerator,
+                Arrays.<Class<?>>asList(implementations));
+        final DefaultInformationExposingRepository implementation = new DefaultInformationExposingRepository(
+                configuration, getConfiguration());
+        final InformationExposingInvocationHandler<E> handler = new InformationExposingInvocationHandler<>(
+                implementation, instance);
         final Object proxyInstance = Proxy.newProxyInstance(instance.getClass().getClassLoader(), new Class[]{
                 repositoryInterface,
                 InformationExposingRepository.class

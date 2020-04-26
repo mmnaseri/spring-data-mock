@@ -14,7 +14,7 @@ import com.mmnaseri.utils.spring.data.store.DataStoreRegistry;
  * <p>This class is an immutable repository factory configuration insofar as the configuration itself is
  * considered. The properties themselves won't be protected and are open to external change.</p>
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/12/16, 1:49 PM)
  */
 @SuppressWarnings("WeakerAccess")
@@ -31,12 +31,23 @@ public class ImmutableRepositoryFactoryConfiguration implements RepositoryFactor
     private final KeyGenerator<?> keyGenerator;
 
     public ImmutableRepositoryFactoryConfiguration(RepositoryFactoryConfiguration configuration) {
-        this(configuration.getRepositoryMetadataResolver(), configuration.getDescriptionExtractor(), configuration.getFunctionRegistry(),
-                configuration.getDataStoreRegistry(), configuration.getResultAdapterContext(), configuration.getTypeMappingContext(),
-                configuration.getEventListenerContext(), configuration.getOperationInvocationHandler(), configuration.getDefaultKeyGenerator());
+        this(configuration.getRepositoryMetadataResolver(), configuration.getDescriptionExtractor(),
+             configuration.getFunctionRegistry(),
+             configuration.getDataStoreRegistry(), configuration.getResultAdapterContext(),
+             configuration.getTypeMappingContext(),
+             configuration.getEventListenerContext(), configuration.getOperationInvocationHandler(),
+             configuration.getDefaultKeyGenerator());
     }
 
-    public ImmutableRepositoryFactoryConfiguration(RepositoryMetadataResolver metadataResolver, MethodQueryDescriptionExtractor queryDescriptionExtractor, DataFunctionRegistry functionRegistry, DataStoreRegistry dataStoreRegistry, ResultAdapterContext resultAdapterContext, TypeMappingContext typeMappingContext, DataStoreEventListenerContext eventListenerContext, NonDataOperationInvocationHandler operationInvocationHandler, KeyGenerator<?> keyGenerator) {
+    public ImmutableRepositoryFactoryConfiguration(RepositoryMetadataResolver metadataResolver,
+                                                   MethodQueryDescriptionExtractor queryDescriptionExtractor,
+                                                   DataFunctionRegistry functionRegistry,
+                                                   DataStoreRegistry dataStoreRegistry,
+                                                   ResultAdapterContext resultAdapterContext,
+                                                   TypeMappingContext typeMappingContext,
+                                                   DataStoreEventListenerContext eventListenerContext,
+                                                   NonDataOperationInvocationHandler operationInvocationHandler,
+                                                   KeyGenerator<?> keyGenerator) {
         this.metadataResolver = metadataResolver;
         this.queryDescriptionExtractor = queryDescriptionExtractor;
         this.functionRegistry = functionRegistry;

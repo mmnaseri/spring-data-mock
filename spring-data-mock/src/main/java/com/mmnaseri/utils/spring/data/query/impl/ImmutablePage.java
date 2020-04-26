@@ -5,7 +5,7 @@ import com.mmnaseri.utils.spring.data.query.Page;
 /**
  * This is an immutable page
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/17/15)
  */
 @SuppressWarnings("WeakerAccess")

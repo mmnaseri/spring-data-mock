@@ -11,19 +11,21 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/30/15)
  */
 public class AssignableRepositoryMetadataResolverTest {
 
-    @Test(expectedExceptions = RepositoryDefinitionException.class, expectedExceptionsMessageRegExp = ".*?: Expected interface to extend .*?\\.Repository")
+    @Test(expectedExceptions = RepositoryDefinitionException.class,
+          expectedExceptionsMessageRegExp = ".*?: Expected interface to extend .*?\\.Repository")
     public void testResolvingFromNonInheritingRepository() throws Exception {
         new AssignableRepositoryMetadataResolver().resolve(MalformedRepository.class);
     }
 
     @Test
     public void testResolvingFromInheritingRepository() throws Exception {
-        final RepositoryMetadata metadata = new AssignableRepositoryMetadataResolver().resolve(SimplePersonRepository.class);
+        final RepositoryMetadata metadata = new AssignableRepositoryMetadataResolver().resolve(
+                SimplePersonRepository.class);
         assertThat(metadata, is(notNullValue()));
         assertThat(metadata.getRepositoryInterface(), equalTo((Class) SimplePersonRepository.class));
         assertThat(metadata.getEntityType(), equalTo((Class) Person.class));

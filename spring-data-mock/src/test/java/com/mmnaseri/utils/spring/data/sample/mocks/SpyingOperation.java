@@ -7,7 +7,7 @@ import com.mmnaseri.utils.spring.data.store.DataStore;
 import com.mmnaseri.utils.spring.data.store.DataStoreOperation;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/12/16, 6:37 PM)
  */
 public class SpyingOperation implements DataStoreOperation<Object, String, Person> {
@@ -22,7 +22,8 @@ public class SpyingOperation implements DataStoreOperation<Object, String, Perso
     }
 
     @Override
-    public Object execute(DataStore<String, Person> store, RepositoryConfiguration configuration, Invocation invocation) {
+    public Object execute(DataStore<String, Person> store, RepositoryConfiguration configuration,
+                          Invocation invocation) {
         this.store = store;
         this.configuration = configuration;
         this.invocation = invocation;

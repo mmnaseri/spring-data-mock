@@ -10,8 +10,6 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import java.io.Serializable;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
@@ -41,7 +39,7 @@ public class DefaultPlaneServiceTest {
         //the tests, too.
         //This is the same as using a shared database for doing all the tests. So, at the end of the tests we need
         //to clear the database after us like using a regular data store
-        final DataStore<Serializable, Plane> dataStore = configuration.getDataStoreRegistry().getDataStore(Plane.class);
+        final DataStore<Object, Plane> dataStore = configuration.getDataStoreRegistry().getDataStore(Plane.class);
         dataStore.truncate();
     }
 
@@ -52,7 +50,7 @@ public class DefaultPlaneServiceTest {
         final String serial = "123456";
         final Long id = service.create(model, serial);
         assertThat(id, is(notNullValue()));
-        final Plane loaded = repository.findOne(id);
+        final Plane loaded = repository.findById(id).orElse(null);
         assertThat(loaded, is(notNullValue()));
         assertThat(loaded.getModel(), is(model));
         assertThat(loaded.getSerial(), is(serial));

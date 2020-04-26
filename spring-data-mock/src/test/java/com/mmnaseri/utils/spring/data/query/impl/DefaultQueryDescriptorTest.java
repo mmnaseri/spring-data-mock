@@ -21,7 +21,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/10/16)
  */
 public class DefaultQueryDescriptorTest {
@@ -35,20 +35,23 @@ public class DefaultQueryDescriptorTest {
 
     @Test
     public void testGettingPageWhenPageExtractorIsNull() throws Exception {
-        final DefaultQueryDescriptor descriptor = new DefaultQueryDescriptor(false, null, 0, null, null, null, null, null);
+        final DefaultQueryDescriptor descriptor = new DefaultQueryDescriptor(false, null, 0, null, null, null, null,
+                                                                             null);
         assertThat(descriptor.getPage(new ImmutableInvocation(null, new Object[]{})), is(nullValue()));
     }
 
     @Test
     public void testGettingSortWhenSortExtractorIsNull() throws Exception {
-        final DefaultQueryDescriptor descriptor = new DefaultQueryDescriptor(false, null, 0, null, null, null, null, null);
+        final DefaultQueryDescriptor descriptor = new DefaultQueryDescriptor(false, null, 0, null, null, null, null,
+                                                                             null);
         assertThat(descriptor.getSort(new ImmutableInvocation(null, new Object[]{})), is(nullValue()));
     }
 
     @Test
     public void testMatchingWhenThereAreNotAnyConditions() throws Exception {
         final List<List<Parameter>> branches = Collections.emptyList();
-        final DefaultQueryDescriptor descriptor = new DefaultQueryDescriptor(false, null, 0, null, null, branches, null, null);
+        final DefaultQueryDescriptor descriptor = new DefaultQueryDescriptor(false, null, 0, null, null, branches, null,
+                                                                             null);
         assertThat(descriptor.matches(null, new ImmutableInvocation(null, null)), is(false));
         assertThat(descriptor.matches(new Object(), new ImmutableInvocation(null, null)), is(true));
     }
@@ -59,9 +62,12 @@ public class DefaultQueryDescriptorTest {
         final ArrayList<Parameter> branch = new ArrayList<>();
         branches.add(branch);
         //getByFirstNameAndLastName(:0, :1)
-        branch.add(new ImmutableParameter("firstName", Collections.<Modifier>emptySet(), new int[]{0}, operatorContext.getBySuffix("Equals")));
-        branch.add(new ImmutableParameter("lastName", Collections.<Modifier>emptySet(), new int[]{1}, operatorContext.getBySuffix("IsNot")));
-        final DefaultQueryDescriptor descriptor = new DefaultQueryDescriptor(false, null, 0, null, null, branches, null, null);
+        branch.add(new ImmutableParameter("firstName", Collections.<Modifier>emptySet(), new int[]{0},
+                                          operatorContext.getBySuffix("Equals")));
+        branch.add(new ImmutableParameter("lastName", Collections.<Modifier>emptySet(), new int[]{1},
+                                          operatorContext.getBySuffix("IsNot")));
+        final DefaultQueryDescriptor descriptor = new DefaultQueryDescriptor(false, null, 0, null, null, branches, null,
+                                                                             null);
         final Person person = new Person().setFirstName("X").setLastName("Y");
         assertThat(descriptor.matches(person, new ImmutableInvocation(null, new Object[]{"A", "Y"})), is(false));
         assertThat(descriptor.matches(person, new ImmutableInvocation(null, new Object[]{"X", "Y"})), is(false));
@@ -79,26 +85,47 @@ public class DefaultQueryDescriptorTest {
         branches.add(second);
         branches.add(third);
         //getByFirstNameAndLastNameOrIdOrAddressCityAndAddressStreet(:0, :1, :2, :3, :4)
-        first.add(new ImmutableParameter("firstName", Collections.<Modifier>emptySet(), new int[]{0}, operatorContext.getBySuffix("Equals")));
-        first.add(new ImmutableParameter("lastName", Collections.<Modifier>emptySet(), new int[]{1}, operatorContext.getBySuffix("Equals")));
-        second.add(new ImmutableParameter("id", Collections.<Modifier>emptySet(), new int[]{2}, operatorContext.getBySuffix("Equals")));
-        third.add(new ImmutableParameter("address.city", Collections.<Modifier>emptySet(), new int[]{3}, operatorContext.getBySuffix("Equals")));
-        third.add(new ImmutableParameter("address.street", Collections.<Modifier>emptySet(), new int[]{4}, operatorContext.getBySuffix("Equals")));
-        final DefaultQueryDescriptor descriptor = new DefaultQueryDescriptor(false, null, 0, null, null, branches, null, null);
-        final Person person = new Person().setId("1").setFirstName("X").setLastName("Y").setAddress(new Address().setCity("Shiraz").setStreet("Chaharbagh"));
-        assertThat(descriptor.matches(person, new ImmutableInvocation(null, new Object[]{"X", "Y", "2", "Mashad", "Reza"})), is(true)); //first branch
-        assertThat(descriptor.matches(person, new ImmutableInvocation(null, new Object[]{"A", "B", "1", "Mashad", "Reza"})), is(true)); //second branch
-        assertThat(descriptor.matches(person, new ImmutableInvocation(null, new Object[]{"A", "B", "3", "Shiraz", "Chaharbagh"})), is(true)); //third branch
-        assertThat(descriptor.matches(person, new ImmutableInvocation(null, new Object[]{"A", "B", "3", "Tehran", "Tajrish"})), is(false)); //none
+        first.add(new ImmutableParameter("firstName", Collections.<Modifier>emptySet(), new int[]{0},
+                                         operatorContext.getBySuffix("Equals")));
+        first.add(new ImmutableParameter("lastName", Collections.<Modifier>emptySet(), new int[]{1},
+                                         operatorContext.getBySuffix("Equals")));
+        second.add(new ImmutableParameter("id", Collections.<Modifier>emptySet(), new int[]{2},
+                                          operatorContext.getBySuffix("Equals")));
+        third.add(new ImmutableParameter("address.city", Collections.<Modifier>emptySet(), new int[]{3},
+                                         operatorContext.getBySuffix("Equals")));
+        third.add(new ImmutableParameter("address.street", Collections.<Modifier>emptySet(), new int[]{4},
+                                         operatorContext.getBySuffix("Equals")));
+        final DefaultQueryDescriptor descriptor = new DefaultQueryDescriptor(false, null, 0, null, null, branches, null,
+                                                                             null);
+        final Person person = new Person().setId("1").setFirstName("X").setLastName("Y").setAddress(
+                new Address().setCity("Shiraz").setStreet("Chaharbagh"));
+        assertThat(descriptor.matches(person,
+                                      new ImmutableInvocation(null, new Object[]{"X", "Y", "2", "Mashad", "Reza"})),
+                   is(true)); //first branch
+        assertThat(descriptor.matches(person,
+                                      new ImmutableInvocation(null, new Object[]{"A", "B", "1", "Mashad", "Reza"})),
+                   is(true)); //second branch
+        assertThat(descriptor.matches(person, new ImmutableInvocation(null, new Object[]{"A", "B", "3", "Shiraz",
+                                                                                         "Chaharbagh"})),
+                   is(true)); //third branch
+        assertThat(descriptor.matches(person,
+                                      new ImmutableInvocation(null, new Object[]{"A", "B", "3", "Tehran", "Tajrish"})),
+                   is(false)); //none
     }
 
     @Test
     public void testToString() throws Exception {
-        final QueryDescriptor noFunctionNotDistinct = new DefaultQueryDescriptor(false, null, 0, null, null, Collections.<List<Parameter>>emptyList(), null, null);
+        final QueryDescriptor noFunctionNotDistinct = new DefaultQueryDescriptor(false, null, 0, null, null,
+                                                                                 Collections.<List<Parameter>>emptyList(),
+                                                                                 null, null);
         assertThat(noFunctionNotDistinct.toString(), is("[]"));
-        final QueryDescriptor functionNotDistinct = new DefaultQueryDescriptor(false, "xyz", 0, null, null, Collections.<List<Parameter>>emptyList(), null, null);
+        final QueryDescriptor functionNotDistinct = new DefaultQueryDescriptor(false, "xyz", 0, null, null,
+                                                                               Collections.<List<Parameter>>emptyList(),
+                                                                               null, null);
         assertThat(functionNotDistinct.toString(), is("xyz []"));
-        final QueryDescriptor functionDistinct = new DefaultQueryDescriptor(true, "xyz", 0, null, null, Collections.<List<Parameter>>emptyList(), null, null);
+        final QueryDescriptor functionDistinct = new DefaultQueryDescriptor(true, "xyz", 0, null, null,
+                                                                            Collections.<List<Parameter>>emptyList(),
+                                                                            null, null);
         assertThat(functionDistinct.toString(), is("xyz distinct []"));
     }
 

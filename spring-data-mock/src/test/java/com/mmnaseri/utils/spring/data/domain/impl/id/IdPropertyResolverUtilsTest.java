@@ -16,7 +16,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (6/8/16, 1:49 AM)
  */
 public class IdPropertyResolverUtilsTest extends AbstractUtilityClassTest {
@@ -28,24 +28,34 @@ public class IdPropertyResolverUtilsTest extends AbstractUtilityClassTest {
 
     @Test
     public void testReadingAnnotationFromField() throws Exception {
-        assertThat(IdPropertyResolverUtils.isAnnotated(EntityWithAnnotatedIdFieldFromJPA.class.getDeclaredField("customIdProperty")), is(true));
-        assertThat(IdPropertyResolverUtils.isAnnotated(EntityWithAnnotatedIdField.class.getDeclaredField("id")), is(true));
+        assertThat(IdPropertyResolverUtils
+                           .isAnnotated(EntityWithAnnotatedIdFieldFromJPA.class.getDeclaredField("customIdProperty")),
+                   is(true));
+        assertThat(IdPropertyResolverUtils.isAnnotated(EntityWithAnnotatedIdField.class.getDeclaredField("id")),
+                   is(true));
     }
 
     @Test
     public void testReadingAnnotationFromMethod() throws Exception {
-        assertThat(IdPropertyResolverUtils.isAnnotated(EntityWithAnnotatedIdGetterFromJPA.class.getDeclaredMethod("getMyCustomId")), is(true));
-        assertThat(IdPropertyResolverUtils.isAnnotated(EntityWithAnnotatedIdGetter.class.getDeclaredMethod("getId")), is(true));
+        assertThat(IdPropertyResolverUtils
+                           .isAnnotated(EntityWithAnnotatedIdGetterFromJPA.class.getDeclaredMethod("getMyCustomId")),
+                   is(true));
+        assertThat(IdPropertyResolverUtils.isAnnotated(EntityWithAnnotatedIdGetter.class.getDeclaredMethod("getId")),
+                   is(true));
     }
 
     @Test(expectedExceptions = PropertyTypeMismatchException.class)
     public void testPropertyNameFromMethodWhenIdTypeIsInvalid() throws Exception {
-        IdPropertyResolverUtils.getPropertyNameFromAnnotatedMethod(EntityWithAnnotatedIdGetterFromJPA.class, Long.class, EntityWithAnnotatedIdGetterFromJPA.class.getDeclaredMethod("getMyCustomId"));
+        IdPropertyResolverUtils.getPropertyNameFromAnnotatedMethod(EntityWithAnnotatedIdGetterFromJPA.class, Long.class,
+                                                                   EntityWithAnnotatedIdGetterFromJPA.class
+                                                                           .getDeclaredMethod("getMyCustomId"));
     }
 
     @Test
     public void testPropertyNameFromMethod() throws Exception {
-        final String propertyName = IdPropertyResolverUtils.getPropertyNameFromAnnotatedMethod(EntityWithAnnotatedIdGetterFromJPA.class, Integer.class, EntityWithAnnotatedIdGetterFromJPA.class.getDeclaredMethod("getMyCustomId"));
+        final String propertyName = IdPropertyResolverUtils.getPropertyNameFromAnnotatedMethod(
+                EntityWithAnnotatedIdGetterFromJPA.class, Integer.class,
+                EntityWithAnnotatedIdGetterFromJPA.class.getDeclaredMethod("getMyCustomId"));
         assertThat(propertyName, is(notNullValue()));
         assertThat(propertyName, is("myCustomId"));
     }
@@ -57,7 +67,9 @@ public class IdPropertyResolverUtilsTest extends AbstractUtilityClassTest {
         final List list = (List) idAnnotations.get(null);
         //noinspection unchecked
         list.add("random class name");
-        final String propertyName = IdPropertyResolverUtils.getPropertyNameFromAnnotatedMethod(EntityWithAnnotatedIdGetterFromJPA.class, Integer.class, EntityWithAnnotatedIdGetterFromJPA.class.getDeclaredMethod("getMyCustomId"));
+        final String propertyName = IdPropertyResolverUtils.getPropertyNameFromAnnotatedMethod(
+                EntityWithAnnotatedIdGetterFromJPA.class, Integer.class,
+                EntityWithAnnotatedIdGetterFromJPA.class.getDeclaredMethod("getMyCustomId"));
         assertThat(propertyName, is(notNullValue()));
     }
 

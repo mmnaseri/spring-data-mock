@@ -18,7 +18,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/28/16)
  */
 final class PagingAndSortingUtils {
@@ -31,6 +31,7 @@ final class PagingAndSortingUtils {
 
     /**
      * Finds everything and sorts it using the given sort property
+     *
      * @param entries the entries to be sorted
      * @param sort    how to sort the data
      * @return sorted entries, unless sort is null.
@@ -44,7 +45,8 @@ final class PagingAndSortingUtils {
         }
         final List<Order> orders = new LinkedList<>();
         for (Sort.Order order : sort) {
-            final SortDirection direction = order.getDirection().equals(Sort.Direction.ASC) ? SortDirection.ASCENDING : SortDirection.DESCENDING;
+            final SortDirection direction = order.getDirection().equals(Sort.Direction.ASC) ? SortDirection.ASCENDING
+                    : SortDirection.DESCENDING;
             final NullHandling nullHandling;
             switch (order.getNullHandling()) {
                 case NULLS_FIRST:
@@ -67,13 +69,14 @@ final class PagingAndSortingUtils {
 
     /**
      * Loads everything, sorts them, and pages the according to the spec.
-     * @param entries     the entries to be paged
-     * @param pageable    the pagination and sort spec
+     *
+     * @param entries  the entries to be paged
+     * @param pageable the pagination and sort spec
      * @return the specified view of the data
      */
     public static Page page(Collection entries, Pageable pageable) {
         final List<?> all;
-        if (pageable.getSort() != null) {
+        if (pageable.getSort().isSorted()) {
             log.info("The page specification requests sorting, so we are going to sort the data first");
             all = sort(entries, pageable.getSort());
         } else {
@@ -85,7 +88,8 @@ final class PagingAndSortingUtils {
         int end = start + pageable.getPageSize();
         start = Math.min(start, all.size());
         end = Math.min(end, all.size());
-        log.info("Trimming the selection down for page " + pageable.getPageNumber() + " to include items from " + start + " to " + end);
+        log.info("Trimming the selection down for page " + pageable.getPageNumber() + " to include items from " + start
+                         + " to " + end);
         final List<?> selection = new LinkedList<>(all.subList(start, end));
         //noinspection unchecked
         return new PageImpl(selection, pageable, all.size());

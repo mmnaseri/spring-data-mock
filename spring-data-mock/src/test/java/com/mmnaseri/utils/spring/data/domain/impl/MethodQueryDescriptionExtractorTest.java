@@ -23,7 +23,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/21/15)
  */
 public class MethodQueryDescriptionExtractorTest {
@@ -36,94 +36,132 @@ public class MethodQueryDescriptionExtractorTest {
     @BeforeMethod
     public void setUp() throws Exception {
         extractor = new MethodQueryDescriptionExtractor(new DefaultOperatorContext());
-        malformedRepositoryMetadata = new ImmutableRepositoryMetadata(String.class, Person.class, MalformedRepository.class, "id");
-        sampleRepositoryMetadata = new ImmutableRepositoryMetadata(String.class, Person.class, RepositoryWithValidMethods.class, "id");
+        malformedRepositoryMetadata = new ImmutableRepositoryMetadata(String.class, Person.class,
+                                                                      MalformedRepository.class, "id");
+        sampleRepositoryMetadata = new ImmutableRepositoryMetadata(String.class, Person.class,
+                                                                   RepositoryWithValidMethods.class, "id");
     }
 
-    @Test(expectedExceptions = QueryParserException.class, expectedExceptionsMessageRegExp = ".*?: Malformed query method name.*")
+    @Test(expectedExceptions = QueryParserException.class,
+          expectedExceptionsMessageRegExp = ".*?: Malformed query method name.*")
     public void testMethodNameNotStartingWithNormalWord() throws Exception {
         configuration = new DefaultRepositoryFactoryConfiguration();
         extractor.extract(malformedRepositoryMetadata, configuration, MalformedRepository.class.getMethod("Malformed"));
     }
 
-    @Test(expectedExceptions = QueryParserException.class, expectedExceptionsMessageRegExp = ".*?: There is already a limit of 5 specified for this query:.*")
+    @Test(expectedExceptions = QueryParserException.class,
+          expectedExceptionsMessageRegExp = ".*?: There is already a limit of 5 specified for this query:.*")
     public void testMultipleLimitsUsingFirst() throws Exception {
-        extractor.extract(malformedRepositoryMetadata, configuration, MalformedRepository.class.getMethod("findFirst5First10"));
+        extractor.extract(malformedRepositoryMetadata, configuration,
+                          MalformedRepository.class.getMethod("findFirst5First10"));
     }
 
-    @Test(expectedExceptions = QueryParserException.class, expectedExceptionsMessageRegExp = ".*?: There is already a limit of 1 specified for this query:.*")
+    @Test(expectedExceptions = QueryParserException.class,
+          expectedExceptionsMessageRegExp = ".*?: There is already a limit of 1 specified for this query:.*")
     public void testMultipleLimitsUsingFirstOne() throws Exception {
-        extractor.extract(malformedRepositoryMetadata, configuration, MalformedRepository.class.getMethod("findFirstFirst10"));
+        extractor.extract(malformedRepositoryMetadata, configuration,
+                          MalformedRepository.class.getMethod("findFirstFirst10"));
     }
 
-    @Test(expectedExceptions = QueryParserException.class, expectedExceptionsMessageRegExp = ".*?: There is already a limit of 10 specified for this query:.*")
+    @Test(expectedExceptions = QueryParserException.class,
+          expectedExceptionsMessageRegExp = ".*?: There is already a limit of 10 specified for this query:.*")
     public void testMultipleLimits() throws Exception {
-        extractor.extract(malformedRepositoryMetadata, configuration, MalformedRepository.class.getMethod("findTop10Top5"));
+        extractor.extract(malformedRepositoryMetadata, configuration,
+                          MalformedRepository.class.getMethod("findTop10Top5"));
     }
 
-    @Test(expectedExceptions = QueryParserException.class, expectedExceptionsMessageRegExp = ".*?: You have already stated that this query should return distinct items:.*")
+    @Test(expectedExceptions = QueryParserException.class,
+          expectedExceptionsMessageRegExp = ".*?: You have already stated that this query should return distinct "
+                  + "items:.*")
     public void testMultipleDistinctFlags() throws Exception {
-        extractor.extract(malformedRepositoryMetadata, configuration, MalformedRepository.class.getMethod("findDistinctDistinct"));
+        extractor.extract(malformedRepositoryMetadata, configuration,
+                          MalformedRepository.class.getMethod("findDistinctDistinct"));
     }
 
-    @Test(expectedExceptions = QueryParserException.class, expectedExceptionsMessageRegExp = ".*?: Query method name cannot end with `By`")
+    @Test(expectedExceptions = QueryParserException.class,
+          expectedExceptionsMessageRegExp = ".*?: Query method name cannot end with `By`")
     public void testNonSimpleQueryEndingInBy() throws Exception {
-        extractor.extract(malformedRepositoryMetadata, configuration, MalformedRepository.class.getMethod("findTop10DistinctBy"));
+        extractor.extract(malformedRepositoryMetadata, configuration,
+                          MalformedRepository.class.getMethod("findTop10DistinctBy"));
     }
 
-    @Test(expectedExceptions = QueryParserException.class, expectedExceptionsMessageRegExp = ".*?: Could not find property `unknownProperty`.*")
+    @Test(expectedExceptions = QueryParserException.class,
+          expectedExceptionsMessageRegExp = ".*?: Could not find property `unknownProperty`.*")
     public void testUnknownPropertyInExpression() throws Exception {
-        extractor.extract(malformedRepositoryMetadata, configuration, MalformedRepository.class.getMethod("findByUnknownProperty"));
+        extractor.extract(malformedRepositoryMetadata, configuration,
+                          MalformedRepository.class.getMethod("findByUnknownProperty"));
     }
 
-    @Test(expectedExceptions = QueryParserException.class, expectedExceptionsMessageRegExp = ".*?: Expected to see parameter with index 0")
+    @Test(expectedExceptions = QueryParserException.class,
+          expectedExceptionsMessageRegExp = ".*?: Expected to see parameter with index 0")
     public void testTooFewParameterNumber() throws Exception {
-        extractor.extract(malformedRepositoryMetadata, configuration, MalformedRepository.class.getMethod("findByFirstName"));
+        extractor.extract(malformedRepositoryMetadata, configuration,
+                          MalformedRepository.class.getMethod("findByFirstName"));
     }
 
-    @Test(expectedExceptions = QueryParserException.class, expectedExceptionsMessageRegExp = ".*?: Expected more tokens to follow AND/OR operator")
+    @Test(expectedExceptions = QueryParserException.class,
+          expectedExceptionsMessageRegExp = ".*?: Expected more tokens to follow AND/OR operator")
     public void testTooFewExpressionEndingInOr() throws Exception {
-        extractor.extract(malformedRepositoryMetadata, configuration, MalformedRepository.class.getMethod("findByFirstNameOr", String.class));
+        extractor.extract(malformedRepositoryMetadata, configuration,
+                          MalformedRepository.class.getMethod("findByFirstNameOr", String.class));
     }
 
-    @Test(expectedExceptions = QueryParserException.class, expectedExceptionsMessageRegExp = ".*?: Expected more tokens to follow AND/OR operator")
+    @Test(expectedExceptions = QueryParserException.class,
+          expectedExceptionsMessageRegExp = ".*?: Expected more tokens to follow AND/OR operator")
     public void testTooFewExpressionEndingInAnd() throws Exception {
-        extractor.extract(malformedRepositoryMetadata, configuration, MalformedRepository.class.getMethod("findByFirstNameOr", String.class));
+        extractor.extract(malformedRepositoryMetadata, configuration,
+                          MalformedRepository.class.getMethod("findByFirstNameOr", String.class));
     }
 
     @Test(expectedExceptions = QueryParserException.class, expectedExceptionsMessageRegExp = ".*\\: Invalid parameter types for operator IS on property firstName: \\[class java\\.lang\\.Object\\]")
     public void testBadParameterType() throws Exception {
-        extractor.extract(malformedRepositoryMetadata, configuration, MalformedRepository.class.getMethod("findByFirstName", Object.class));
+        extractor.extract(malformedRepositoryMetadata, configuration,
+                          MalformedRepository.class.getMethod("findByFirstName", Object.class));
     }
 
-    @Test(expectedExceptions = QueryParserException.class, expectedExceptionsMessageRegExp = ".*?: Invalid last argument: expected paging or sorting.*?")
+    @Test(expectedExceptions = QueryParserException.class,
+          expectedExceptionsMessageRegExp = ".*?: Invalid last argument: expected paging or sorting.*?")
     public void testBadLastParameter() throws Exception {
-        extractor.extract(malformedRepositoryMetadata, configuration, MalformedRepository.class.getMethod("findByFirstName", String.class, Object.class));
+        extractor.extract(malformedRepositoryMetadata, configuration,
+                          MalformedRepository.class.getMethod("findByFirstName", String.class, Object.class));
     }
 
-    @Test(expectedExceptions = QueryParserException.class, expectedExceptionsMessageRegExp = ".*?: Too many parameters.*?")
+    @Test(expectedExceptions = QueryParserException.class,
+          expectedExceptionsMessageRegExp = ".*?: Too many parameters.*?")
     public void testTooManyParameters() throws Exception {
-        extractor.extract(malformedRepositoryMetadata, configuration, MalformedRepository.class.getMethod("findByFirstName", String.class, Object.class, Object.class));
+        extractor.extract(malformedRepositoryMetadata, configuration, MalformedRepository.class
+                .getMethod("findByFirstName", String.class, Object.class, Object.class));
     }
 
-    @Test(expectedExceptions = QueryParserException.class, expectedExceptionsMessageRegExp = ".*?: Could not find property `firstNameOrderBy` on `class com.mmnaseri.utils.spring.data.sample.models.Person`")
+    @Test(expectedExceptions = QueryParserException.class,
+          expectedExceptionsMessageRegExp = ".*?: Could not find property `firstNameOrderBy` on `class com.mmnaseri"
+                  + ".utils.spring.data.sample.models.Person`")
     public void testWithTrailingOrderBy() throws Exception {
-        extractor.extract(malformedRepositoryMetadata, configuration, MalformedRepository.class.getMethod("findByFirstNameOrderBy", String.class));
+        extractor.extract(malformedRepositoryMetadata, configuration,
+                          MalformedRepository.class.getMethod("findByFirstNameOrderBy", String.class));
     }
 
-    @Test(expectedExceptions = QueryParserException.class, expectedExceptionsMessageRegExp = ".*?: Failed to get a property descriptor for expression: Xyz")
+    @Test(expectedExceptions = QueryParserException.class,
+          expectedExceptionsMessageRegExp = ".*?: Failed to get a property descriptor for expression: Xyz")
     public void testWithOrderByInvalidProperty() throws Exception {
-        extractor.extract(malformedRepositoryMetadata, configuration, MalformedRepository.class.getMethod("findByFirstNameOrderByXyzDesc", String.class));
+        extractor.extract(malformedRepositoryMetadata, configuration,
+                          MalformedRepository.class.getMethod("findByFirstNameOrderByXyzDesc", String.class));
     }
 
-    @Test(expectedExceptions = QueryParserException.class, expectedExceptionsMessageRegExp = ".*?: You cannot specify both an order-by clause and a dynamic ordering")
+    @Test(expectedExceptions = QueryParserException.class,
+          expectedExceptionsMessageRegExp = ".*?: You cannot specify both an order-by clause and a dynamic ordering")
     public void testWithMultipleOrders() throws Exception {
-        extractor.extract(malformedRepositoryMetadata, configuration, MalformedRepository.class.getMethod("findByFirstNameOrderByFirstNameAsc", String.class, org.springframework.data.domain.Sort.class));
+        extractor.extract(malformedRepositoryMetadata, configuration, MalformedRepository.class
+                .getMethod("findByFirstNameOrderByFirstNameAsc", String.class,
+                           org.springframework.data.domain.Sort.class));
     }
 
-    @Test(expectedExceptions = QueryParserException.class, expectedExceptionsMessageRegExp = ".*?: Sort property `address` is not comparable in `findByFirstNameOrderByAddressAsc`")
+    @Test(expectedExceptions = QueryParserException.class,
+          expectedExceptionsMessageRegExp = ".*?: Sort property `address` is not comparable in "
+                  + "`findByFirstNameOrderByAddressAsc`")
     public void testWithOrderByNonComparableProperty() throws Exception {
-        extractor.extract(malformedRepositoryMetadata, configuration, MalformedRepository.class.getMethod("findByFirstNameOrderByAddressAsc", String.class));
+        extractor.extract(malformedRepositoryMetadata, configuration,
+                          MalformedRepository.class.getMethod("findByFirstNameOrderByAddressAsc", String.class));
     }
 
     @Test
@@ -133,7 +171,8 @@ public class MethodQueryDescriptionExtractorTest {
 
     @Test
     public void testReadMethodWithoutAnyCriteria() throws Exception {
-        final QueryDescriptor descriptor = extractor.extract(sampleRepositoryMetadata, configuration, RepositoryWithValidMethods.class.getMethod("find"));
+        final QueryDescriptor descriptor = extractor.extract(sampleRepositoryMetadata, configuration,
+                                                             RepositoryWithValidMethods.class.getMethod("find"));
         assertThat(descriptor, is(notNullValue()));
         assertThat(descriptor.getConfiguration(), is(configuration));
         assertThat(descriptor.getFunction(), is(nullValue()));
@@ -144,7 +183,8 @@ public class MethodQueryDescriptionExtractorTest {
 
     @Test
     public void testCustomFunctionWithoutAnyCriteria() throws Exception {
-        final QueryDescriptor descriptor = extractor.extract(sampleRepositoryMetadata, configuration, RepositoryWithValidMethods.class.getMethod("test"));
+        final QueryDescriptor descriptor = extractor.extract(sampleRepositoryMetadata, configuration,
+                                                             RepositoryWithValidMethods.class.getMethod("test"));
         assertThat(descriptor, is(notNullValue()));
         assertThat(descriptor.getConfiguration(), is(configuration));
         assertThat(descriptor.getFunction(), is("test"));
@@ -155,7 +195,10 @@ public class MethodQueryDescriptionExtractorTest {
 
     @Test
     public void testQueryMethodWithSingleBranch() throws Exception {
-        final QueryDescriptor descriptor = extractor.extract(sampleRepositoryMetadata, configuration, RepositoryWithValidMethods.class.getMethod("findByFirstNameAndLastNameEquals", String.class, String.class));
+        final QueryDescriptor descriptor = extractor.extract(sampleRepositoryMetadata, configuration,
+                                                             RepositoryWithValidMethods.class
+                                                                     .getMethod("findByFirstNameAndLastNameEquals",
+                                                                                String.class, String.class));
         assertThat(descriptor, is(notNullValue()));
         assertThat(descriptor.getConfiguration(), is(configuration));
         assertThat(descriptor.getFunction(), is(nullValue()));
@@ -178,7 +221,10 @@ public class MethodQueryDescriptionExtractorTest {
 
     @Test
     public void testModifierOnSingleParameter() throws Exception {
-        final QueryDescriptor descriptor = extractor.extract(sampleRepositoryMetadata, configuration, RepositoryWithValidMethods.class.getMethod("findByFirstNameAndLastNameIgnoreCase", String.class, String.class));
+        final QueryDescriptor descriptor = extractor.extract(sampleRepositoryMetadata, configuration,
+                                                             RepositoryWithValidMethods.class
+                                                                     .getMethod("findByFirstNameAndLastNameIgnoreCase",
+                                                                                String.class, String.class));
         assertThat(descriptor, is(notNullValue()));
         assertThat(descriptor.getConfiguration(), is(configuration));
         assertThat(descriptor.getFunction(), is(nullValue()));
@@ -202,7 +248,10 @@ public class MethodQueryDescriptionExtractorTest {
 
     @Test
     public void testWithOrderBy() throws Exception {
-        final QueryDescriptor descriptor = extractor.extract(sampleRepositoryMetadata, configuration, RepositoryWithValidMethods.class.getMethod("findByFirstNameOrderByLastNameDescAgeAsc", String.class));
+        final QueryDescriptor descriptor = extractor.extract(sampleRepositoryMetadata, configuration,
+                                                             RepositoryWithValidMethods.class.getMethod(
+                                                                     "findByFirstNameOrderByLastNameDescAgeAsc",
+                                                                     String.class));
         assertThat(descriptor, is(notNullValue()));
         assertThat(descriptor.getBranches(), hasSize(1));
         assertThat(descriptor.getBranches().get(0), hasSize(1));
@@ -223,7 +272,10 @@ public class MethodQueryDescriptionExtractorTest {
 
     @Test
     public void testWithMultipleBranches() throws Exception {
-        final QueryDescriptor descriptor = extractor.extract(sampleRepositoryMetadata, configuration, RepositoryWithValidMethods.class.getMethod("findByFirstNameOrLastName", String.class, String.class));
+        final QueryDescriptor descriptor = extractor.extract(sampleRepositoryMetadata, configuration,
+                                                             RepositoryWithValidMethods.class
+                                                                     .getMethod("findByFirstNameOrLastName",
+                                                                                String.class, String.class));
         assertThat(descriptor, is(notNullValue()));
         assertThat(descriptor.getBranches(), hasSize(2));
         assertThat(descriptor.getBranches().get(0), hasSize(1));
@@ -244,7 +296,10 @@ public class MethodQueryDescriptionExtractorTest {
 
     @Test
     public void testWithStaticSortingAndDynamicPaging() throws Exception {
-        final QueryDescriptor descriptor = extractor.extract(sampleRepositoryMetadata, configuration, RepositoryWithValidMethods.class.getMethod("findByFirstNameOrderByLastNameDesc", String.class, Pageable.class));
+        final QueryDescriptor descriptor = extractor.extract(sampleRepositoryMetadata, configuration,
+                                                             RepositoryWithValidMethods.class
+                                                                     .getMethod("findByFirstNameOrderByLastNameDesc",
+                                                                                String.class, Pageable.class));
         assertThat(descriptor, is(notNullValue()));
         assertThat(descriptor.getBranches(), hasSize(1));
         assertThat(descriptor.getBranches().get(0), hasSize(1));
@@ -259,7 +314,7 @@ public class MethodQueryDescriptionExtractorTest {
         assertThat(orders, hasSize(1));
         assertThat(orders.get(0).getProperty(), is("lastName"));
         assertThat(orders.get(0).getDirection(), is(SortDirection.DESCENDING));
-        final Page page = descriptor.getPage(new ImmutableInvocation(null, new Object[]{null, new PageRequest(0, 1)}));
+        final Page page = descriptor.getPage(new ImmutableInvocation(null, new Object[]{null, PageRequest.of(0, 1)}));
         assertThat(page, is(notNullValue()));
         assertThat(page.getPageSize(), is(1));
         assertThat(page.getPageNumber(), is(0));
@@ -267,7 +322,10 @@ public class MethodQueryDescriptionExtractorTest {
 
     @Test
     public void testWithDynamicSortingAndDynamicPaging() throws Exception {
-        final QueryDescriptor descriptor = extractor.extract(sampleRepositoryMetadata, configuration, RepositoryWithValidMethods.class.getMethod("findByFirstName", String.class, Pageable.class));
+        final QueryDescriptor descriptor = extractor.extract(sampleRepositoryMetadata, configuration,
+                                                             RepositoryWithValidMethods.class
+                                                                     .getMethod("findByFirstName", String.class,
+                                                                                Pageable.class));
         assertThat(descriptor, is(notNullValue()));
         assertThat(descriptor.getBranches(), hasSize(1));
         assertThat(descriptor.getBranches().get(0), hasSize(1));
@@ -278,7 +336,11 @@ public class MethodQueryDescriptionExtractorTest {
         assertThat(descriptor.getBranches().get(0).get(0).getPath(), is("firstName"));
         assertThat(descriptor.getFunction(), is(nullValue()));
         assertThat(descriptor.getLimit(), is(0));
-        final ImmutableInvocation invocation = new ImmutableInvocation(null, new Object[]{null, new PageRequest(0, 1, new org.springframework.data.domain.Sort(org.springframework.data.domain.Sort.Direction.ASC, "firstName", "lastName"))});
+        final ImmutableInvocation invocation = new ImmutableInvocation(null, new Object[]{null, PageRequest.of(0, 1,
+                                                                                                               org.springframework.data.domain.Sort
+                                                                                                                       .by(org.springframework.data.domain.Sort.Direction.ASC,
+                                                                                                                           "firstName",
+                                                                                                                           "lastName"))});
         final List<Order> orders = descriptor.getSort(invocation).getOrders();
         assertThat(orders, hasSize(2));
         assertThat(orders.get(0).getProperty(), is("firstName"));
@@ -293,7 +355,10 @@ public class MethodQueryDescriptionExtractorTest {
 
     @Test
     public void testWithDynamicSortAndNoPaging() throws Exception {
-        final QueryDescriptor descriptor = extractor.extract(sampleRepositoryMetadata, configuration, RepositoryWithValidMethods.class.getMethod("findByFirstName", String.class, org.springframework.data.domain.Sort.class));
+        final QueryDescriptor descriptor = extractor.extract(sampleRepositoryMetadata, configuration,
+                                                             RepositoryWithValidMethods.class
+                                                                     .getMethod("findByFirstName", String.class,
+                                                                                org.springframework.data.domain.Sort.class));
         assertThat(descriptor, is(notNullValue()));
         assertThat(descriptor.getBranches(), hasSize(1));
         assertThat(descriptor.getBranches().get(0), hasSize(1));
@@ -304,7 +369,11 @@ public class MethodQueryDescriptionExtractorTest {
         assertThat(descriptor.getBranches().get(0).get(0).getPath(), is("firstName"));
         assertThat(descriptor.getFunction(), is(nullValue()));
         assertThat(descriptor.getLimit(), is(0));
-        final ImmutableInvocation invocation = new ImmutableInvocation(null, new Object[]{null, new org.springframework.data.domain.Sort(org.springframework.data.domain.Sort.Direction.ASC, "firstName", "lastName")});
+        final ImmutableInvocation invocation = new ImmutableInvocation(null, new Object[]{null,
+                                                                                          org.springframework.data.domain.Sort.by(
+                                                                                                  org.springframework.data.domain.Sort.Direction.ASC,
+                                                                                                  "firstName",
+                                                                                                  "lastName")});
         final List<Order> orders = descriptor.getSort(invocation).getOrders();
         assertThat(orders, hasSize(2));
         assertThat(orders.get(0).getProperty(), is("firstName"));
@@ -317,7 +386,10 @@ public class MethodQueryDescriptionExtractorTest {
 
     @Test
     public void testAllIgnoreCase() throws Exception {
-        final QueryDescriptor descriptor = extractor.extract(sampleRepositoryMetadata, configuration, RepositoryWithValidMethods.class.getMethod("findByFirstNameAndLastNameAllIgnoreCase", String.class, String.class));
+        final QueryDescriptor descriptor = extractor.extract(sampleRepositoryMetadata, configuration,
+                                                             RepositoryWithValidMethods.class.getMethod(
+                                                                     "findByFirstNameAndLastNameAllIgnoreCase",
+                                                                     String.class, String.class));
         assertThat(descriptor, is(notNullValue()));
         assertThat(descriptor.getBranches(), hasSize(1));
         assertThat(descriptor.getBranches().get(0), hasSize(2));
@@ -337,7 +409,10 @@ public class MethodQueryDescriptionExtractorTest {
 
     @Test
     public void testFunction() throws Exception {
-        final QueryDescriptor descriptor = extractor.extract(sampleRepositoryMetadata, configuration, RepositoryWithValidMethods.class.getMethod("functionNameByFirstName", String.class));
+        final QueryDescriptor descriptor = extractor.extract(sampleRepositoryMetadata, configuration,
+                                                             RepositoryWithValidMethods.class
+                                                                     .getMethod("functionNameByFirstName",
+                                                                                String.class));
         assertThat(descriptor, is(notNullValue()));
         assertThat(descriptor.getBranches(), hasSize(1));
         assertThat(descriptor.getBranches().get(0), hasSize(1));

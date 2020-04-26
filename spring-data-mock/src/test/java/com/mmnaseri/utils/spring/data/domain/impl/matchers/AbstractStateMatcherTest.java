@@ -9,7 +9,7 @@ import org.testng.annotations.Test;
 import static org.testng.Assert.assertFalse;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/10/16)
  */
 public class AbstractStateMatcherTest {
@@ -17,7 +17,8 @@ public class AbstractStateMatcherTest {
     @Test(expectedExceptions = InvalidArgumentException.class, expectedExceptionsMessageRegExp = ".*x.y.z.*")
     public void testWhenHasParameters() throws Exception {
         final NotMatchingStateMatcher matcher = new NotMatchingStateMatcher();
-        matcher.matches(new ImmutableParameter("x.y.z", null, null, new ImmutableOperator("sample operator", 0, null)), new Object(), new Object());
+        matcher.matches(new ImmutableParameter("x.y.z", null, null, new ImmutableOperator("sample operator", 0, null)),
+                        new Object(), new Object());
     }
 
     @Test

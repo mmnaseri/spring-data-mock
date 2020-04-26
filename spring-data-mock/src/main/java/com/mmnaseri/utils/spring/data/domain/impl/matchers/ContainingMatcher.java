@@ -3,10 +3,10 @@ package com.mmnaseri.utils.spring.data.domain.impl.matchers;
 import com.mmnaseri.utils.spring.data.domain.Parameter;
 
 /**
- * This class will look for a substring in the passed string value by converting both the needle and
- * the haystack to lower case.
+ * This class will look for a substring in the passed string value by converting both the needle and the haystack to
+ * lower case.
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/29/15)
  */
 public class ContainingMatcher extends AbstractSimpleStringMatcher {
