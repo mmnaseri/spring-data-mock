@@ -2,6 +2,7 @@ package com.mmnaseri.utils.samples.spring.data.jpa.service;
 
 import com.mmnaseri.utils.samples.spring.data.jpa.model.Customer;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -19,4 +20,5 @@ public interface CustomerService {
 
     List<Customer> findCustomersByName(String firstName, String lastName);
 
+    List<Customer> findCustomersByFirstNames(Collection<String> firstNames);
 }

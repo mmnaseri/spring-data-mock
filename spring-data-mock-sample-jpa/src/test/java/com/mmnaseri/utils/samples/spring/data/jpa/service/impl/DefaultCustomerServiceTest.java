@@ -7,6 +7,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -91,6 +92,17 @@ public class DefaultCustomerServiceTest {
         createCustomer("Hassan", "Naseri", date(1962, 4, 15));
         //... and have the service look up one of them
         final List<Customer> list = service.findCustomersByName("Milad", "Naseri");
+        assertThat(list, is(notNullValue()));
+        assertThat(list, hasSize(1));
+        assertThat(list.get(0), is(customer));
+    }
+
+    @Test
+    public void testLoadingCustomersByFirstNames() throws Exception {
+        createCustomer("Milad", "Naseri", null);
+        final Customer customer = createCustomer("Mateusz", "Stefek", null);
+
+        final List<Customer> list = service.findCustomersByFirstNames(Collections.singleton("Mateusz"));
         assertThat(list, is(notNullValue()));
         assertThat(list, hasSize(1));
         assertThat(list.get(0), is(customer));

@@ -31,4 +31,8 @@ public abstract class AbstractStateMatcher implements Matcher {
      */
     protected abstract boolean matches(Parameter parameter, Object value);
 
+    @Override
+    public boolean isApplicableTo(Class<?> parameterType, Class<?>... propertiesTypes) {
+        return propertiesTypes.length == 0;
+    }
 }

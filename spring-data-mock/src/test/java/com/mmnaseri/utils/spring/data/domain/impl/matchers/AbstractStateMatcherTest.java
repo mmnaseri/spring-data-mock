@@ -6,6 +6,8 @@ import com.mmnaseri.utils.spring.data.error.InvalidArgumentException;
 import com.mmnaseri.utils.spring.data.sample.mocks.NotMatchingStateMatcher;
 import org.testng.annotations.Test;
 
+import static org.testng.Assert.assertFalse;
+
 /**
  * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/10/16)
@@ -25,4 +27,9 @@ public class AbstractStateMatcherTest {
         matcher.matches(new ImmutableParameter("x.y.z", null, null, null), new Object(), new Object[0]);
     }
 
+    @Test
+    public void shouldNotApplyToNonEmptyListOfParameters() {
+        final NotMatchingStateMatcher matcher = new NotMatchingStateMatcher();
+        assertFalse(matcher.isApplicableTo(String.class, String.class));
+    }
 }

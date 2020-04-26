@@ -5,6 +5,9 @@ import com.mmnaseri.utils.spring.data.error.InvalidArgumentException;
 import com.mmnaseri.utils.spring.data.sample.mocks.NotMatchingSimpleMatcher;
 import org.testng.annotations.Test;
 
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertTrue;
+
 /**
  * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/10/16)
@@ -29,4 +32,27 @@ public class AbstractSimpleMatcherTest {
         matcher.matches(new ImmutableParameter("x.y.z", null, null, null), new Object(), 1);
     }
 
+    @Test
+    public void testApplicableToSameType() {
+        final NotMatchingSimpleMatcher matcher = new NotMatchingSimpleMatcher();
+        assertTrue(matcher.isApplicableTo(String.class, String.class));
+    }
+
+    @Test
+    public void testApplicableToSubType() {
+        final NotMatchingSimpleMatcher matcher = new NotMatchingSimpleMatcher();
+        assertTrue(matcher.isApplicableTo(Number.class, Integer.class));
+    }
+
+    @Test
+    public void testNonApplicableToDifferentType() {
+        final NotMatchingSimpleMatcher matcher = new NotMatchingSimpleMatcher();
+        assertFalse(matcher.isApplicableTo(String.class, Integer.class));
+    }
+
+    @Test
+    public void shouldNotBeApplicableToDifferentNumberOfArguments() {
+        final NotMatchingSimpleMatcher matcher = new NotMatchingSimpleMatcher();
+        assertFalse(matcher.isApplicableTo(String.class, String.class, String.class));
+    }
 }
