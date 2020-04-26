@@ -25,6 +25,7 @@ import com.mmnaseri.utils.spring.data.query.impl.DefaultDataFunctionRegistry;
 import com.mmnaseri.utils.spring.data.sample.mocks.AllCatchingEventListener;
 import com.mmnaseri.utils.spring.data.sample.mocks.SpyingDataFunction;
 import com.mmnaseri.utils.spring.data.sample.mocks.SpyingHandler;
+import com.mmnaseri.utils.spring.data.sample.models.Person;
 import com.mmnaseri.utils.spring.data.sample.repositories.*;
 import com.mmnaseri.utils.spring.data.store.*;
 import com.mmnaseri.utils.spring.data.store.impl.AuditDataEventListener;
@@ -35,6 +36,8 @@ import org.hamcrest.Matchers;
 import org.springframework.data.domain.AuditorAware;
 import org.testng.annotations.Test;
 
+import java.io.Serializable;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.mmnaseri.utils.spring.data.dsl.factory.RepositoryFactoryBuilder.given;
@@ -374,4 +377,12 @@ public class RepositoryFactoryBuilderTest {
         assertThat(repository.getRepositoryConfiguration().getKeyGenerator(), is(instanceOf(NoOpKeyGenerator.class)));
     }
 
+    @Test
+    public void testSaveIterable() throws Exception {
+        final JpaPersonRepository repository = RepositoryFactoryBuilder.builder().mock(JpaPersonRepository.class);
+        final Iterable iterable = Arrays.asList(new Person().setId("1"), new Person().setId("2"), new Person().setId("3"));
+        repository.save(iterable);
+        assertThat(repository.findAll(), hasSize(3));
+        assertThat(repository.findAll(), containsInAnyOrder(((List) iterable).toArray()));
+    }
 }
