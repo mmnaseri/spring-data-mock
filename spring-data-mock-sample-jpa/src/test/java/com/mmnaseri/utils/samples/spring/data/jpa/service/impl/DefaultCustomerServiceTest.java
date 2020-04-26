@@ -108,6 +108,17 @@ public class DefaultCustomerServiceTest {
         assertThat(list.get(0), is(customer));
     }
 
+    @Test
+    public void testLookingUpByFirstNamePart() {
+        createCustomer("Milad", "Naseri", date(1988, 1, 1));
+        final Customer eric = createCustomer("Eric", "Deandrea", date(1999, 1, 1));
+
+        final List<Customer> list = service.findByFirstNamePart("IC");
+        assertThat(list, is(notNullValue()));
+        assertThat(list, hasSize(1));
+        assertThat(list.get(0), is(eric));
+    }
+
     private Customer createCustomer(String firstName, String lastName, Date birthday) {
         final Customer customer = new Customer();
         customer.setFirstName(firstName);

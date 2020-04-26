@@ -55,4 +55,9 @@ public class DefaultCustomerService implements CustomerService {
         return repository.findByFirstNameIn(firstNames);
     }
 
+    @Override
+    public List<Customer> findByFirstNamePart(final String part) {
+        return repository.findByFirstNameIgnoreCaseContaining(part);
+    }
+
 }

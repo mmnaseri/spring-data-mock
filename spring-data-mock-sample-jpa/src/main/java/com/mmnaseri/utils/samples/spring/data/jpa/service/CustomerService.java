@@ -21,4 +21,7 @@ public interface CustomerService {
     List<Customer> findCustomersByName(String firstName, String lastName);
 
     List<Customer> findCustomersByFirstNames(Collection<String> firstNames);
+
+    List<Customer> findByFirstNamePart(String part);
+
 }

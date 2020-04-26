@@ -109,7 +109,7 @@ import java.util.regex.Pattern;
 public class MethodQueryDescriptionExtractor implements QueryDescriptionExtractor<Method> {
 
     private static final String ALL_IGNORE_CASE_SUFFIX = "(AllIgnoreCase|AllIgnoresCase|AllIgnoringCase)$";
-    private static final String IGNORE_CASE_SUFFIX = "(IgnoreCase|IgnoresCase|IgnoringCase)$";
+    private static final String IGNORE_CASE_PARTIAL = "(IgnoreCase|IgnoresCase|IgnoringCase)";
     private static final String ASC_SUFFIX = "Asc";
     private static final String DESC_SUFFIX = "Desc";
     private static final String DEFAULT_OPERATOR_SUFFIX = "Is";
@@ -338,10 +338,10 @@ public class MethodQueryDescriptionExtractor implements QueryDescriptionExtracto
 
     private String parseModifiers(boolean allIgnoreCase, String originalExpression, Set<Modifier> modifiers) {
         String expression = originalExpression;
-        if (expression.matches(".*" + IGNORE_CASE_SUFFIX)) {
-            //if the expression ended in IgnoreCase, we need to strip that off
+        if (expression.matches(".*" + IGNORE_CASE_PARTIAL + ".*")) {
+            //if the expression contains IgnoreCase, we need to strip that off
             modifiers.add(Modifier.IGNORE_CASE);
-            expression = expression.replaceFirst(IGNORE_CASE_SUFFIX, "");
+            expression = expression.replaceFirst(IGNORE_CASE_PARTIAL, "");
         } else if (allIgnoreCase) {
             //if we had already set "AllIgnoreCase", we will still add the modifier
             modifiers.add(Modifier.IGNORE_CASE);

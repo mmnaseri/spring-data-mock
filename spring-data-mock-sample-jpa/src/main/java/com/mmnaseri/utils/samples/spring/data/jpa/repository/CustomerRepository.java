@@ -19,4 +19,6 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
     List<Customer> findByExample(Example<Customer> probe);
 
     List<Customer> findByFirstNameIn(Collection<String> firstNames);
+
+    List<Customer> findByFirstNameIgnoreCaseContaining(String substring);
 }
