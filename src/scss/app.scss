@@ -21,6 +21,10 @@ p {
   line-height: 24px;
 }
 
+.hljs.inline {
+  display: inline;
+}
+
 .center {
   display: block;
   margin-left: auto;
@@ -39,6 +43,10 @@ div.header {
   -o-transition: background-color 0.4s;
   transition: background-color 0.4s;
   a {
+    color: #666666;
+    cursor: pointer;
+  }
+  a.pull-right {
     color: #ededed;
     cursor: pointer;
   }
@@ -90,7 +98,7 @@ a.jump-top {
   margin-top: 0;
 }
 
-@import "parts/header.scss";
-@import "parts/sub-header.scss";
-@import "parts/zenburn.scss";
-@import "parts/footer.scss";
+@import "parts/header";
+@import "parts/sub-header";
+@import "parts/ocean";
+@import "parts/footer";

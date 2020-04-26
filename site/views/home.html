@@ -2,8 +2,6 @@
 <p><a href="https://paypal.me/mmnaseri"><img src="https://img.shields.io/badge/paypal-donate-yellow.svg" alt="Donae"></a>
 <a href="http://opensource.org/licenses/MIT"><img src="http://img.shields.io/badge/license-MIT-brightgreen.svg" alt="MIT license"></a>
 <a href="https://maven-badges.herokuapp.com/maven-central/com.mmnaseri.utils/spring-data-mock"><img src="https://maven-badges.herokuapp.com/maven-central/com.mmnaseri.utils/spring-data-mock/badge.svg" alt="Maven Central"></a>
-<a href="https://www.versioneye.com/user/projects/5722a8f5ba37ce0031fc17f0"><img src="https://www.versioneye.com/user/projects/5722a8f5ba37ce0031fc17f0/badge.svg?style=flat" alt="Dependency Status"></a>
-<a href="http://waffle.io/mmnaseri/spring-data-mock"><img src="https://badge.waffle.io/mmnaseri/spring-data-mock.svg?label=ready&title=issues" alt="Open Issues"></a>
 <a href="https://travis-ci.org/mmnaseri/spring-data-mock"><img src="https://travis-ci.org/mmnaseri/spring-data-mock.svg?branch=master" alt="Build Status"></a>
 <a href="https://www.codacy.com/app/mmnaseri/spring-data-mock"><img src="https://api.codacy.com/project/badge/grade/ad9f174fa0654a2b8c925b86973f272d" alt="Codacy Badge"></a>
 <a href="https://coveralls.io/github/mmnaseri/spring-data-mock?branch=master"><img src="https://coveralls.io/repos/github/mmnaseri/spring-data-mock/badge.svg?branch=master" alt="Coverage Status"></a></p>
@@ -16,20 +14,18 @@ Data repositories.</p>
 <li><p><a href="http://github.com/mmnaseri/spring-data-mock">Github</a></p>
 </li>
 <li><p>Maven Central by adding this dependency to your <code class="hljs"><span class="hljs-selector-tag">pom</span><span class="hljs-selector-class">.xml</span></code> file:</p>
-  <pre>
-    <code class="hljs"><span class="xml">
-        <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span>
-            <span class="hljs-tag">&lt;<span class="hljs-name">groupid</span>&gt;</span>com.mmnaseri.utils<span class="hljs-tag">&lt;/<span class="hljs-name">groupid</span>&gt;</span>
-            <span class="hljs-tag">&lt;<span class="hljs-name">artifactid</span>&gt;</span>spring-data-mock<span class="hljs-tag">&lt;/<span class="hljs-name">artifactid</span>&gt;</span>
-            <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>$</span><span class="hljs-template-variable">{latest-version}</span><span class="xml"><span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span>
-            <span class="hljs-tag">&lt;<span class="hljs-name">scope</span>&gt;</span>test<span class="hljs-tag">&lt;/<span class="hljs-name">scope</span>&gt;</span>
-        <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span>
-    </span></code>
-  </pre></li>
+<pre><code class="hljs"><span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">groupid</span>&gt;</span>com.mmnaseri.utils<span class="hljs-tag">&lt;/<span class="hljs-name">groupid</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">artifactid</span>&gt;</span>spring-data-mock<span class="hljs-tag">&lt;/<span class="hljs-name">artifactid</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>$</span><span class="hljs-template-variable">{latest-version}</span><span class="xml"><span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">scope</span>&gt;</span>test<span class="hljs-tag">&lt;/<span class="hljs-name">scope</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span></span></code></pre>
+</li>
 <li><p>By cloning the project and installing it locally:</p>
-<pre><code class="hljs"><span class="hljs-title">git</span> clone https://github.com/mmnaseri/spring-<span class="hljs-class"><span class="hljs-keyword">data</span>-mock.git</span>
+<pre><code class="language-bash hljs"><span class="hljs-title">git</span> clone https://github.com/mmnaseri/spring-<span class="hljs-class"><span class="hljs-keyword">data</span>-mock.git</span>
 <span class="hljs-title">cd</span> spring-<span class="hljs-class"><span class="hljs-keyword">data</span>-mock</span>
-<span class="hljs-title">mvn</span> install</code></pre><p>and then adding the same dependency as above, or just grabbing the
+<span class="hljs-title">mvn</span> install</code></pre>
+<p>and then adding the same dependency as above, or just grabbing the
 JAR file locally from the <code class="hljs"><span class="hljs-keyword">target</span></code> folder.</p>
 </li>
 </ul>
@@ -47,9 +43,20 @@ any development work on this project.</p>
 <p>If you have any issues or if there are features that you require, you are more than
 welcome to  submit them via the <a href="https://github.com/mmnaseri/spring-data-mock/issues">issues page</a>
 at Github. I will try to keep track of them, and assign them to a planned future release.</p>
-<p>Here is how this framework looks like right now:</p>
-<br>
-
-<div class="center">
-[![Throughput Graph](https://graphs.waffle.io/mmnaseri/spring-data-mock/throughput.svg)](https://waffle.io/mmnaseri/spring-data-mock/metrics)
-</div>
+<h2 id="contribution">Contribution</h2>
+<p>Since this project aims to help you in the testing phase of your code, it is paramount that it is
+written with the best of qualities and that it maintains the highest standard.</p>
+<p>Contributors are more than welcome. In fact, I flag most of the issues I receive as <kbd>help wanted</kbd> and
+there are really generous people out there who do take care of some issues.</p>
+<p>If you see a piece of code that you don&#39;t like for whatever reason -- so long as that reason can be backed
+by pioneers and standards -- feel free to dig in and change the code to your heart&#39;s content and create a
+pull request.</p>
+<h3 id="building-the-code">Building the Code</h3>
+<p>To make the code builds universal and canonical, I have a Docker configuration attached to this project
+which installs OpenJDK 8 on Ubuntu Xenial. This is the build environment I will be using to test and release
+the code.</p>
+<pre><code class="language-bash hljs"><span class="hljs-symbol">docker</span> <span class="hljs-keyword">build </span>-t spring-<span class="hljs-meta">data</span>-mock:jdk8 .
+<span class="hljs-symbol">docker</span> run -<span class="hljs-keyword">it </span>--rm -v $(pwd):/src spring-<span class="hljs-meta">data</span>-mock:jdk8</code></pre>
+<p>Then, from inside the Docker image, you can build and test the project with Maven:</p>
+<pre><code class="language-bash hljs"><span class="hljs-symbol">cd</span> spring-<span class="hljs-meta">data</span>-mock
+<span class="hljs-keyword">mvn </span>test</code></pre>

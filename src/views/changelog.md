@@ -7,6 +7,39 @@ in a given release.
 Where applicable, an issue number and a link to the appropriate
 issue is provided as well.
 
+[v2.0.0](https://github.com/mmnaseri/spring-data-mock/releases/tag/v2.0.0)
+------------------------------------------------
+
+This is the second major release of the library and adapts the standards and APIs used
+in Spring Boot 2.0.
+
+For a detailed discussed on how this came to be, see [#163](https://github.com/mmnaseri/spring-data-mock/issues/163).
+
+Many tanks and kudos to [@binakot](https://github.com/binakot) who undertook a major part
+of this migration.
+
+-------
+
+[v1.1.4](https://github.com/mmnaseri/spring-data-mock/releases/tag/v1.1.4)
+------------------------------------------------
+
+This version includes a bunch of generic enhancements to the codebase. 
+
+##### Enhancements
+
+  * [#139](https://github.com/mmnaseri/spring-data-mock/pull/117) Update the README to reflect the correct versioning scheme
+
+  * [#130](https://github.com/mmnaseri/spring-data-mock/pull/130) Add a user-group sample to demonstrate how relationships work
+  
+  * [#137](https://github.com/mmnaseri/spring-data-mock/pull/130) Improve code quality by reducing complexity
+  
+  * [#139](https://github.com/mmnaseri/spring-data-mock/pull/139) Update Travis CI usage to non-container infrastructure.
+  
+  * Update dependencies to newest version.
+  
+##### Fixes
+  
+  * [#128](https://github.com/mmnaseri/spring-data-mock/pull/128) Fix an error where `ignoreCase` wasn't honored everywhere.
 
 [v1.1.3](https://github.com/mmnaseri/spring-data-mock/releases/tag/v1.1.3)
 ------------------------------------------------

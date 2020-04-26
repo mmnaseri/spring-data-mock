@@ -4,21 +4,21 @@
  */
 
 //Gulp main
-var gulp = require("gulp");
-var uglify = require("gulp-uglify");
-var del = require("del");
-var copy = require("gulp-copy");
-var concat = require("gulp-concat");
-var wiredep = require("gulp-wiredep");
-var sourcemaps = require('gulp-sourcemaps');
-var git = require('gulp-git');
-var sass = require('gulp-sass');
-var refresh = require('gulp-refresh');
-var markedown = require('gulp-markdown');
-var highlight = require('gulp-highlight');
+const gulp = require("gulp");
+// const uglify = require("gulp-uglify");
+const del = require("del");
+const copy = require("gulp-copy");
+const concat = require("gulp-concat");
+const wiredep = require("gulp-wiredep");
+const sourcemaps = require('gulp-sourcemaps');
+const git = require('gulp-git');
+const sass = require('gulp-sass');
+const refresh = require('gulp-refresh');
+const markedown = require('gulp-markdown');
+const highlight = require('gulp-highlight');
 
 //configs
-var paths = {
+const paths = {
     main: "src/index.html",
     scripts: [
         'src/js/*.js',
@@ -120,7 +120,7 @@ gulp.task('watch', function () {
 gulp.task("views", function () {
     return gulp.src(paths.views)
         .pipe(markedown())
-        .pipe(highlight())
+        .pipe(highlight({theme: 'darcula'}))
         .pipe(gulp.dest(paths.site.views))
         .pipe(refresh())
 });

@@ -62,8 +62,12 @@ module.directive('code', function () {
     return {
         restrict: "E",
         link: function ($scope, $element) {
-            if ($element.get(0).parentNode.nodeName.toLowerCase() == 'pre') {
-                angular.element($element.get(0).parentNode).addClass('hljs');
+            // if (!$element || !$element.get) {
+            //     console.log($element);
+            //     return;
+            // }
+            if ($element[0].parentNode.nodeName.toLowerCase() === 'pre') {
+                angular.element($element[0].parentNode).addClass('hljs');
             } else {
                 $element.addClass('inline');
             }
@@ -142,4 +146,11 @@ module.directive('jumpTop', function () {
         restrict: "E",
         template: "<a class='jump-top' target='_self' href='#/readme'><i class='glyphicon glyphicon-chevron-up'></i></a>"
     };
+});
+
+$(function () {
+    if (/^http:\/\/localhost[:\/]/.test(window.location.href)) {
+        let liveReload = $("<script type=\"application/javascript\" src=\"http://localhost:13001/livereload.js\">");
+        $("head").append(liveReload);
+    }
 });
