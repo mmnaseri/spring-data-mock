@@ -8,7 +8,6 @@ import com.mmnaseri.utils.spring.data.tools.PropertyUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
@@ -22,7 +21,7 @@ import java.util.List;
  * <p>Since the return value of the method can and will be adapted to the return value of the invoked method,
  * return values are not considered to be so important, and they are not checked or considered.</p>
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/29/15)
  */
 @SuppressWarnings("WeakerAccess")
@@ -37,31 +36,36 @@ public class SignatureDataOperationResolver implements DataOperationResolver {
 
     @Override
     public DataStoreOperation<?, ?, ?> resolve(Method method) {
-        log.info("Trying to resolve the data operation for method " + method + " by going through the previously set up type mappings");
+        log.info("Trying to resolve the data operation for method " + method
+                         + " by going through the previously set up type mappings");
         for (TypeMapping<?> mapping : mappings) {
             final Class<?> type = mapping.getType();
             final Method declaration = findMethod(type, method.getName(), method.getParameterTypes());
             if (declaration != null) {
                 log.info("Setting the resolution as a method invocation on the previously prepared type mapping");
                 final Object instance = mapping.getInstance();
-                return new MethodInvocationDataStoreOperation<Serializable, Object>(instance, declaration);
+                return new MethodInvocationDataStoreOperation<Object, Object>(instance, declaration);
             }
         }
         return null;
     }
 
     private static Method findMethod(Class<?> type, String name, Class<?>... parameterTypes) {
-        log.debug("Attempting to look for the actual declaration of the method named '" + name + "' with parameter types " + Arrays.toString(parameterTypes) + " on the child type " + type);
+        log.debug(
+                "Attempting to look for the actual declaration of the method named '" + name + "' with parameter types "
+                        + Arrays.toString(parameterTypes) + " on the child type " + type);
         Class<?> searchType = type;
         while (searchType != null) {
             log.trace("Looking at type " + type + " for method " + name);
-            final Method[] methods = searchType.isInterface() ? searchType.getMethods() : searchType.getDeclaredMethods();
+            final Method[] methods =
+                    searchType.isInterface() ? searchType.getMethods() : searchType.getDeclaredMethods();
             for (Method method : methods) {
                 if (method.getName().equals(name) && parameterTypes.length == method.getParameterTypes().length) {
                     boolean matches = true;
                     for (int i = 0; i < parameterTypes.length; i++) {
                         final Class<?> parameterType = parameterTypes[i];
-                        if (!PropertyUtils.getTypeOf(method.getParameterTypes()[i]).isAssignableFrom(PropertyUtils.getTypeOf(parameterType))) {
+                        if (!PropertyUtils.getTypeOf(method.getParameterTypes()[i]).isAssignableFrom(
+                                PropertyUtils.getTypeOf(parameterType))) {
                             matches = false;
                             break;
                         }

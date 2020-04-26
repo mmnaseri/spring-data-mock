@@ -32,15 +32,15 @@
     </developers>
 
     <properties>
-        <spring-data-commons.version>1.12.1.RELEASE</spring-data-commons.version>
-        <spring-data-jpa.version>1.10.1.RELEASE</spring-data-jpa.version>
-        <persistence-api.version>1.0.2</persistence-api.version>
-        <spring-data-mock.version>1.1.4</spring-data-mock.version>
-        <testng.version>6.9.6</testng.version>
-        <hamcrest.version>1.3</hamcrest.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven-compiler-plugin.version>3.5.1</maven-compiler-plugin.version>
-        <target-jdk.version>1.7</target-jdk.version>
+        <spring-data-commons.version>2.2.6.RELEASE</spring-data-commons.version>
+        <spring-data-jpa.version>2.2.6.RELEASE</spring-data-jpa.version>
+        <persistence-api.version>1.0.2</persistence-api.version>
+        <spring-data-mock.version>2.0.0</spring-data-mock.version>
+        <testng.version>7.1.0</testng.version>
+        <hamcrest.version>1.3</hamcrest.version>
+        <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
+        <target-jdk.version>1.8</target-jdk.version>
         <cobertura-maven-plugin.version>2.7</cobertura-maven-plugin.version>
     </properties>
 

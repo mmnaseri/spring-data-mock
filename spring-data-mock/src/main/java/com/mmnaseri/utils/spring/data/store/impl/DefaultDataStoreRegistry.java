@@ -6,15 +6,14 @@ import com.mmnaseri.utils.spring.data.store.DataStoreRegistry;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import java.io.Serializable;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * This is the default implementation of the data store registry that supports caching a data store based on
- * the type of entity the data store supports.
+ * This is the default implementation of the data store registry that supports caching a data store based on the type of
+ * entity the data store supports.
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/29/15)
  */
 public class DefaultDataStoreRegistry implements DataStoreRegistry {
@@ -23,13 +22,13 @@ public class DefaultDataStoreRegistry implements DataStoreRegistry {
     private final Map<Class<?>, DataStore<?, ?>> dataStores = new ConcurrentHashMap<>();
 
     @Override
-    public <E, K extends Serializable> void register(DataStore<K, E> dataStore) {
+    public <E, K> void register(DataStore<K, E> dataStore) {
         log.info("Registering a data store for type " + dataStore.getEntityType());
         dataStores.put(dataStore.getEntityType(), dataStore);
     }
 
     @Override
-    public <E, K extends Serializable> DataStore<K, E> getDataStore(Class<E> entityType) {
+    public <E, K> DataStore<K, E> getDataStore(Class<E> entityType) {
         if (!dataStores.containsKey(entityType)) {
             log.error("There is no data store registered for entity type " + entityType);
             log.debug("Registered data types are " + dataStores.keySet());

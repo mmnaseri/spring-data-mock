@@ -3,7 +3,7 @@ package com.mmnaseri.utils.spring.data.domain;
 /**
  * This interface represents an operator used for matching entities to a preset criteria.
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/29/15)
  */
 public interface Operator {

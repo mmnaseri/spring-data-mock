@@ -20,7 +20,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/10/16)
  */
 public class DefaultDataOperationResolverTest {
@@ -31,17 +31,23 @@ public class DefaultDataOperationResolverTest {
     public void setUp() throws Exception {
         final ArrayList<TypeMapping<?>> mappings = new ArrayList<>();
         mappings.add(new ImmutableTypeMapping<>(MappedType.class, new MappedType()));
-        final MethodQueryDescriptionExtractor descriptionExtractor = new MethodQueryDescriptionExtractor(new DefaultOperatorContext());
-        final ImmutableRepositoryMetadata repositoryMetadata = new ImmutableRepositoryMetadata(String.class, Person.class, SampleMappedRepository.class, "id");
+        final MethodQueryDescriptionExtractor descriptionExtractor = new MethodQueryDescriptionExtractor(
+                new DefaultOperatorContext());
+        final ImmutableRepositoryMetadata repositoryMetadata = new ImmutableRepositoryMetadata(String.class,
+                                                                                               Person.class,
+                                                                                               SampleMappedRepository.class,
+                                                                                               "id");
         final DefaultDataFunctionRegistry functionRegistry = new DefaultDataFunctionRegistry();
-        resolver = new DefaultDataOperationResolver(mappings, descriptionExtractor, repositoryMetadata, functionRegistry, new DefaultRepositoryFactoryConfiguration());
+        resolver = new DefaultDataOperationResolver(mappings, descriptionExtractor, repositoryMetadata,
+                                                    functionRegistry, new DefaultRepositoryFactoryConfiguration());
     }
 
     @Test
     public void testLookingForMethodThatHasMapping() throws Exception {
-        final DataStoreOperation<?, ?, ?> operation = resolver.resolve(SampleMappedRepository.class.getMethod("mappedSignature", String.class));
+        final DataStoreOperation<?, ?, ?> operation = resolver.resolve(
+                SampleMappedRepository.class.getMethod("mappedSignature", String.class));
         assertThat(operation, is(notNullValue()));
-        assertThat(operation,  is(instanceOf(MethodInvocationDataStoreOperation.class)));
+        assertThat(operation, is(instanceOf(MethodInvocationDataStoreOperation.class)));
         final MethodInvocationDataStoreOperation invocation = (MethodInvocationDataStoreOperation) operation;
         assertThat(invocation.getInstance(), is(instanceOf(MappedType.class)));
         assertThat(invocation.getMethod(), is(MappedType.class.getMethod("mappedSignature", CharSequence.class)));
@@ -49,7 +55,8 @@ public class DefaultDataOperationResolverTest {
 
     @Test
     public void testLookingForQueryMethod() throws Exception {
-        final DataStoreOperation<?, ?, ?> operation = resolver.resolve(SampleMappedRepository.class.getMethod("findByFirstName", String.class));
+        final DataStoreOperation<?, ?, ?> operation = resolver.resolve(
+                SampleMappedRepository.class.getMethod("findByFirstName", String.class));
         assertThat(operation, is(notNullValue()));
         assertThat(operation, is(instanceOf(DescribedDataStoreOperation.class)));
     }

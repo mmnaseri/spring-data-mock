@@ -9,7 +9,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/29/15)
  */
 @SuppressWarnings("unused")
@@ -37,6 +37,7 @@ public class AnnotatedFieldIdPropertyResolverTest extends BaseRepeatableIdProper
 
     /**
      * Regression test for https://github.com/mmnaseri/spring-data-mock/issues/55
+     *
      * @throws Exception
      */
     @Test

@@ -12,7 +12,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (10/5/15)
  */
 public class NullToIterableResultAdapterTest {
@@ -20,18 +20,24 @@ public class NullToIterableResultAdapterTest {
     @Test
     public void testAcceptance() throws Exception {
         final ResultAdapter<Iterable> adapter = new NullToIterableResultAdapter();
-        assertThat(adapter.accepts(new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findIterable"), new Object[]{}), null), is(true));
-        assertThat(adapter.accepts(new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findOther"), new Object[]{}), null), is(false));
+        assertThat(adapter.accepts(
+                new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findIterable"), new Object[]{}),
+                null), is(true));
+        assertThat(adapter.accepts(
+                new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findOther"), new Object[]{}), null),
+                   is(false));
     }
 
     @Test
     public void testAdaptingToIterable() throws Exception {
         final ResultAdapter<Iterable> adapter = new NullToIterableResultAdapter();
-        final Iterable value = adapter.adapt(new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findIterable"), new Object[]{}), null);
+        final Iterable value = adapter.adapt(
+                new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findIterable"), new Object[]{}),
+                null);
         assertThat(value, is(notNullValue()));
         assertThat(value.iterator(), is(notNullValue()));
         final Iterator iterator = value.iterator();
         assertThat(iterator.hasNext(), is(false));
     }
-    
+
 }

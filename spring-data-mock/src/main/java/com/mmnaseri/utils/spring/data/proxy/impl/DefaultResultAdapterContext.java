@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * This is the default implementation for registering and containing result adapters.
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/24/15)
  */
 @SuppressWarnings("WeakerAccess")
@@ -34,7 +34,8 @@ public class DefaultResultAdapterContext implements ResultAdapterContext {
 
     /**
      * Instantiates the context
-     * @param registerDefaults    whether default adapters should be registered by default.
+     *
+     * @param registerDefaults whether default adapters should be registered by default.
      */
     public DefaultResultAdapterContext(boolean registerDefaults) {
         adapters = new ArrayList<>();
@@ -76,7 +77,8 @@ public class DefaultResultAdapterContext implements ResultAdapterContext {
                 return adapter.adapt(invocation, originalResult);
             }
         }
-        log.error("Could not find any result adapter that was capable of adapting the result of the invocation to type " + invocation.getMethod().getReturnType());
+        log.error("Could not find any result adapter that was capable of adapting the result of the invocation to type "
+                          + invocation.getMethod().getReturnType());
         throw new ResultAdapterFailureException(originalResult, invocation.getMethod().getReturnType());
     }
 

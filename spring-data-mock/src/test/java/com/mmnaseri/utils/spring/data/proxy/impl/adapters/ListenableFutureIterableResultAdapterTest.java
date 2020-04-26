@@ -15,7 +15,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/10/16)
  */
 public class ListenableFutureIterableResultAdapterTest {
@@ -24,16 +24,24 @@ public class ListenableFutureIterableResultAdapterTest {
     public void testAccepting() throws Exception {
         final ListenableFutureIterableResultAdapter adapter = new ListenableFutureIterableResultAdapter();
         assertThat(adapter.accepts(null, null), is(false));
-        assertThat(adapter.accepts(new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findOther"), new Object[]{}), new Object()), is(false));
-        assertThat(adapter.accepts(new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findListenableFuture"), new Object[]{}), new Object()), is(false));
-        assertThat(adapter.accepts(new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findListenableFuture"), new Object[]{}), new ArrayList<>()), is(true));
+        assertThat(adapter.accepts(
+                new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findOther"), new Object[]{}),
+                new Object()), is(false));
+        assertThat(adapter.accepts(
+                new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findListenableFuture"),
+                                        new Object[]{}), new Object()), is(false));
+        assertThat(adapter.accepts(
+                new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findListenableFuture"),
+                                        new Object[]{}), new ArrayList<>()), is(true));
     }
 
     @Test
     public void testAdapting() throws Exception {
         final ListenableFutureIterableResultAdapter adapter = new ListenableFutureIterableResultAdapter();
         final List<Integer> originalValue = Arrays.asList(1, 2, 3);
-        final ListenableFuture adapted = adapter.adapt(new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findListenableFuture"), new Object[]{}), originalValue);
+        final ListenableFuture adapted = adapter.adapt(
+                new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findListenableFuture"),
+                                        new Object[]{}), originalValue);
         assertThat(adapted, is(notNullValue()));
         final Object result = adapted.get();
         assertThat(result, is(notNullValue()));

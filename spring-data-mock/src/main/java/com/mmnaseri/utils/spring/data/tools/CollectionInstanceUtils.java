@@ -4,7 +4,7 @@ import java.util.*;
 import java.util.concurrent.*;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/24/15)
  */
 public final class CollectionInstanceUtils {
@@ -15,7 +15,8 @@ public final class CollectionInstanceUtils {
 
     /**
      * Given any of the known collection types, this method will return an instance of the collection.
-     * @param collectionType    the type of the collection
+     *
+     * @param collectionType the type of the collection
      * @return the collection instance
      */
     public static Collection<?> getCollection(Class<?> collectionType) {

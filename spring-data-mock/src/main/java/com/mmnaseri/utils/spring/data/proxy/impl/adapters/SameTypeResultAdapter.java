@@ -8,7 +8,7 @@ import com.mmnaseri.utils.spring.data.domain.Invocation;
  *
  * <p>This adapter runs at priority {@literal -500}.</p>
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/24/15)
  */
 public class SameTypeResultAdapter extends AbstractResultAdapter<Object> {

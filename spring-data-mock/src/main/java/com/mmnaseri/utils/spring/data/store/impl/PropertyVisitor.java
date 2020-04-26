@@ -9,10 +9,10 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 /**
- * This property visitor will visit all properties (fields and getter methods) to find out the property that
- * has the specified annotation. The property can later be retrieved by calling {@link #getProperty()}.
+ * This property visitor will visit all properties (fields and getter methods) to find out the property that has the
+ * specified annotation. The property can later be retrieved by calling {@link #getProperty()}.
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (10/12/15)
  */
 class PropertyVisitor implements ReflectionUtils.MethodCallback, ReflectionUtils.FieldCallback {

@@ -9,7 +9,7 @@ import static org.hamcrest.Matchers.*;
 import static org.testng.Assert.fail;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/8/16)
  */
 public abstract class AbstractUtilityClassTest {

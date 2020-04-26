@@ -5,7 +5,7 @@ import com.mmnaseri.utils.spring.data.domain.Matcher;
 import com.mmnaseri.utils.spring.data.domain.Operator;
 
 /**
- * @author Mohammad Milad Naseri (m.m.naseri@gmail.com)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/17/16, 12:37 PM)
  */
 @SuppressWarnings("WeakerAccess")

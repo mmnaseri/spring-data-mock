@@ -9,9 +9,8 @@ import com.mmnaseri.utils.spring.data.sample.models.PersonSerializable;
 import org.springframework.data.repository.Repository;
 
 /**
- *
  * @author blackleg
  */
-public interface SimplePersonSerializableRepository  extends Repository<PersonSerializable, String> {
-    
+public interface SimplePersonSerializableRepository extends Repository<PersonSerializable, String> {
+
 }

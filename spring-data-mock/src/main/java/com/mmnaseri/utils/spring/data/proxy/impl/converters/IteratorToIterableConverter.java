@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * This value will convert an iterator to an iterable.
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/28/15)
  */
 @SuppressWarnings("WeakerAccess")

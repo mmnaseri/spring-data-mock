@@ -13,7 +13,11 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
 
 /**
  * @author Milad Naseri (milad.naseri@cdk.com)
@@ -49,7 +53,7 @@ public class DefaultUserServiceTest {
         assertThat(user.getEmail(), is(email));
         assertThat(user.getPasswordHash(), is(not(password)));
         assertThat(repository.count(), is(1L));
-        final User found = repository.findOne(user.getId());
+        final User found = repository.findById(user.getId()).orElse(null);
         assertThat(found, is(notNullValue()));
         assertThat(found.getUsername(), is(username));
         assertThat(found.getEmail(), is(email));

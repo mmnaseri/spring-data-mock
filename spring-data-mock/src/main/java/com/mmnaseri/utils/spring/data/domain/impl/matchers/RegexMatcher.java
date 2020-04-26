@@ -5,7 +5,7 @@ import com.mmnaseri.utils.spring.data.domain.Parameter;
 /**
  * This matcher will determine if the value on the object (a string) matches the pattern being passed.
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/29/15)
  */
 public class RegexMatcher extends AbstractSimpleStringMatcher {

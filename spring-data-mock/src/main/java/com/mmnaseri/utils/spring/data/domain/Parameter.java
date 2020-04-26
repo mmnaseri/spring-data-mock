@@ -5,7 +5,7 @@ import java.util.Set;
 /**
  * This interface represents a "parameter" factored into matching a given entity to a preset criteria.
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/17/15)
  */
 public interface Parameter {

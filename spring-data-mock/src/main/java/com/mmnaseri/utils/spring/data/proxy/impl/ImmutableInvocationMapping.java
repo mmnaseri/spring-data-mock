@@ -3,17 +3,16 @@ package com.mmnaseri.utils.spring.data.proxy.impl;
 import com.mmnaseri.utils.spring.data.proxy.InvocationMapping;
 import com.mmnaseri.utils.spring.data.store.DataStoreOperation;
 
-import java.io.Serializable;
 import java.lang.reflect.Method;
 
 /**
  * <p>This class is an immutable invocation mapping.</p>
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/29/15)
  */
 @SuppressWarnings("WeakerAccess")
-public class ImmutableInvocationMapping<K extends Serializable, E> implements InvocationMapping<K, E> {
+public class ImmutableInvocationMapping<K, E> implements InvocationMapping<K, E> {
 
     private final Method method;
     private final DataStoreOperation<?, K, E> operation;

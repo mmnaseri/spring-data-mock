@@ -5,11 +5,11 @@ import com.mmnaseri.utils.spring.data.proxy.RepositoryFactory;
 import com.mmnaseri.utils.spring.data.proxy.RepositoryFactoryConfiguration;
 
 /**
- * Finalizes the DSL by providing a way to either choose to {@link #build() build} the factory or to
- * {@link KeyGeneration continue} with the DSL and mock a repository instead, thus complementing the
- * grammar for the repository factory build DSL with that of the repository mock builder.
+ * Finalizes the DSL by providing a way to either choose to {@link #build() build} the factory or to {@link
+ * KeyGeneration continue} with the DSL and mock a repository instead, thus complementing the grammar for the repository
+ * factory build DSL with that of the repository mock builder.
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (10/14/15)
  */
 @SuppressWarnings("WeakerAccess")
@@ -22,8 +22,8 @@ public interface End extends KeyGeneration {
     RepositoryFactory build();
 
     /**
-     * @return the {@link RepositoryFactoryConfiguration repository factory configuration} instance that has
-     * been created as a result of method calls via this DSL
+     * @return the {@link RepositoryFactoryConfiguration repository factory configuration} instance that has been
+     * created as a result of method calls via this DSL
      */
     RepositoryFactoryConfiguration configure();
 

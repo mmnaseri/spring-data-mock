@@ -11,7 +11,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (10/5/15)
  */
 public class NullToFutureResultAdapterTest {
@@ -19,14 +19,20 @@ public class NullToFutureResultAdapterTest {
     @Test
     public void testAcceptance() throws Exception {
         final ResultAdapter<Future> adapter = new NullToFutureResultAdapter();
-        assertThat(adapter.accepts(new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findFuture"), new Object[]{}), null), is(true));
-        assertThat(adapter.accepts(new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findOther"), new Object[]{}), null), is(false));
+        assertThat(adapter.accepts(
+                new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findFuture"), new Object[]{}),
+                null), is(true));
+        assertThat(adapter.accepts(
+                new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findOther"), new Object[]{}), null),
+                   is(false));
     }
 
     @Test
     public void testAdaptingFuture() throws Exception {
         final ResultAdapter<Future> adapter = new NullToFutureResultAdapter();
-        final Future value = adapter.adapt(new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findFuture"), new Object[]{}), null);
+        final Future value = adapter.adapt(
+                new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findFuture"), new Object[]{}),
+                null);
         assertThat(value, is(notNullValue()));
         assertThat(value.get(), is(nullValue()));
     }

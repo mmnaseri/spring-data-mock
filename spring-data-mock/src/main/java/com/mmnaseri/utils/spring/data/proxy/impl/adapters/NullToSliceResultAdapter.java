@@ -15,7 +15,7 @@ import java.util.Collections;
  *
  * <p>This adapter runs at the priority of {@literal -200}.</p>
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/24/15)
  */
 public class NullToSliceResultAdapter extends AbstractResultAdapter<Slice> {

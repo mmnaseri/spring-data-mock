@@ -15,7 +15,7 @@ import java.util.List;
  * This is a comparator that will compare two objects based on a common property. The property should be defined as an
  * expression such as "x.y.z".
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/17/15)
  */
 public class PropertyComparator implements Comparator<Object> {
@@ -26,7 +26,8 @@ public class PropertyComparator implements Comparator<Object> {
     private final SortDirection direction;
 
     PropertyComparator(Order order) {
-        this.nullHandling = order.getNullHandling() == null || NullHandling.DEFAULT.equals(order.getNullHandling()) ? DEFAULT_NULL_HANDLING : order.getNullHandling();
+        this.nullHandling = order.getNullHandling() == null || NullHandling.DEFAULT.equals(order.getNullHandling())
+                ? DEFAULT_NULL_HANDLING : order.getNullHandling();
         property = order.getProperty();
         direction = order.getDirection();
     }
@@ -46,9 +47,10 @@ public class PropertyComparator implements Comparator<Object> {
     }
 
     /**
-     * Returns the value of the specified {@link #property property} from the object, given that it exists.
-     * Otherwise, it throws an {@link InvalidArgumentException}.
-     * @param object    the object to read the property from
+     * Returns the value of the specified {@link #property property} from the object, given that it exists. Otherwise,
+     * it throws an {@link InvalidArgumentException}.
+     *
+     * @param object the object to read the property from
      * @return the value of the property
      * @throws InvalidArgumentException
      */
@@ -63,9 +65,11 @@ public class PropertyComparator implements Comparator<Object> {
     }
 
     /**
-     * If either of the two values is {@literal null}, this will compare them by taking {@link NullHandling} into account.
-     * @param first     the first value
-     * @param second    the second value
+     * If either of the two values is {@literal null}, this will compare them by taking {@link NullHandling} into
+     * account.
+     *
+     * @param first  the first value
+     * @param second the second value
      * @return comparison results as defined by {@link Comparable#compareTo(Object)}
      */
     private int compareIfEitherIsNull(Object first, Object second) {
@@ -82,8 +86,8 @@ public class PropertyComparator implements Comparator<Object> {
      * This will compare the two values if their are <em>compatible</em>, meaning one of them is of a type that is a
      * super type or is the same type as the other one.
      *
-     * @param first     the first item
-     * @param second    the second item
+     * @param first  the first item
+     * @param second the second item
      * @return comparison results as defined by {@link Comparable#compareTo(Object)}
      * @throws InvalidArgumentException
      */
@@ -101,8 +105,9 @@ public class PropertyComparator implements Comparator<Object> {
 
     /**
      * This method checks to make sure both values are of type {@link Comparable}
-     * @param first     the first value
-     * @param second    the second value
+     *
+     * @param first  the first value
+     * @param second the second value
      * @throws InvalidArgumentException if they are not
      */
     private void checkForComparable(Object first, Object second) {
@@ -113,8 +118,9 @@ public class PropertyComparator implements Comparator<Object> {
 
     /**
      * Given a collection of objects, will sort them by taking the sort property into account.
-     * @param collection    the collection of items
-     * @param sort          the sort specification
+     *
+     * @param collection the collection of items
+     * @param sort       the sort specification
      */
     public static void sort(List<?> collection, Sort sort) {
         for (int i = sort.getOrders().size() - 1; i >= 0; i--) {

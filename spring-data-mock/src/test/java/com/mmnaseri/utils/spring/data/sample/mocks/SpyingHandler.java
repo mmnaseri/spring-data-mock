@@ -5,7 +5,7 @@ import com.mmnaseri.utils.spring.data.proxy.NonDataOperationHandler;
 import java.lang.reflect.Method;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/12/16, 1:30 PM)
  */
 public class SpyingHandler implements NonDataOperationHandler {

@@ -12,7 +12,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/9/16)
  */
 public class DefaultDataStoreEventListenerContextTest {
@@ -80,10 +80,13 @@ public class DefaultDataStoreEventListenerContextTest {
         parent.register(first);
         child.register(second);
         assertThat(parent.getListeners(AfterInsertDataStoreEvent.class), hasSize(1));
-        assertThat(parent.getListeners(AfterInsertDataStoreEvent.class).get(0), Matchers.<DataStoreEventListener>is(first));
+        assertThat(parent.getListeners(AfterInsertDataStoreEvent.class).get(0),
+                   Matchers.<DataStoreEventListener>is(first));
         assertThat(child.getListeners(AfterInsertDataStoreEvent.class), hasSize(2));
-        assertThat(child.getListeners(AfterInsertDataStoreEvent.class).get(0), Matchers.<DataStoreEventListener>is(second));
-        assertThat(child.getListeners(AfterInsertDataStoreEvent.class).get(1), Matchers.<DataStoreEventListener>is(first));
+        assertThat(child.getListeners(AfterInsertDataStoreEvent.class).get(0),
+                   Matchers.<DataStoreEventListener>is(second));
+        assertThat(child.getListeners(AfterInsertDataStoreEvent.class).get(1),
+                   Matchers.<DataStoreEventListener>is(first));
     }
 
 }

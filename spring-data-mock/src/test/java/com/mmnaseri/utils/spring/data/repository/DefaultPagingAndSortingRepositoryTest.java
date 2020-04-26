@@ -19,7 +19,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/11/16, 1:58 PM)
  */
 public class DefaultPagingAndSortingRepositoryTest {
@@ -32,14 +32,30 @@ public class DefaultPagingAndSortingRepositoryTest {
         dataStore = new MemoryDataStore<>(Person.class);
         repository = new DefaultPagingAndSortingRepository();
         repository.setDataStore(dataStore);
-        dataStore.save("1", new Person().setId("1").setAddress(new Address().setZip(new Zip().setArea("A1")).setCity("Seattle").setState(new State().setName("Washington").setAbbreviation("WA"))));
-        dataStore.save("2", new Person().setId("2").setAddress(new Address().setZip(new Zip().setArea("A2")).setCity("Edmonds").setState(new State().setName("Washington").setAbbreviation("WA"))));
-        dataStore.save("3", new Person().setId("3").setAddress(new Address().setZip(new Zip().setArea("A3")).setCity("Seattle").setState(new State().setName("Washington").setAbbreviation("WA"))));
-        dataStore.save("4", new Person().setId("4").setAddress(new Address().setZip(new Zip().setArea("A1")).setCity("Kirkland").setState(new State().setName("Washington").setAbbreviation("WA"))));
-        dataStore.save("5", new Person().setId("5").setAddress(new Address().setZip(new Zip().setArea("A2")).setCity("Portland").setState(new State().setName("Oregon").setAbbreviation("OR"))));
-        dataStore.save("6", new Person().setId("6").setAddress(new Address().setZip(new Zip().setArea("A3")).setCity("Portland").setState(new State().setName("Oregon").setAbbreviation("OR"))));
-        dataStore.save("7", new Person().setId("7").setAddress(new Address().setZip(new Zip().setArea("A1")).setCity("Spokane").setState(new State().setName("Washington").setAbbreviation("WA"))));
-        dataStore.save("8", new Person().setId("8").setAddress(new Address().setZip(new Zip().setArea("A2")).setCity("Seattle").setState(new State().setName("Washington").setAbbreviation("WA"))));
+        dataStore.save("1", new Person().setId("1").setAddress(new Address().setZip(new Zip().setArea("A1"))
+                                                                            .setCity("Seattle").setState(
+                        new State().setName("Washington").setAbbreviation("WA"))));
+        dataStore.save("2", new Person().setId("2").setAddress(new Address().setZip(new Zip().setArea("A2"))
+                                                                            .setCity("Edmonds").setState(
+                        new State().setName("Washington").setAbbreviation("WA"))));
+        dataStore.save("3", new Person().setId("3").setAddress(new Address().setZip(new Zip().setArea("A3"))
+                                                                            .setCity("Seattle").setState(
+                        new State().setName("Washington").setAbbreviation("WA"))));
+        dataStore.save("4", new Person().setId("4").setAddress(new Address().setZip(new Zip().setArea("A1"))
+                                                                            .setCity("Kirkland").setState(
+                        new State().setName("Washington").setAbbreviation("WA"))));
+        dataStore.save("5", new Person().setId("5").setAddress(new Address().setZip(new Zip().setArea("A2"))
+                                                                            .setCity("Portland").setState(
+                        new State().setName("Oregon").setAbbreviation("OR"))));
+        dataStore.save("6", new Person().setId("6").setAddress(new Address().setZip(new Zip().setArea("A3"))
+                                                                            .setCity("Portland").setState(
+                        new State().setName("Oregon").setAbbreviation("OR"))));
+        dataStore.save("7", new Person().setId("7").setAddress(new Address().setZip(new Zip().setArea("A1"))
+                                                                            .setCity("Spokane").setState(
+                        new State().setName("Washington").setAbbreviation("WA"))));
+        dataStore.save("8", new Person().setId("8").setAddress(new Address().setZip(new Zip().setArea("A2"))
+                                                                            .setCity("Seattle").setState(
+                        new State().setName("Washington").setAbbreviation("WA"))));
     }
 
     @Test
@@ -51,7 +67,8 @@ public class DefaultPagingAndSortingRepositoryTest {
 
     @Test
     public void testFindAllWithSort() throws Exception {
-        final List<?> found = repository.findAll(new Sort(new Sort.Order(Sort.Direction.ASC, "address.city"), new Sort.Order(Sort.Direction.DESC, "address.zip.area")));
+        final List<?> found = repository.findAll(Sort.by(new Sort.Order(Sort.Direction.ASC, "address.city"),
+                                                         new Sort.Order(Sort.Direction.DESC, "address.zip.area")));
         assertThat(found, hasSize(dataStore.retrieveAll().size()));
         assertThat(found.get(0), Matchers.<Object>is(dataStore.retrieve("2")));
         assertThat(found.get(1), Matchers.<Object>is(dataStore.retrieve("4")));
@@ -65,7 +82,7 @@ public class DefaultPagingAndSortingRepositoryTest {
 
     @Test
     public void testFindAllWithPagingAndNoSorting() throws Exception {
-        final Page page = repository.findAll(new PageRequest(2, 3));
+        final Page page = repository.findAll(PageRequest.of(2, 3));
         assertThat(page.getTotalElements(), is(8L));
         assertThat(page.getTotalPages(), is(3));
         assertThat(page.getNumber(), is(2));
@@ -75,7 +92,10 @@ public class DefaultPagingAndSortingRepositoryTest {
 
     @Test
     public void testFindAllWithPagingAndSorting() throws Exception {
-        final Page page = repository.findAll(new PageRequest(2, 3, new Sort(new Sort.Order(Sort.Direction.ASC, "address.city"), new Sort.Order(Sort.Direction.DESC, "address.zip.area"))));
+        final Page page = repository.findAll(PageRequest.of(2, 3,
+                                                            Sort.by(new Sort.Order(Sort.Direction.ASC, "address.city"),
+                                                                    new Sort.Order(Sort.Direction.DESC,
+                                                                                   "address.zip.area"))));
         assertThat(page.getTotalElements(), is(8L));
         assertThat(page.getTotalPages(), is(3));
         assertThat(page.getNumber(), is(2));
@@ -88,8 +108,12 @@ public class DefaultPagingAndSortingRepositoryTest {
 
     @Test
     public void testWithNullsFirst() throws Exception {
-        dataStore.save("9", new Person().setId("9").setAddress(new Address().setZip(new Zip().setArea(null)).setCity("Spokane").setState(new State().setName("Washington").setAbbreviation("WA"))));
-        final List<?> found = repository.findAll(new Sort(new Sort.Order(Sort.Direction.ASC, "address.city"), new Sort.Order(Sort.Direction.DESC, "address.zip.area", Sort.NullHandling.NULLS_FIRST)));
+        dataStore.save("9", new Person().setId("9").setAddress(new Address().setZip(new Zip().setArea(null))
+                                                                            .setCity("Spokane").setState(
+                        new State().setName("Washington").setAbbreviation("WA"))));
+        final List<?> found = repository.findAll(Sort.by(new Sort.Order(Sort.Direction.ASC, "address.city"),
+                                                         new Sort.Order(Sort.Direction.DESC, "address.zip.area",
+                                                                        Sort.NullHandling.NULLS_FIRST)));
         assertThat(found, hasSize(dataStore.retrieveAll().size()));
         assertThat(found.get(0), Matchers.<Object>is(dataStore.retrieve("2")));
         assertThat(found.get(1), Matchers.<Object>is(dataStore.retrieve("4")));
@@ -104,8 +128,12 @@ public class DefaultPagingAndSortingRepositoryTest {
 
     @Test
     public void testWithNullsLast() throws Exception {
-        dataStore.save("9", new Person().setId("9").setAddress(new Address().setZip(new Zip().setArea(null)).setCity("Spokane").setState(new State().setName("Washington").setAbbreviation("WA"))));
-        final List<?> found = repository.findAll(new Sort(new Sort.Order(Sort.Direction.ASC, "address.city"), new Sort.Order(Sort.Direction.DESC, "address.zip.area", Sort.NullHandling.NULLS_LAST)));
+        dataStore.save("9", new Person().setId("9").setAddress(new Address().setZip(new Zip().setArea(null))
+                                                                            .setCity("Spokane").setState(
+                        new State().setName("Washington").setAbbreviation("WA"))));
+        final List<?> found = repository.findAll(Sort.by(new Sort.Order(Sort.Direction.ASC, "address.city"),
+                                                         new Sort.Order(Sort.Direction.DESC, "address.zip.area",
+                                                                        Sort.NullHandling.NULLS_LAST)));
         assertThat(found, hasSize(dataStore.retrieveAll().size()));
         assertThat(found.get(0), Matchers.<Object>is(dataStore.retrieve("2")));
         assertThat(found.get(1), Matchers.<Object>is(dataStore.retrieve("4")));

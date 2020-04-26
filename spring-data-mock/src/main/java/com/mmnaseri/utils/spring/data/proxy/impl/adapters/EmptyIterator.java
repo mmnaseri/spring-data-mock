@@ -5,7 +5,7 @@ import java.util.Iterator;
 /**
  * This class is an iterator over an empty collection.
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/10/16)
  */
 public class EmptyIterator implements Iterator {

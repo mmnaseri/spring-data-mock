@@ -7,7 +7,7 @@ import com.mmnaseri.utils.spring.data.query.SortDirection;
 /**
  * This is an immutable order.
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/17/15)
  */
 @SuppressWarnings("WeakerAccess")

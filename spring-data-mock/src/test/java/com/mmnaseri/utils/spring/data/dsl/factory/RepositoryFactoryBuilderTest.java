@@ -25,6 +25,7 @@ import com.mmnaseri.utils.spring.data.query.impl.DefaultDataFunctionRegistry;
 import com.mmnaseri.utils.spring.data.sample.mocks.AllCatchingEventListener;
 import com.mmnaseri.utils.spring.data.sample.mocks.SpyingDataFunction;
 import com.mmnaseri.utils.spring.data.sample.mocks.SpyingHandler;
+import com.mmnaseri.utils.spring.data.sample.models.Person;
 import com.mmnaseri.utils.spring.data.sample.repositories.*;
 import com.mmnaseri.utils.spring.data.store.*;
 import com.mmnaseri.utils.spring.data.store.impl.AuditDataEventListener;
@@ -36,6 +37,7 @@ import org.springframework.data.domain.AuditorAware;
 import org.testng.annotations.Test;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.mmnaseri.utils.spring.data.dsl.factory.RepositoryFactoryBuilder.given;
@@ -43,7 +45,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/12/16, 11:42 AM)
  */
 public class RepositoryFactoryBuilderTest {
@@ -75,7 +77,8 @@ public class RepositoryFactoryBuilderTest {
         configuration.setFunctionRegistry(functionRegistry);
         configuration.setDefaultKeyGenerator(new NoOpKeyGenerator<>());
         final UUIDKeyGenerator keyGenerator = new UUIDKeyGenerator();
-        final RepositoryFactoryConfiguration modifiedConfiguration = given(configuration).withDefaultKeyGenerator(keyGenerator).withListener(new AllCatchingEventListener()).configure();
+        final RepositoryFactoryConfiguration modifiedConfiguration = given(configuration).withDefaultKeyGenerator(
+                keyGenerator).withListener(new AllCatchingEventListener()).configure();
         assertThat(modifiedConfiguration, is(notNullValue()));
         assertThat(modifiedConfiguration.getDefaultKeyGenerator(), is((Object) keyGenerator));
         assertThat(modifiedConfiguration.getEventListenerContext(), is(notNullValue()));
@@ -89,13 +92,16 @@ public class RepositoryFactoryBuilderTest {
         assertThat(factory, is(notNullValue()));
         assertThat(factory.getConfiguration(), is(notNullValue()));
         assertThat(factory.getConfiguration().getRepositoryMetadataResolver(), is(notNullValue()));
-        assertThat(factory.getConfiguration().getRepositoryMetadataResolver(), Matchers.<RepositoryMetadataResolver>is(resolver));
+        assertThat(factory.getConfiguration().getRepositoryMetadataResolver(),
+                   Matchers.<RepositoryMetadataResolver>is(resolver));
     }
 
     @Test
     public void testUsingCustomQueryDescriptor() throws Exception {
-        final MethodQueryDescriptionExtractor queryDescriptionExtractor = new MethodQueryDescriptionExtractor(new DefaultOperatorContext());
-        final RepositoryFactory factory = RepositoryFactoryBuilder.builder().extractQueriesUsing(queryDescriptionExtractor).build();
+        final MethodQueryDescriptionExtractor queryDescriptionExtractor = new MethodQueryDescriptionExtractor(
+                new DefaultOperatorContext());
+        final RepositoryFactory factory = RepositoryFactoryBuilder.builder().extractQueriesUsing(
+                queryDescriptionExtractor).build();
         assertThat(factory, is(notNullValue()));
         assertThat(factory.getConfiguration(), is(notNullValue()));
         assertThat(factory.getConfiguration().getDescriptionExtractor(), is(notNullValue()));
@@ -105,7 +111,8 @@ public class RepositoryFactoryBuilderTest {
     @Test
     public void testSpecifyingDefaultKeyGenerator() throws Exception {
         final UUIDKeyGenerator generator = new UUIDKeyGenerator();
-        final RepositoryFactoryConfiguration configuration = RepositoryFactoryBuilder.builder().withDefaultKeyGenerator(generator).configure();
+        final RepositoryFactoryConfiguration configuration = RepositoryFactoryBuilder.builder().withDefaultKeyGenerator(
+                generator).configure();
         assertThat(configuration.getDefaultKeyGenerator(), is(notNullValue()));
         assertThat(configuration.getDefaultKeyGenerator(), is((Object) generator));
     }
@@ -118,7 +125,8 @@ public class RepositoryFactoryBuilderTest {
         assertThat(factory.getConfiguration(), is(notNullValue()));
         assertThat(factory.getConfiguration().getDescriptionExtractor(), is(notNullValue()));
         assertThat(factory.getConfiguration().getDescriptionExtractor().getOperatorContext(), is(notNullValue()));
-        assertThat(factory.getConfiguration().getDescriptionExtractor().getOperatorContext(), Matchers.<OperatorContext>is(operatorContext));
+        assertThat(factory.getConfiguration().getDescriptionExtractor().getOperatorContext(),
+                   Matchers.<OperatorContext>is(operatorContext));
     }
 
     @Test
@@ -130,27 +138,34 @@ public class RepositoryFactoryBuilderTest {
         assertThat(factory.getConfiguration(), is(notNullValue()));
         assertThat(factory.getConfiguration().getDescriptionExtractor(), is(notNullValue()));
         assertThat(factory.getConfiguration().getDescriptionExtractor().getOperatorContext(), is(notNullValue()));
-        assertThat(factory.getConfiguration().getDescriptionExtractor().getOperatorContext().getBySuffix("X"), is(notNullValue()));
-        assertThat(factory.getConfiguration().getDescriptionExtractor().getOperatorContext().getBySuffix("X"), Matchers.<Operator>is(x));
-        assertThat(factory.getConfiguration().getDescriptionExtractor().getOperatorContext().getBySuffix("Y"), is(notNullValue(Operator.class)));
-        assertThat(factory.getConfiguration().getDescriptionExtractor().getOperatorContext().getBySuffix("Y"), Matchers.<Operator>is(y));
+        assertThat(factory.getConfiguration().getDescriptionExtractor().getOperatorContext().getBySuffix("X"),
+                   is(notNullValue()));
+        assertThat(factory.getConfiguration().getDescriptionExtractor().getOperatorContext().getBySuffix("X"),
+                   Matchers.<Operator>is(x));
+        assertThat(factory.getConfiguration().getDescriptionExtractor().getOperatorContext().getBySuffix("Y"),
+                   is(notNullValue(Operator.class)));
+        assertThat(factory.getConfiguration().getDescriptionExtractor().getOperatorContext().getBySuffix("Y"),
+                   Matchers.<Operator>is(y));
     }
 
     @Test
     public void testUsingCustomFunctionRegistry() throws Exception {
         final DefaultDataFunctionRegistry functionRegistry = new DefaultDataFunctionRegistry();
-        final RepositoryFactory factory = RepositoryFactoryBuilder.builder().withDataFunctions(functionRegistry).build();
+        final RepositoryFactory factory = RepositoryFactoryBuilder.builder().withDataFunctions(functionRegistry)
+                                                                  .build();
         assertThat(factory, is(notNullValue()));
         assertThat(factory.getConfiguration(), is(notNullValue()));
         assertThat(factory.getConfiguration().getFunctionRegistry(), is(notNullValue()));
-        assertThat(factory.getConfiguration().getFunctionRegistry(), Matchers.<DataFunctionRegistry>is(functionRegistry));
+        assertThat(factory.getConfiguration().getFunctionRegistry(),
+                   Matchers.<DataFunctionRegistry>is(functionRegistry));
     }
 
     @Test
     public void testUsingDefaultFunctionRegistryWithExtraFunctions() throws Exception {
         final SpyingDataFunction<Object> x = new SpyingDataFunction<>(null);
         final SpyingDataFunction<Object> y = new SpyingDataFunction<>(null);
-        final RepositoryFactory factory = RepositoryFactoryBuilder.builder().registerFunction("x", x).and("y", y).build();
+        final RepositoryFactory factory = RepositoryFactoryBuilder.builder().registerFunction("x", x).and("y", y)
+                                                                  .build();
         assertThat(factory, is(notNullValue()));
         assertThat(factory.getConfiguration(), is(notNullValue()));
         assertThat(factory.getConfiguration().getFunctionRegistry(), is(notNullValue()));
@@ -173,16 +188,18 @@ public class RepositoryFactoryBuilderTest {
 
     @Test
     public void testUsingDefaultDataStoreRegistryAndCustomDataStores() throws Exception {
-        final MemoryDataStore<Serializable, Integer> x = new MemoryDataStore<>(Integer.class);
-        final MemoryDataStore<Serializable, String> y = new MemoryDataStore<>(String.class);
+        final MemoryDataStore<Object, Integer> x = new MemoryDataStore<>(Integer.class);
+        final MemoryDataStore<Object, String> y = new MemoryDataStore<>(String.class);
         final RepositoryFactory factory = RepositoryFactoryBuilder.builder().registerDataStore(x).and(y).build();
         assertThat(factory, is(notNullValue()));
         assertThat(factory.getConfiguration(), is(notNullValue()));
         assertThat(factory.getConfiguration().getDataStoreRegistry(), is(notNullValue()));
         assertThat(factory.getConfiguration().getDataStoreRegistry().getDataStore(Integer.class), is(notNullValue()));
-        assertThat(factory.getConfiguration().getDataStoreRegistry().getDataStore(Integer.class), Matchers.<DataStore>is(x));
+        assertThat(factory.getConfiguration().getDataStoreRegistry().getDataStore(Integer.class),
+                   Matchers.<DataStore>is(x));
         assertThat(factory.getConfiguration().getDataStoreRegistry().getDataStore(String.class), is(notNullValue()));
-        assertThat(factory.getConfiguration().getDataStoreRegistry().getDataStore(String.class), Matchers.<DataStore>is(y));
+        assertThat(factory.getConfiguration().getDataStoreRegistry().getDataStore(String.class),
+                   Matchers.<DataStore>is(y));
     }
 
     @Test
@@ -219,12 +236,16 @@ public class RepositoryFactoryBuilderTest {
 
     @Test
     public void testUsingDefaultTypeMappingContextAndCustomTypeMappings() throws Exception {
-        final RepositoryFactory factory = RepositoryFactoryBuilder.builder().honoringImplementation(Object.class, Integer.class).and(Object.class, String.class).build();
+        final RepositoryFactory factory = RepositoryFactoryBuilder.builder().honoringImplementation(Object.class,
+                                                                                                    Integer.class).and(
+                Object.class, String.class).build();
         assertThat(factory, is(notNullValue()));
         assertThat(factory.getConfiguration(), is(notNullValue()));
         assertThat(factory.getConfiguration().getTypeMappingContext(), is(notNullValue()));
-        assertThat(factory.getConfiguration().getTypeMappingContext().getImplementations(Object.class), hasItem(Integer.class));
-        assertThat(factory.getConfiguration().getTypeMappingContext().getImplementations(Object.class), hasItem(String.class));
+        assertThat(factory.getConfiguration().getTypeMappingContext().getImplementations(Object.class),
+                   hasItem(Integer.class));
+        assertThat(factory.getConfiguration().getTypeMappingContext().getImplementations(Object.class),
+                   hasItem(String.class));
     }
 
     @Test
@@ -256,7 +277,8 @@ public class RepositoryFactoryBuilderTest {
         assertThat(factory, is(notNullValue()));
         assertThat(factory.getConfiguration(), is(notNullValue()));
         assertThat(factory.getConfiguration().getEventListenerContext(), is(notNullValue()));
-        assertThat(factory.getConfiguration().getEventListenerContext(), Matchers.<DataStoreEventListenerContext>is(context));
+        assertThat(factory.getConfiguration().getEventListenerContext(),
+                   Matchers.<DataStoreEventListenerContext>is(context));
     }
 
     @Test
@@ -278,7 +300,8 @@ public class RepositoryFactoryBuilderTest {
         assertThat(factory.getConfiguration(), is(notNullValue()));
         final DataStoreEventListenerContext listenerContext = factory.getConfiguration().getEventListenerContext();
         assertThat(listenerContext, is(notNullValue()));
-        final List<DataStoreEventListener<? extends DataStoreEvent>> listeners = listenerContext.getListeners(DataStoreEvent.class);
+        final List<DataStoreEventListener<? extends DataStoreEvent>> listeners = listenerContext.getListeners(
+                DataStoreEvent.class);
         assertThat(listeners, hasSize(1));
         assertThat(listeners.get(0), is(instanceOf(AuditDataEventListener.class)));
     }
@@ -291,7 +314,8 @@ public class RepositoryFactoryBuilderTest {
         assertThat(factory.getConfiguration(), is(notNullValue()));
         final DataStoreEventListenerContext listenerContext = factory.getConfiguration().getEventListenerContext();
         assertThat(listenerContext, is(notNullValue()));
-        final List<DataStoreEventListener<? extends DataStoreEvent>> listeners = listenerContext.getListeners(DataStoreEvent.class);
+        final List<DataStoreEventListener<? extends DataStoreEvent>> listeners = listenerContext.getListeners(
+                DataStoreEvent.class);
         assertThat(listeners, hasSize(1));
         assertThat(listeners.get(0), is(instanceOf(AuditDataEventListener.class)));
         final AuditDataEventListener auditDataEventListener = (AuditDataEventListener) listeners.get(0);
@@ -303,7 +327,7 @@ public class RepositoryFactoryBuilderTest {
     @Test
     public void testDefaultAuditorAware() throws Exception {
         final AuditorAware<String> auditorAware = new RepositoryFactoryBuilder.DefaultAuditorAware();
-        assertThat(auditorAware.getCurrentAuditor(), is(RepositoryFactoryBuilder.DEFAULT_USER));
+        assertThat(auditorAware.getCurrentAuditor().get(), is(RepositoryFactoryBuilder.DEFAULT_USER));
     }
 
     @Test
@@ -314,7 +338,8 @@ public class RepositoryFactoryBuilderTest {
 
     @Test
     public void testMockingUsingCustomImplementation() throws Exception {
-        final ExtendedSimplePersonRepository repository = RepositoryFactoryBuilder.builder().usingImplementation(StringMapping.class).and(NumberMapping.class).mock(ExtendedSimplePersonRepository.class);
+        final ExtendedSimplePersonRepository repository = RepositoryFactoryBuilder.builder().usingImplementation(
+                StringMapping.class).and(NumberMapping.class).mock(ExtendedSimplePersonRepository.class);
         assertThat(repository, is(notNullValue()));
         assertThat(repository.getString(), is("Hello!"));
         assertThat(repository.getNumber(), Matchers.<Number>is(123));
@@ -322,7 +347,9 @@ public class RepositoryFactoryBuilderTest {
 
     @Test
     public void testMockingWithoutGeneratingKeys() throws Exception {
-        final ConfiguredSimplePersonRepository repository = RepositoryFactoryBuilder.builder().withoutGeneratingKeys().usingImplementation(ConfiguredMapping.class).mock(ConfiguredSimplePersonRepository.class);
+        final ConfiguredSimplePersonRepository repository =
+                RepositoryFactoryBuilder.builder().withoutGeneratingKeys().usingImplementation(ConfiguredMapping.class)
+                                        .mock(ConfiguredSimplePersonRepository.class);
         assertThat(repository.getRepositoryConfiguration(), is(notNullValue()));
         assertThat(repository.getRepositoryConfiguration().getKeyGenerator(), is(notNullValue()));
         assertThat(repository.getRepositoryConfiguration().getKeyGenerator(), is(instanceOf(NoOpKeyGenerator.class)));
@@ -330,20 +357,32 @@ public class RepositoryFactoryBuilderTest {
 
     @Test
     public void testMockingWithCustomKeyGeneration() throws Exception {
-        final NoOpKeyGenerator<Serializable> keyGenerator = new NoOpKeyGenerator<>();
-        final ConfiguredSimplePersonRepository repository = RepositoryFactoryBuilder.builder().generateKeysUsing(keyGenerator).usingImplementation(ConfiguredMapping.class).mock(ConfiguredSimplePersonRepository.class);
+        final NoOpKeyGenerator<Object> keyGenerator = new NoOpKeyGenerator<>();
+        final ConfiguredSimplePersonRepository repository = RepositoryFactoryBuilder.builder().generateKeysUsing(
+                keyGenerator).usingImplementation(ConfiguredMapping.class).mock(ConfiguredSimplePersonRepository.class);
         assertThat(repository.getRepositoryConfiguration(), is(notNullValue()));
         assertThat(repository.getRepositoryConfiguration().getKeyGenerator(), is(notNullValue()));
-        assertThat(repository.getRepositoryConfiguration().getKeyGenerator(), Matchers.<KeyGenerator<?>>is(keyGenerator));
+        assertThat(repository.getRepositoryConfiguration().getKeyGenerator(),
+                   Matchers.<KeyGenerator<?>>is(keyGenerator));
     }
 
     @Test
     public void testMockingWithCustomKeyGenerationByType() throws Exception {
         //noinspection unchecked
-        final ConfiguredSimplePersonRepository repository = RepositoryFactoryBuilder.builder().generateKeysUsing(NoOpKeyGenerator.class).usingImplementation(ConfiguredMapping.class).mock(ConfiguredSimplePersonRepository.class);
+        final ConfiguredSimplePersonRepository repository = RepositoryFactoryBuilder.builder().generateKeysUsing(
+                NoOpKeyGenerator.class).usingImplementation(ConfiguredMapping.class).mock(
+                ConfiguredSimplePersonRepository.class);
         assertThat(repository.getRepositoryConfiguration(), is(notNullValue()));
         assertThat(repository.getRepositoryConfiguration().getKeyGenerator(), is(notNullValue()));
         assertThat(repository.getRepositoryConfiguration().getKeyGenerator(), is(instanceOf(NoOpKeyGenerator.class)));
     }
 
+    @Test
+    public void testSaveIterable() throws Exception {
+        final JpaPersonRepository repository = RepositoryFactoryBuilder.builder().mock(JpaPersonRepository.class);
+        final Iterable iterable = Arrays.asList(new Person().setId("1"), new Person().setId("2"), new Person().setId("3"));
+        repository.saveAll(iterable);
+        assertThat(repository.findAll(), hasSize(3));
+        assertThat(repository.findAll(), containsInAnyOrder(((List) iterable).toArray()));
+    }
 }

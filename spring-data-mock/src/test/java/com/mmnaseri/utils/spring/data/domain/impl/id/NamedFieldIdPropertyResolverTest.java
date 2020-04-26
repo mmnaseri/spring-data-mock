@@ -5,7 +5,7 @@ import com.mmnaseri.utils.spring.data.sample.models.EmptyEntity;
 import com.mmnaseri.utils.spring.data.sample.models.EntityWithIdField;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/29/15)
  */
 public class NamedFieldIdPropertyResolverTest extends BaseIdPropertyResolverTest {
@@ -24,6 +24,5 @@ public class NamedFieldIdPropertyResolverTest extends BaseIdPropertyResolverTest
     protected Class<?> entityWithNoProperty() {
         return EmptyEntity.class;
     }
-
 
 }

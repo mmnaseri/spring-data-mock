@@ -6,7 +6,6 @@ import com.mmnaseri.utils.spring.data.tools.GetterMethodFilter;
 import org.springframework.data.annotation.Id;
 import org.springframework.util.ReflectionUtils;
 
-import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -14,19 +13,19 @@ import static com.mmnaseri.utils.spring.data.domain.impl.id.IdPropertyResolverUt
 import static com.mmnaseri.utils.spring.data.domain.impl.id.IdPropertyResolverUtils.isAnnotated;
 
 /**
- * This class will resolve ID property name from a getter method that is annotated with
- * {@link Id @Id}.
+ * This class will resolve ID property name from a getter method that is annotated with {@link Id @Id}.
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/23/15)
  */
 @SuppressWarnings("WeakerAccess")
 public class AnnotatedGetterIdPropertyResolver implements IdPropertyResolver {
 
     @Override
-    public String resolve(final Class<?> entityType, Class<? extends Serializable> idType) {
+    public String resolve(final Class<?> entityType, Class<?> idType) {
         final AtomicReference<Method> found = new AtomicReference<>();
         ReflectionUtils.doWithMethods(entityType, new ReflectionUtils.MethodCallback() {
+
             @Override
             public void doWith(Method method) throws IllegalArgumentException, IllegalAccessException {
                 if (isAnnotated(method)) {

@@ -14,7 +14,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/10/16)
  */
 public class DefaultTypeMappingContextTest {
@@ -28,19 +28,19 @@ public class DefaultTypeMappingContextTest {
                 DefaultJpaRepository.class,
                 DefaultPagingAndSortingRepository.class,
                 DefaultCrudRepository.class,
-                DefaultQueryDslPredicateExecutor.class,
                 DefaultQueryByExampleExecutor.class
         };
     }
 
     @Test
-    public void testDefaultMappings() throws Exception {
+    public void testDefaultMappings() {
         final DefaultTypeMappingContext context = new DefaultTypeMappingContext();
-        assertThat(context.getImplementations(Object.class), Matchers.<Class<?>>containsInAnyOrder(defaultImplementations));
+        assertThat(context.getImplementations(Object.class),
+                   Matchers.<Class<?>>containsInAnyOrder(defaultImplementations));
     }
 
     @Test
-    public void testRegisteringMappings() throws Exception {
+    public void testRegisteringMappings() {
         final DefaultTypeMappingContext context = new DefaultTypeMappingContext();
         assertThat(context.getImplementations(Double.class), hasSize(defaultImplementations.length));
         context.register(Double.class, Float.class);
@@ -66,7 +66,8 @@ public class DefaultTypeMappingContextTest {
         assertThat(context.getImplementations(Double.class), hasSize(defaultImplementations.length + 2));
         assertThat(context.getImplementations(Double.class), hasItem(LowerPriorityMapping.class));
         assertThat(context.getImplementations(Double.class), hasItem(HighPriorityMapping.class));
-        assertThat(context.getImplementations(Double.class).indexOf(LowerPriorityMapping.class), is(lessThan(context.getImplementations(Double.class).indexOf(HighPriorityMapping.class))));
+        assertThat(context.getImplementations(Double.class).indexOf(LowerPriorityMapping.class),
+                   is(lessThan(context.getImplementations(Double.class).indexOf(HighPriorityMapping.class))));
     }
 
     @Test
@@ -137,10 +138,16 @@ public class DefaultTypeMappingContextTest {
         assertThat(implementation.pi(), is(Math.PI));
     }
 
-    private static abstract class AbstractImplementation {}
+    private static abstract class AbstractImplementation {
 
-    private interface InterfaceImplementation {}
+    }
 
-    private static class PrivateImplementationClass {}
+    private interface InterfaceImplementation {
+
+    }
+
+    private static class PrivateImplementationClass {
+
+    }
 
 }
