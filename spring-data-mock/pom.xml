@@ -161,21 +161,6 @@
         </dependency>
     </dependencies>
 
-    <repositories>
-        <!-- this is so that we can pull down com.gemstone.gemfire:gemfire since it's no longer available in central -->
-        <repository>
-            <id>gemfire-repository</id>
-            <name>Gemfire Repository</name>
-            <url>http://dist.gemstone.com/maven/release</url>
-        </repository>
-        <!-- this is so that we can pull down org.testng:testng:6.9.11 and stop VersionEye complaining about testng version -->
-        <repository>
-            <id>gradle-repository</id>
-            <name>Gradle Repository</name>
-            <url>http://gradle.artifactoryonline.com/gradle/libs/</url>
-        </repository>
-    </repositories>
-
     <build>
         <plugins>
             <plugin>
@@ -215,6 +200,8 @@
                             <executable>gpg2</executable>
                             <gpgArguments>
                                 <arg>--batch</arg>
+                                <arg>--pinentry-mode</arg>
+                                <arg>loopback</arg>
                             </gpgArguments>
                         </configuration>
                         <executions>
