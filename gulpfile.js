@@ -108,12 +108,12 @@ gulp.task('watch', function () {
     refresh.listen({
         port: 13001
     });
-    gulp.watch(paths.site.root, ['git-site']);
-    gulp.watch(paths.parts, ['sass']);
-    gulp.watch(paths.scripts, ['scripts']);
-    gulp.watch(paths.lib, ['lib']);
-    gulp.watch(paths.main, ['index']);
-    gulp.watch(paths.views, ['views']);
+    gulp.watch(paths.site.root, gulp.series(['git-site']));
+    gulp.watch(paths.parts, gulp.series(['sass']));
+    gulp.watch(paths.scripts, gulp.series(['scripts']));
+    gulp.watch(paths.lib, gulp.series(['lib']));
+    gulp.watch(paths.main, gulp.series(['index']));
+    gulp.watch(paths.views, gulp.series(['views']));
 });
 
 
@@ -125,8 +125,8 @@ gulp.task("views", function () {
         .pipe(refresh())
 });
 
-gulp.task("default", ["generate", "watch"]);
+gulp.task("generate", gulp.series(["lib", "scripts", "sass", "views", "index", "git-site"]));
 
-gulp.task("generate", ["lib", "scripts", "sass", "views", "index", "git-site"]);
+gulp.task("default", gulp.series(["generate", "watch"]));
 
-gulp.task("regenerate", ["clean", "generate"]);
+gulp.task("regenerate", gulp.series(["clean", "generate"]));

@@ -16,58 +16,53 @@ repository with actual data. Thus, you can test your services <em>without</em> h
 with the highest level of isolation -- with actual data.</p>
 <h1 id="quick-start">Quick Start</h1>
 <p>Regardless of how you add the necessary dependency to your project, mocking a repository can be as simple as:</p>
-<pre><code><span class="hljs-selector-tag">builder</span>()<span class="hljs-selector-class">.mock</span>(<span class="hljs-selector-tag">UserRepository</span><span class="hljs-selector-class">.class</span>);
-</code></pre><p>where <code><span class="hljs-function"><span class="hljs-title">builder</span><span class="hljs-params">()</span></span></code> is a static method of the <code>RepositoryFactoryBuilder</code> class under package <code>com<span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.dsl</span><span class="hljs-selector-class">.factory</span></code>.</p>
+<pre><code class="hljs">builder<span class="hljs-literal">()</span>.mock(<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">UserRepository</span>.</span></span><span class="hljs-keyword">class</span>);</code></pre><p>where <code class="hljs"><span class="hljs-function"><span class="hljs-title">builder</span><span class="hljs-params">()</span></span></code> is a static method of the <code class="hljs"><span class="hljs-attribute">RepositoryFactoryBuilder</span></code> class under package <code class="hljs"><span class="hljs-selector-tag">com</span><span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.dsl</span><span class="hljs-selector-class">.factory</span></code>.</p>
 <p>The full code for that would be:</p>
-<pre><code class="lang-java">
-import static com<span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.dsl</span><span class="hljs-selector-class">.factory</span><span class="hljs-selector-class">.RepositoryFactoryBuilder</span><span class="hljs-selector-class">.builder</span>;
+<pre><code class="language-java hljs">
+import static com.mmnaseri.utils.spring.data.dsl.factory.RepositoryFactoryBuilder.builder;
 
-<span class="hljs-selector-tag">public</span> <span class="hljs-selector-tag">class</span> <span class="hljs-selector-tag">UserServiceTest</span> {
+public class UserServiceTest {
 
     private UserRepository repository;
-    private UserService service;
-
-    <span class="hljs-variable">@BeforeMethod</span>
+    private UserService<span class="hljs-built_in"> service;
+</span>
+    @BeforeMethod
     public void setUp() {
-        repository = builder()<span class="hljs-selector-class">.mock</span>(UserRepository.class);
-        repository<span class="hljs-selector-class">.save</span>(new User(&amp;quot;test&amp;quot;, &amp;quot;securePassword&amp;quot;));
-        service = new UserService(repository);
+        repository = builder().mock(UserRepository.class);
+        repository.save(new User(&amp;quot;test&amp;quot;, &amp;quot;securePassword&amp;quot;));
+       <span class="hljs-built_in"> service </span>= new UserService(repository);
     }
 
-    <span class="hljs-variable">@Test</span>
+    @Test
     public void testUserLookUp() {
-        User user = service<span class="hljs-selector-class">.load</span>(&amp;quot;test&amp;quot;);
+       <span class="hljs-built_in"> User user </span>= service.load(&amp;quot;test&amp;quot;);
     }
 
-}
-</code></pre>
-<p>An alternate way of mocking a repository would be by using the <code>RepositoryMockBuilder</code> class under the <code>com<span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.dsl</span><span class="hljs-selector-class">.mock</span></code>
+}</code></pre>
+<p>An alternate way of mocking a repository would be by using the <code class="hljs"><span class="hljs-attribute">RepositoryMockBuilder</span></code> class under the <code class="hljs"><span class="hljs-selector-tag">com</span><span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.dsl</span><span class="hljs-selector-class">.mock</span></code>
 package:</p>
-<pre><code class="lang-java"><span class="hljs-keyword">final</span> RepositoryFactoryConfiguration configuration = ... ;
-<span class="hljs-keyword">final</span> UserRepository repository = <span class="hljs-keyword">new</span> RepositoryMockBuilder()
-    .useConfiguration(configuration)
-    .mock(UserRepository.<span class="hljs-keyword">class</span>);
-</code></pre>
+<pre><code class="language-java hljs">final RepositoryFactoryConfiguration configuration =<span class="hljs-operator"> ... </span>;
+final UserRepository repository = <span class="hljs-keyword">new</span> <span class="hljs-constructor">RepositoryMockBuilder()</span>
+    .use<span class="hljs-constructor">Configuration(<span class="hljs-params">configuration</span>)</span>
+    .mock(<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">UserRepository</span>.</span></span><span class="hljs-keyword">class</span>);</code></pre>
 <h1 id="mocking-a-repository">Mocking a Repository</h1>
-<p>To mock a repository you must somehow use the underlying <code>RepositoryFactory</code>. There is currently a single implementation of
-this interface available, <code>com<span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.proxy</span><span class="hljs-selector-class">.impl</span><span class="hljs-selector-class">.DefaultRepositoryFactory</span></code>. The factory has a <code><span class="hljs-function"><span class="hljs-title">getInstance</span>(<span class="hljs-params">...</span>)</span></code>
+<p>To mock a repository you must somehow use the underlying <code class="hljs"><span class="hljs-attribute">RepositoryFactory</span></code>. There is currently a single implementation of
+this interface available, <code class="hljs"><span class="hljs-selector-tag">com</span><span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.proxy</span><span class="hljs-selector-class">.impl</span><span class="hljs-selector-class">.DefaultRepositoryFactory</span></code>. The factory has a <code class="hljs"><span class="hljs-function"><span class="hljs-title">getInstance</span>(<span class="hljs-params">...</span>)</span></code>
 method that let&#39;s you customize the mocking for each instance of the repository you create. This means that you can mock a
 single repository multiple times, each time with a different set of behaviors:</p>
-<pre><code class="lang-java"><span class="hljs-keyword">final</span> UserRepository repository = <span class="hljs-keyword">factory</span>.getInstance(keyGenerator,
-            UserRepository.<span class="hljs-keyword">class</span>,
-            Implementation1.<span class="hljs-keyword">class</span>,
-            Implementation2.<span class="hljs-keyword">class</span>);
-</code></pre>
+<pre><code class="language-java hljs"><span class="hljs-keyword">final</span> UserRepository repository = factory.getInstance(keyGenerator,
+            UserRepository<span class="hljs-class">.<span class="hljs-keyword">class</span>,</span>
+            Implementation1<span class="hljs-class">.<span class="hljs-keyword">class</span>,</span>
+            Implementation2<span class="hljs-class">.<span class="hljs-keyword">class</span>);</span></code></pre>
 <p>There are three components to this method call:</p>
 <ol>
-<li>The <strong>key generator</strong> (which can be <code><span class="hljs-literal">null</span></code>) will determine the strategy for generating keys for the ID field for
+<li>The <strong>key generator</strong> (which can be <code class="hljs"><span class="hljs-literal">null</span></code>) will determine the strategy for generating keys for the ID field for
 an entity when it is inserted into the underlying data store.</li>
 <li>The <strong>repository interface</strong> which is the interface you want to instantiate and have proxied for you.</li>
 <li>The <strong>custom implementations</strong> (which are optional) that can provide custom ways of handling repository method calls.</li>
 </ol>
 <p>A minimal way of instantiating a repository would be:</p>
-<pre><code class="lang-java"><span class="hljs-keyword">final</span> UserRepository repository = <span class="hljs-keyword">factory</span>.getInstance(<span class="hljs-keyword">null</span>, UserRepository.<span class="hljs-keyword">class</span>);
-</code></pre>
+<pre><code class="language-java hljs"><span class="hljs-keyword">final</span> UserRepository repository = <span class="hljs-keyword">factory</span>.getInstance(<span class="hljs-keyword">null</span>, UserRepository<span class="hljs-class">.<span class="hljs-keyword">class</span>);</span></code></pre>
 <p>which falls back on the default way of generating keys, and relies solely on default implementations for handling method calls.</p>
 <h2 id="repository-factory-configuration">Repository Factory Configuration</h2>
 <p>The default repository factory implementation takes in a configuration object which will let you customize multiple
@@ -87,12 +82,12 @@ by the Spring Data team. Also, the operators (such as &quot;Is Greater Than&quot
 </li>
 <li><p>Customize the underlying <em>data store</em> mapping for each entity type. By default, storage is done in-memory. But there is
 nothing preventing you from attaching the data store for a particular type of entity to another source. All you have to do
-is to implement the <code>com<span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.store</span><span class="hljs-selector-class">.DataStore</span></code> interface and add it to this context. It is actually
+is to implement the <code class="hljs"><span class="hljs-selector-tag">com</span><span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.store</span><span class="hljs-selector-class">.DataStore</span></code> interface and add it to this context. It is actually
 much easier than it sounds.</p>
 </li>
 <li><p>Decide <em>how results should be adapted</em> from an actual value returned from implementation methods to the way a
-repository method is supposed to return values. This is to allow, for instance, to implement a <code><span class="hljs-keyword">findAll</span></code> method that
-returns a collection of items, and then reuse its implementation for a repository method named <code><span class="hljs-keyword">findAll</span></code> that is supposed
+repository method is supposed to return values. This is to allow, for instance, to implement a <code class="hljs"><span class="hljs-attribute">findAll</span></code> method that
+returns a collection of items, and then reuse its implementation for a repository method named <code class="hljs"><span class="hljs-attribute">findAll</span></code> that is supposed
 to return a set.</p>
 </li>
 <li><p>Set <em>default implementations</em> for particular repository types and subtypes.</p>
@@ -100,63 +95,60 @@ to return a set.</p>
 <li><p>Add and customize <em>event listeners</em> to data store actions. These can listen to events before and after inserting, updating,
 and deleting a particular entity.</p>
 </li>
-<li><p>Decide how repository methods that are strictly non-data (e.g. <code>.<span class="hljs-keyword">equals</span>(<span class="hljs-attr">...</span>)</code>) are to be handled</p>
+<li><p>Decide how repository methods that are strictly non-data (e.g. <code class="hljs">.<span class="hljs-keyword">equals</span>(<span class="hljs-params">...</span>)</code>) are to be handled</p>
 </li>
 <li><p>And what the default key generation scheme should be in case no key generator is specified for the given repository</p>
 </li>
 </ul>
 <p>Since the configuration object is complex and can be a hassle to create, you can use the much easier to use DSL via the
-<code>com<span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.dsl</span><span class="hljs-selector-class">.factory</span><span class="hljs-selector-class">.RepositoryFactoryBuilder</span></code> class. We will go over that shortly.</p>
+<code class="hljs"><span class="hljs-selector-tag">com</span><span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.dsl</span><span class="hljs-selector-class">.factory</span><span class="hljs-selector-class">.RepositoryFactoryBuilder</span></code> class. We will go over that shortly.</p>
 <h2 id="using-the-dsl-to-mock-a-repository">Using the DSL to Mock a Repository</h2>
 <p>Once you have a configuration object at hand, you can use the DSL bundled with this framework to easily mock
 your repositories and avoid going through the RepositoryFactory class.</p>
 <p>You can mock a repository this way:</p>
-<pre><code class="lang-java"><span class="hljs-keyword">final</span> RepositoryMockBuilder builder = <span class="hljs-keyword">new</span> RepositoryMockBuilder();
-<span class="hljs-keyword">final</span> UserRepository repository = builder.useConfiguration(configuration)
-    .generateKeysUsing(UUIDKeyGenerator.<span class="hljs-keyword">class</span>)
-    .usingImplementation(SampleImpl1.<span class="hljs-keyword">class</span>)
-        .and(SampleImpl2.<span class="hljs-keyword">class</span>)
-        .and(SampleImpl3.<span class="hljs-keyword">class</span>)
-    .mock(UserRepository.<span class="hljs-keyword">class</span>);
-</code></pre>
+<pre><code class="language-java hljs">final RepositoryMockBuilder builder = <span class="hljs-keyword">new</span> <span class="hljs-constructor">RepositoryMockBuilder()</span>;
+final UserRepository repository = builder.use<span class="hljs-constructor">Configuration(<span class="hljs-params">configuration</span>)</span>
+    .generate<span class="hljs-constructor">KeysUsing(UUIDKeyGenerator.<span class="hljs-params">class</span>)</span>
+    .using<span class="hljs-constructor">Implementation(SampleImpl1.<span class="hljs-params">class</span>)</span>
+        .<span class="hljs-keyword">and</span>(<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">SampleImpl2</span>.</span></span><span class="hljs-keyword">class</span>)
+        .<span class="hljs-keyword">and</span>(<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">SampleImpl3</span>.</span></span><span class="hljs-keyword">class</span>)
+    .mock(<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">UserRepository</span>.</span></span><span class="hljs-keyword">class</span>);</code></pre>
 <p>You have to note that this builder is <em>stateless</em>, meaning that each of the methods in this builder will not modify an
 internal state, but rather return an object which reflects all the configurations up to this point.</p>
 <p>To better understand this concept, let&#39;s look at the following example:</p>
-<pre><code class="lang-java"><span class="hljs-keyword">final</span> RepositoryMockBuilder base = <span class="hljs-keyword">new</span> RepositoryMockBuilder();
-<span class="hljs-keyword">final</span> RepositoryMockBuilder builder1 = base.useConfiguration(configuration)
-    .generateKeysUsing(UUIDKeyGenerator.<span class="hljs-keyword">class</span>)
-    .usingImplementation(SampleImpl1.<span class="hljs-keyword">class</span>);
-<span class="hljs-keyword">final</span> RepositoryMockBuilder builder2 = base.useConfiguration(configuration)
-    .generateKeysUsing(NoOpKeyGenerator.<span class="hljs-keyword">class</span>)
-    .usingImplementation(SampleImpl2.<span class="hljs-keyword">class</span>);
-</code></pre>
+<pre><code class="language-java hljs">final RepositoryMockBuilder base = <span class="hljs-keyword">new</span> <span class="hljs-constructor">RepositoryMockBuilder()</span>;
+final RepositoryMockBuilder builder1 = base.use<span class="hljs-constructor">Configuration(<span class="hljs-params">configuration</span>)</span>
+    .generate<span class="hljs-constructor">KeysUsing(UUIDKeyGenerator.<span class="hljs-params">class</span>)</span>
+    .using<span class="hljs-constructor">Implementation(SampleImpl1.<span class="hljs-params">class</span>)</span>;
+final RepositoryMockBuilder builder2 = base.use<span class="hljs-constructor">Configuration(<span class="hljs-params">configuration</span>)</span>
+    .generate<span class="hljs-constructor">KeysUsing(NoOpKeyGenerator.<span class="hljs-params">class</span>)</span>
+    .using<span class="hljs-constructor">Implementation(SampleImpl2.<span class="hljs-params">class</span>)</span>;</code></pre>
 <p>This is by design, and is to allow developers and testers the freedom of reusing their configurations.</p>
 <h2 id="using-the-dsl-to-create-a-configuration">Using the DSL to Create a Configuration</h2>
 <p>Whereas mocking a repository is a relatively painless process and might not require the use of a dedicated DSL, creating
 a configuration is another story altogether. In recognition of this fact, I have created a DSL for this very purpose, so
 that you can craft configurations using a <em>stateful</em> builder via this DSL:</p>
-<pre><code class="lang-java">final RepositoryFactoryBuilder builder = RepositoryFactoryBuilder.builder()
-    .resolveMetadataUsing(<span class="hljs-attr">...</span>)
-    .registerOperator(<span class="hljs-attr">...</span>) <span class="hljs-comment">//register some operator</span>
-        .<span class="hljs-keyword">and</span>(<span class="hljs-attr">...</span>).<span class="hljs-keyword">and</span>(<span class="hljs-attr">...</span>) <span class="hljs-comment">//register other operators</span>
-    .registerFunction(<span class="hljs-attr">...</span>) <span class="hljs-comment">//register data function</span>
-        .<span class="hljs-keyword">and</span>(<span class="hljs-attr">...</span>).<span class="hljs-keyword">and</span>(<span class="hljs-attr">...</span>) <span class="hljs-comment">//register additional data functions</span>
-    .registerDataStore(<span class="hljs-attr">...</span>) <span class="hljs-comment">//register a data store to be used in the configured repositories</span>
-        .<span class="hljs-keyword">and</span>(<span class="hljs-attr">...</span>).<span class="hljs-keyword">and</span>(<span class="hljs-attr">...</span>) <span class="hljs-comment">//register additional data stores</span>
-    .adaptResultsUsing(<span class="hljs-attr">...</span>) <span class="hljs-comment">//register a result adapter</span>
-        .<span class="hljs-keyword">and</span>(<span class="hljs-attr">...</span>).<span class="hljs-keyword">and</span>(<span class="hljs-attr">...</span>) <span class="hljs-comment">//register additional result adapters</span>
-    .honoringImplementation(<span class="hljs-attr">...</span>) <span class="hljs-comment">//add some custom implementation on a global scope</span>
-        .<span class="hljs-keyword">and</span>(<span class="hljs-attr">...</span>).<span class="hljs-keyword">and</span>(<span class="hljs-attr">...</span>) <span class="hljs-comment">//register additional implementations</span>
-    .withOperationHandler(<span class="hljs-attr">...</span>) <span class="hljs-comment">//register other operation handlers</span>
-        .<span class="hljs-keyword">and</span>(<span class="hljs-attr">...</span>).<span class="hljs-keyword">and</span>(<span class="hljs-attr">...</span>) <span class="hljs-comment">//add more operation handlers</span>
-    .withDefaultKeyGenerator(<span class="hljs-attr">...</span>) <span class="hljs-comment">//set the default key generator</span>
-    .enableAuditing(<span class="hljs-attr">...</span>) <span class="hljs-comment">//enable support for Spring Data&amp;#39;s auditing and pass in a custom auditor aware instance</span>
-    .withListener(<span class="hljs-attr">...</span>) <span class="hljs-comment">//register some event listener</span>
-        .<span class="hljs-keyword">and</span>(<span class="hljs-attr">...</span>).<span class="hljs-keyword">and</span>(<span class="hljs-attr">...</span>) <span class="hljs-comment">//register additional event listeners</span>
-</code></pre>
-<p>At this stage, you can either call to the <code><span class="hljs-function"><span class="hljs-title">configure</span><span class="hljs-params">()</span></span></code> method on the builder object to get a configuration object, or
+<pre><code class="language-java hljs">final RepositoryFactoryBuilder builder = RepositoryFactoryBuilder.builder()
+    .resolveMetadataUsing(<span class="hljs-params">...</span>)
+    .registerOperator(<span class="hljs-params">...</span>) <span class="hljs-comment">//register some operator</span>
+        .<span class="hljs-literal">and</span>(<span class="hljs-params">...</span>).<span class="hljs-literal">and</span>(<span class="hljs-params">...</span>) <span class="hljs-comment">//register other operators</span>
+    .registerFunction(<span class="hljs-params">...</span>) <span class="hljs-comment">//register data function</span>
+        .<span class="hljs-literal">and</span>(<span class="hljs-params">...</span>).<span class="hljs-literal">and</span>(<span class="hljs-params">...</span>) <span class="hljs-comment">//register additional data functions</span>
+    .registerDataStore(<span class="hljs-params">...</span>) <span class="hljs-comment">//register a data store to be used in the configured repositories</span>
+        .<span class="hljs-literal">and</span>(<span class="hljs-params">...</span>).<span class="hljs-literal">and</span>(<span class="hljs-params">...</span>) <span class="hljs-comment">//register additional data stores</span>
+    .adaptResultsUsing(<span class="hljs-params">...</span>) <span class="hljs-comment">//register a result adapter</span>
+        .<span class="hljs-literal">and</span>(<span class="hljs-params">...</span>).<span class="hljs-literal">and</span>(<span class="hljs-params">...</span>) <span class="hljs-comment">//register additional result adapters</span>
+    .honoringImplementation(<span class="hljs-params">...</span>) <span class="hljs-comment">//add some custom implementation on a global scope</span>
+        .<span class="hljs-literal">and</span>(<span class="hljs-params">...</span>).<span class="hljs-literal">and</span>(<span class="hljs-params">...</span>) <span class="hljs-comment">//register additional implementations</span>
+    .withOperationHandler(<span class="hljs-params">...</span>) <span class="hljs-comment">//register other operation handlers</span>
+        .<span class="hljs-literal">and</span>(<span class="hljs-params">...</span>).<span class="hljs-literal">and</span>(<span class="hljs-params">...</span>) <span class="hljs-comment">//add more operation handlers</span>
+    .withDefaultKeyGenerator(<span class="hljs-params">...</span>) <span class="hljs-comment">//set the default key generator</span>
+    .enableAuditing(<span class="hljs-params">...</span>) <span class="hljs-comment">//enable support for Spring Data&amp;#39;s auditing and pass in a custom auditor aware instance</span>
+    .withListener(<span class="hljs-params">...</span>) <span class="hljs-comment">//register some event listener</span>
+        .<span class="hljs-literal">and</span>(<span class="hljs-params">...</span>).<span class="hljs-literal">and</span>(<span class="hljs-params">...</span>) <span class="hljs-comment">//register additional event listeners</span></code></pre>
+<p>At this stage, you can either call to the <code class="hljs"><span class="hljs-function"><span class="hljs-title">configure</span><span class="hljs-params">()</span></span></code> method on the builder object to get a configuration object, or
 you can skip this step and continue from the key generation step of the mock builder (marked with three stars in the previous
-listing). Alternatively, you can call <code><span class="hljs-function"><span class="hljs-title">build</span><span class="hljs-params">()</span></span></code> to get an instance of the repository factory, which you can use to
+listing). Alternatively, you can call <code class="hljs"><span class="hljs-function"><span class="hljs-title">build</span><span class="hljs-params">()</span></span></code> to get an instance of the repository factory, which you can use to
 instantiate mock repositories.</p>
 <p>All of the steps above are optional. All values have defaults and you can skip setting them and still expect everything
 to just work out of the box.</p>
@@ -169,104 +161,102 @@ to just work out of the box.</p>
 <th>Default Behavior</th>
 </tr>
 </thead>
-<tbody>
-<tr>
-<td><code>resolveMetadataUsing</code></td>
+<tbody><tr>
+<td><code class="hljs"><span class="hljs-attribute">resolveMetadataUsing</span></code></td>
 <td>tells the configurer to use the provided metadata resolver</td>
-<td><code>~<span class="hljs-selector-class">.domain</span><span class="hljs-selector-class">.impl</span><span class="hljs-selector-class">.DefaultRepositoryMetadataResolver</span></code> will be used</td>
+<td><code class="hljs">~<span class="hljs-selector-class">.domain</span><span class="hljs-selector-class">.impl</span><span class="hljs-selector-class">.DefaultRepositoryMetadataResolver</span></code> will be used</td>
 </tr>
 <tr>
-<td><code>withOperators</code></td>
+<td><code class="hljs"><span class="hljs-attribute">withOperators</span></code></td>
 <td>tells the configurer to use the provided operator context</td>
-<td><code>~<span class="hljs-selector-class">.domain</span><span class="hljs-selector-class">.impl</span><span class="hljs-selector-class">.DefaultOperatorContext</span></code> will be used</td>
+<td><code class="hljs">~<span class="hljs-selector-class">.domain</span><span class="hljs-selector-class">.impl</span><span class="hljs-selector-class">.DefaultOperatorContext</span></code> will be used</td>
 </tr>
 <tr>
-<td><code>registerOperator</code></td>
+<td><code class="hljs"><span class="hljs-attribute">registerOperator</span></code></td>
 <td>registers an operator with the operator context</td>
-<td>only the operators in the <code>DefaultOperatorContext</code> will be used</td>
+<td>only the operators in the <code class="hljs"><span class="hljs-attribute">DefaultOperatorContext</span></code> will be used</td>
 </tr>
 <tr>
-<td><code>withDataFunctions</code></td>
+<td><code class="hljs"><span class="hljs-attribute">withDataFunctions</span></code></td>
 <td>tells the configurer to use the provided data function registry</td>
-<td><code>~<span class="hljs-selector-class">.query</span><span class="hljs-selector-class">.impl</span><span class="hljs-selector-class">.DefaultDataFunctionRegistry</span></code> will be used</td>
+<td><code class="hljs">~<span class="hljs-selector-class">.query</span><span class="hljs-selector-class">.impl</span><span class="hljs-selector-class">.DefaultDataFunctionRegistry</span></code> will be used</td>
 </tr>
 <tr>
-<td><code>registerFunction</code></td>
+<td><code class="hljs"><span class="hljs-attribute">registerFunction</span></code></td>
 <td>registers a function with the default context</td>
 <td>only default functions will be registered</td>
 </tr>
 <tr>
-<td><code>withDataStores</code></td>
+<td><code class="hljs"><span class="hljs-attribute">withDataStores</span></code></td>
 <td>tells the configurer to use the provided data store registry</td>
-<td><code>~<span class="hljs-selector-class">.store</span><span class="hljs-selector-class">.impl</span><span class="hljs-selector-class">.DefaultDataStoreRegistry</span></code> will be used</td>
+<td><code class="hljs">~<span class="hljs-selector-class">.store</span><span class="hljs-selector-class">.impl</span><span class="hljs-selector-class">.DefaultDataStoreRegistry</span></code> will be used</td>
 </tr>
 <tr>
-<td><code>registerDataStore</code></td>
+<td><code class="hljs"><span class="hljs-attribute">registerDataStore</span></code></td>
 <td>registers a data store</td>
 <td>no data store will be registered by default</td>
 </tr>
 <tr>
-<td><code>withAdapters</code></td>
+<td><code class="hljs"><span class="hljs-attribute">withAdapters</span></code></td>
 <td>tells the configurer to use the provided result adapter context</td>
-<td><code>~<span class="hljs-selector-class">.proxy</span><span class="hljs-selector-class">.impl</span><span class="hljs-selector-class">.DefaultResultAdapterContext</span></code> will be used</td>
+<td><code class="hljs">~<span class="hljs-selector-class">.proxy</span><span class="hljs-selector-class">.impl</span><span class="hljs-selector-class">.DefaultResultAdapterContext</span></code> will be used</td>
 </tr>
 <tr>
-<td><code>adaptResultsUsing</code></td>
+<td><code class="hljs"><span class="hljs-attribute">adaptResultsUsing</span></code></td>
 <td>registers an adapter</td>
 <td>no additional adapters will be used</td>
 </tr>
 <tr>
-<td><code>withMappings</code></td>
+<td><code class="hljs"><span class="hljs-attribute">withMappings</span></code></td>
 <td>tells the configurer to use the provided type mapping context</td>
-<td><code>~<span class="hljs-selector-class">.proxy</span><span class="hljs-selector-class">.impl</span><span class="hljs-selector-class">.DefaultTypeMappingContext</span></code> will be used</td>
+<td><code class="hljs">~<span class="hljs-selector-class">.proxy</span><span class="hljs-selector-class">.impl</span><span class="hljs-selector-class">.DefaultTypeMappingContext</span></code> will be used</td>
 </tr>
 <tr>
-<td><code>honoringImplementation</code></td>
+<td><code class="hljs"><span class="hljs-attribute">honoringImplementation</span></code></td>
 <td>registers a type with the type mapping context</td>
 <td>only the defaults provided will be used</td>
 </tr>
 <tr>
-<td><code>withOperationHandlers</code></td>
+<td><code class="hljs"><span class="hljs-attribute">withOperationHandlers</span></code></td>
 <td>tells the configurer to use the provided non-data operation handler context</td>
 <td>the default context will be used</td>
 </tr>
 <tr>
-<td><code>withOperationHandler</code></td>
+<td><code class="hljs"><span class="hljs-attribute">withOperationHandler</span></code></td>
 <td>registers an operation handler with the context</td>
 <td>the default handlers will be used</td>
 </tr>
 <tr>
-<td><code>withDefaultKeyGenerator</code></td>
+<td><code class="hljs"><span class="hljs-attribute">withDefaultKeyGenerator</span></code></td>
 <td>registers a default, fallback key generator for the repository factory</td>
 <td>no fallback will be used</td>
 </tr>
 <tr>
-<td><code>withListeners</code></td>
+<td><code class="hljs"><span class="hljs-attribute">withListeners</span></code></td>
 <td>tells the configurer to use the provided event listener context</td>
-<td><code>~<span class="hljs-selector-class">.store</span><span class="hljs-selector-class">.impl</span><span class="hljs-selector-class">.DefaultDataStoreEventListenerContext</span></code> will be used</td>
+<td><code class="hljs">~<span class="hljs-selector-class">.store</span><span class="hljs-selector-class">.impl</span><span class="hljs-selector-class">.DefaultDataStoreEventListenerContext</span></code> will be used</td>
 </tr>
 <tr>
-<td><code>withListener</code></td>
+<td><code class="hljs"><span class="hljs-attribute">withListener</span></code></td>
 <td>adds the provided event listener</td>
 <td>no listener will be added</td>
 </tr>
 <tr>
-<td><code><span class="hljs-built_in">enable</span>Auditing</code></td>
-<td>enables Spring Data auditing. You can also provide an <code>AuditorAware</code>. If you don&#39;t provide anything, a default will be used which assumes user to be a string and it will have a value of <code><span class="hljs-keyword">User</span></code></td>
+<td><code class="hljs"><span class="hljs-attribute">enableAuditing</span></code></td>
+<td>enables Spring Data auditing. You can also provide an <code class="hljs"><span class="hljs-attribute">AuditorAware</span></code>. If you don&#39;t provide anything, a default will be used which assumes user to be a string and it will have a value of <code class="hljs"><span class="hljs-keyword">User</span></code></td>
 <td>auditing will not be enabled</td>
 </tr>
 <tr>
-<td><code>build</code></td>
+<td><code class="hljs"><span class="hljs-attribute">build</span></code></td>
 <td>builds and returns a repository factory</td>
 <td>N/A</td>
 </tr>
 <tr>
-<td><code>configure</code></td>
+<td><code class="hljs"><span class="hljs-attribute">configure</span></code></td>
 <td>builds and returns a repository factory configuration</td>
 <td>N/A</td>
 </tr>
-</tbody>
-</table>
+</tbody></table>
 <p>To answer the question of what all of these configurable steps mean, we need to go to the next section.</p>
 <h1 id="the-mechanics">The Mechanics</h1>
 <p>In this section, we will detail the framework and go over how each part of it can be configured.</p>
@@ -281,22 +271,22 @@ the repository as well as the persistent entity it is supporting. This is what t
 <li><p>the type of the identifier associated with the entity</p>
 </li>
 </ul>
-<p>The default metadata resolver is the <code>com<span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.domain</span><span class="hljs-selector-class">.impl</span><span class="hljs-selector-class">.DefaultRepositoryMetadataResolver</span></code>
-class, which will first see if the repository is annotated with <code>@<span class="hljs-keyword">org</span>.<span class="hljs-keyword">springframework</span>.<span class="hljs-keyword">data</span>.<span class="hljs-keyword">repository</span>.<span class="hljs-keyword">RepositoryDefinition</span></code>
-and if not tries to extract its metadata from the interface should it extend <code>org<span class="hljs-selector-class">.springframework</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.repository</span><span class="hljs-selector-class">.Repository</span></code>.</p>
+<p>The default metadata resolver is the <code class="hljs"><span class="hljs-selector-tag">com</span><span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.domain</span><span class="hljs-selector-class">.impl</span><span class="hljs-selector-class">.DefaultRepositoryMetadataResolver</span></code>
+class, which will first see if the repository is annotated with <code class="hljs">@org<span class="hljs-selector-class">.springframework</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.repository</span>.RepositoryDefinition</code>
+and if not tries to extract its metadata from the interface should it extend <code class="hljs"><span class="hljs-selector-tag">org</span><span class="hljs-selector-class">.springframework</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.repository</span><span class="hljs-selector-class">.Repository</span></code>.</p>
 <p>If none of these conditions are met, it will throw an exception.</p>
 <div class="alert alert-warning">
 <h4 id="primitive-ids">Primitve IDs</h4>
 <p> At this point, we do not support primitive identifier types. This means that if your ID type
- is <code><span class="hljs-keyword">long</span></code>, you will have to change it to <code>java<span class="hljs-selector-class">.lang</span><span class="hljs-selector-class">.Long</span></code> to be able to use this framework.</p>
+ is `long`, you will have to change it to `java.lang.Long` to be able to use this framework.</p>
 </div>
 
 <h2 id="the-operators">The Operators</h2>
 <p>The operators are what drive how the query methods are parsed. This is the general recipe:</p>
 <p>At each juncture, we look for the operator whose tokens matches the longest suffix, and assume the rest to be a
 property path, so that for instance, if we are parsing &quot;ParentParentAgeGreaterThanEqual&quot;, we will match it with the
-operator &quot;GreaterThanEqual&quot;, and consider the &quot;ParentParentAge&quot; to be a property path (which might be <code>parent<span class="hljs-selector-class">.parent</span><span class="hljs-selector-class">.age</span></code>).</p>
-<p>Each operator has a <code>Matcher</code>, which will help identify whether or not based on a given criteria an entity instance matches
+operator &quot;GreaterThanEqual&quot;, and consider the &quot;ParentParentAge&quot; to be a property path (which might be <code class="hljs"><span class="hljs-selector-tag">parent</span><span class="hljs-selector-class">.parent</span><span class="hljs-selector-class">.age</span></code>).</p>
+<p>Each operator has a <code class="hljs"><span class="hljs-attribute">Matcher</span></code>, which will help identify whether or not based on a given criteria an entity instance matches
 the query.</p>
 <p>By extending the operators, you can practically extend the query method DSL. This might not be practical, as we might not want
 to support things that Spring Data doesn&#39;t support yet, but it allows for a better maintainability and easier extensibility should
@@ -309,106 +299,104 @@ Spring Data actually expand beyond what it is today.</p>
 <th>Suffixes</th>
 </tr>
 </thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td>AFTER</td>
-<td><code><span class="hljs-keyword">After</span></code>, <code>IsAfter</code></td>
+<td><code class="hljs"><span class="hljs-attribute">After</span></code>, <code class="hljs"><span class="hljs-attribute">IsAfter</span></code></td>
 </tr>
 <tr>
 <td>BEFORE</td>
-<td><code><span class="hljs-keyword">Before</span></code>, <code>IsBefore</code></td>
+<td><code class="hljs"><span class="hljs-attribute">Before</span></code>, <code class="hljs"><span class="hljs-attribute">IsBefore</span></code></td>
 </tr>
 <tr>
 <td>CONTAINING</td>
-<td><code>Containing</code>, <code>IsContaining</code>, <code><span class="hljs-keyword">Contains</span></code></td>
+<td><code class="hljs"><span class="hljs-attribute">Containing</span></code>, <code class="hljs"><span class="hljs-attribute">IsContaining</span></code>, <code class="hljs"><span class="hljs-built_in">Contains</span></code></td>
 </tr>
 <tr>
 <td>BETWEEN</td>
-<td><code>Between</code>, <code>IsBetween</code></td>
+<td><code class="hljs"><span class="hljs-attribute">Between</span></code>, <code class="hljs"><span class="hljs-attribute">IsBetween</span></code></td>
 </tr>
 <tr>
 <td>NOT_BETWEEN</td>
-<td><code>NotBetween</code>, <code>IsNotBetween</code></td>
+<td><code class="hljs"><span class="hljs-attribute">NotBetween</span></code>, <code class="hljs"><span class="hljs-attribute">IsNotBetween</span></code></td>
 </tr>
 <tr>
 <td>ENDING_WITH</td>
-<td><code>EndingWith</code>, <code>IsEndingWith</code>, <code>EndsWith</code></td>
+<td><code class="hljs"><span class="hljs-attribute">EndingWith</span></code>, <code class="hljs"><span class="hljs-attribute">IsEndingWith</span></code>, <code class="hljs"><span class="hljs-attribute">EndsWith</span></code></td>
 </tr>
 <tr>
 <td>FALSE</td>
-<td><code><span class="hljs-literal">False</span></code>, <code><span class="hljs-keyword">IsFalse</span></code></td>
+<td><code class="hljs"><span class="hljs-literal">False</span></code>, <code class="hljs"><span class="hljs-attribute">IsFalse</span></code></td>
 </tr>
 <tr>
 <td>GREATER_THAN</td>
-<td><code>GreaterThan</code>, <code>IsGreaterThan</code></td>
+<td><code class="hljs"><span class="hljs-attribute">GreaterThan</span></code>, <code class="hljs"><span class="hljs-attribute">IsGreaterThan</span></code></td>
 </tr>
 <tr>
 <td>GREATER_THAN_EQUALS</td>
-<td><code>GreaterThanEqual</code>, <code>IsGreaterThanEqual</code></td>
+<td><code class="hljs"><span class="hljs-attribute">GreaterThanEqual</span></code>, <code class="hljs"><span class="hljs-attribute">IsGreaterThanEqual</span></code></td>
 </tr>
 <tr>
 <td>IN</td>
-<td><code><span class="hljs-keyword">In</span></code>, <code>IsIn</code></td>
+<td><code class="hljs"><span class="hljs-attribute">In</span></code>, <code class="hljs"><span class="hljs-attribute">IsIn</span></code></td>
 </tr>
 <tr>
 <td>IS</td>
-<td><code><span class="hljs-keyword">Is</span></code>, <code>EqualTo</code>, <code><span class="hljs-built_in">IsEqualTo</span></code>, <code><span class="hljs-keyword">Equals</span></code></td>
+<td><code class="hljs"><span class="hljs-keyword">Is</span></code>, <code class="hljs"><span class="hljs-attribute">EqualTo</span></code>, <code class="hljs"><span class="hljs-attribute">IsEqualTo</span></code>, <code class="hljs"><span class="hljs-built_in">Equals</span></code></td>
 </tr>
 <tr>
 <td>NOT_NULL</td>
-<td><code>NotNull</code>, <code>IsNotNull</code></td>
+<td><code class="hljs"><span class="hljs-attribute">NotNull</span></code>, <code class="hljs"><span class="hljs-attribute">IsNotNull</span></code></td>
 </tr>
 <tr>
 <td>NULL</td>
-<td><code><span class="hljs-literal">Null</span></code>, <code><span class="hljs-built_in">IsNull</span></code></td>
+<td><code class="hljs"><span class="hljs-literal">Null</span></code>, <code class="hljs"><span class="hljs-attribute">IsNull</span></code></td>
 </tr>
 <tr>
 <td>LESS_THAN</td>
-<td><code>LessThan</code>, <code>IsLessThan</code></td>
+<td><code class="hljs"><span class="hljs-attribute">LessThan</span></code>, <code class="hljs"><span class="hljs-attribute">IsLessThan</span></code></td>
 </tr>
 <tr>
 <td>LESS_THAN_EQUAL</td>
-<td><code>LessThanEqual</code>, <code>IsLessThanEqual</code></td>
+<td><code class="hljs"><span class="hljs-attribute">LessThanEqual</span></code>, <code class="hljs"><span class="hljs-attribute">IsLessThanEqual</span></code></td>
 </tr>
 <tr>
 <td>LIKE</td>
-<td><code><span class="hljs-keyword">Like</span></code>, <code>IsLike</code></td>
+<td><code class="hljs"><span class="hljs-attribute">Like</span></code>, <code class="hljs"><span class="hljs-attribute">IsLike</span></code></td>
 </tr>
 <tr>
 <td>NEAR</td>
-<td><code><span class="hljs-keyword">Near</span></code>, <code>IsNear</code></td>
+<td><code class="hljs"><span class="hljs-keyword">Near</span></code>, <code class="hljs"><span class="hljs-attribute">IsNear</span></code></td>
 </tr>
 <tr>
 <td>NOT</td>
-<td><code><span class="hljs-keyword">IsNot</span></code>, <code><span class="hljs-literal">Not</span></code>, <code>IsNotEqualTo</code>, <code>DoesNotEqual</code></td>
+<td><code class="hljs"><span class="hljs-attribute">IsNot</span></code>, <code class="hljs"><span class="hljs-attribute">Not</span></code>, <code class="hljs"><span class="hljs-attribute">IsNotEqualTo</span></code>, <code class="hljs"><span class="hljs-attribute">DoesNotEqual</span></code></td>
 </tr>
 <tr>
 <td>NOT_IN</td>
-<td><code>NotIn</code>, <code>IsNotIn</code></td>
+<td><code class="hljs"><span class="hljs-attribute">NotIn</span></code>, <code class="hljs"><span class="hljs-attribute">IsNotIn</span></code></td>
 </tr>
 <tr>
 <td>NOT_LIKE</td>
-<td><code>NotLike</code>, <code>IsNotLike</code></td>
+<td><code class="hljs"><span class="hljs-attribute">NotLike</span></code>, <code class="hljs"><span class="hljs-attribute">IsNotLike</span></code></td>
 </tr>
 <tr>
 <td>REGEX</td>
-<td><code><span class="hljs-built_in">Regex</span></code>, <code>MatchesRegex</code>, <code><span class="hljs-keyword">Matches</span></code></td>
+<td><code class="hljs"><span class="hljs-attribute">Regex</span></code>, <code class="hljs"><span class="hljs-attribute">MatchesRegex</span></code>, <code class="hljs"><span class="hljs-keyword">Matches</span></code></td>
 </tr>
 <tr>
 <td>STARTING_WITH</td>
-<td><code>StartingWith</code>, <code>IsStartingWith</code>, <code>StartsWith</code></td>
+<td><code class="hljs"><span class="hljs-attribute">StartingWith</span></code>, <code class="hljs"><span class="hljs-attribute">IsStartingWith</span></code>, <code class="hljs"><span class="hljs-attribute">StartsWith</span></code></td>
 </tr>
 <tr>
 <td>TRUE</td>
-<td><code><span class="hljs-literal">True</span></code>, <code><span class="hljs-keyword">IsTrue</span></code></td>
+<td><code class="hljs"><span class="hljs-literal">True</span></code>, <code class="hljs"><span class="hljs-attribute">IsTrue</span></code></td>
 </tr>
-</tbody>
-</table>
-<p>If no suffix is present to determine the operator by, it is assumed that the <code><span class="hljs-keyword">IS</span></code> operator was intended.</p>
+</tbody></table>
+<p>If no suffix is present to determine the operator by, it is assumed that the <code class="hljs"><span class="hljs-keyword">IS</span></code> operator was intended.</p>
 <h2 id="data-functions">Data Functions</h2>
 <p>Data functions determine what should be done with a particular selection of entities before a result is returned. For instance,
-the <code><span class="hljs-built_in">count</span></code> data function just returns the collection size for a subset of data, thus allowing you to start your query method with
-<code><span class="hljs-built_in">count</span></code> and expect it to return the size of the selection.</p>
+the <code class="hljs"><span class="hljs-built_in">count</span></code> data function just returns the collection size for a subset of data, thus allowing you to start your query method with
+<code class="hljs"><span class="hljs-built_in">count</span></code> and expect it to return the size of the selection.</p>
 <p>By extending the data functions, you are also extending the DSL for query methods by allowing various new data function names to be
 used in the beginning of a query method&#39;s name.</p>
 <p>Available data functions:</p>
@@ -419,49 +407,47 @@ used in the beginning of a query method&#39;s name.</p>
 <th>Description</th>
 </tr>
 </thead>
-<tbody>
-<tr>
-<td><code><span class="hljs-built_in">count</span></code></td>
+<tbody><tr>
+<td><code class="hljs"><span class="hljs-built_in">count</span></code></td>
 <td>Returns the number of items that were selected</td>
 </tr>
 <tr>
-<td><code><span class="hljs-keyword">delete</span></code></td>
+<td><code class="hljs"><span class="hljs-keyword">delete</span></code></td>
 <td>Deletes all the selected items</td>
 </tr>
-</tbody>
-</table>
+</tbody></table>
 <h2 id="data-stores">Data Stores</h2>
 <p>This framework has an abstraction hiding away the details of where and how entities are stored and are looked up. The default
 behavior is, of course, to keep everything in memory. It might, however, be necessary to delegate this to some external service
 or entity, such as an im-memory data store, a distributed cache, or an actual database.</p>
-<p>All you have to do is implement the <code>com<span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.store</span><span class="hljs-selector-class">.DataStore</span></code> interface and point it to the right direction.</p>
+<p>All you have to do is implement the <code class="hljs"><span class="hljs-selector-tag">com</span><span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.store</span><span class="hljs-selector-class">.DataStore</span></code> interface and point it to the right direction.</p>
 <p>Currently available implementations of the data store abstraction are:</p>
 <ul>
-<li><code>com<span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.store</span><span class="hljs-selector-class">.impl</span><span class="hljs-selector-class">.MemoryDataStore</span></code> which, as the name implies, holds everything in memory</li>
-<li><code>com<span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.store</span><span class="hljs-selector-class">.impl</span><span class="hljs-selector-class">.EventPublishingDataStore</span></code> which acts as a wrapper around another, delegate
+<li><code class="hljs"><span class="hljs-selector-tag">com</span><span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.store</span><span class="hljs-selector-class">.impl</span><span class="hljs-selector-class">.MemoryDataStore</span></code> which, as the name implies, holds everything in memory</li>
+<li><code class="hljs"><span class="hljs-selector-tag">com</span><span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.store</span><span class="hljs-selector-class">.impl</span><span class="hljs-selector-class">.EventPublishingDataStore</span></code> which acts as a wrapper around another, delegate
 data store to add event publishing capabilities.</li>
 </ul>
 <p>A data store <em>has to</em> support these operations:</p>
 <ul>
-<li><code>hasKey</code>: to be able to tell whether or not it contains a given entity</li>
-<li><code><span class="hljs-keyword">save</span></code>: to store an object at a given key</li>
-<li><code><span class="hljs-keyword">delete</span></code>: to delete an item by its key</li>
-<li><code>retrieve</code>: to return an object from a key</li>
-<li><code><span class="hljs-built_in">keys</span></code>: to return all the keys that it has stored</li>
-<li><code>retrieveAll</code>: to return all the entities that it has stored</li>
-<li><code><span class="hljs-built_in">truncate</span></code>: to delete all items at once</li>
-<li><code>getEntityType</code>: to tell us what type of object it is storing</li>
+<li><code class="hljs"><span class="hljs-attribute">hasKey</span></code>: to be able to tell whether or not it contains a given entity</li>
+<li><code class="hljs"><span class="hljs-attribute">save</span></code>: to store an object at a given key</li>
+<li><code class="hljs"><span class="hljs-keyword">delete</span></code>: to delete an item by its key</li>
+<li><code class="hljs"><span class="hljs-attribute">retrieve</span></code>: to return an object from a key</li>
+<li><code class="hljs"><span class="hljs-attribute">keys</span></code>: to return all the keys that it has stored</li>
+<li><code class="hljs"><span class="hljs-attribute">retrieveAll</span></code>: to return all the entities that it has stored</li>
+<li><code class="hljs"><span class="hljs-attribute">truncate</span></code>: to delete all items at once</li>
+<li><code class="hljs"><span class="hljs-attribute">getEntityType</span></code>: to tell us what type of object it is storing</li>
 </ul>
 <p>As you can see, this is a good abstraction of a key-value store that is centered around a particular object type.</p>
 <p>This abstraction let&#39;s us create a separate data store for each object type, and bind them to their individual
 repositories.</p>
 <p>Additionally, if you want to support more sophisticated operations and enable batching and operation queueing, your
-repository can implement <code>com<span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.store</span><span class="hljs-selector-class">.QueueingDataStore</span></code> which introduces the following
+repository can implement <code class="hljs"><span class="hljs-selector-tag">com</span><span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.store</span><span class="hljs-selector-class">.QueueingDataStore</span></code> which introduces the following
 three operations:</p>
 <ul>
-<li><code><span class="hljs-built_in">flush</span></code>: to flush the queue and commit all issued operations</li>
-<li><code>startBatch</code>: to start a batch of operations</li>
-<li><code><span class="hljs-keyword">end</span></code>: to end the batch that was indicated</li>
+<li><code class="hljs"><span class="hljs-built_in">flush</span></code>: to flush the queue and commit all issued operations</li>
+<li><code class="hljs"><span class="hljs-attribute">startBatch</span></code>: to start a batch of operations</li>
+<li><code class="hljs"><span class="hljs-keyword">end</span></code>: to end the batch that was indicated</li>
 </ul>
 <p>Certain repository methods can take advantage of these additional functionality if provided.</p>
 <h2 id="result-adapters">Result Adapters</h2>
@@ -480,135 +466,133 @@ method returns a List, while the interface method returns just one instance.</p>
 <th>Description</th>
 </tr>
 </thead>
-<tbody>
-<tr>
-<td><code>VoidResultAdapter</code></td>
-<td><code><span class="hljs-keyword">void</span></code></td>
-<td><code><span class="hljs-comment">*</span></code></td>
-<td><code><span class="hljs-deletion">-inf</span></code></td>
+<tbody><tr>
+<td><code class="hljs"><span class="hljs-attribute">VoidResultAdapter</span></code></td>
+<td><code class="hljs"><span class="hljs-keyword">void</span></code></td>
+<td><code class="hljs"><span class="hljs-comment">*</span></code></td>
+<td><code class="hljs"><span class="hljs-deletion">-inf</span></code></td>
 <td></td>
 </tr>
 <tr>
-<td><code>SameTypeResultAdapter</code></td>
-<td><code><span class="hljs-comment">*</span></code></td>
-<td><code><span class="hljs-comment">*</span></code></td>
-<td><code><span class="hljs-deletion">-500</span></code></td>
+<td><code class="hljs"><span class="hljs-attribute">SameTypeResultAdapter</span></code></td>
+<td><code class="hljs"><span class="hljs-comment">*</span></code></td>
+<td><code class="hljs"><span class="hljs-comment">*</span></code></td>
+<td><code class="hljs"><span class="hljs-number">-500</span></code></td>
 <td>Used when the source and target are of the same type</td>
 </tr>
 <tr>
-<td><code>NumberIterableResultAdapter</code></td>
-<td><code><span class="hljs-built_in">Number</span></code></td>
-<td><code><span class="hljs-built_in">Iterable</span></code></td>
-<td><code><span class="hljs-deletion">-425</span></code></td>
+<td><code class="hljs"><span class="hljs-attribute">NumberIterableResultAdapter</span></code></td>
+<td><code class="hljs"><span class="hljs-built_in">Number</span></code></td>
+<td><code class="hljs"><span class="hljs-built_in">Iterable</span></code></td>
+<td><code class="hljs"><span class="hljs-number">-425</span></code></td>
 <td></td>
 </tr>
 <tr>
-<td><code>SimpleIterableResultAdapter</code></td>
-<td><code><span class="hljs-comment">*</span></code></td>
-<td><code><span class="hljs-built_in">Iterable</span></code></td>
-<td><code><span class="hljs-deletion">-400</span></code></td>
+<td><code class="hljs"><span class="hljs-attribute">SimpleIterableResultAdapter</span></code></td>
+<td><code class="hljs"><span class="hljs-comment">*</span></code></td>
+<td><code class="hljs"><span class="hljs-built_in">Iterable</span></code></td>
+<td><code class="hljs"><span class="hljs-number">-400</span></code></td>
 <td>When we want to convert an object to its iterable</td>
 </tr>
 <tr>
-<td><code>NullSimpleResultAdapter</code></td>
-<td><code><span class="hljs-literal">null</span></code></td>
-<td><code><span class="hljs-built_in">Object</span></code></td>
-<td><code><span class="hljs-deletion">-400</span></code></td>
+<td><code class="hljs"><span class="hljs-attribute">NullSimpleResultAdapter</span></code></td>
+<td><code class="hljs"><span class="hljs-literal">null</span></code></td>
+<td><code class="hljs"><span class="hljs-built_in">Object</span></code></td>
+<td><code class="hljs"><span class="hljs-number">-400</span></code></td>
 <td>Used when target type is a single object</td>
 </tr>
 <tr>
-<td><code>NullToIteratorResultAdapter</code></td>
-<td><code><span class="hljs-literal">null</span></code></td>
-<td><code><span class="hljs-built_in">Iterator</span></code></td>
-<td><code><span class="hljs-deletion">-350</span></code></td>
+<td><code class="hljs"><span class="hljs-attribute">NullToIteratorResultAdapter</span></code></td>
+<td><code class="hljs"><span class="hljs-literal">null</span></code></td>
+<td><code class="hljs"><span class="hljs-built_in">Iterator</span></code></td>
+<td><code class="hljs"><span class="hljs-number">-350</span></code></td>
 <td></td>
 </tr>
 <tr>
-<td><code>IteratorIterableResultAdapter</code></td>
-<td><code><span class="hljs-built_in">Iterator</span></code></td>
-<td><code><span class="hljs-built_in">Iterable</span></code></td>
-<td><code><span class="hljs-deletion">-350</span></code></td>
+<td><code class="hljs"><span class="hljs-attribute">IteratorIterableResultAdapter</span></code></td>
+<td><code class="hljs"><span class="hljs-built_in">Iterator</span></code></td>
+<td><code class="hljs"><span class="hljs-built_in">Iterable</span></code></td>
+<td><code class="hljs"><span class="hljs-number">-350</span></code></td>
 <td></td>
 </tr>
 <tr>
-<td><code>NullToCollectionResultAdapter</code></td>
-<td><code><span class="hljs-literal">null</span></code></td>
-<td><code>Collection</code></td>
-<td><code><span class="hljs-deletion">-300</span></code></td>
+<td><code class="hljs"><span class="hljs-attribute">NullToCollectionResultAdapter</span></code></td>
+<td><code class="hljs"><span class="hljs-literal">null</span></code></td>
+<td><code class="hljs"><span class="hljs-keyword">Collection</span></code></td>
+<td><code class="hljs"><span class="hljs-number">-300</span></code></td>
 <td></td>
 </tr>
 <tr>
-<td><code>CollectionIterableResultAdapter</code></td>
-<td><code>Collection</code></td>
-<td><code><span class="hljs-built_in">Iterable</span></code></td>
-<td><code><span class="hljs-deletion">-300</span></code></td>
+<td><code class="hljs"><span class="hljs-attribute">CollectionIterableResultAdapter</span></code></td>
+<td><code class="hljs"><span class="hljs-keyword">Collection</span></code></td>
+<td><code class="hljs"><span class="hljs-built_in">Iterable</span></code></td>
+<td><code class="hljs"><span class="hljs-number">-300</span></code></td>
 <td></td>
 </tr>
 <tr>
-<td><code>SliceIterableResultAdapter</code></td>
-<td><code>Slice</code></td>
-<td><code><span class="hljs-built_in">Iterable</span></code></td>
-<td><code><span class="hljs-deletion">-250</span></code></td>
+<td><code class="hljs"><span class="hljs-attribute">SliceIterableResultAdapter</span></code></td>
+<td><code class="hljs"><span class="hljs-attribute">Slice</span></code></td>
+<td><code class="hljs"><span class="hljs-built_in">Iterable</span></code></td>
+<td><code class="hljs"><span class="hljs-number">-250</span></code></td>
 <td></td>
 </tr>
 <tr>
-<td><code>NullToIterableResultAdapter</code></td>
-<td><code><span class="hljs-literal">null</span></code></td>
-<td><code><span class="hljs-built_in">Iterable</span></code></td>
-<td><code><span class="hljs-deletion">-250</span></code></td>
+<td><code class="hljs"><span class="hljs-attribute">NullToIterableResultAdapter</span></code></td>
+<td><code class="hljs"><span class="hljs-literal">null</span></code></td>
+<td><code class="hljs"><span class="hljs-built_in">Iterable</span></code></td>
+<td><code class="hljs"><span class="hljs-number">-250</span></code></td>
 <td></td>
 </tr>
 <tr>
-<td><code>NullToSliceResultAdapter</code></td>
-<td><code><span class="hljs-literal">null</span></code></td>
-<td><code>Slice</code></td>
-<td><code><span class="hljs-deletion">-200</span></code></td>
+<td><code class="hljs"><span class="hljs-attribute">NullToSliceResultAdapter</span></code></td>
+<td><code class="hljs"><span class="hljs-literal">null</span></code></td>
+<td><code class="hljs"><span class="hljs-attribute">Slice</span></code></td>
+<td><code class="hljs"><span class="hljs-number">-200</span></code></td>
 <td></td>
 </tr>
 <tr>
-<td><code>PageIterableResultAdapter</code></td>
-<td><code><span class="hljs-keyword">Page</span></code></td>
-<td><code><span class="hljs-built_in">Iterable</span></code></td>
-<td><code><span class="hljs-deletion">-200</span></code></td>
+<td><code class="hljs"><span class="hljs-attribute">PageIterableResultAdapter</span></code></td>
+<td><code class="hljs"><span class="hljs-attribute">Page</span></code></td>
+<td><code class="hljs"><span class="hljs-built_in">Iterable</span></code></td>
+<td><code class="hljs"><span class="hljs-number">-200</span></code></td>
 <td></td>
 </tr>
 <tr>
-<td><code>NullToFutureResultAdapter</code></td>
-<td><code><span class="hljs-literal">null</span></code></td>
-<td><code><span class="hljs-keyword">Future</span></code></td>
-<td><code><span class="hljs-deletion">-150</span></code></td>
+<td><code class="hljs"><span class="hljs-attribute">NullToFutureResultAdapter</span></code></td>
+<td><code class="hljs"><span class="hljs-literal">null</span></code></td>
+<td><code class="hljs"><span class="hljs-attribute">Future</span></code></td>
+<td><code class="hljs"><span class="hljs-number">-150</span></code></td>
 <td></td>
 </tr>
 <tr>
-<td><code>GeoPageIterableResultAdapter</code></td>
-<td><code>GeoPage</code></td>
-<td><code><span class="hljs-built_in">Iterable</span></code></td>
-<td><code><span class="hljs-deletion">-150</span></code></td>
+<td><code class="hljs"><span class="hljs-attribute">GeoPageIterableResultAdapter</span></code></td>
+<td><code class="hljs"><span class="hljs-attribute">GeoPage</span></code></td>
+<td><code class="hljs"><span class="hljs-built_in">Iterable</span></code></td>
+<td><code class="hljs"><span class="hljs-number">-150</span></code></td>
 <td></td>
 </tr>
 <tr>
-<td><code>NullToListenableFutureResultAdapter</code></td>
-<td><code><span class="hljs-literal">null</span></code></td>
-<td><code>ListenableFuture</code></td>
-<td><code><span class="hljs-deletion">-100</span></code></td>
+<td><code class="hljs"><span class="hljs-attribute">NullToListenableFutureResultAdapter</span></code></td>
+<td><code class="hljs"><span class="hljs-literal">null</span></code></td>
+<td><code class="hljs"><span class="hljs-attribute">ListenableFuture</span></code></td>
+<td><code class="hljs"><span class="hljs-number">-100</span></code></td>
 <td></td>
 </tr>
 <tr>
-<td><code>FutureIterableResultAdapter</code></td>
-<td><code><span class="hljs-keyword">Future</span></code></td>
-<td><code><span class="hljs-built_in">Iterable</span></code></td>
-<td><code><span class="hljs-deletion">-100</span></code></td>
+<td><code class="hljs"><span class="hljs-attribute">FutureIterableResultAdapter</span></code></td>
+<td><code class="hljs"><span class="hljs-attribute">Future</span></code></td>
+<td><code class="hljs"><span class="hljs-built_in">Iterable</span></code></td>
+<td><code class="hljs"><span class="hljs-number">-100</span></code></td>
 <td></td>
 </tr>
 <tr>
-<td><code>ListenableFutureIterableResultAdapter</code></td>
-<td><code>ListenableFuture</code></td>
-<td><code><span class="hljs-built_in">Iterable</span></code></td>
-<td><code><span class="hljs-deletion">-50</span></code></td>
+<td><code class="hljs"><span class="hljs-attribute">ListenableFutureIterableResultAdapter</span></code></td>
+<td><code class="hljs"><span class="hljs-attribute">ListenableFuture</span></code></td>
+<td><code class="hljs"><span class="hljs-built_in">Iterable</span></code></td>
+<td><code class="hljs"><span class="hljs-number">-50</span></code></td>
 <td></td>
 </tr>
-</tbody>
-</table>
+</tbody></table>
 <h2 id="custom-implementations-and-type-mapping-context">Custom Implementations and Type Mapping Context</h2>
 <p>You can map custom implementations to repository interfaces. To this end, a type mapping context exists which will let you bind
 particular repository interface super types to custom implementation classes. The methods are then looked up according to their
@@ -627,32 +611,32 @@ data sources.</p>
 the type mapping context.</p>
 <p>We have implemented the following data extensions.</p>
 <h3 id="support-for-crudrepository">Support for CrudRepository</h3>
-<p>All methods introduced in <code>org<span class="hljs-selector-class">.springframework</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.repository</span><span class="hljs-selector-class">.CrudRepository</span></code> are implemented in a class called
-<code>com<span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.repository</span><span class="hljs-selector-class">.DefaultCrudRepository</span></code>. This class is registered with the type mapping
+<p>All methods introduced in <code class="hljs"><span class="hljs-selector-tag">org</span><span class="hljs-selector-class">.springframework</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.repository</span><span class="hljs-selector-class">.CrudRepository</span></code> are implemented in a class called
+<code class="hljs"><span class="hljs-selector-tag">com</span><span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.repository</span><span class="hljs-selector-class">.DefaultCrudRepository</span></code>. This class is registered with the type mapping
 for all repositories by default.</p>
 <h3 id="support-for-pagingandsortingrepository">Support for PagingAndSortingRepository</h3>
-<p>All methods introduced in <code>org<span class="hljs-selector-class">.springframework</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.repository</span><span class="hljs-selector-class">.PagingAndSortingRepository</span></code> are implemented in a class called
-<code>com<span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.repository</span><span class="hljs-selector-class">.DefaultPagingAndSortingRepository</span></code>. This class is registered with the type mapping
+<p>All methods introduced in <code class="hljs"><span class="hljs-selector-tag">org</span><span class="hljs-selector-class">.springframework</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.repository</span><span class="hljs-selector-class">.PagingAndSortingRepository</span></code> are implemented in a class called
+<code class="hljs"><span class="hljs-selector-tag">com</span><span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.repository</span><span class="hljs-selector-class">.DefaultPagingAndSortingRepository</span></code>. This class is registered with the type mapping
 for all repositories by default.</p>
-<h3 id="support-for-query-by-example-">Support for &quot;Query by Example&quot;</h3>
+<h3 id="support-for-query-by-example">Support for &quot;Query by Example&quot;</h3>
 <p>Query by example is a concept introduced in Spring Data 1.12 and as such might not be shipped with your version of Spring
 Data by default.</p>
-<p>That is why we first check to see if interface <code>org<span class="hljs-selector-class">.springframework</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.repository</span><span class="hljs-selector-class">.query</span><span class="hljs-selector-class">.QueryByExampleExecutor</span></code> is found
-in the classpath. If so, then we register supporting type <code>com<span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.repository</span><span class="hljs-selector-class">.DefaultQueryByExampleExecutor</span></code>
+<p>That is why we first check to see if interface <code class="hljs"><span class="hljs-selector-tag">org</span><span class="hljs-selector-class">.springframework</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.repository</span><span class="hljs-selector-class">.query</span><span class="hljs-selector-class">.QueryByExampleExecutor</span></code> is found
+in the classpath. If so, then we register supporting type <code class="hljs"><span class="hljs-selector-tag">com</span><span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.repository</span><span class="hljs-selector-class">.DefaultQueryByExampleExecutor</span></code>
 which includes methods that are capable of taking care of all methods introduced in this interface.</p>
 <h3 id="support-for-querydsl">Support for QueryDSL</h3>
 <p>There is an extension for <a href="http://www.querydsl.com">QueryDSL</a> for Spring Data that will let you use a fluent API to
 interact with the data store, while hiding away the complexities of talking to the database itself.</p>
-<p>If the <code>org<span class="hljs-selector-class">.springframework</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.querydsl</span><span class="hljs-selector-class">.QueryDslPredicateExecutor</span></code> interface is found in the classpath and, additionally,
+<p>If the <code class="hljs"><span class="hljs-selector-tag">org</span><span class="hljs-selector-class">.springframework</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.querydsl</span><span class="hljs-selector-class">.QueryDslPredicateExecutor</span></code> interface is found in the classpath and, additionally,
 we can also find the CGLib library in the classpath (which is required for QueryDSL to function), we assume
-QueryDSL support to be enabled. We then add the <code>com<span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.repository</span><span class="hljs-selector-class">.DefaultQueryDslPredicateExecutor</span></code>
+QueryDSL support to be enabled. We then add the <code class="hljs"><span class="hljs-selector-tag">com</span><span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.repository</span><span class="hljs-selector-class">.DefaultQueryDslPredicateExecutor</span></code>
 implementation to the type mapping context.</p>
 <h4 id="note-on-additional-dependencies">Note on additional dependencies</h4>
-<p><code>DefaultQueryDslPredicateExecutor</code> uses the <code><span class="hljs-selector-tag">com</span><span class="hljs-selector-class">.querydsl</span><span class="hljs-selector-pseudo">:querydsl-collections</span></code> to query the underlying data store mock
+<p><code class="hljs"><span class="hljs-attribute">DefaultQueryDslPredicateExecutor</span></code> uses the <code class="hljs"><span class="hljs-selector-tag">com</span><span class="hljs-selector-class">.querydsl</span><span class="hljs-selector-pseudo">:querydsl-collections</span></code> to query the underlying data store mock
 the same way as the QueryDSL framework itself. As such, if you want to be able to mock repositories that use QueryDSL
-operations, you will have to add a dependency to <code>querydsl-collections</code>:</p>
+operations, you will have to add a dependency to <code class="hljs"><span class="hljs-attribute">querydsl-collections</span></code>:</p>
 <pre>
-<code><span class="xml">
+<code class="hljs"><span class="xml">
     <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span>
         <span class="hljs-tag">&lt;<span class="hljs-name">groupid</span>&gt;</span>com.querydsl<span class="hljs-tag">&lt;/<span class="hljs-name">groupid</span>&gt;</span>
         <span class="hljs-tag">&lt;<span class="hljs-name">artifactid</span>&gt;</span>querydsl-collections<span class="hljs-tag">&lt;/<span class="hljs-name">artifactid</span>&gt;</span>
@@ -663,88 +647,87 @@ operations, you will have to add a dependency to <code>querydsl-collections</cod
 </pre>
 
 <h3 id="support-for-jpa">Support for JPA</h3>
-<p>If we can find <code>org<span class="hljs-selector-class">.springframework</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.jpa</span><span class="hljs-selector-class">.repository</span><span class="hljs-selector-class">.JpaRepository</span></code> in the classpath, we assume JPA support to be added.
-As such, we will register <code>com<span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.repository</span><span class="hljs-selector-class">.DefaultJpaRepository</span></code> which will take care of all the
-methods in the <code>JpaRepository</code> interface that are not already handled by other extensions.</p>
+<p>If we can find <code class="hljs"><span class="hljs-selector-tag">org</span><span class="hljs-selector-class">.springframework</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.jpa</span><span class="hljs-selector-class">.repository</span><span class="hljs-selector-class">.JpaRepository</span></code> in the classpath, we assume JPA support to be added.
+As such, we will register <code class="hljs"><span class="hljs-selector-tag">com</span><span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.repository</span><span class="hljs-selector-class">.DefaultJpaRepository</span></code> which will take care of all the
+methods in the <code class="hljs"><span class="hljs-attribute">JpaRepository</span></code> interface that are not already handled by other extensions.</p>
 <h3 id="gemfire-support">Gemfire Support</h3>
-<p>If <code>org<span class="hljs-selector-class">.springframework</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.gemfire</span><span class="hljs-selector-class">.repository</span><span class="hljs-selector-class">.GemfireRepository</span></code> is found in the classpath, we will assume that you want
-to be able to mock Gemfire repositories as well. That is why we register <code>com<span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.repository</span><span class="hljs-selector-class">.DefaultGemfireRepository</span></code>
+<p>If <code class="hljs"><span class="hljs-selector-tag">org</span><span class="hljs-selector-class">.springframework</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.gemfire</span><span class="hljs-selector-class">.repository</span><span class="hljs-selector-class">.GemfireRepository</span></code> is found in the classpath, we will assume that you want
+to be able to mock Gemfire repositories as well. That is why we register <code class="hljs"><span class="hljs-selector-tag">com</span><span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.repository</span><span class="hljs-selector-class">.DefaultGemfireRepository</span></code>
 to be able to take care of Gemfire-specific methods that aren&#39;t found on regular repositories.</p>
 <h2 id="non-data-operation-handlers">Non-Data-Operation Handlers</h2>
 <p>Non-data-operation handlers, as the name suggests, are operation handlers that support invocation of methods that are not
-data-specific. Examples include <code>Object.<span class="hljs-keyword">equals</span>(<span class="hljs-attr">...</span>)</code> and <code><span class="hljs-selector-tag">Object</span><span class="hljs-selector-class">.hashCode</span>(...)</code>.</p>
-<p>These are registered with <code>com<span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.proxy</span><span class="hljs-selector-class">.impl</span><span class="hljs-selector-class">.NonDataOperationInvocationHandler</span></code> which has a <code><span class="hljs-function"><span class="hljs-title">register</span>(<span class="hljs-params">...</span>)</span></code>
+data-specific. Examples include <code class="hljs">Object.<span class="hljs-keyword">equals</span>(<span class="hljs-params">...</span>)</code> and <code class="hljs"><span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Object</span>.</span></span>hash<span class="hljs-constructor">Code(<span class="hljs-operator">...</span>)</span></code>.</p>
+<p>These are registered with <code class="hljs"><span class="hljs-selector-tag">com</span><span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.proxy</span><span class="hljs-selector-class">.impl</span><span class="hljs-selector-class">.NonDataOperationInvocationHandler</span></code> which has a <code class="hljs"><span class="hljs-function"><span class="hljs-title">register</span>(<span class="hljs-params">...</span>)</span></code>
 method for the purpose.</p>
 <p>You can implement your own handlers, which will be investigated and invoked in the order in which they were registered,
 but these come with the framework:</p>
 <ul>
-<li><code>com<span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.proxy</span><span class="hljs-selector-class">.impl</span><span class="hljs-selector-class">.regular</span><span class="hljs-selector-class">.EqualsNonDataOperationHandler</span></code>: for handling <code><span class="hljs-built_in">Object</span>.<span class="hljs-keyword">equals</span>(<span class="hljs-built_in">Object</span>)</code></li>
-<li><code>com<span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.proxy</span><span class="hljs-selector-class">.impl</span><span class="hljs-selector-class">.regular</span><span class="hljs-selector-class">.HashCodeNonDataOperationHandler</span></code> for handling <code><span class="hljs-selector-tag">Object</span><span class="hljs-selector-class">.hashCode</span>()</code></li>
-<li><code>com<span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.proxy</span><span class="hljs-selector-class">.impl</span><span class="hljs-selector-class">.regular</span><span class="hljs-selector-class">.ToStringNonDataOperationHandler</span></code> for handling <code><span class="hljs-selector-tag">Object</span><span class="hljs-selector-class">.toString</span>()</code></li>
+<li><code class="hljs"><span class="hljs-selector-tag">com</span><span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.proxy</span><span class="hljs-selector-class">.impl</span><span class="hljs-selector-class">.regular</span><span class="hljs-selector-class">.EqualsNonDataOperationHandler</span></code>: for handling <code class="hljs"><span class="hljs-built_in">Object</span>.<span class="hljs-keyword">equals</span>(<span class="hljs-built_in">Object</span>)</code></li>
+<li><code class="hljs"><span class="hljs-selector-tag">com</span><span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.proxy</span><span class="hljs-selector-class">.impl</span><span class="hljs-selector-class">.regular</span><span class="hljs-selector-class">.HashCodeNonDataOperationHandler</span></code> for handling <code class="hljs"><span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Object</span>.</span></span>hash<span class="hljs-constructor">Code()</span></code></li>
+<li><code class="hljs"><span class="hljs-selector-tag">com</span><span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.proxy</span><span class="hljs-selector-class">.impl</span><span class="hljs-selector-class">.regular</span><span class="hljs-selector-class">.ToStringNonDataOperationHandler</span></code> for handling <code class="hljs"><span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Object</span>.</span></span><span class="hljs-keyword">to</span><span class="hljs-constructor">String()</span></code></li>
 </ul>
 <h3 id="disclaimer">Disclaimer</h3>
 <p>The credit for fixing this goes to @Kaidjin who went all ninja on this and helped resolve #12 in all speed.</p>
 <h2 id="event-listeners">Event Listeners</h2>
 <p>You can register event listeners for each of the following events:</p>
 <ul>
-<li><code>BeforeInsertDataStoreEvent</code></li>
-<li><code>AfterInsertDataStoreEvent</code></li>
-<li><code>BeforeUpdateDataStoreEvent</code></li>
-<li><code>AfterUpdateDataStoreEvent</code></li>
-<li><code>BeforeDeleteDataStoreEvent</code></li>
-<li><code>AfterDeleteDataStoreEvent</code></li>
+<li><code class="hljs"><span class="hljs-attribute">BeforeInsertDataStoreEvent</span></code></li>
+<li><code class="hljs"><span class="hljs-attribute">AfterInsertDataStoreEvent</span></code></li>
+<li><code class="hljs"><span class="hljs-attribute">BeforeUpdateDataStoreEvent</span></code></li>
+<li><code class="hljs"><span class="hljs-attribute">AfterUpdateDataStoreEvent</span></code></li>
+<li><code class="hljs"><span class="hljs-attribute">BeforeDeleteDataStoreEvent</span></code></li>
+<li><code class="hljs"><span class="hljs-attribute">AfterDeleteDataStoreEvent</span></code></li>
 </ul>
 <p>The event handlers can then modify, take note of, or otherwise interact with the entities for which the event was raised.</p>
-<p>If you use the <code><span class="hljs-function"><span class="hljs-title">enableAuditing</span><span class="hljs-params">()</span></span></code> feature above, an event listener (<code>com<span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.store</span><span class="hljs-selector-class">.impl</span><span class="hljs-selector-class">.AuditDataEventListener</span></code>)
+<p>If you use the <code class="hljs"><span class="hljs-function"><span class="hljs-title">enableAuditing</span><span class="hljs-params">()</span></span></code> feature above, an event listener (<code class="hljs"><span class="hljs-selector-tag">com</span><span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.store</span><span class="hljs-selector-class">.impl</span><span class="hljs-selector-class">.AuditDataEventListener</span></code>)
 will be registered with the configuration which will enable auditing features and will set relevant properties in the appropriate
 juncture by listening closely to the events listed above.</p>
 <h3 id="auditing">Auditing</h3>
-<p>Out-of-the-box auditing is supported through this event mechanism for the usual <code>CreatedBy</code>, <code>CreatedDate</code>, <code>LastModifiedBy</code>,
-and <code>LastModifiedDate</code> audit annotations provided by Spring Data Commons. To support user-related auditing (created by and last
-modified by) you will need to supply an <code>AuditorAware</code> or accept the default one, which will always return a String object with
-value, <code><span class="hljs-variable">&amp;quot</span>;User<span class="hljs-variable">&amp;quot</span>;</code>.</p>
+<p>Out-of-the-box auditing is supported through this event mechanism for the usual <code class="hljs"><span class="hljs-attribute">CreatedBy</span></code>, <code class="hljs"><span class="hljs-attribute">CreatedDate</span></code>, <code class="hljs"><span class="hljs-attribute">LastModifiedBy</span></code>,
+and <code class="hljs"><span class="hljs-attribute">LastModifiedDate</span></code> audit annotations provided by Spring Data Commons. To support user-related auditing (created by and last
+modified by) you will need to supply an <code class="hljs"><span class="hljs-attribute">AuditorAware</span></code> or accept the default one, which will always return a String object with
+value, <code class="hljs"><span class="hljs-symbol">&amp;quot;</span>User<span class="hljs-symbol">&amp;quot;</span></code>.</p>
 <p>By default, auditing is disabled. This is to follow in the footprints of Spring. Since Spring Data asks you to explicitly enable
 auditing, this framework, too, pushes for the same requirement.</p>
-<h4 id="note-on-additional-dependencies">Note on additional dependencies</h4>
-<p>When you enable auditing, Spring Data will use the <code>joda-<span class="hljs-built_in">time</span></code> library to achieve precision timestamping. As such, when you
-enable auditing, you will have to add a dependency on <code>joda-<span class="hljs-built_in">time</span>:joda-<span class="hljs-built_in">time</span></code>.</p>
+<h4 id="note-on-additional-dependencies-1">Note on additional dependencies</h4>
+<p>When you enable auditing, Spring Data will use the <code class="hljs">joda-<span class="hljs-built_in">time</span></code> library to achieve precision timestamping. As such, when you
+enable auditing, you will have to add a dependency on <code class="hljs">joda-<span class="hljs-built_in">time</span>:joda-<span class="hljs-built_in">time</span></code>.</p>
 <h3 id="a-note-on-distinct-selections">A Note on Distinct Selections</h3>
-<p>When using the <code><span class="hljs-keyword">distinct</span></code> modifier for selection, this framework will use the internal <code><span class="hljs-function"><span class="hljs-title">hashCode</span><span class="hljs-params">()</span></span></code> of the object being read
+<p>When using the <code class="hljs"><span class="hljs-attribute">distinct</span></code> modifier for selection, this framework will use the internal <code class="hljs"><span class="hljs-function"><span class="hljs-title">hashCode</span><span class="hljs-params">()</span></span></code> of the object being read
 from the data store abstraction to figure out distinct values.</p>
 <p>This is because as opposed to most data stores, we do not have any notion of row-by-row or object-to-object equality relations
-and at the moment we cannot figure out if two objects should be considered as equal, unless they have a <code><span class="hljs-built_in">hash</span>Code</code>.</p>
-<p>Having a <code><span class="hljs-built_in">hash</span>Code</code> is good programming practice anyway, so I don&#39;t feel too bad about not having implemented this for the moment.</p>
+and at the moment we cannot figure out if two objects should be considered as equal, unless they have a <code class="hljs"><span class="hljs-attribute">hashCode</span></code>.</p>
+<p>Having a <code class="hljs"><span class="hljs-attribute">hashCode</span></code> is good programming practice anyway, so I don&#39;t feel too bad about not having implemented this for the moment.</p>
 <h3 id="referenced-objects">Referenced Objects</h3>
 <p>In this framework referenced objects are not going to be separated out. We have not implemented a full-fledged ORM and that is not
 the plan -- at least for the moment.</p>
 <p>When you save an object such as this:</p>
-<pre><code class="lang-java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">EntityA</span> {</span>
+<pre><code class="language-java hljs"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-symbol">EntityA</span> {
 
-    <span class="hljs-meta">@Reference</span>
-    <span class="hljs-keyword">private</span> EntityB referencedObject;
+    @Reference
+    <span class="hljs-keyword">private</span> EntityB <span class="hljs-built_in">ref</span>erencedObject;
 
-}
-</code></pre>
-<p>we are not going to automatically create a data store for the <code>EntityB</code> class and store the values there. Though it doesn&#39;t seem to
+}</code></pre>
+<p>we are not going to automatically create a data store for the <code class="hljs"><span class="hljs-attribute">EntityB</span></code> class and store the values there. Though it doesn&#39;t seem to
 be to complicated to implement, at the moment it is not how we do things.</p>
 <h2 id="key-generation">Key Generation</h2>
 <p>When storing data in the data store, we require a key. That is because the underlying data store abstraction is essentially a key-value
 store.</p>
 <p>This means that you will either have to provide keys for every entity you save, or that there must be some sort of key generation
 mechanism in place to handle that for you. Well, luckily, there is one. Here is a list of the various key generators that come
-with this framework, and you can easily add your own by implementing <code>com<span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.domain</span><span class="hljs-selector-class">.KeyGenerator</span></code>.</p>
+with this framework, and you can easily add your own by implementing <code class="hljs"><span class="hljs-selector-tag">com</span><span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.domain</span><span class="hljs-selector-class">.KeyGenerator</span></code>.</p>
 <ul>
-<li><code>com<span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.domain</span><span class="hljs-selector-class">.KeyGenerator</span></code>: when you genuinely do not wish to generate keys automatically. This key generator
-will basically generate <code><span class="hljs-literal">null</span></code> keys.</li>
-<li><code>com<span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.domain</span><span class="hljs-selector-class">.impl</span><span class="hljs-selector-class">.key</span><span class="hljs-selector-class">.UUIDKeyGenerator</span></code>: generates UUID values and returns them as Strings.</li>
-<li><code>com<span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.domain</span><span class="hljs-selector-class">.impl</span><span class="hljs-selector-class">.key</span><span class="hljs-selector-class">.SequentialIntegerKeyGenerator</span></code>: generates <code><span class="hljs-keyword">int</span></code> values starting from <code>1</code></li>
-<li><code>com<span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.domain</span><span class="hljs-selector-class">.impl</span><span class="hljs-selector-class">.key</span><span class="hljs-selector-class">.SequentialLongKeyGenerator</span></code>: generates <code><span class="hljs-keyword">long</span></code> values starting from <code>1</code></li>
-<li><code>com<span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.domain</span><span class="hljs-selector-class">.impl</span><span class="hljs-selector-class">.key</span><span class="hljs-selector-class">.ConfigurableSequentialIntegerKeyGenerator</span></code>: generates <code><span class="hljs-keyword">int</span></code> values that start
-from a custom <code>initialValue</code> and increase/decrease by a custom <code><span class="hljs-built_in">step</span></code></li>
-<li><code>com<span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.domain</span><span class="hljs-selector-class">.impl</span><span class="hljs-selector-class">.key</span><span class="hljs-selector-class">.ConfigurableSequentialLongKeyGenerator</span></code>: generates <code><span class="hljs-keyword">long</span></code> values that start
-from a custom <code>initialValue</code> and increase/decrease by a custom <code><span class="hljs-built_in">step</span></code></li>
-<li><code>com<span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.domain</span><span class="hljs-selector-class">.impl</span><span class="hljs-selector-class">.key</span><span class="hljs-selector-class">.RandomIntegerKeyGenerator</span></code>: generates random, unique <code><span class="hljs-keyword">int</span></code> values</li>
-<li><code>com<span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.domain</span><span class="hljs-selector-class">.impl</span><span class="hljs-selector-class">.key</span><span class="hljs-selector-class">.RandomLongKeyGenerator</span></code>: generates random, unique <code><span class="hljs-keyword">long</span></code> values</li>
+<li><code class="hljs"><span class="hljs-selector-tag">com</span><span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.domain</span><span class="hljs-selector-class">.KeyGenerator</span></code>: when you genuinely do not wish to generate keys automatically. This key generator
+will basically generate <code class="hljs"><span class="hljs-literal">null</span></code> keys.</li>
+<li><code class="hljs"><span class="hljs-selector-tag">com</span><span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.domain</span><span class="hljs-selector-class">.impl</span><span class="hljs-selector-class">.key</span><span class="hljs-selector-class">.UUIDKeyGenerator</span></code>: generates UUID values and returns them as Strings.</li>
+<li><code class="hljs"><span class="hljs-selector-tag">com</span><span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.domain</span><span class="hljs-selector-class">.impl</span><span class="hljs-selector-class">.key</span><span class="hljs-selector-class">.SequentialIntegerKeyGenerator</span></code>: generates <code class="hljs"><span class="hljs-built_in">int</span></code> values starting from <code class="hljs"><span class="hljs-number">1</span></code></li>
+<li><code class="hljs"><span class="hljs-selector-tag">com</span><span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.domain</span><span class="hljs-selector-class">.impl</span><span class="hljs-selector-class">.key</span><span class="hljs-selector-class">.SequentialLongKeyGenerator</span></code>: generates <code class="hljs"><span class="hljs-keyword">long</span></code> values starting from <code class="hljs"><span class="hljs-number">1</span></code></li>
+<li><code class="hljs"><span class="hljs-selector-tag">com</span><span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.domain</span><span class="hljs-selector-class">.impl</span><span class="hljs-selector-class">.key</span><span class="hljs-selector-class">.ConfigurableSequentialIntegerKeyGenerator</span></code>: generates <code class="hljs"><span class="hljs-built_in">int</span></code> values that start
+from a custom <code class="hljs"><span class="hljs-attribute">initialValue</span></code> and increase/decrease by a custom <code class="hljs"><span class="hljs-built_in">step</span></code></li>
+<li><code class="hljs"><span class="hljs-selector-tag">com</span><span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.domain</span><span class="hljs-selector-class">.impl</span><span class="hljs-selector-class">.key</span><span class="hljs-selector-class">.ConfigurableSequentialLongKeyGenerator</span></code>: generates <code class="hljs"><span class="hljs-keyword">long</span></code> values that start
+from a custom <code class="hljs"><span class="hljs-attribute">initialValue</span></code> and increase/decrease by a custom <code class="hljs"><span class="hljs-built_in">step</span></code></li>
+<li><code class="hljs"><span class="hljs-selector-tag">com</span><span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.domain</span><span class="hljs-selector-class">.impl</span><span class="hljs-selector-class">.key</span><span class="hljs-selector-class">.RandomIntegerKeyGenerator</span></code>: generates random, unique <code class="hljs"><span class="hljs-built_in">int</span></code> values</li>
+<li><code class="hljs"><span class="hljs-selector-tag">com</span><span class="hljs-selector-class">.mmnaseri</span><span class="hljs-selector-class">.utils</span><span class="hljs-selector-class">.spring</span><span class="hljs-selector-class">.data</span><span class="hljs-selector-class">.domain</span><span class="hljs-selector-class">.impl</span><span class="hljs-selector-class">.key</span><span class="hljs-selector-class">.RandomLongKeyGenerator</span></code>: generates random, unique <code class="hljs"><span class="hljs-keyword">long</span></code> values</li>
 </ul>
 <p>If you are using the DSL to configure the repository factory and do not mention which of the above to use, and you don&#39;t
 explicitly say that you do not want key generation to be turned off, one of the above will be chosen for you automatically
