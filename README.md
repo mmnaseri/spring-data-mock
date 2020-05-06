@@ -10,7 +10,6 @@
 
 -----------
 
-
 This is a fairly flexible, versatile framework for mocking Spring Data repositories. Spring Data provides a very good
 foundation for separating the concerns of managing a database and its subsequently resulting queries from those of the
 business layer.
