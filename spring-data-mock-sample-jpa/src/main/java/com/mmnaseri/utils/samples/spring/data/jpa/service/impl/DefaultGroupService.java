@@ -9,6 +9,7 @@ import com.mmnaseri.utils.samples.spring.data.jpa.service.GroupService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;
 
@@ -43,7 +44,7 @@ public class DefaultGroupService implements GroupService {
 
   @Override
   public void join(Group group, User user) {
-    if (membershipRepository.findByUserAndGroup(user, group) != null) {
+    if (membershipRepository.findByUserAndGroup(user, group).isPresent()) {
       return;
     }
     final Membership membership = new Membership();
@@ -54,11 +55,11 @@ public class DefaultGroupService implements GroupService {
 
   @Override
   public void leave(Group group, User user) {
-    final Membership membership = membershipRepository.findByUserAndGroup(user, group);
-    if (membership == null) {
+    final Optional<Membership> membership = membershipRepository.findByUserAndGroup(user, group);
+    if (!membership.isPresent()) {
       return;
     }
-    membershipRepository.delete(membership);
+    membershipRepository.delete(membership.get());
   }
 
   @Override
@@ -83,10 +84,11 @@ public class DefaultGroupService implements GroupService {
 
   @Override
   public void deactivate(final Group group, final User user) {
-    Membership membership = membershipRepository.findByUserAndGroup(user, group);
-    if (membership == null) {
+    Optional<Membership> optional = membershipRepository.findByUserAndGroup(user, group);
+    if (!optional.isPresent()) {
       return;
     }
+    Membership membership = optional.get();
     membership.setActive(false);
     membershipRepository.save(membership);
   }

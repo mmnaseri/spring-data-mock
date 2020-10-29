@@ -2,16 +2,13 @@ package com.mmnaseri.utils.spring.data.proxy.impl.adapters;
 
 import com.mmnaseri.utils.spring.data.domain.Invocation;
 import com.mmnaseri.utils.spring.data.error.ResultAdapterFailureException;
-import com.mmnaseri.utils.spring.data.tools.PropertyUtils;
 
 import java.util.Iterator;
 import java.util.Optional;
-import java.util.concurrent.Future;
 
 /**
  * This adapter accepts all invocations wherein the original value is an {@link Iterable} object and
- * the requested method type is a simple value. Simple types are types that are not a subtype of
- * {@link Iterable}, {@link Iterator}, {@link Future}, or {@link Optional}.
+ * the requested method type is an {@link Optional} value.
  *
  * <p>While adapting, the adapter will also check that the iterable yields only one item and that it
  * is of the same type or of a child type of the type requested by the invoked method.
@@ -19,28 +16,25 @@ import java.util.concurrent.Future;
  * <p>This adapter runs at the priority {@literal -400}.
  *
  * @author Milad Naseri (m.m.naseri@gmail.com)
- * @since 1.0 (9/28/15)
+ * @since 2.1.1 (10/29/2020)
  */
-public class SimpleIterableResultAdapter extends AbstractIterableResultAdapter<Object> {
+public class OptionalResultAdapter extends AbstractIterableResultAdapter<Object> {
 
-  public SimpleIterableResultAdapter() {
+  public OptionalResultAdapter() {
     super(-400);
   }
 
   @Override
-  public boolean accepts(Invocation invocation, Object originalValue) {
+  public boolean accepts(final Invocation invocation, final Object originalValue) {
     if (!(originalValue instanceof Iterable)) {
       return false;
     }
     final Class<?> returnType = invocation.getMethod().getReturnType();
-    return !Iterable.class.isAssignableFrom(returnType)
-        && !Iterator.class.isAssignableFrom(returnType)
-        && !Future.class.isAssignableFrom(returnType)
-        && !Optional.class.isAssignableFrom(returnType);
+    return returnType.isAssignableFrom(Optional.class);
   }
 
   @Override
-  protected Object doAdapt(Invocation invocation, Iterable iterable) {
+  protected Object doAdapt(final Invocation invocation, final Iterable iterable) {
     final Iterator iterator = iterable.iterator();
     if (iterator.hasNext()) {
       final Object value = iterator.next();
@@ -50,15 +44,9 @@ public class SimpleIterableResultAdapter extends AbstractIterableResultAdapter<O
             invocation.getMethod().getReturnType(),
             "Expected only one item but found many");
       }
-      if (!PropertyUtils.getTypeOf(invocation.getMethod().getReturnType()).isInstance(value)) {
-        throw new ResultAdapterFailureException(
-            value,
-            invocation.getMethod().getReturnType(),
-            "Expected value to be of the indicated type");
-      }
-      return value;
+      return Optional.of(value);
     } else {
-      return null;
+      return Optional.empty();
     }
   }
 }

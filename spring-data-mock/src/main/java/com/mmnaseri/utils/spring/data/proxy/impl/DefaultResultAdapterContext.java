@@ -17,6 +17,7 @@ import com.mmnaseri.utils.spring.data.proxy.impl.adapters.NullToIteratorResultAd
 import com.mmnaseri.utils.spring.data.proxy.impl.adapters.NullToListenableFutureResultAdapter;
 import com.mmnaseri.utils.spring.data.proxy.impl.adapters.NullToSliceResultAdapter;
 import com.mmnaseri.utils.spring.data.proxy.impl.adapters.NumberIterableResultAdapter;
+import com.mmnaseri.utils.spring.data.proxy.impl.adapters.OptionalResultAdapter;
 import com.mmnaseri.utils.spring.data.proxy.impl.adapters.PageIterableResultAdapter;
 import com.mmnaseri.utils.spring.data.proxy.impl.adapters.SameTypeResultAdapter;
 import com.mmnaseri.utils.spring.data.proxy.impl.adapters.SimpleIterableResultAdapter;
@@ -66,6 +67,7 @@ public class DefaultResultAdapterContext implements ResultAdapterContext {
       adapters.add(new NullToListenableFutureResultAdapter());
       adapters.add(new NumberIterableResultAdapter());
       adapters.add(new SimpleIterableResultAdapter());
+      adapters.add(new OptionalResultAdapter());
       adapters.add(new IteratorIterableResultAdapter());
       adapters.add(new CollectionIterableResultAdapter());
       adapters.add(new SliceIterableResultAdapter());
