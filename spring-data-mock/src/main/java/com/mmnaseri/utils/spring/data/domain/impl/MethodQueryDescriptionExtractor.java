@@ -149,6 +149,7 @@ public class MethodQueryDescriptionExtractor implements QueryDescriptionExtracto
         //if the method name simply was the function name, no metadata can be extracted
         if (!reader.hasMore()) {
             pageExtractor = null;
+            sortExtractor = null;
         } else {
             reader.expect("By");
             if (!reader.hasMore()) {
