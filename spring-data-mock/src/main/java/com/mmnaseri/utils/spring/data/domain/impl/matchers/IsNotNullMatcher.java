@@ -8,9 +8,8 @@ package com.mmnaseri.utils.spring.data.domain.impl.matchers;
  */
 public class IsNotNullMatcher extends AbstractUnaryMatcher {
 
-    @Override
-    protected boolean matches(Object value) {
-        return value != null;
-    }
-
+  @Override
+  protected boolean matches(Object value) {
+    return value != null;
+  }
 }

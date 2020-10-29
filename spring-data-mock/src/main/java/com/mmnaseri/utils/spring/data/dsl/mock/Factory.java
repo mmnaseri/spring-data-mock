@@ -11,12 +11,11 @@ import com.mmnaseri.utils.spring.data.proxy.RepositoryFactory;
 @SuppressWarnings({"WeakerAccess", "unused"})
 public interface Factory {
 
-    /**
-     * Tells the builder to use the specified factory
-     *
-     * @param factory the factory
-     * @return the rest of the configuration
-     */
-    KeyGeneration useFactory(RepositoryFactory factory);
-
+  /**
+   * Tells the builder to use the specified factory
+   *
+   * @param factory the factory
+   * @return the rest of the configuration
+   */
+  KeyGeneration useFactory(RepositoryFactory factory);
 }

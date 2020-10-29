@@ -12,8 +12,8 @@ import com.mmnaseri.utils.spring.data.store.DataStore;
 @SuppressWarnings("WeakerAccess")
 public class BeforeInsertDataStoreEvent extends AbstractEntityDataStoreEvent {
 
-    public BeforeInsertDataStoreEvent(RepositoryMetadata repositoryMetadata, DataStore<?, ?> dataStore, Object entity) {
-        super(repositoryMetadata, dataStore, entity);
-    }
-
+  public BeforeInsertDataStoreEvent(
+      RepositoryMetadata repositoryMetadata, DataStore<?, ?> dataStore, Object entity) {
+    super(repositoryMetadata, dataStore, entity);
+  }
 }

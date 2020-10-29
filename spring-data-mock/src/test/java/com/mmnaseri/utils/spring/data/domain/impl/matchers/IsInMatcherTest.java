@@ -19,37 +19,33 @@ import static org.testng.Assert.assertTrue;
  */
 public class IsInMatcherTest {
 
-    @Test
-    public void testWhenItemIsNull() {
-        assertThat(new IsInMatcher().matches(null, Collections.emptyList()), is(false));
-    }
+  @Test
+  public void testWhenItemIsNull() {
+    assertThat(new IsInMatcher().matches(null, Collections.emptyList()), is(false));
+  }
 
-    @Test
-    public void testWhenItemIsInCollection() {
-        assertThat(new IsInMatcher().matches(1, Arrays.asList(1, 2, 3, 4)), is(true));
-    }
+  @Test
+  public void testWhenItemIsInCollection() {
+    assertThat(new IsInMatcher().matches(1, Arrays.asList(1, 2, 3, 4)), is(true));
+  }
 
-    @Test
-    public void testWhenItemIsNotInCollection() {
-        assertThat(new IsInMatcher().matches(1, Arrays.asList(3, 4, 5, 6)), is(false));
-    }
+  @Test
+  public void testWhenItemIsNotInCollection() {
+    assertThat(new IsInMatcher().matches(1, Arrays.asList(3, 4, 5, 6)), is(false));
+  }
 
-    @DataProvider
-    public Object[][] allowedTypes() {
-        return new Object[][] {
-                { Collection.class },
-                { Iterable.class },
-                { Iterator.class }
-        };
-    }
+  @DataProvider
+  public Object[][] allowedTypes() {
+    return new Object[][] {{Collection.class}, {Iterable.class}, {Iterator.class}};
+  }
 
-    @Test(dataProvider = "allowedTypes")
-    public void testAllowedParameterType(Class<?> parameterType) {
-        assertTrue(new IsInMatcher().isApplicableTo(String.class, parameterType));
-    }
+  @Test(dataProvider = "allowedTypes")
+  public void testAllowedParameterType(Class<?> parameterType) {
+    assertTrue(new IsInMatcher().isApplicableTo(String.class, parameterType));
+  }
 
-    @Test
-    public void testInvalidParameterType() {
-        assertFalse(new IsInMatcher().isApplicableTo(String.class, String.class ));
-    }
+  @Test
+  public void testInvalidParameterType() {
+    assertFalse(new IsInMatcher().isApplicableTo(String.class, String.class));
+  }
 }

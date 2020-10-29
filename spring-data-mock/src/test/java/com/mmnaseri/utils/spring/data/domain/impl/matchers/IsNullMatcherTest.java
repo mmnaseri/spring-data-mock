@@ -11,14 +11,13 @@ import static org.hamcrest.Matchers.is;
  */
 public class IsNullMatcherTest {
 
-    @Test
-    public void testSubjectIsNull() {
-        assertThat(new IsNullMatcher().matches(null), is(true));
-    }
+  @Test
+  public void testSubjectIsNull() {
+    assertThat(new IsNullMatcher().matches(null), is(true));
+  }
 
-    @Test
-    public void testSubjectIsNotNull() {
-        assertThat(new IsNullMatcher().matches(new Object()), is(false));
-    }
-
+  @Test
+  public void testSubjectIsNotNull() {
+    assertThat(new IsNullMatcher().matches(new Object()), is(false));
+  }
 }

@@ -13,27 +13,24 @@ import java.util.Set;
 @SuppressWarnings("unused")
 public interface DataFunctionRegistry {
 
-    /**
-     * Registers a new data function
-     *
-     * @param name     the name under which the function will be known
-     * @param function the actual function
-     */
-    void register(String name, DataFunction<?> function);
+  /**
+   * Registers a new data function
+   *
+   * @param name the name under which the function will be known
+   * @param function the actual function
+   */
+  void register(String name, DataFunction<?> function);
 
-    /**
-     * Finds the function associated with the given name. If a function with that name does not exist, throws an
-     * exception.
-     *
-     * @param name the name of the function.
-     * @return the data function
-     * @throws FunctionNotFoundException If no function for the provided name can be found.
-     */
-    DataFunction<?> getFunction(String name);
+  /**
+   * Finds the function associated with the given name. If a function with that name does not exist,
+   * throws an exception.
+   *
+   * @param name the name of the function.
+   * @return the data function
+   * @throws FunctionNotFoundException If no function for the provided name can be found.
+   */
+  DataFunction<?> getFunction(String name);
 
-    /**
-     * @return the set of all registered functions
-     */
-    Set<String> getFunctions();
-
+  /** @return the set of all registered functions */
+  Set<String> getFunctions();
 }

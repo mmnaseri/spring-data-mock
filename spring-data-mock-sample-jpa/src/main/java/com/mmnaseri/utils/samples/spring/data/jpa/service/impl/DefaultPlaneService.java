@@ -10,33 +10,32 @@ import com.mmnaseri.utils.samples.spring.data.jpa.service.PlaneService;
  */
 public class DefaultPlaneService implements PlaneService {
 
-    private final PlaneRepository repository;
+  private final PlaneRepository repository;
 
-    public DefaultPlaneService(PlaneRepository repository) {
-        this.repository = repository;
+  public DefaultPlaneService(PlaneRepository repository) {
+    this.repository = repository;
+  }
+
+  @Override
+  public Long create(String model, String serial) {
+    final Plane plane = new Plane();
+    plane.setModel(model);
+    plane.setCapacity(100);
+    plane.setSerial(serial);
+    return repository.save(plane).getId();
+  }
+
+  @Override
+  public String lookup(Long id) {
+    return repository.findById(id).map(Plane::getModel).orElse(null);
+  }
+
+  @Override
+  public String lookup(String serial) {
+    final Plane plane = repository.lookupBySerial(serial);
+    if (plane == null) {
+      return null;
     }
-
-    @Override
-    public Long create(String model, String serial) {
-        final Plane plane = new Plane();
-        plane.setModel(model);
-        plane.setCapacity(100);
-        plane.setSerial(serial);
-        return repository.save(plane).getId();
-    }
-
-    @Override
-    public String lookup(Long id) {
-        return repository.findById(id).map(Plane::getModel).orElse(null);
-    }
-
-    @Override
-    public String lookup(String serial) {
-        final Plane plane = repository.lookupBySerial(serial);
-        if (plane == null) {
-            return null;
-        }
-        return plane.getModel();
-    }
-
+    return plane.getModel();
+  }
 }

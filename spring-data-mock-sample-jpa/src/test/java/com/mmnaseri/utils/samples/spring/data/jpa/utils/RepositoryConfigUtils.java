@@ -15,17 +15,18 @@ import static com.mmnaseri.utils.spring.data.dsl.factory.RepositoryFactoryBuilde
  */
 public final class RepositoryConfigUtils {
 
-    private static final RepositoryFactoryConfiguration CONFIGURATION = builder()
-            .honoringImplementation(SerialAwareEntityRepository.class, SerialAwareEntityRepositorySupport.class)
-            .withDefaultKeyGenerator(new ConfigurableSequentialLongKeyGenerator())
-            .configure();
+  private static final RepositoryFactoryConfiguration CONFIGURATION =
+      builder()
+          .honoringImplementation(
+              SerialAwareEntityRepository.class, SerialAwareEntityRepositorySupport.class)
+          .withDefaultKeyGenerator(new ConfigurableSequentialLongKeyGenerator())
+          .configure();
 
-    private RepositoryConfigUtils() {
-        throw new UnsupportedOperationException();
-    }
+  private RepositoryConfigUtils() {
+    throw new UnsupportedOperationException();
+  }
 
-    public static RepositoryFactoryConfiguration getConfiguration() {
-        return CONFIGURATION;
-    }
-
+  public static RepositoryFactoryConfiguration getConfiguration() {
+    return CONFIGURATION;
+  }
 }

@@ -7,8 +7,7 @@ import java.util.Collection;
 @SuppressWarnings("unused")
 public interface StoreService {
 
-    Store create(String name);
+  Store create(String name);
 
-    Collection<Store> create(String... names);
-
+  Collection<Store> create(String... names);
 }

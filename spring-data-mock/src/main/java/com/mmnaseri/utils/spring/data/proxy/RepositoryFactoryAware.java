@@ -8,11 +8,10 @@ package com.mmnaseri.utils.spring.data.proxy;
  */
 public interface RepositoryFactoryAware extends DependencyAware {
 
-    /**
-     * Used to inject the repository factory into the implementing class
-     *
-     * @param factory the factory
-     */
-    void setRepositoryFactory(RepositoryFactory factory);
-
+  /**
+   * Used to inject the repository factory into the implementing class
+   *
+   * @param factory the factory
+   */
+  void setRepositoryFactory(RepositoryFactory factory);
 }

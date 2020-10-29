@@ -6,8 +6,10 @@ package com.mmnaseri.utils.spring.data.error;
  */
 public class MultipleIdPropertiesException extends EntityDefinitionException {
 
-    public MultipleIdPropertiesException(Class<?> entityType) {
-        super("There are multiple properties in " + entityType + " that are annotated as the ID property");
-    }
-
+  public MultipleIdPropertiesException(Class<?> entityType) {
+    super(
+        "There are multiple properties in "
+            + entityType
+            + " that are annotated as the ID property");
+  }
 }

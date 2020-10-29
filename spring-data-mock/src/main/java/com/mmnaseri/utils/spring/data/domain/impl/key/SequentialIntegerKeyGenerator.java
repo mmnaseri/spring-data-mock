@@ -12,11 +12,10 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class SequentialIntegerKeyGenerator implements KeyGenerator<Integer> {
 
-    private final AtomicInteger seed = new AtomicInteger(1);
+  private final AtomicInteger seed = new AtomicInteger(1);
 
-    @Override
-    public Integer generate() {
-        return seed.getAndIncrement();
-    }
-
+  @Override
+  public Integer generate() {
+    return seed.getAndIncrement();
+  }
 }

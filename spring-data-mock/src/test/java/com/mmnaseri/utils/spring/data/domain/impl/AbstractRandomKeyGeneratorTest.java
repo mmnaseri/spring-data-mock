@@ -17,15 +17,14 @@ import static org.hamcrest.Matchers.not;
  */
 public class AbstractRandomKeyGeneratorTest {
 
-    @Test
-    public void testThatGeneratorProtectsUsFromDuplicates() {
-        final Set<Integer> generatedKeys = new HashSet<>();
-        final KeyGenerator<Integer> generator = new DuplicatingKeyGenerator();
-        for (int i = 0; i < 1000; i++) {
-            final Integer key = generator.generate();
-            assertThat(generatedKeys, not(hasItem(key)));
-            generatedKeys.add(key);
-        }
+  @Test
+  public void testThatGeneratorProtectsUsFromDuplicates() {
+    final Set<Integer> generatedKeys = new HashSet<>();
+    final KeyGenerator<Integer> generator = new DuplicatingKeyGenerator();
+    for (int i = 0; i < 1000; i++) {
+      final Integer key = generator.generate();
+      assertThat(generatedKeys, not(hasItem(key)));
+      generatedKeys.add(key);
     }
-
+  }
 }

@@ -11,14 +11,13 @@ import com.mmnaseri.utils.spring.data.proxy.RepositoryConfiguration;
  */
 public interface DataStoreOperation<R, K, E> {
 
-    /**
-     * Called to trigger the actual operation
-     *
-     * @param store         the data store on which this operation is taking place
-     * @param configuration the configuration for the data store
-     * @param invocation    the invocation that triggered this operation
-     * @return the result of the operation
-     */
-    R execute(DataStore<K, E> store, RepositoryConfiguration configuration, Invocation invocation);
-
+  /**
+   * Called to trigger the actual operation
+   *
+   * @param store the data store on which this operation is taking place
+   * @param configuration the configuration for the data store
+   * @param invocation the invocation that triggered this operation
+   * @return the result of the operation
+   */
+  R execute(DataStore<K, E> store, RepositoryConfiguration configuration, Invocation invocation);
 }

@@ -6,9 +6,12 @@ package com.mmnaseri.utils.spring.data.error;
  */
 public class PrimitiveIdTypeException extends EntityDefinitionException {
 
-    public PrimitiveIdTypeException(Class<?> entityType, String idProperty) {
-        super("The ID property (" + idProperty + ") found on entity <" + entityType
-                      + "> is of a primitive type. Primitive types are not supported by this framework.");
-    }
-
+  public PrimitiveIdTypeException(Class<?> entityType, String idProperty) {
+    super(
+        "The ID property ("
+            + idProperty
+            + ") found on entity <"
+            + entityType
+            + "> is of a primitive type. Primitive types are not supported by this framework.");
+  }
 }

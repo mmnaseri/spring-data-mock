@@ -6,6 +6,5 @@ package com.mmnaseri.utils.spring.data.domain;
  */
 public interface RepositoryMetadataResolver {
 
-    RepositoryMetadata resolve(Class<?> repositoryInterface);
-
+  RepositoryMetadata resolve(Class<?> repositoryInterface);
 }

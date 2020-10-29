@@ -11,12 +11,11 @@ import com.mmnaseri.utils.spring.data.proxy.NonDataOperationHandler;
 @SuppressWarnings("WeakerAccess")
 public interface OperationHandlersAnd extends EventListener {
 
-    /**
-     * Registers an extra operation handler
-     *
-     * @param handler the handler
-     * @return the rest of the configuration
-     */
-    OperationHandlersAnd and(NonDataOperationHandler handler);
-
+  /**
+   * Registers an extra operation handler
+   *
+   * @param handler the handler
+   * @return the rest of the configuration
+   */
+  OperationHandlersAnd and(NonDataOperationHandler handler);
 }

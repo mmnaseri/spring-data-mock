@@ -11,15 +11,15 @@ import java.util.List;
  */
 public interface GroupService {
 
-    Group createGroup(String name);
+  Group createGroup(String name);
 
-    void deleteGroup(Group group);
+  void deleteGroup(Group group);
 
-    void join(Group group, User user);
+  void join(Group group, User user);
 
-    void leave(Group group, User user);
+  void leave(Group group, User user);
 
-    List<User> members(Group group);
+  List<User> members(Group group);
 
-    List<Group> groups(User user);
+  List<Group> groups(User user);
 }

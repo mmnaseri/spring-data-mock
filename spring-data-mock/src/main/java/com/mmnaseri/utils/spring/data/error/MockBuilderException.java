@@ -6,8 +6,7 @@ package com.mmnaseri.utils.spring.data.error;
  */
 public class MockBuilderException extends RepositoryMockException {
 
-    public MockBuilderException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
+  public MockBuilderException(String message, Throwable cause) {
+    super(message, cause);
+  }
 }

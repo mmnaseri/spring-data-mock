@@ -9,13 +9,12 @@ package com.mmnaseri.utils.spring.data.dsl.factory;
 @SuppressWarnings("WeakerAccess")
 public interface MappingContextAnd extends OperationHandlers {
 
-    /**
-     * Registers an additional mapping
-     *
-     * @param superType      the super type for the interface
-     * @param implementation the concrete class providing mapped method implementations
-     * @return the rest of the configuration
-     */
-    MappingContextAnd and(Class<?> superType, Class<?> implementation);
-
+  /**
+   * Registers an additional mapping
+   *
+   * @param superType the super type for the interface
+   * @param implementation the concrete class providing mapped method implementations
+   * @return the rest of the configuration
+   */
+  MappingContextAnd and(Class<?> superType, Class<?> implementation);
 }

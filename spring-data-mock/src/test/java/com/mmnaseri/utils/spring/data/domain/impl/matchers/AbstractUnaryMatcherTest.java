@@ -14,22 +14,27 @@ import static org.testng.Assert.assertFalse;
  */
 public class AbstractUnaryMatcherTest {
 
-    @Test(expectedExceptions = InvalidArgumentException.class, expectedExceptionsMessageRegExp = ".*x.y.z.*")
-    public void testWhenHasParameters() {
-        final NotMatchingUnaryMatcher matcher = new NotMatchingUnaryMatcher();
-        matcher.matches(new ImmutableParameter("x.y.z", null, null, new ImmutableOperator("sample operator", 0, null)),
-                        new Object(), new Object());
-    }
+  @Test(
+      expectedExceptions = InvalidArgumentException.class,
+      expectedExceptionsMessageRegExp = ".*x.y.z.*")
+  public void testWhenHasParameters() {
+    final NotMatchingUnaryMatcher matcher = new NotMatchingUnaryMatcher();
+    matcher.matches(
+        new ImmutableParameter(
+            "x.y.z", null, null, new ImmutableOperator("sample operator", 0, null)),
+        new Object(),
+        new Object());
+  }
 
-    @Test
-    public void testWhenHasNoParameters() {
-        final NotMatchingUnaryMatcher matcher = new NotMatchingUnaryMatcher();
-        matcher.matches(new ImmutableParameter("x.y.z", null, null, null), new Object());
-    }
+  @Test
+  public void testWhenHasNoParameters() {
+    final NotMatchingUnaryMatcher matcher = new NotMatchingUnaryMatcher();
+    matcher.matches(new ImmutableParameter("x.y.z", null, null, null), new Object());
+  }
 
-    @Test
-    public void shouldNotApplyToNonEmptyListOfParameters() {
-        final NotMatchingUnaryMatcher matcher = new NotMatchingUnaryMatcher();
-        assertFalse(matcher.isApplicableTo(String.class, String.class));
-    }
+  @Test
+  public void shouldNotApplyToNonEmptyListOfParameters() {
+    final NotMatchingUnaryMatcher matcher = new NotMatchingUnaryMatcher();
+    assertFalse(matcher.isApplicableTo(String.class, String.class));
+  }
 }

@@ -6,11 +6,11 @@ package com.mmnaseri.utils.spring.data.error;
  */
 public class DataFunctionException extends DataOperationException {
 
-    public DataFunctionException(String message) {
-        super(message);
-    }
+  public DataFunctionException(String message) {
+    super(message);
+  }
 
-    public DataFunctionException(String message, Throwable cause) {
-        super(message, cause);
-    }
+  public DataFunctionException(String message, Throwable cause) {
+    super(message, cause);
+  }
 }

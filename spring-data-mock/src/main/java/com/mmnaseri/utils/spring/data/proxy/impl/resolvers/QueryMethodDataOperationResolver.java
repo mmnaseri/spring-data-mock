@@ -17,10 +17,12 @@ import org.springframework.data.annotation.QueryAnnotation;
 import java.lang.reflect.Method;
 
 /**
- * <p>This class will resolve methods to their query method equivalent by parsing their names and parameters.</p>
+ * This class will resolve methods to their query method equivalent by parsing their names and
+ * parameters.
  *
- * <p>Even though, technically speaking, a class annotated with {@link QueryAnnotation} <em>is</em> a
- * query method, this class will ignore such methods since it doesn't know how to respond to native queries.</p>
+ * <p>Even though, technically speaking, a class annotated with {@link QueryAnnotation} <em>is</em>
+ * a query method, this class will ignore such methods since it doesn't know how to respond to
+ * native queries.
  *
  * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/29/15)
@@ -28,32 +30,34 @@ import java.lang.reflect.Method;
 @SuppressWarnings("WeakerAccess")
 public class QueryMethodDataOperationResolver implements DataOperationResolver {
 
-    private static final Log log = LogFactory.getLog(QueryMethodDataOperationResolver.class);
-    private final MethodQueryDescriptionExtractor descriptionExtractor;
-    private final RepositoryMetadata repositoryMetadata;
-    private final DataFunctionRegistry functionRegistry;
-    private final RepositoryFactoryConfiguration configuration;
+  private static final Log log = LogFactory.getLog(QueryMethodDataOperationResolver.class);
+  private final MethodQueryDescriptionExtractor descriptionExtractor;
+  private final RepositoryMetadata repositoryMetadata;
+  private final DataFunctionRegistry functionRegistry;
+  private final RepositoryFactoryConfiguration configuration;
 
-    public QueryMethodDataOperationResolver(MethodQueryDescriptionExtractor descriptionExtractor,
-                                            RepositoryMetadata repositoryMetadata,
-                                            DataFunctionRegistry functionRegistry,
-                                            RepositoryFactoryConfiguration configuration) {
-        this.descriptionExtractor = descriptionExtractor;
-        this.repositoryMetadata = repositoryMetadata;
-        this.functionRegistry = functionRegistry;
-        this.configuration = configuration;
+  public QueryMethodDataOperationResolver(
+      MethodQueryDescriptionExtractor descriptionExtractor,
+      RepositoryMetadata repositoryMetadata,
+      DataFunctionRegistry functionRegistry,
+      RepositoryFactoryConfiguration configuration) {
+    this.descriptionExtractor = descriptionExtractor;
+    this.repositoryMetadata = repositoryMetadata;
+    this.functionRegistry = functionRegistry;
+    this.configuration = configuration;
+  }
+
+  @Override
+  public DataStoreOperation<?, ?, ?> resolve(Method method) {
+    if (AnnotationUtils.findAnnotation(method, QueryAnnotation.class) != null) {
+      log.info("Found a @Query annotation on the method " + method);
+      // we don't know how to handle vendor-specific query methods
+      return null;
     }
-
-    @Override
-    public DataStoreOperation<?, ?, ?> resolve(Method method) {
-        if (AnnotationUtils.findAnnotation(method, QueryAnnotation.class) != null) {
-            log.info("Found a @Query annotation on the method " + method);
-            //we don't know how to handle vendor-specific query methods
-            return null;
-        }
-        log.info("Extracting query description from the method by parsing the method");
-        final QueryDescriptor descriptor = descriptionExtractor.extract(repositoryMetadata, configuration, method);
-        return new DescribedDataStoreOperation<>(new SelectDataStoreOperation<>(descriptor), functionRegistry);
-    }
-
+    log.info("Extracting query description from the method by parsing the method");
+    final QueryDescriptor descriptor =
+        descriptionExtractor.extract(repositoryMetadata, configuration, method);
+    return new DescribedDataStoreOperation<>(
+        new SelectDataStoreOperation<>(descriptor), functionRegistry);
+  }
 }

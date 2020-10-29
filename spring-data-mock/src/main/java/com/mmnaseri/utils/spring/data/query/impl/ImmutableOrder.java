@@ -13,38 +13,37 @@ import com.mmnaseri.utils.spring.data.query.SortDirection;
 @SuppressWarnings("WeakerAccess")
 public class ImmutableOrder implements Order {
 
-    private final SortDirection direction;
-    private final String property;
-    private final NullHandling nullHandling;
+  private final SortDirection direction;
+  private final String property;
+  private final NullHandling nullHandling;
 
-    public ImmutableOrder(Order order) {
-        this(order.getDirection(), order.getProperty(), order.getNullHandling());
-    }
+  public ImmutableOrder(Order order) {
+    this(order.getDirection(), order.getProperty(), order.getNullHandling());
+  }
 
-    public ImmutableOrder(SortDirection direction, String property, NullHandling nullHandling) {
-        this.direction = direction;
-        this.property = property;
-        this.nullHandling = nullHandling;
-    }
+  public ImmutableOrder(SortDirection direction, String property, NullHandling nullHandling) {
+    this.direction = direction;
+    this.property = property;
+    this.nullHandling = nullHandling;
+  }
 
-    @Override
-    public SortDirection getDirection() {
-        return direction;
-    }
+  @Override
+  public SortDirection getDirection() {
+    return direction;
+  }
 
-    @Override
-    public String getProperty() {
-        return property;
-    }
+  @Override
+  public String getProperty() {
+    return property;
+  }
 
-    @Override
-    public NullHandling getNullHandling() {
-        return nullHandling;
-    }
+  @Override
+  public NullHandling getNullHandling() {
+    return nullHandling;
+  }
 
-    @Override
-    public String toString() {
-        return property + " " + direction;
-    }
-
+  @Override
+  public String toString() {
+    return property + " " + direction;
+  }
 }

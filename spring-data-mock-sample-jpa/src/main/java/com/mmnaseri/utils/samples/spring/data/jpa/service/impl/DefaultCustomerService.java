@@ -18,46 +18,46 @@ import static org.springframework.data.domain.ExampleMatcher.GenericPropertyMatc
  */
 public class DefaultCustomerService implements CustomerService {
 
-    private final CustomerRepository repository;
+  private final CustomerRepository repository;
 
-    public DefaultCustomerService(CustomerRepository repository) {
-        this.repository = repository;
-    }
+  public DefaultCustomerService(CustomerRepository repository) {
+    this.repository = repository;
+  }
 
-    public long register(String firstName, String lastName, Date birthday) {
-        final Customer customer = new Customer();
-        customer.setFirstName(firstName);
-        customer.setLastName(lastName);
-        customer.setBirthday(birthday);
-        return repository.save(customer).getId();
-    }
+  public long register(String firstName, String lastName, Date birthday) {
+    final Customer customer = new Customer();
+    customer.setFirstName(firstName);
+    customer.setLastName(lastName);
+    customer.setBirthday(birthday);
+    return repository.save(customer).getId();
+  }
 
-    public Customer findCustomer(long id) {
-        return repository.findById(id).orElse(null);
-    }
+  public Customer findCustomer(long id) {
+    return repository.findById(id).orElse(null);
+  }
 
-    public List<Customer> findCustomersByBirthday(Date from, Date to) {
-        return repository.findByBirthdayBetween(from, to);
-    }
+  public List<Customer> findCustomersByBirthday(Date from, Date to) {
+    return repository.findByBirthdayBetween(from, to);
+  }
 
-    public List<Customer> findCustomersByName(String firstName, String lastName) {
-        final Customer probe = new Customer();
-        probe.setFirstName(firstName);
-        probe.setLastName(lastName);
-        final ExampleMatcher matcher = ExampleMatcher.matching()
-                .withMatcher("firstName", ignoreCase())
-                .withMatcher("lastName", ignoreCase());
-        final Example<Customer> example = Example.of(probe, matcher);
-        return repository.findByExample(example);
-    }
+  public List<Customer> findCustomersByName(String firstName, String lastName) {
+    final Customer probe = new Customer();
+    probe.setFirstName(firstName);
+    probe.setLastName(lastName);
+    final ExampleMatcher matcher =
+        ExampleMatcher.matching()
+            .withMatcher("firstName", ignoreCase())
+            .withMatcher("lastName", ignoreCase());
+    final Example<Customer> example = Example.of(probe, matcher);
+    return repository.findByExample(example);
+  }
 
-    public List<Customer> findCustomersByFirstNames(Collection<String> firstNames) {
-        return repository.findByFirstNameIn(firstNames);
-    }
+  public List<Customer> findCustomersByFirstNames(Collection<String> firstNames) {
+    return repository.findByFirstNameIn(firstNames);
+  }
 
-    @Override
-    public List<Customer> findByFirstNamePart(final String part) {
-        return repository.findByFirstNameIgnoreCaseContaining(part);
-    }
-
+  @Override
+  public List<Customer> findByFirstNamePart(final String part) {
+    return repository.findByFirstNameIgnoreCaseContaining(part);
+  }
 }

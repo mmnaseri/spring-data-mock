@@ -17,41 +17,41 @@ import java.util.Set;
  */
 public class ImmutableParameter implements Parameter {
 
-    private final String path;
-    private final Set<Modifier> modifiers;
-    private final int[] indices;
-    private final Operator operator;
+  private final String path;
+  private final Set<Modifier> modifiers;
+  private final int[] indices;
+  private final Operator operator;
 
-    public ImmutableParameter(String path, Set<Modifier> modifiers, int[] indices, Operator operator) {
-        this.path = path;
-        this.operator = operator;
-        this.modifiers = modifiers == null ? Collections.emptySet() : new HashSet<>(modifiers);
-        this.indices = indices;
-    }
+  public ImmutableParameter(
+      String path, Set<Modifier> modifiers, int[] indices, Operator operator) {
+    this.path = path;
+    this.operator = operator;
+    this.modifiers = modifiers == null ? Collections.emptySet() : new HashSet<>(modifiers);
+    this.indices = indices;
+  }
 
-    @Override
-    public String getPath() {
-        return path;
-    }
+  @Override
+  public String getPath() {
+    return path;
+  }
 
-    @Override
-    public Set<Modifier> getModifiers() {
-        return Collections.unmodifiableSet(modifiers);
-    }
+  @Override
+  public Set<Modifier> getModifiers() {
+    return Collections.unmodifiableSet(modifiers);
+  }
 
-    @Override
-    public int[] getIndices() {
-        return indices;
-    }
+  @Override
+  public int[] getIndices() {
+    return indices;
+  }
 
-    @Override
-    public Operator getOperator() {
-        return operator;
-    }
+  @Override
+  public Operator getOperator() {
+    return operator;
+  }
 
-    @Override
-    public String toString() {
-        return "(" + path + "," + operator + "," + Arrays.toString(indices) + "," + modifiers + ")";
-    }
-
+  @Override
+  public String toString() {
+    return "(" + path + "," + operator + "," + Arrays.toString(indices) + "," + modifiers + ")";
+  }
 }

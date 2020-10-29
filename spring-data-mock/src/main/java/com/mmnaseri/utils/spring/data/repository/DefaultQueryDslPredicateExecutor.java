@@ -15,52 +15,63 @@ import org.springframework.data.domain.Sort;
  * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/28/16)
  */
-public class DefaultQueryDslPredicateExecutor extends PagingAndSortingSupport implements DataStoreAware {
+public class DefaultQueryDslPredicateExecutor extends PagingAndSortingSupport
+    implements DataStoreAware {
 
-    private DataStore dataStore;
-    private Object alias;
+  private DataStore dataStore;
+  private Object alias;
 
-    public Object findOne(Predicate predicate) {
-        return ((CollQuery) CollQueryFactory.from(alias, dataStore.retrieveAll()).where(predicate)).fetchOne();
-    }
+  public Object findOne(Predicate predicate) {
+    return ((CollQuery) CollQueryFactory.from(alias, dataStore.retrieveAll()).where(predicate))
+        .fetchOne();
+  }
 
-    public Iterable findAll(Predicate predicate) {
-        return ((CollQuery) CollQueryFactory.from(alias, dataStore.retrieveAll()).where(predicate)).fetch();
-    }
+  public Iterable findAll(Predicate predicate) {
+    return ((CollQuery) CollQueryFactory.from(alias, dataStore.retrieveAll()).where(predicate))
+        .fetch();
+  }
 
-    public Iterable findAll(Predicate predicate, Sort sort) {
-        return PagingAndSortingUtils.sort(((CollQuery) CollQueryFactory.from(alias, dataStore.retrieveAll()).where(
-                predicate)).fetch(), sort);
-    }
+  public Iterable findAll(Predicate predicate, Sort sort) {
+    return PagingAndSortingUtils.sort(
+        ((CollQuery) CollQueryFactory.from(alias, dataStore.retrieveAll()).where(predicate))
+            .fetch(),
+        sort);
+  }
 
-    public Page findAll(Predicate predicate, Pageable pageable) {
-        return page(((CollQuery) CollQueryFactory.from(alias, dataStore.retrieveAll()).where(predicate)).fetch(),
-                    pageable);
-    }
+  public Page findAll(Predicate predicate, Pageable pageable) {
+    return page(
+        ((CollQuery) CollQueryFactory.from(alias, dataStore.retrieveAll()).where(predicate))
+            .fetch(),
+        pageable);
+  }
 
-    public long count(Predicate predicate) {
-        return ((CollQuery) CollQueryFactory.from(alias, dataStore.retrieveAll()).where(predicate)).fetchCount();
-    }
+  public long count(Predicate predicate) {
+    return ((CollQuery) CollQueryFactory.from(alias, dataStore.retrieveAll()).where(predicate))
+        .fetchCount();
+  }
 
-    public boolean exists(Predicate predicate) {
-        return ((CollQuery) CollQueryFactory.from(alias, dataStore.retrieveAll()).where(predicate)).fetchCount() > 0;
-    }
+  public boolean exists(Predicate predicate) {
+    return ((CollQuery) CollQueryFactory.from(alias, dataStore.retrieveAll()).where(predicate))
+            .fetchCount()
+        > 0;
+  }
 
-    public Iterable findAll(OrderSpecifier... orders) {
-        //noinspection unchecked
-        return ((CollQuery) CollQueryFactory.from(alias, dataStore.retrieveAll()).orderBy(orders)).fetch();
-    }
+  public Iterable findAll(OrderSpecifier... orders) {
+    //noinspection unchecked
+    return ((CollQuery) CollQueryFactory.from(alias, dataStore.retrieveAll()).orderBy(orders))
+        .fetch();
+  }
 
-    public Iterable findAll(Predicate predicate, OrderSpecifier... orders) {
-        //noinspection unchecked
-        return ((CollQuery) CollQueryFactory.from(alias, dataStore.retrieveAll()).where(predicate).orderBy(orders))
-                .fetch();
-    }
+  public Iterable findAll(Predicate predicate, OrderSpecifier... orders) {
+    //noinspection unchecked
+    return ((CollQuery)
+            CollQueryFactory.from(alias, dataStore.retrieveAll()).where(predicate).orderBy(orders))
+        .fetch();
+  }
 
-    @Override
-    public void setDataStore(DataStore dataStore) {
-        this.dataStore = dataStore;
-        this.alias = Alias.alias(dataStore.getEntityType());
-    }
-
+  @Override
+  public void setDataStore(DataStore dataStore) {
+    this.dataStore = dataStore;
+    this.alias = Alias.alias(dataStore.getEntityType());
+  }
 }

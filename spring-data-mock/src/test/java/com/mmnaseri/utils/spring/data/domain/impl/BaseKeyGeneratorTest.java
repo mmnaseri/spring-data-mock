@@ -15,17 +15,16 @@ import static org.hamcrest.Matchers.is;
  */
 public abstract class BaseKeyGeneratorTest<S> {
 
-    protected abstract KeyGenerator<S> getKeyGenerator();
+  protected abstract KeyGenerator<S> getKeyGenerator();
 
-    @Test(invocationCount = 100)
-    public void testThatKeysAreUnique() {
-        final KeyGenerator<S> keyGenerator = getKeyGenerator();
-        final Set<S> keys = new HashSet<>();
-        for (int i = 0; i < 200; i++) {
-            final S key = keyGenerator.generate();
-            assertThat(keys.contains(key), is(false));
-            keys.add(key);
-        }
+  @Test(invocationCount = 100)
+  public void testThatKeysAreUnique() {
+    final KeyGenerator<S> keyGenerator = getKeyGenerator();
+    final Set<S> keys = new HashSet<>();
+    for (int i = 0; i < 200; i++) {
+      final S key = keyGenerator.generate();
+      assertThat(keys.contains(key), is(false));
+      keys.add(key);
     }
-
+  }
 }

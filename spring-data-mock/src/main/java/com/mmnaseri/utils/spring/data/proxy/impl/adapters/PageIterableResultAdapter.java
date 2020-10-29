@@ -8,38 +8,37 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * <p>This class will adapt results from an iterable object to a page.</p>
+ * This class will adapt results from an iterable object to a page.
  *
- * <p>It will accept adaptations wherein the original value is some sort of iterable and the required return type
- * is an instance of {@link Page}. Remember that it does <em>not</em> check for individual object type
- * compatibility.</p>
+ * <p>It will accept adaptations wherein the original value is some sort of iterable and the
+ * required return type is an instance of {@link Page}. Remember that it does <em>not</em> check for
+ * individual object type compatibility.
  *
- * <p>This adapter will execute at priority {@literal -200}.</p>
+ * <p>This adapter will execute at priority {@literal -200}.
  *
  * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/28/15)
  */
 public class PageIterableResultAdapter extends AbstractIterableResultAdapter<Page> {
 
-    public PageIterableResultAdapter() {
-        super(-200);
-    }
+  public PageIterableResultAdapter() {
+    super(-200);
+  }
 
-    @Override
-    protected Page doAdapt(Invocation invocation, Iterable iterable) {
-        final List content = new ArrayList();
-        for (Object item : iterable) {
-            //noinspection unchecked
-            content.add(item);
-        }
-        //noinspection unchecked
-        return new PageImpl(content);
+  @Override
+  protected Page doAdapt(Invocation invocation, Iterable iterable) {
+    final List content = new ArrayList();
+    for (Object item : iterable) {
+      //noinspection unchecked
+      content.add(item);
     }
+    //noinspection unchecked
+    return new PageImpl(content);
+  }
 
-    @Override
-    public boolean accepts(Invocation invocation, Object originalValue) {
-        return originalValue instanceof Iterable && invocation.getMethod().getReturnType()
-                                                              .equals(Page.class);
-    }
-
+  @Override
+  public boolean accepts(Invocation invocation, Object originalValue) {
+    return originalValue instanceof Iterable
+        && invocation.getMethod().getReturnType().equals(Page.class);
+  }
 }

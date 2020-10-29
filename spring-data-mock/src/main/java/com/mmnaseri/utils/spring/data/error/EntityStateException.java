@@ -6,8 +6,7 @@ package com.mmnaseri.utils.spring.data.error;
  */
 public abstract class EntityStateException extends RepositoryMockException {
 
-    public EntityStateException(String message) {
-        super(message);
-    }
-
+  public EntityStateException(String message) {
+    super(message);
+  }
 }

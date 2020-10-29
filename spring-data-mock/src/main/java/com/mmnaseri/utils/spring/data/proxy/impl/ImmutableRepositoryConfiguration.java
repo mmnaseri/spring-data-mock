@@ -7,37 +7,38 @@ import com.mmnaseri.utils.spring.data.proxy.RepositoryConfiguration;
 import java.util.List;
 
 /**
- * <p>This class is an immutable repository configuration.</p>
+ * This class is an immutable repository configuration.
  *
  * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (10/12/15)
  */
 public class ImmutableRepositoryConfiguration implements RepositoryConfiguration {
 
-    private final RepositoryMetadata repositoryMetadata;
-    private final KeyGenerator<?> keyGenerator;
-    private final List<Class<?>> boundImplementations;
+  private final RepositoryMetadata repositoryMetadata;
+  private final KeyGenerator<?> keyGenerator;
+  private final List<Class<?>> boundImplementations;
 
-    public ImmutableRepositoryConfiguration(RepositoryMetadata repositoryMetadata, KeyGenerator<?> keyGenerator,
-                                            List<Class<?>> boundImplementations) {
-        this.repositoryMetadata = repositoryMetadata;
-        this.keyGenerator = keyGenerator;
-        this.boundImplementations = boundImplementations;
-    }
+  public ImmutableRepositoryConfiguration(
+      RepositoryMetadata repositoryMetadata,
+      KeyGenerator<?> keyGenerator,
+      List<Class<?>> boundImplementations) {
+    this.repositoryMetadata = repositoryMetadata;
+    this.keyGenerator = keyGenerator;
+    this.boundImplementations = boundImplementations;
+  }
 
-    @Override
-    public RepositoryMetadata getRepositoryMetadata() {
-        return repositoryMetadata;
-    }
+  @Override
+  public RepositoryMetadata getRepositoryMetadata() {
+    return repositoryMetadata;
+  }
 
-    @Override
-    public KeyGenerator<?> getKeyGenerator() {
-        return keyGenerator;
-    }
+  @Override
+  public KeyGenerator<?> getKeyGenerator() {
+    return keyGenerator;
+  }
 
-    @Override
-    public List<Class<?>> getBoundImplementations() {
-        return boundImplementations;
-    }
-
+  @Override
+  public List<Class<?>> getBoundImplementations() {
+    return boundImplementations;
+  }
 }

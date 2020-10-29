@@ -17,25 +17,32 @@ import static org.hamcrest.Matchers.notNullValue;
  */
 public class NullToIteratorResultAdapterTest {
 
-    @Test
-    public void testAcceptance() throws Exception {
-        final ResultAdapter<Iterator> adapter = new NullToIteratorResultAdapter();
-        assertThat(adapter.accepts(
-                new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findIterator"), new Object[]{}),
-                null), is(true));
-        assertThat(adapter.accepts(
-                new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findOther"), new Object[]{}), null),
-                   is(false));
-    }
+  @Test
+  public void testAcceptance() throws Exception {
+    final ResultAdapter<Iterator> adapter = new NullToIteratorResultAdapter();
+    assertThat(
+        adapter.accepts(
+            new ImmutableInvocation(
+                ReturnTypeSampleRepository.class.getMethod("findIterator"), new Object[] {}),
+            null),
+        is(true));
+    assertThat(
+        adapter.accepts(
+            new ImmutableInvocation(
+                ReturnTypeSampleRepository.class.getMethod("findOther"), new Object[] {}),
+            null),
+        is(false));
+  }
 
-    @Test
-    public void testAdaptingToIterable() throws Exception {
-        final ResultAdapter<Iterator> adapter = new NullToIteratorResultAdapter();
-        final Iterator value = adapter.adapt(
-                new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findIterator"), new Object[]{}),
-                null);
-        assertThat(value, is(notNullValue()));
-        assertThat(value.hasNext(), is(false));
-    }
-
+  @Test
+  public void testAdaptingToIterable() throws Exception {
+    final ResultAdapter<Iterator> adapter = new NullToIteratorResultAdapter();
+    final Iterator value =
+        adapter.adapt(
+            new ImmutableInvocation(
+                ReturnTypeSampleRepository.class.getMethod("findIterator"), new Object[] {}),
+            null);
+    assertThat(value, is(notNullValue()));
+    assertThat(value.hasNext(), is(false));
+  }
 }

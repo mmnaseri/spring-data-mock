@@ -16,17 +16,18 @@ import java.lang.reflect.Field;
 @SuppressWarnings("WeakerAccess")
 public class NamedFieldIdPropertyResolver implements IdPropertyResolver {
 
-    @Override
-    public String resolve(Class<?> entityType, Class<?> idType) {
-        final Field field = ReflectionUtils.findField(entityType, "id");
-        if (field != null) {
-            if (PropertyUtils.getTypeOf(idType).isAssignableFrom(PropertyUtils.getTypeOf(field.getType()))) {
-                return field.getName();
-            } else {
-                throw new PropertyTypeMismatchException(entityType, field.getName(), idType, field.getType());
-            }
-        }
-        return null;
+  @Override
+  public String resolve(Class<?> entityType, Class<?> idType) {
+    final Field field = ReflectionUtils.findField(entityType, "id");
+    if (field != null) {
+      if (PropertyUtils.getTypeOf(idType)
+          .isAssignableFrom(PropertyUtils.getTypeOf(field.getType()))) {
+        return field.getName();
+      } else {
+        throw new PropertyTypeMismatchException(
+            entityType, field.getName(), idType, field.getType());
+      }
     }
-
+    return null;
+  }
 }

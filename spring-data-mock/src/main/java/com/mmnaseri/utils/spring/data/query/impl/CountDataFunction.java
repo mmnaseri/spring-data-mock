@@ -19,16 +19,18 @@ import java.util.List;
 @SuppressWarnings("WeakerAccess")
 public class CountDataFunction implements DataFunction<Long> {
 
-    private static final Log log = LogFactory.getLog(CountDataFunction.class);
+  private static final Log log = LogFactory.getLog(CountDataFunction.class);
 
-    @Override
-    public <K, E> Long apply(DataStore<K, E> dataStore, QueryDescriptor query,
-                             RepositoryConfiguration repositoryConfiguration, List<E> selection) {
-        if (selection == null) {
-            log.error("Cannot calculate the count if the selection is null");
-            throw new InvalidArgumentException("Selection cannot be null");
-        }
-        return ((Integer) selection.size()).longValue();
+  @Override
+  public <K, E> Long apply(
+      DataStore<K, E> dataStore,
+      QueryDescriptor query,
+      RepositoryConfiguration repositoryConfiguration,
+      List<E> selection) {
+    if (selection == null) {
+      log.error("Cannot calculate the count if the selection is null");
+      throw new InvalidArgumentException("Selection cannot be null");
     }
-
+    return ((Integer) selection.size()).longValue();
+  }
 }

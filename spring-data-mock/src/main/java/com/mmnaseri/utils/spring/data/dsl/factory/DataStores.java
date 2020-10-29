@@ -12,22 +12,21 @@ import com.mmnaseri.utils.spring.data.store.DataStoreRegistry;
 @SuppressWarnings("WeakerAccess")
 public interface DataStores extends ResultAdapters {
 
-    /**
-     * Tells the builder to use a different registry
-     *
-     * @param registry the registry
-     * @return the rest of the configuration
-     */
-    ResultAdapters withDataStores(DataStoreRegistry registry);
+  /**
+   * Tells the builder to use a different registry
+   *
+   * @param registry the registry
+   * @return the rest of the configuration
+   */
+  ResultAdapters withDataStores(DataStoreRegistry registry);
 
-    /**
-     * Registers a new data store
-     *
-     * @param dataStore the data store
-     * @param <E>       the entity type
-     * @param <K>       the key type
-     * @return the rest of the configuration
-     */
-    <E, K> DataStoresAnd registerDataStore(DataStore<K, E> dataStore);
-
+  /**
+   * Registers a new data store
+   *
+   * @param dataStore the data store
+   * @param <E> the entity type
+   * @param <K> the key type
+   * @return the rest of the configuration
+   */
+  <E, K> DataStoresAnd registerDataStore(DataStore<K, E> dataStore);
 }

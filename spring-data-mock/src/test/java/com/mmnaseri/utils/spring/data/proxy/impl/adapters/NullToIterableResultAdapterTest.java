@@ -17,27 +17,34 @@ import static org.hamcrest.Matchers.notNullValue;
  */
 public class NullToIterableResultAdapterTest {
 
-    @Test
-    public void testAcceptance() throws Exception {
-        final ResultAdapter<Iterable> adapter = new NullToIterableResultAdapter();
-        assertThat(adapter.accepts(
-                new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findIterable"), new Object[]{}),
-                null), is(true));
-        assertThat(adapter.accepts(
-                new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findOther"), new Object[]{}), null),
-                   is(false));
-    }
+  @Test
+  public void testAcceptance() throws Exception {
+    final ResultAdapter<Iterable> adapter = new NullToIterableResultAdapter();
+    assertThat(
+        adapter.accepts(
+            new ImmutableInvocation(
+                ReturnTypeSampleRepository.class.getMethod("findIterable"), new Object[] {}),
+            null),
+        is(true));
+    assertThat(
+        adapter.accepts(
+            new ImmutableInvocation(
+                ReturnTypeSampleRepository.class.getMethod("findOther"), new Object[] {}),
+            null),
+        is(false));
+  }
 
-    @Test
-    public void testAdaptingToIterable() throws Exception {
-        final ResultAdapter<Iterable> adapter = new NullToIterableResultAdapter();
-        final Iterable value = adapter.adapt(
-                new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findIterable"), new Object[]{}),
-                null);
-        assertThat(value, is(notNullValue()));
-        assertThat(value.iterator(), is(notNullValue()));
-        final Iterator iterator = value.iterator();
-        assertThat(iterator.hasNext(), is(false));
-    }
-
+  @Test
+  public void testAdaptingToIterable() throws Exception {
+    final ResultAdapter<Iterable> adapter = new NullToIterableResultAdapter();
+    final Iterable value =
+        adapter.adapt(
+            new ImmutableInvocation(
+                ReturnTypeSampleRepository.class.getMethod("findIterable"), new Object[] {}),
+            null);
+    assertThat(value, is(notNullValue()));
+    assertThat(value.iterator(), is(notNullValue()));
+    final Iterator iterator = value.iterator();
+    assertThat(iterator.hasNext(), is(false));
+  }
 }

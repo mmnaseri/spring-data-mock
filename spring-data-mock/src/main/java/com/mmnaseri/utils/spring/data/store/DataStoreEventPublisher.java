@@ -9,11 +9,10 @@ package com.mmnaseri.utils.spring.data.store;
 @SuppressWarnings("unused")
 public interface DataStoreEventPublisher {
 
-    /**
-     * This method is called to publish a data store event
-     *
-     * @param event the event that should be published
-     */
-    void publishEvent(DataStoreEvent event);
-
+  /**
+   * This method is called to publish a data store event
+   *
+   * @param event the event that should be published
+   */
+  void publishEvent(DataStoreEvent event);
 }

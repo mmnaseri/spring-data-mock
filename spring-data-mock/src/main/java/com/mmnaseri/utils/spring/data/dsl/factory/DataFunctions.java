@@ -12,22 +12,21 @@ import com.mmnaseri.utils.spring.data.query.DataFunctionRegistry;
 @SuppressWarnings("WeakerAccess")
 public interface DataFunctions extends DataStores {
 
-    /**
-     * Tells the builder which data function registry it should use
-     *
-     * @param registry the registry that should be used
-     * @return the rest of the configuration
-     */
-    DataStores withDataFunctions(DataFunctionRegistry registry);
+  /**
+   * Tells the builder which data function registry it should use
+   *
+   * @param registry the registry that should be used
+   * @return the rest of the configuration
+   */
+  DataStores withDataFunctions(DataFunctionRegistry registry);
 
-    /**
-     * Registers a function and lets you add more functions
-     *
-     * @param name     the name under which this function is recognized
-     * @param function the function
-     * @param <R>      the type of the result
-     * @return the rest of the configuration
-     */
-    <R> DataFunctionsAnd registerFunction(String name, DataFunction<R> function);
-
+  /**
+   * Registers a function and lets you add more functions
+   *
+   * @param name the name under which this function is recognized
+   * @param function the function
+   * @param <R> the type of the result
+   * @return the rest of the configuration
+   */
+  <R> DataFunctionsAnd registerFunction(String name, DataFunction<R> function);
 }

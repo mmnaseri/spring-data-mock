@@ -20,97 +20,98 @@ import java.util.List;
  */
 public class RepositoryMockBuilder implements Start, ImplementationAnd, KeyGeneration {
 
-    private final RepositoryFactory factory;
-    private final List<Class<?>> implementations;
-    private final KeyGenerator<?> keyGenerator;
+  private final RepositoryFactory factory;
+  private final List<Class<?>> implementations;
+  private final KeyGenerator<?> keyGenerator;
 
-    public RepositoryMockBuilder() {
-        this(null, new LinkedList<>(), null);
+  public RepositoryMockBuilder() {
+    this(null, new LinkedList<>(), null);
+  }
+
+  private RepositoryMockBuilder(
+      RepositoryFactory factory, List<Class<?>> implementations, KeyGenerator<?> keyGenerator) {
+    this.factory = factory;
+    this.implementations = implementations;
+    this.keyGenerator = keyGenerator;
+  }
+
+  @Override
+  public KeyGeneration useConfiguration(RepositoryFactoryConfiguration configuration) {
+    return new RepositoryMockBuilder(
+        new DefaultRepositoryFactory(configuration), implementations, keyGenerator);
+  }
+
+  @Override
+  public KeyGeneration useFactory(RepositoryFactory factory) {
+    return new RepositoryMockBuilder(factory, implementations, keyGenerator);
+  }
+
+  @Override
+  public ImplementationAnd usingImplementation(Class<?> implementation) {
+    final LinkedList<Class<?>> implementations = new LinkedList<>(this.implementations);
+    implementations.add(implementation);
+    return new RepositoryMockBuilder(factory, implementations, keyGenerator);
+  }
+
+  @Override
+  public ImplementationAnd and(Class<?> implementation) {
+    return usingImplementation(implementation);
+  }
+
+  @Override
+  public <S> Implementation generateKeysUsing(KeyGenerator<S> keyGenerator) {
+    return new RepositoryMockBuilder(factory, implementations, keyGenerator);
+  }
+
+  @Override
+  public <S, G extends KeyGenerator<S>> Implementation generateKeysUsing(Class<G> generatorType) {
+    //noinspection unchecked
+    final G instance = (G) createKeyGenerator(generatorType);
+    return generateKeysUsing(instance);
+  }
+
+  @Override
+  public Implementation withoutGeneratingKeys() {
+    return new RepositoryMockBuilder(factory, implementations, new NoOpKeyGenerator<>());
+  }
+
+  private KeyGenerator<?> createKeyGenerator(Class<? extends KeyGenerator> generatorType) {
+    final KeyGenerator instance;
+    try {
+      instance = generatorType.getDeclaredConstructor().newInstance();
+    } catch (Exception e) {
+      throw new MockBuilderException(
+          "Failed to instantiate key generator of type " + generatorType, e);
     }
+    return instance;
+  }
 
-    private RepositoryMockBuilder(RepositoryFactory factory, List<Class<?>> implementations,
-                                  KeyGenerator<?> keyGenerator) {
-        this.factory = factory;
-        this.implementations = implementations;
-        this.keyGenerator = keyGenerator;
+  @Override
+  public <E> E mock(Class<E> repositoryInterface) {
+    final RepositoryFactory repositoryFactory;
+    if (factory == null) {
+      repositoryFactory = RepositoryFactoryBuilder.defaultFactory();
+    } else {
+      repositoryFactory = this.factory;
     }
-
-    @Override
-    public KeyGeneration useConfiguration(RepositoryFactoryConfiguration configuration) {
-        return new RepositoryMockBuilder(new DefaultRepositoryFactory(configuration), implementations, keyGenerator);
+    if (keyGenerator == null) {
+      final RepositoryFactoryConfiguration configuration = repositoryFactory.getConfiguration();
+      final KeyGenerator<?> evaluatedKeyGenerator;
+      if (configuration.getDefaultKeyGenerator() != null) {
+        evaluatedKeyGenerator = configuration.getDefaultKeyGenerator();
+      } else {
+        final KeyGeneratorProvider generatorProvider = new KeyGeneratorProvider();
+        final RepositoryMetadata metadata =
+            configuration.getRepositoryMetadataResolver().resolve(repositoryInterface);
+        final Class<?> identifierType = metadata.getIdentifierType();
+        final Class<? extends KeyGenerator<?>> keyGeneratorType =
+            generatorProvider.getKeyGenerator(identifierType);
+        evaluatedKeyGenerator = createKeyGenerator(keyGeneratorType);
+      }
+      return generateKeysUsing(evaluatedKeyGenerator).mock(repositoryInterface);
+    } else {
+      return repositoryFactory.getInstance(
+          keyGenerator, repositoryInterface, implementations.toArray(new Class[0]));
     }
-
-    @Override
-    public KeyGeneration useFactory(RepositoryFactory factory) {
-        return new RepositoryMockBuilder(factory, implementations, keyGenerator);
-    }
-
-    @Override
-    public ImplementationAnd usingImplementation(Class<?> implementation) {
-        final LinkedList<Class<?>> implementations = new LinkedList<>(this.implementations);
-        implementations.add(implementation);
-        return new RepositoryMockBuilder(factory, implementations, keyGenerator);
-    }
-
-    @Override
-    public ImplementationAnd and(Class<?> implementation) {
-        return usingImplementation(implementation);
-    }
-
-    @Override
-    public <S> Implementation generateKeysUsing(KeyGenerator<S> keyGenerator) {
-        return new RepositoryMockBuilder(factory, implementations, keyGenerator);
-    }
-
-    @Override
-    public <S, G extends KeyGenerator<S>> Implementation generateKeysUsing(Class<G> generatorType) {
-        //noinspection unchecked
-        final G instance = (G) createKeyGenerator(generatorType);
-        return generateKeysUsing(instance);
-    }
-
-    @Override
-    public Implementation withoutGeneratingKeys() {
-        return new RepositoryMockBuilder(factory, implementations, new NoOpKeyGenerator<>());
-    }
-
-    private KeyGenerator<?> createKeyGenerator(Class<? extends KeyGenerator> generatorType) {
-        final KeyGenerator instance;
-        try {
-            instance = generatorType.getDeclaredConstructor().newInstance();
-        } catch (Exception e) {
-            throw new MockBuilderException("Failed to instantiate key generator of type " + generatorType, e);
-        }
-        return instance;
-    }
-
-    @Override
-    public <E> E mock(Class<E> repositoryInterface) {
-        final RepositoryFactory repositoryFactory;
-        if (factory == null) {
-            repositoryFactory = RepositoryFactoryBuilder.defaultFactory();
-        } else {
-            repositoryFactory = this.factory;
-        }
-        if (keyGenerator == null) {
-            final RepositoryFactoryConfiguration configuration = repositoryFactory.getConfiguration();
-            final KeyGenerator<?> evaluatedKeyGenerator;
-            if (configuration.getDefaultKeyGenerator() != null) {
-                evaluatedKeyGenerator = configuration.getDefaultKeyGenerator();
-            } else {
-                final KeyGeneratorProvider generatorProvider = new KeyGeneratorProvider();
-                final RepositoryMetadata metadata = configuration.getRepositoryMetadataResolver().resolve(
-                        repositoryInterface);
-                final Class<?> identifierType = metadata.getIdentifierType();
-                final Class<? extends KeyGenerator<?>> keyGeneratorType = generatorProvider.getKeyGenerator(
-                        identifierType);
-                evaluatedKeyGenerator = createKeyGenerator(keyGeneratorType);
-            }
-            return generateKeysUsing(evaluatedKeyGenerator).mock(repositoryInterface);
-        } else {
-            return repositoryFactory.getInstance(keyGenerator, repositoryInterface,
-                                                 implementations.toArray(new Class[0]));
-        }
-    }
-
+  }
 }

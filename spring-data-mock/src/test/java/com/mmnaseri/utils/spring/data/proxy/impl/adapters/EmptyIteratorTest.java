@@ -11,19 +11,18 @@ import static org.hamcrest.Matchers.is;
  */
 public class EmptyIteratorTest {
 
-    @Test
-    public void testHasNext() {
-        assertThat(EmptyIterator.INSTANCE.hasNext(), is(false));
-    }
+  @Test
+  public void testHasNext() {
+    assertThat(EmptyIterator.INSTANCE.hasNext(), is(false));
+  }
 
-    @Test(expectedExceptions = IndexOutOfBoundsException.class)
-    public void testNext() {
-        EmptyIterator.INSTANCE.next();
-    }
+  @Test(expectedExceptions = IndexOutOfBoundsException.class)
+  public void testNext() {
+    EmptyIterator.INSTANCE.next();
+  }
 
-    @Test(expectedExceptions = IndexOutOfBoundsException.class)
-    public void testRemove() {
-        EmptyIterator.INSTANCE.remove();
-    }
-
+  @Test(expectedExceptions = IndexOutOfBoundsException.class)
+  public void testRemove() {
+    EmptyIterator.INSTANCE.remove();
+  }
 }

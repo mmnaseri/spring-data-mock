@@ -13,27 +13,26 @@ import java.util.Arrays;
  */
 public class ImmutableInvocation implements Invocation {
 
-    private final Method method;
-    private final Object[] arguments;
+  private final Method method;
+  private final Object[] arguments;
 
-    public ImmutableInvocation(Method method, Object[] arguments) {
-        this.method = method;
-        this.arguments = arguments;
-    }
+  public ImmutableInvocation(Method method, Object[] arguments) {
+    this.method = method;
+    this.arguments = arguments;
+  }
 
-    @Override
-    public Method getMethod() {
-        return method;
-    }
+  @Override
+  public Method getMethod() {
+    return method;
+  }
 
-    @Override
-    public Object[] getArguments() {
-        return arguments;
-    }
+  @Override
+  public Object[] getArguments() {
+    return arguments;
+  }
 
-    @Override
-    public String toString() {
-        return method + ", " + Arrays.toString(arguments);
-    }
-
+  @Override
+  public String toString() {
+    return method + ", " + Arrays.toString(arguments);
+  }
 }

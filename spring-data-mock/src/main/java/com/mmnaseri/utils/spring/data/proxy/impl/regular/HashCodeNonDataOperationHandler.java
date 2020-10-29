@@ -12,16 +12,15 @@ import java.lang.reflect.Method;
  */
 public class HashCodeNonDataOperationHandler implements NonDataOperationHandler {
 
-    private static final String HASH_CODE = "hashCode";
+  private static final String HASH_CODE = "hashCode";
 
-    @Override
-    public boolean handles(Object proxy, Method method, Object... args) {
-        return Object.class.equals(method.getDeclaringClass()) && HASH_CODE.equals(method.getName());
-    }
+  @Override
+  public boolean handles(Object proxy, Method method, Object... args) {
+    return Object.class.equals(method.getDeclaringClass()) && HASH_CODE.equals(method.getName());
+  }
 
-    @Override
-    public Object invoke(Object proxy, Object... args) {
-        return System.identityHashCode(proxy);
-    }
-
+  @Override
+  public Object invoke(Object proxy, Object... args) {
+    return System.identityHashCode(proxy);
+  }
 }

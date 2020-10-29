@@ -11,33 +11,31 @@ import javax.persistence.Id;
 @SuppressWarnings("unused")
 public class Plane extends SerialAwareEntity {
 
-    @Id
-    private Long id;
-    private String model;
-    private int capacity;
+  @Id private Long id;
+  private String model;
+  private int capacity;
 
-    public Long getId() {
-        return id;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    public String getModel() {
-        return model;
-    }
+  public String getModel() {
+    return model;
+  }
 
-    public void setModel(String model) {
-        this.model = model;
-    }
+  public void setModel(String model) {
+    this.model = model;
+  }
 
-    public int getCapacity() {
-        return capacity;
-    }
+  public int getCapacity() {
+    return capacity;
+  }
 
-    public void setCapacity(int capacity) {
-        this.capacity = capacity;
-    }
-
+  public void setCapacity(int capacity) {
+    this.capacity = capacity;
+  }
 }

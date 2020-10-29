@@ -9,14 +9,13 @@ package com.mmnaseri.utils.spring.data.dsl.mock;
 @SuppressWarnings("WeakerAccess")
 public interface End {
 
-    /**
-     * Tells the builder that it is now time to mock the given repository interface using the configuration provided
-     * thus far.
-     *
-     * @param repositoryInterface the repository interface to mock
-     * @param <E>                 the type of the repository
-     * @return the mocked instance
-     */
-    <E> E mock(Class<E> repositoryInterface);
-
+  /**
+   * Tells the builder that it is now time to mock the given repository interface using the
+   * configuration provided thus far.
+   *
+   * @param repositoryInterface the repository interface to mock
+   * @param <E> the type of the repository
+   * @return the mocked instance
+   */
+  <E> E mock(Class<E> repositoryInterface);
 }

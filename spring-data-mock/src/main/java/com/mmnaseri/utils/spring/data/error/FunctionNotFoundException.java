@@ -6,8 +6,7 @@ package com.mmnaseri.utils.spring.data.error;
  */
 public class FunctionNotFoundException extends FunctionRegistryException {
 
-    public FunctionNotFoundException(String functionName) {
-        super("No function with this name has been registered: " + functionName);
-    }
-
+  public FunctionNotFoundException(String functionName) {
+    super("No function with this name has been registered: " + functionName);
+  }
 }

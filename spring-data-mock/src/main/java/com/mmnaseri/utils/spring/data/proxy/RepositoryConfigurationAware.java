@@ -8,11 +8,10 @@ package com.mmnaseri.utils.spring.data.proxy;
  */
 public interface RepositoryConfigurationAware extends DependencyAware {
 
-    /**
-     * Called when the bound implementation class needs to know about the repository configuration.
-     *
-     * @param repositoryConfiguration the repository configuration
-     */
-    void setRepositoryConfiguration(RepositoryConfiguration repositoryConfiguration);
-
+  /**
+   * Called when the bound implementation class needs to know about the repository configuration.
+   *
+   * @param repositoryConfiguration the repository configuration
+   */
+  void setRepositoryConfiguration(RepositoryConfiguration repositoryConfiguration);
 }

@@ -5,9 +5,7 @@ import javax.persistence.Id;
 
 public class Card {
 
-  @Id
-  @GeneratedValue
-  private Integer id;
+  @Id @GeneratedValue private Integer id;
 
   private String blabla;
 

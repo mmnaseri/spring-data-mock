@@ -8,6 +8,5 @@ import com.mmnaseri.utils.samples.spring.data.jpa.model.SerialAwareEntity;
  */
 public interface SerialAwareEntityRepository<E extends SerialAwareEntity> {
 
-    E lookupBySerial(String serial);
-
+  E lookupBySerial(String serial);
 }

@@ -20,32 +20,47 @@ import static org.hamcrest.Matchers.notNullValue;
  */
 public class ListenableFutureIterableResultAdapterTest {
 
-    @Test
-    public void testAccepting() throws Exception {
-        final ListenableFutureIterableResultAdapter adapter = new ListenableFutureIterableResultAdapter();
-        assertThat(adapter.accepts(null, null), is(false));
-        assertThat(adapter.accepts(
-                new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findOther"), new Object[]{}),
-                new Object()), is(false));
-        assertThat(adapter.accepts(
-                new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findListenableFuture"),
-                                        new Object[]{}), new Object()), is(false));
-        assertThat(adapter.accepts(
-                new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findListenableFuture"),
-                                        new Object[]{}), new ArrayList<>()), is(true));
-    }
+  @Test
+  public void testAccepting() throws Exception {
+    final ListenableFutureIterableResultAdapter adapter =
+        new ListenableFutureIterableResultAdapter();
+    assertThat(adapter.accepts(null, null), is(false));
+    assertThat(
+        adapter.accepts(
+            new ImmutableInvocation(
+                ReturnTypeSampleRepository.class.getMethod("findOther"), new Object[] {}),
+            new Object()),
+        is(false));
+    assertThat(
+        adapter.accepts(
+            new ImmutableInvocation(
+                ReturnTypeSampleRepository.class.getMethod("findListenableFuture"),
+                new Object[] {}),
+            new Object()),
+        is(false));
+    assertThat(
+        adapter.accepts(
+            new ImmutableInvocation(
+                ReturnTypeSampleRepository.class.getMethod("findListenableFuture"),
+                new Object[] {}),
+            new ArrayList<>()),
+        is(true));
+  }
 
-    @Test
-    public void testAdapting() throws Exception {
-        final ListenableFutureIterableResultAdapter adapter = new ListenableFutureIterableResultAdapter();
-        final List<Integer> originalValue = Arrays.asList(1, 2, 3);
-        final ListenableFuture adapted = adapter.adapt(
-                new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findListenableFuture"),
-                                        new Object[]{}), originalValue);
-        assertThat(adapted, is(notNullValue()));
-        final Object result = adapted.get();
-        assertThat(result, is(notNullValue()));
-        assertThat(result, Matchers.is(originalValue));
-    }
-
+  @Test
+  public void testAdapting() throws Exception {
+    final ListenableFutureIterableResultAdapter adapter =
+        new ListenableFutureIterableResultAdapter();
+    final List<Integer> originalValue = Arrays.asList(1, 2, 3);
+    final ListenableFuture adapted =
+        adapter.adapt(
+            new ImmutableInvocation(
+                ReturnTypeSampleRepository.class.getMethod("findListenableFuture"),
+                new Object[] {}),
+            originalValue);
+    assertThat(adapted, is(notNullValue()));
+    final Object result = adapted.get();
+    assertThat(result, is(notNullValue()));
+    assertThat(result, Matchers.is(originalValue));
+  }
 }

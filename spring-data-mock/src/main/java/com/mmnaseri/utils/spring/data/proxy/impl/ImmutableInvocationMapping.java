@@ -6,7 +6,7 @@ import com.mmnaseri.utils.spring.data.store.DataStoreOperation;
 import java.lang.reflect.Method;
 
 /**
- * <p>This class is an immutable invocation mapping.</p>
+ * This class is an immutable invocation mapping.
  *
  * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/29/15)
@@ -14,27 +14,26 @@ import java.lang.reflect.Method;
 @SuppressWarnings("WeakerAccess")
 public class ImmutableInvocationMapping<K, E> implements InvocationMapping<K, E> {
 
-    private final Method method;
-    private final DataStoreOperation<?, K, E> operation;
+  private final Method method;
+  private final DataStoreOperation<?, K, E> operation;
 
-    public ImmutableInvocationMapping(Method method, DataStoreOperation<?, K, E> operation) {
-        this.method = method;
-        this.operation = operation;
-    }
+  public ImmutableInvocationMapping(Method method, DataStoreOperation<?, K, E> operation) {
+    this.method = method;
+    this.operation = operation;
+  }
 
-    @Override
-    public Method getMethod() {
-        return method;
-    }
+  @Override
+  public Method getMethod() {
+    return method;
+  }
 
-    @Override
-    public DataStoreOperation<?, K, E> getOperation() {
-        return operation;
-    }
+  @Override
+  public DataStoreOperation<?, K, E> getOperation() {
+    return operation;
+  }
 
-    @Override
-    public String toString() {
-        return method + " -> " + operation;
-    }
-
+  @Override
+  public String toString() {
+    return method + " -> " + operation;
+  }
 }

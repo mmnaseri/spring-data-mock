@@ -15,57 +15,55 @@ import static org.hamcrest.Matchers.nullValue;
  */
 public class PropertyVisitorTest {
 
-    @Test
-    public void testLookingForFieldWithAnnotation() throws Exception {
-        final PropertyVisitor visitor = new PropertyVisitor(Id.class);
-        assertThat(visitor.getProperty(), is(nullValue()));
-        visitor.doWith(EntityWithAnnotationOnIdFieldAndGetter.class.getDeclaredField("field"));
-        assertThat(visitor.getProperty(), is("field"));
-    }
+  @Test
+  public void testLookingForFieldWithAnnotation() throws Exception {
+    final PropertyVisitor visitor = new PropertyVisitor(Id.class);
+    assertThat(visitor.getProperty(), is(nullValue()));
+    visitor.doWith(EntityWithAnnotationOnIdFieldAndGetter.class.getDeclaredField("field"));
+    assertThat(visitor.getProperty(), is("field"));
+  }
 
-    @Test
-    public void testLookingForFieldWithWrongAnnotation() throws Exception {
-        final PropertyVisitor visitor = new PropertyVisitor(LastModifiedBy.class);
-        assertThat(visitor.getProperty(), is(nullValue()));
-        visitor.doWith(EntityWithAnnotationOnIdFieldAndGetter.class.getDeclaredField("field"));
-        assertThat(visitor.getProperty(), is(nullValue()));
-    }
+  @Test
+  public void testLookingForFieldWithWrongAnnotation() throws Exception {
+    final PropertyVisitor visitor = new PropertyVisitor(LastModifiedBy.class);
+    assertThat(visitor.getProperty(), is(nullValue()));
+    visitor.doWith(EntityWithAnnotationOnIdFieldAndGetter.class.getDeclaredField("field"));
+    assertThat(visitor.getProperty(), is(nullValue()));
+  }
 
+  @Test
+  public void testLookingForMethodWithAnnotation() throws Exception {
+    final PropertyVisitor visitor = new PropertyVisitor(Id.class);
+    assertThat(visitor.getProperty(), is(nullValue()));
+    visitor.doWith(EntityWithAnnotationOnIdFieldAndGetter.class.getDeclaredMethod("getProperty"));
+    assertThat(visitor.getProperty(), is("property"));
+  }
 
-    @Test
-    public void testLookingForMethodWithAnnotation() throws Exception {
-        final PropertyVisitor visitor = new PropertyVisitor(Id.class);
-        assertThat(visitor.getProperty(), is(nullValue()));
-        visitor.doWith(EntityWithAnnotationOnIdFieldAndGetter.class.getDeclaredMethod("getProperty"));
-        assertThat(visitor.getProperty(), is("property"));
-    }
+  @Test
+  public void testLookingForMethodWithWrongAnnotation() throws Exception {
+    final PropertyVisitor visitor = new PropertyVisitor(LastModifiedBy.class);
+    assertThat(visitor.getProperty(), is(nullValue()));
+    visitor.doWith(EntityWithAnnotationOnIdFieldAndGetter.class.getDeclaredMethod("getProperty"));
+    assertThat(visitor.getProperty(), is(nullValue()));
+  }
 
-    @Test
-    public void testLookingForMethodWithWrongAnnotation() throws Exception {
-        final PropertyVisitor visitor = new PropertyVisitor(LastModifiedBy.class);
-        assertThat(visitor.getProperty(), is(nullValue()));
-        visitor.doWith(EntityWithAnnotationOnIdFieldAndGetter.class.getDeclaredMethod("getProperty"));
-        assertThat(visitor.getProperty(), is(nullValue()));
-    }
+  @Test
+  public void testLookingFieldFirst() throws Exception {
+    final PropertyVisitor visitor = new PropertyVisitor(Id.class);
+    assertThat(visitor.getProperty(), is(nullValue()));
+    visitor.doWith(EntityWithAnnotationOnIdFieldAndGetter.class.getDeclaredField("field"));
+    assertThat(visitor.getProperty(), is("field"));
+    visitor.doWith(EntityWithAnnotationOnIdFieldAndGetter.class.getDeclaredMethod("getProperty"));
+    assertThat(visitor.getProperty(), is("field"));
+  }
 
-    @Test
-    public void testLookingFieldFirst() throws Exception {
-        final PropertyVisitor visitor = new PropertyVisitor(Id.class);
-        assertThat(visitor.getProperty(), is(nullValue()));
-        visitor.doWith(EntityWithAnnotationOnIdFieldAndGetter.class.getDeclaredField("field"));
-        assertThat(visitor.getProperty(), is("field"));
-        visitor.doWith(EntityWithAnnotationOnIdFieldAndGetter.class.getDeclaredMethod("getProperty"));
-        assertThat(visitor.getProperty(), is("field"));
-    }
-
-    @Test
-    public void testLookingMethodFirst() throws Exception {
-        final PropertyVisitor visitor = new PropertyVisitor(Id.class);
-        assertThat(visitor.getProperty(), is(nullValue()));
-        visitor.doWith(EntityWithAnnotationOnIdFieldAndGetter.class.getDeclaredMethod("getProperty"));
-        assertThat(visitor.getProperty(), is("property"));
-        visitor.doWith(EntityWithAnnotationOnIdFieldAndGetter.class.getDeclaredField("field"));
-        assertThat(visitor.getProperty(), is("property"));
-    }
-
+  @Test
+  public void testLookingMethodFirst() throws Exception {
+    final PropertyVisitor visitor = new PropertyVisitor(Id.class);
+    assertThat(visitor.getProperty(), is(nullValue()));
+    visitor.doWith(EntityWithAnnotationOnIdFieldAndGetter.class.getDeclaredMethod("getProperty"));
+    assertThat(visitor.getProperty(), is("property"));
+    visitor.doWith(EntityWithAnnotationOnIdFieldAndGetter.class.getDeclaredField("field"));
+    assertThat(visitor.getProperty(), is("property"));
+  }
 }

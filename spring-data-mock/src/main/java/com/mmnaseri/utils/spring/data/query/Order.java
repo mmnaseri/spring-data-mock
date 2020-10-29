@@ -8,19 +8,12 @@ package com.mmnaseri.utils.spring.data.query;
  */
 public interface Order {
 
-    /**
-     * @return the direction of the sort
-     */
-    SortDirection getDirection();
+  /** @return the direction of the sort */
+  SortDirection getDirection();
 
-    /**
-     * @return the property for which the ordering is taking place
-     */
-    String getProperty();
+  /** @return the property for which the ordering is taking place */
+  String getProperty();
 
-    /**
-     * @return how null values should be handled
-     */
-    NullHandling getNullHandling();
-
+  /** @return how null values should be handled */
+  NullHandling getNullHandling();
 }

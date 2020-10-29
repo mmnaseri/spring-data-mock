@@ -11,19 +11,18 @@ import com.mmnaseri.utils.spring.data.sample.models.EntityWithoutAnnotatedIdGett
 @SuppressWarnings("unused")
 public class NamedGetterIdPropertyResolverTest extends BaseIdPropertyResolverTest {
 
-    @Override
-    protected IdPropertyResolver getIdPropertyResolver() {
-        return new NamedGetterIdPropertyResolver();
-    }
+  @Override
+  protected IdPropertyResolver getIdPropertyResolver() {
+    return new NamedGetterIdPropertyResolver();
+  }
 
-    @Override
-    protected Class<?> properEntity() {
-        return EntityWithoutAnnotatedIdGetter.class;
-    }
+  @Override
+  protected Class<?> properEntity() {
+    return EntityWithoutAnnotatedIdGetter.class;
+  }
 
-    @Override
-    protected Class<?> entityWithNoProperty() {
-        return EmptyEntity.class;
-    }
-
+  @Override
+  protected Class<?> entityWithNoProperty() {
+    return EmptyEntity.class;
+  }
 }

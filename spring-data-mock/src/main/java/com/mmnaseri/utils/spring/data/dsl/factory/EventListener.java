@@ -13,21 +13,20 @@ import com.mmnaseri.utils.spring.data.store.DataStoreEventListenerContext;
 @SuppressWarnings("WeakerAccess")
 public interface EventListener extends Auditing {
 
-    /**
-     * Tells the build to use this listener context
-     *
-     * @param context the context
-     * @return the rest of the configuration
-     */
-    End withListeners(DataStoreEventListenerContext context);
+  /**
+   * Tells the build to use this listener context
+   *
+   * @param context the context
+   * @return the rest of the configuration
+   */
+  End withListeners(DataStoreEventListenerContext context);
 
-    /**
-     * Tells the context to register this listener
-     *
-     * @param listener the listener
-     * @param <E>      the (super-)type of the events the listener is going to react to
-     * @return the rest of the configuration
-     */
-    <E extends DataStoreEvent> EventListenerAnd withListener(DataStoreEventListener<E> listener);
-
+  /**
+   * Tells the context to register this listener
+   *
+   * @param listener the listener
+   * @param <E> the (super-)type of the events the listener is going to react to
+   * @return the rest of the configuration
+   */
+  <E extends DataStoreEvent> EventListenerAnd withListener(DataStoreEventListener<E> listener);
 }

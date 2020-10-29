@@ -6,6 +6,4 @@ package com.mmnaseri.utils.spring.data.query;
  * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/19/15)
  */
-public interface PageParameterExtractor extends ParameterMetadataExtractor<Page> {
-
-}
+public interface PageParameterExtractor extends ParameterMetadataExtractor<Page> {}

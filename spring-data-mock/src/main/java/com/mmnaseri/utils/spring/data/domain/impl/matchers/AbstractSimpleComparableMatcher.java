@@ -11,21 +11,21 @@ import com.mmnaseri.utils.spring.data.error.InvalidArgumentException;
  */
 public abstract class AbstractSimpleComparableMatcher extends AbstractSimpleMatcher {
 
-    @Override
-    protected final boolean matches(Parameter parameter, Object actual, Object expected) {
-        if (!(actual instanceof Comparable) || !(expected instanceof Comparable)) {
-            throw new InvalidArgumentException("Expected property to be comparable: " + parameter.getPath());
-        }
-        return matches((Comparable) actual, (Comparable) expected);
+  @Override
+  protected final boolean matches(Parameter parameter, Object actual, Object expected) {
+    if (!(actual instanceof Comparable) || !(expected instanceof Comparable)) {
+      throw new InvalidArgumentException(
+          "Expected property to be comparable: " + parameter.getPath());
     }
+    return matches((Comparable) actual, (Comparable) expected);
+  }
 
-    /**
-     * Does comparison and returns the result.
-     *
-     * @param actual    the actual value
-     * @param pivot     the pivot
-     * @return {@literal true} if the match succeeded
-     */
-    protected abstract boolean matches(Comparable actual, Comparable pivot);
-
+  /**
+   * Does comparison and returns the result.
+   *
+   * @param actual the actual value
+   * @param pivot the pivot
+   * @return {@literal true} if the match succeeded
+   */
+  protected abstract boolean matches(Comparable actual, Comparable pivot);
 }

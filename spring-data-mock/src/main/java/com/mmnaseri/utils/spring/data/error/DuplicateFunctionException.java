@@ -6,8 +6,7 @@ package com.mmnaseri.utils.spring.data.error;
  */
 public class DuplicateFunctionException extends FunctionRegistryException {
 
-    public DuplicateFunctionException(String name) {
-        super("Another function with this name has already been registered: " + name);
-    }
-
+  public DuplicateFunctionException(String name) {
+    super("Another function with this name has already been registered: " + name);
+  }
 }

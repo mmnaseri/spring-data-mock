@@ -11,40 +11,39 @@ import com.mmnaseri.utils.spring.data.domain.Operator;
  */
 public class ImmutableOperator implements Operator {
 
-    private final String name;
-    private final int operands;
-    private final Matcher matcher;
-    private final String[] tokens;
+  private final String name;
+  private final int operands;
+  private final Matcher matcher;
+  private final String[] tokens;
 
-    public ImmutableOperator(String name, int operands, Matcher matcher, String... tokens) {
-        this.name = name;
-        this.operands = operands;
-        this.matcher = matcher;
-        this.tokens = tokens;
-    }
+  public ImmutableOperator(String name, int operands, Matcher matcher, String... tokens) {
+    this.name = name;
+    this.operands = operands;
+    this.matcher = matcher;
+    this.tokens = tokens;
+  }
 
-    public String getName() {
-        return name;
-    }
+  public String getName() {
+    return name;
+  }
 
-    @Override
-    public int getOperands() {
-        return operands;
-    }
+  @Override
+  public int getOperands() {
+    return operands;
+  }
 
-    @Override
-    public Matcher getMatcher() {
-        return matcher;
-    }
+  @Override
+  public Matcher getMatcher() {
+    return matcher;
+  }
 
-    @Override
-    public String[] getTokens() {
-        return tokens;
-    }
+  @Override
+  public String[] getTokens() {
+    return tokens;
+  }
 
-    @Override
-    public String toString() {
-        return name;
-    }
-
+  @Override
+  public String toString() {
+    return name;
+  }
 }

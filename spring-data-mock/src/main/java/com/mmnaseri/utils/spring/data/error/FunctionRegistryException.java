@@ -6,8 +6,7 @@ package com.mmnaseri.utils.spring.data.error;
  */
 public abstract class FunctionRegistryException extends RepositoryMockException {
 
-    public FunctionRegistryException(String message) {
-        super(message);
-    }
-
+  public FunctionRegistryException(String message) {
+    super(message);
+  }
 }

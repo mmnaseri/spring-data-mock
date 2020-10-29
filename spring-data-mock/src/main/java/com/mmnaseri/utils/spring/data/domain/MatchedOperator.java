@@ -8,9 +8,6 @@ package com.mmnaseri.utils.spring.data.domain;
  */
 public interface MatchedOperator extends Operator {
 
-    /**
-     * @return the suffix that was matched when looking up this operator
-     */
-    String getMatchedToken();
-
+  /** @return the suffix that was matched when looking up this operator */
+  String getMatchedToken();
 }

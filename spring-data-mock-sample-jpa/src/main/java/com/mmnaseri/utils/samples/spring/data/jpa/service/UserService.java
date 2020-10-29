@@ -9,14 +9,13 @@ import com.mmnaseri.utils.samples.spring.data.jpa.model.User;
 @SuppressWarnings("unused")
 public interface UserService {
 
-    User createUser(String username, String email, String password);
+  User createUser(String username, String email, String password);
 
-    void updatePassword(String handle, String oldPassword, String newPassword);
+  void updatePassword(String handle, String oldPassword, String newPassword);
 
-    void deleteUser(String handle);
+  void deleteUser(String handle);
 
-    User lookup(String handle);
+  User lookup(String handle);
 
-    User authenticate(String handle, String password);
-
+  User authenticate(String handle, String password);
 }

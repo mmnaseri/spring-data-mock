@@ -10,60 +10,71 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * <p>This class will use all the magic implemented in the other ID property resolvers to find out the ID property
- * for an entity.</p>
+ * This class will use all the magic implemented in the other ID property resolvers to find out the
+ * ID property for an entity.
  *
- * <p>The order in which conditions are considered is:</p>
+ * <p>The order in which conditions are considered is:
  *
  * <ol>
- *     <li>{@link AnnotatedGetterIdPropertyResolver Annotated getter}</li>
- *     <li>{@link AnnotatedFieldIdPropertyResolver Annotated field}</li>
- *     <li>{@link NamedGetterIdPropertyResolver Getter for ID property using name}</li>
- *     <li>{@link NamedFieldIdPropertyResolver Field having proper name}</li>
+ *   <li>{@link AnnotatedGetterIdPropertyResolver Annotated getter}
+ *   <li>{@link AnnotatedFieldIdPropertyResolver Annotated field}
+ *   <li>{@link NamedGetterIdPropertyResolver Getter for ID property using name}
+ *   <li>{@link NamedFieldIdPropertyResolver Field having proper name}
  * </ol>
  *
- * <p>After all the above are considered, if nothing is found, a {@link NoIdPropertyException NoIdPropertyException}
- * is thrown to show that the promised ID property was not found on the entity class.</p>
+ * <p>After all the above are considered, if nothing is found, a {@link NoIdPropertyException
+ * NoIdPropertyException} is thrown to show that the promised ID property was not found on the
+ * entity class.
  *
  * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/23/15)
  */
 public class EntityIdPropertyResolver implements IdPropertyResolver {
 
-    private static final Log log = LogFactory.getLog(EntityIdPropertyResolver.class);
-    private final AnnotatedGetterIdPropertyResolver annotatedGetterIdPropertyResolver =
-            new AnnotatedGetterIdPropertyResolver();
-    private final AnnotatedFieldIdPropertyResolver annotatedFieldIdPropertyResolver =
-            new AnnotatedFieldIdPropertyResolver();
-    private final NamedGetterIdPropertyResolver namedGetterIdPropertyResolver = new NamedGetterIdPropertyResolver();
-    private final NamedFieldIdPropertyResolver namedFieldIdPropertyResolver = new NamedFieldIdPropertyResolver();
+  private static final Log log = LogFactory.getLog(EntityIdPropertyResolver.class);
+  private final AnnotatedGetterIdPropertyResolver annotatedGetterIdPropertyResolver =
+      new AnnotatedGetterIdPropertyResolver();
+  private final AnnotatedFieldIdPropertyResolver annotatedFieldIdPropertyResolver =
+      new AnnotatedFieldIdPropertyResolver();
+  private final NamedGetterIdPropertyResolver namedGetterIdPropertyResolver =
+      new NamedGetterIdPropertyResolver();
+  private final NamedFieldIdPropertyResolver namedFieldIdPropertyResolver =
+      new NamedFieldIdPropertyResolver();
 
-    @Override
-    public String resolve(Class<?> entityType, Class<?> idType) {
-        log.info("Trying to resolve the ID property for entity " + entityType + " using the annotated getter method");
-        String idProperty = annotatedGetterIdPropertyResolver.resolve(entityType, idType);
-        if (idProperty == null) {
-            log.info("Trying to resolve the ID property for entity " + entityType + " using the annotated ID field");
-            idProperty = annotatedFieldIdPropertyResolver.resolve(entityType, idType);
-        }
-        if (idProperty == null) {
-            log.info("Trying to resolve the ID property for entity " + entityType + " using the getter method");
-            idProperty = namedGetterIdPropertyResolver.resolve(entityType, idType);
-        }
-        if (idProperty == null) {
-            log.info("Trying to resolve the ID property for entity " + entityType + " using the field");
-            idProperty = namedFieldIdPropertyResolver.resolve(entityType, idType);
-        }
-        if (idProperty == null) {
-            log.error("No ID property was found for entity " + entityType);
-            throw new NoIdPropertyException(entityType);
-        }
-        final PropertyDescriptor descriptor = PropertyUtils.getPropertyDescriptor(entityType,
-                                                                                  StringUtils.capitalize(idProperty));
-        if (descriptor.getType().isPrimitive()) {
-            throw new PrimitiveIdTypeException(entityType, idProperty);
-        }
-        return idProperty;
+  @Override
+  public String resolve(Class<?> entityType, Class<?> idType) {
+    log.info(
+        "Trying to resolve the ID property for entity "
+            + entityType
+            + " using the annotated getter method");
+    String idProperty = annotatedGetterIdPropertyResolver.resolve(entityType, idType);
+    if (idProperty == null) {
+      log.info(
+          "Trying to resolve the ID property for entity "
+              + entityType
+              + " using the annotated ID field");
+      idProperty = annotatedFieldIdPropertyResolver.resolve(entityType, idType);
     }
-
+    if (idProperty == null) {
+      log.info(
+          "Trying to resolve the ID property for entity "
+              + entityType
+              + " using the getter method");
+      idProperty = namedGetterIdPropertyResolver.resolve(entityType, idType);
+    }
+    if (idProperty == null) {
+      log.info("Trying to resolve the ID property for entity " + entityType + " using the field");
+      idProperty = namedFieldIdPropertyResolver.resolve(entityType, idType);
+    }
+    if (idProperty == null) {
+      log.error("No ID property was found for entity " + entityType);
+      throw new NoIdPropertyException(entityType);
+    }
+    final PropertyDescriptor descriptor =
+        PropertyUtils.getPropertyDescriptor(entityType, StringUtils.capitalize(idProperty));
+    if (descriptor.getType().isPrimitive()) {
+      throw new PrimitiveIdTypeException(entityType, idProperty);
+    }
+    return idProperty;
+  }
 }

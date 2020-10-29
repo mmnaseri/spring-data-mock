@@ -17,23 +17,22 @@ import static org.hamcrest.Matchers.is;
  */
 public class WrappedSortParameterExtractorTest {
 
-    @Test(expectedExceptions = RepositoryDefinitionException.class)
-    public void testPassingNull() {
-        new WrappedSortParameterExtractor(null);
-    }
+  @Test(expectedExceptions = RepositoryDefinitionException.class)
+  public void testPassingNull() {
+    new WrappedSortParameterExtractor(null);
+  }
 
-    @Test(expectedExceptions = InvalidArgumentException.class)
-    public void testNullInvocation() {
-        final WrappedSortParameterExtractor extractor = new WrappedSortParameterExtractor(
-                new ImmutableSort(new ArrayList<>()));
-        extractor.extract(null);
-    }
+  @Test(expectedExceptions = InvalidArgumentException.class)
+  public void testNullInvocation() {
+    final WrappedSortParameterExtractor extractor =
+        new WrappedSortParameterExtractor(new ImmutableSort(new ArrayList<>()));
+    extractor.extract(null);
+  }
 
-    @Test
-    public void testIdentity() {
-        final Sort sort = new ImmutableSort(new ArrayList<>());
-        final WrappedSortParameterExtractor extractor = new WrappedSortParameterExtractor(sort);
-        assertThat(extractor.extract(new ImmutableInvocation(null, new Object[]{})), is(sort));
-    }
-
+  @Test
+  public void testIdentity() {
+    final Sort sort = new ImmutableSort(new ArrayList<>());
+    final WrappedSortParameterExtractor extractor = new WrappedSortParameterExtractor(sort);
+    assertThat(extractor.extract(new ImmutableInvocation(null, new Object[] {})), is(sort));
+  }
 }

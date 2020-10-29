@@ -10,12 +10,11 @@ import com.mmnaseri.utils.spring.data.domain.impl.MethodQueryDescriptionExtracto
  */
 public interface QueryDescription extends DataFunctions {
 
-    /**
-     * Tells the builder to use the given query description extractor instead of the default
-     *
-     * @param extractor the extractor
-     * @return the rest of the configuration
-     */
-    DataFunctions extractQueriesUsing(MethodQueryDescriptionExtractor extractor);
-
+  /**
+   * Tells the builder to use the given query description extractor instead of the default
+   *
+   * @param extractor the extractor
+   * @return the rest of the configuration
+   */
+  DataFunctions extractQueriesUsing(MethodQueryDescriptionExtractor extractor);
 }

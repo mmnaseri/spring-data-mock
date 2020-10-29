@@ -9,9 +9,8 @@ import com.mmnaseri.utils.spring.data.domain.impl.key.RandomLongKeyGenerator;
  */
 public class RandomLongKeyGeneratorTest extends BaseKeyGeneratorTest<Long> {
 
-    @Override
-    protected KeyGenerator<Long> getKeyGenerator() {
-        return new RandomLongKeyGenerator();
-    }
-
+  @Override
+  protected KeyGenerator<Long> getKeyGenerator() {
+    return new RandomLongKeyGenerator();
+  }
 }

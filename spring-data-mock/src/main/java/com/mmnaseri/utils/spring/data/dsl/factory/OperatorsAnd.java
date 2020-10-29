@@ -10,12 +10,11 @@ import com.mmnaseri.utils.spring.data.domain.Operator;
  */
 public interface OperatorsAnd extends DataFunctions {
 
-    /**
-     * Registers this operator as well
-     *
-     * @param operator the operator
-     * @return the rest of the configuration
-     */
-    OperatorsAnd and(Operator operator);
-
+  /**
+   * Registers this operator as well
+   *
+   * @param operator the operator
+   * @return the rest of the configuration
+   */
+  OperatorsAnd and(Operator operator);
 }

@@ -6,8 +6,7 @@ package com.mmnaseri.utils.spring.data.error;
  */
 public class DataOperationExecutionException extends DataOperationException {
 
-    public DataOperationExecutionException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
+  public DataOperationExecutionException(String message, Throwable cause) {
+    super(message, cause);
+  }
 }

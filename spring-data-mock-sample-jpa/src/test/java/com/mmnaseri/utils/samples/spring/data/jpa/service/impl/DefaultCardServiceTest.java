@@ -6,7 +6,6 @@ import org.hamcrest.Matchers;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static com.mmnaseri.utils.spring.data.dsl.factory.RepositoryFactoryBuilder.builder;

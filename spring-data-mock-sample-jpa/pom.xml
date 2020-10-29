@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
@@ -10,7 +10,8 @@
 
     <name>Spring Data Mock: Samples (JPA)</name>
     <description>This module tries to demonstrate how Spring Data Mock could be used to test an application that
-    is using Spring Data JPA.</description>
+        is using Spring Data JPA.
+    </description>
     <inceptionYear>2016</inceptionYear>
     <licenses>
         <license>

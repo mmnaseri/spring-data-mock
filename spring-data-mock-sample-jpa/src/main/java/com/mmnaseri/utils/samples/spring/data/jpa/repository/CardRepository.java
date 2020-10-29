@@ -8,5 +8,4 @@ import java.util.List;
 public interface CardRepository extends JpaRepository<Card, Integer> {
 
   List<Card> findAllByOrderByBlablaAsc();
-
 }

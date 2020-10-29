@@ -24,36 +24,38 @@ import java.util.List;
  */
 public class DefaultDataOperationResolver implements DataOperationResolver {
 
-    private static final Log log = LogFactory.getLog(DefaultDataOperationResolver.class);
-    private final List<DataOperationResolver> resolvers;
+  private static final Log log = LogFactory.getLog(DefaultDataOperationResolver.class);
+  private final List<DataOperationResolver> resolvers;
 
-    public DefaultDataOperationResolver(List<TypeMapping<?>> implementations,
-                                        MethodQueryDescriptionExtractor descriptionExtractor,
-                                        RepositoryMetadata repositoryMetadata, DataFunctionRegistry functionRegistry,
-                                        RepositoryFactoryConfiguration configuration) {
-        resolvers = new ArrayList<>();
-        resolvers.add(new SignatureDataOperationResolver(implementations));
-        resolvers.add(new QueryMethodDataOperationResolver(descriptionExtractor, repositoryMetadata, functionRegistry,
-                                                           configuration));
+  public DefaultDataOperationResolver(
+      List<TypeMapping<?>> implementations,
+      MethodQueryDescriptionExtractor descriptionExtractor,
+      RepositoryMetadata repositoryMetadata,
+      DataFunctionRegistry functionRegistry,
+      RepositoryFactoryConfiguration configuration) {
+    resolvers = new ArrayList<>();
+    resolvers.add(new SignatureDataOperationResolver(implementations));
+    resolvers.add(
+        new QueryMethodDataOperationResolver(
+            descriptionExtractor, repositoryMetadata, functionRegistry, configuration));
+  }
+
+  @Override
+  public DataStoreOperation<?, ?, ?> resolve(Method method) {
+    log.info("Resolving the data operation for method " + method);
+    for (DataOperationResolver resolver : resolvers) {
+      log.debug("Attempting to resolve the method call using resolver " + resolver);
+      final DataStoreOperation<?, ?, ?> resolution;
+      try {
+        resolution = resolver.resolve(method);
+      } catch (Exception e) {
+        throw new DataOperationDefinitionException(method, e);
+      }
+      if (resolution != null) {
+        return resolution;
+      }
     }
-
-    @Override
-    public DataStoreOperation<?, ?, ?> resolve(Method method) {
-        log.info("Resolving the data operation for method " + method);
-        for (DataOperationResolver resolver : resolvers) {
-            log.debug("Attempting to resolve the method call using resolver " + resolver);
-            final DataStoreOperation<?, ?, ?> resolution;
-            try {
-                resolution = resolver.resolve(method);
-            } catch (Exception e) {
-                throw new DataOperationDefinitionException(method, e);
-            }
-            if (resolution != null) {
-                return resolution;
-            }
-        }
-        log.error("No suitable data operation could be found for method " + method);
-        throw new UnknownDataOperationException(method);
-    }
-
+    log.error("No suitable data operation could be found for method " + method);
+    throw new UnknownDataOperationException(method);
+  }
 }

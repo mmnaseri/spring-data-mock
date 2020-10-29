@@ -20,64 +20,65 @@ import static org.hamcrest.Matchers.notNullValue;
  */
 public class DefaultPlaneServiceTest {
 
-    private PlaneRepository repository;
-    private DefaultPlaneService service;
+  private PlaneRepository repository;
+  private DefaultPlaneService service;
 
-    @BeforeMethod
-    public void setUp() {
-        final RepositoryFactoryConfiguration configuration = RepositoryConfigUtils.getConfiguration();
-        repository = new RepositoryMockBuilder()
-                .useConfiguration(configuration)
-                .mock(PlaneRepository.class);
-        service = new DefaultPlaneService(repository);
-    }
+  @BeforeMethod
+  public void setUp() {
+    final RepositoryFactoryConfiguration configuration = RepositoryConfigUtils.getConfiguration();
+    repository =
+        new RepositoryMockBuilder().useConfiguration(configuration).mock(PlaneRepository.class);
+    service = new DefaultPlaneService(repository);
+  }
 
-    @AfterMethod
-    public void tearDown() {
-        final RepositoryFactoryConfiguration configuration = RepositoryConfigUtils.getConfiguration();
-        //because the configuration is now shared, it means that the data store registry is shared across all
-        //the tests, too.
-        //This is the same as using a shared database for doing all the tests. So, at the end of the tests we need
-        //to clear the database after us like using a regular data store
-        final DataStore<Object, Plane> dataStore = configuration.getDataStoreRegistry().getDataStore(Plane.class);
-        dataStore.truncate();
-    }
+  @AfterMethod
+  public void tearDown() {
+    final RepositoryFactoryConfiguration configuration = RepositoryConfigUtils.getConfiguration();
+    // because the configuration is now shared, it means that the data store registry is shared
+    // across all
+    // the tests, too.
+    // This is the same as using a shared database for doing all the tests. So, at the end of the
+    // tests we need
+    // to clear the database after us like using a regular data store
+    final DataStore<Object, Plane> dataStore =
+        configuration.getDataStoreRegistry().getDataStore(Plane.class);
+    dataStore.truncate();
+  }
 
-    @Test
-    public void testCreate() {
-        assertThat(repository.count(), is(0L));
-        final String model = "F-22";
-        final String serial = "123456";
-        final Long id = service.create(model, serial);
-        assertThat(id, is(notNullValue()));
-        final Plane loaded = repository.findById(id).orElse(null);
-        assertThat(loaded, is(notNullValue()));
-        assertThat(loaded.getModel(), is(model));
-        assertThat(loaded.getSerial(), is(serial));
-    }
+  @Test
+  public void testCreate() {
+    assertThat(repository.count(), is(0L));
+    final String model = "F-22";
+    final String serial = "123456";
+    final Long id = service.create(model, serial);
+    assertThat(id, is(notNullValue()));
+    final Plane loaded = repository.findById(id).orElse(null);
+    assertThat(loaded, is(notNullValue()));
+    assertThat(loaded.getModel(), is(model));
+    assertThat(loaded.getSerial(), is(serial));
+  }
 
-    @Test
-    public void testLookupById() {
-        final Plane entity = new Plane();
-        entity.setModel("Boeing 747");
-        entity.setSerial("123456");
-        entity.setCapacity(1000);
-        final Plane saved = repository.save(entity);
-        final String model = service.lookup(saved.getId());
-        assertThat(model, is(notNullValue()));
-        assertThat(model, is(entity.getModel()));
-    }
+  @Test
+  public void testLookupById() {
+    final Plane entity = new Plane();
+    entity.setModel("Boeing 747");
+    entity.setSerial("123456");
+    entity.setCapacity(1000);
+    final Plane saved = repository.save(entity);
+    final String model = service.lookup(saved.getId());
+    assertThat(model, is(notNullValue()));
+    assertThat(model, is(entity.getModel()));
+  }
 
-    @Test
-    public void testLookupBySerial() {
-        final Plane entity = new Plane();
-        entity.setModel("Boeing 747");
-        entity.setSerial("123456");
-        entity.setCapacity(1000);
-        repository.save(entity);
-        final String model = service.lookup(entity.getSerial());
-        assertThat(model, is(notNullValue()));
-        assertThat(model, is(entity.getModel()));
-    }
-
+  @Test
+  public void testLookupBySerial() {
+    final Plane entity = new Plane();
+    entity.setModel("Boeing 747");
+    entity.setSerial("123456");
+    entity.setCapacity(1000);
+    repository.save(entity);
+    final String model = service.lookup(entity.getSerial());
+    assertThat(model, is(notNullValue()));
+    assertThat(model, is(entity.getModel()));
+  }
 }

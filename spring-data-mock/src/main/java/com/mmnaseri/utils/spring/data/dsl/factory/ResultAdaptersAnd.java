@@ -10,13 +10,12 @@ import com.mmnaseri.utils.spring.data.proxy.ResultAdapter;
  */
 public interface ResultAdaptersAnd extends MappingContext {
 
-    /**
-     * Registers an extra adapter
-     *
-     * @param adapter the adapter
-     * @param <E>     the type of the result for the adapter
-     * @return the rest of the configuration
-     */
-    <E> ResultAdaptersAnd and(ResultAdapter<E> adapter);
-
+  /**
+   * Registers an extra adapter
+   *
+   * @param adapter the adapter
+   * @param <E> the type of the result for the adapter
+   * @return the rest of the configuration
+   */
+  <E> ResultAdaptersAnd and(ResultAdapter<E> adapter);
 }

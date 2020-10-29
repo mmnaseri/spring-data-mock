@@ -10,12 +10,11 @@ import org.testng.annotations.Test;
  */
 public abstract class BaseRepeatableIdPropertyResolverTest extends BaseIdPropertyResolverTest {
 
-    protected abstract Class<?> entityWithMultipleProperties();
+  protected abstract Class<?> entityWithMultipleProperties();
 
-    @Test(expectedExceptions = MultipleIdPropertiesException.class)
-    public void testFindingTheIdFieldOnEntityWithMultipleAnnotatedFields() {
-        final IdPropertyResolver resolver = getIdPropertyResolver();
-        resolver.resolve(entityWithMultipleProperties(), Object.class);
-    }
-
+  @Test(expectedExceptions = MultipleIdPropertiesException.class)
+  public void testFindingTheIdFieldOnEntityWithMultipleAnnotatedFields() {
+    final IdPropertyResolver resolver = getIdPropertyResolver();
+    resolver.resolve(entityWithMultipleProperties(), Object.class);
+  }
 }

@@ -18,5 +18,4 @@ public class DefaultCardService implements CardService {
   public List<Card> load() {
     return cardRepository.findAllByOrderByBlablaAsc();
   }
-
 }

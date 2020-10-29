@@ -12,22 +12,26 @@ import static org.hamcrest.Matchers.is;
  */
 public class GetterMethodFilterTest {
 
-    @Test
-    public void testFailures() throws Exception {
-        final GetterMethodFilter filter = new GetterMethodFilter();
-        assertThat(filter.matches(SampleClass.class.getDeclaredMethod("getProperty")), is(false));
-        assertThat(filter.matches(SampleClass.class.getDeclaredMethod("getProperty", int.class)), is(false));
-        assertThat(filter.matches(SampleClass.class.getDeclaredMethod("hasProperty")), is(false));
-        assertThat(filter.matches(SampleClass.class.getDeclaredMethod("getProperty", String.class)), is(false));
-        assertThat(filter.matches(SampleClass.class.getDeclaredMethod("hasProperty", String.class)), is(false));
-        assertThat(filter.matches(SampleClass.class.getDeclaredMethod("hasState")), is(false));
-        assertThat(filter.matches(SampleClass.class.getDeclaredMethod("getterMethod")), is(false));
-    }
+  @Test
+  public void testFailures() throws Exception {
+    final GetterMethodFilter filter = new GetterMethodFilter();
+    assertThat(filter.matches(SampleClass.class.getDeclaredMethod("getProperty")), is(false));
+    assertThat(
+        filter.matches(SampleClass.class.getDeclaredMethod("getProperty", int.class)), is(false));
+    assertThat(filter.matches(SampleClass.class.getDeclaredMethod("hasProperty")), is(false));
+    assertThat(
+        filter.matches(SampleClass.class.getDeclaredMethod("getProperty", String.class)),
+        is(false));
+    assertThat(
+        filter.matches(SampleClass.class.getDeclaredMethod("hasProperty", String.class)),
+        is(false));
+    assertThat(filter.matches(SampleClass.class.getDeclaredMethod("hasState")), is(false));
+    assertThat(filter.matches(SampleClass.class.getDeclaredMethod("getterMethod")), is(false));
+  }
 
-    @Test
-    public void testProperGetter() throws Exception {
-        final GetterMethodFilter filter = new GetterMethodFilter();
-        assertThat(filter.matches(SampleClass.class.getDeclaredMethod("getValue")), is(true));
-    }
-
+  @Test
+  public void testProperGetter() throws Exception {
+    final GetterMethodFilter filter = new GetterMethodFilter();
+    assertThat(filter.matches(SampleClass.class.getDeclaredMethod("getValue")), is(true));
+  }
 }
