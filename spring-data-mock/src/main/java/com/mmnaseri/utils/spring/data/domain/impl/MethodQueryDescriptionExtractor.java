@@ -143,7 +143,7 @@ public class MethodQueryDescriptionExtractor implements QueryDescriptionExtracto
         //this is the extractor used for getting paging data
         final PageParameterExtractor pageExtractor;
         //this is the extractor used for getting sorting data
-        SortParameterExtractor sortExtractor = null;
+        SortParameterExtractor sortExtractor;
         //these are decision branches, each of which denoting an AND clause
         final List<List<Parameter>> branches = new ArrayList<>();
         //if the method name simply was the function name, no metadata can be extracted
@@ -160,8 +160,17 @@ public class MethodQueryDescriptionExtractor implements QueryDescriptionExtracto
             pageExtractor = getPageParameterExtractor(method, index, sort);
             sortExtractor = getSortParameterExtractor(method, index, sort);
         }
-        return new DefaultQueryDescriptor(queryModifiers.isDistinct(), function, queryModifiers.getLimit(),
-                                          pageExtractor, sortExtractor, branches, configuration, repositoryMetadata);
+        return new DefaultQueryDescriptor(queryModifiers.isDistinct(), function, queryModifiers.getLimit(), pageExtractor, sortExtractor, branches(branches), configuration, repositoryMetadata);
+    }
+
+    private static List<List<Parameter>> branches(List<List<Parameter>> original) {
+        List<List<Parameter>> branches = new ArrayList<>();
+        for (List<Parameter> branch : original) {
+            if (!branch.isEmpty()) {
+                branches.add(branch);
+            }
+        }
+        return branches;
     }
 
     private SortParameterExtractor getSortParameterExtractor(Method method, int index,
@@ -213,6 +222,12 @@ public class MethodQueryDescriptionExtractor implements QueryDescriptionExtracto
             final Parameter parameter;
             //read a full expression
             String expression = parseInitialExpression(reader);
+            // If we have encountered an OrderBy as the first thing in the expression, then we have no properties to
+            // filter on and we only want to order.
+            if (expression.startsWith("OrderBy")) {
+                reader.backtrack(expression.length());
+                break;
+            }
             //if the expression ended in Or, this is the end of this branch
             boolean branchEnd = expression.endsWith("Or");
             //if the expression contains an OrderBy, it is not only the end of the branch, but also the end of the query
