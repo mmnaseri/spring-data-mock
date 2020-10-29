@@ -18,4 +18,6 @@ public interface MembershipRepository extends JpaRepository<Membership, String> 
   List<Membership> findByGroup(Group group);
 
   Membership findByUserAndGroup(User user, Group group);
+
+  List<Membership> findAllByUserAndActive(User user, boolean active);
 }

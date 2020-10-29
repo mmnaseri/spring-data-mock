@@ -3,6 +3,7 @@ package com.mmnaseri.utils.spring.data.domain.impl.matchers;
 import com.mmnaseri.utils.spring.data.domain.Matcher;
 import com.mmnaseri.utils.spring.data.domain.Parameter;
 import com.mmnaseri.utils.spring.data.error.InvalidArgumentException;
+import com.mmnaseri.utils.spring.data.tools.PropertyUtils;
 
 /**
  * Used for matching operands to a binary operator
@@ -39,7 +40,9 @@ public abstract class AbstractBinaryMatcher implements Matcher {
   @Override
   public boolean isApplicableTo(Class<?> parameterType, Class<?>... propertiesTypes) {
     return propertiesTypes.length == 2
-        && parameterType.isAssignableFrom(propertiesTypes[0])
-        && parameterType.isAssignableFrom(propertiesTypes[1]);
+        && PropertyUtils.getTypeOf(parameterType)
+            .isAssignableFrom(PropertyUtils.getTypeOf(propertiesTypes[0]))
+        && PropertyUtils.getTypeOf(parameterType)
+            .isAssignableFrom(PropertyUtils.getTypeOf(propertiesTypes[1]));
   }
 }

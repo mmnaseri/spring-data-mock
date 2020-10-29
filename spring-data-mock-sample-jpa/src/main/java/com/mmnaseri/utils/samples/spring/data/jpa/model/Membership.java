@@ -15,6 +15,7 @@ public class Membership {
   @Id private String id;
   @ManyToOne private User user;
   @ManyToOne private Group group;
+  private Boolean active;
 
   public String getId() {
     return id;
@@ -38,5 +39,14 @@ public class Membership {
 
   public void setGroup(Group group) {
     this.group = group;
+  }
+
+  public Boolean getActive() {
+    return active;
+  }
+
+  public Membership setActive(final Boolean active) {
+    this.active = active;
+    return this;
   }
 }

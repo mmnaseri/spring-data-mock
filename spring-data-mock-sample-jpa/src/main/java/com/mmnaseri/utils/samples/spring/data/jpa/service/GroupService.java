@@ -22,4 +22,8 @@ public interface GroupService {
   List<User> members(Group group);
 
   List<Group> groups(User user);
+
+  void deactivate(Group group, User user);
+
+  List<Group> deactivatedGroups(User user);
 }

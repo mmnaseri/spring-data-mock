@@ -75,4 +75,9 @@ public class DefaultUserService implements UserService {
     }
     return null;
   }
+
+  @Override
+  public List<Group> deactivatedGroups(final User user) {
+    return groupService.deactivatedGroups(user);
+  }
 }

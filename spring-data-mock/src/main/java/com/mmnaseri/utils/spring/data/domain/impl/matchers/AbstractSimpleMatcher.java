@@ -3,6 +3,7 @@ package com.mmnaseri.utils.spring.data.domain.impl.matchers;
 import com.mmnaseri.utils.spring.data.domain.Matcher;
 import com.mmnaseri.utils.spring.data.domain.Parameter;
 import com.mmnaseri.utils.spring.data.error.InvalidArgumentException;
+import com.mmnaseri.utils.spring.data.tools.PropertyUtils;
 
 /**
  * This matcher is used to determine if a condition holds for a single parameter
@@ -33,6 +34,8 @@ public abstract class AbstractSimpleMatcher implements Matcher {
 
   @Override
   public boolean isApplicableTo(Class<?> parameterType, Class<?>... propertiesTypes) {
-    return propertiesTypes.length == 1 && parameterType.isAssignableFrom(propertiesTypes[0]);
+    return propertiesTypes.length == 1
+        && PropertyUtils.getTypeOf(parameterType)
+            .isAssignableFrom(PropertyUtils.getTypeOf(propertiesTypes[0]));
   }
 }

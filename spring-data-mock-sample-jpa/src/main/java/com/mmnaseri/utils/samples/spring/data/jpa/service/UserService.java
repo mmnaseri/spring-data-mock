@@ -1,6 +1,9 @@
 package com.mmnaseri.utils.samples.spring.data.jpa.service;
 
+import com.mmnaseri.utils.samples.spring.data.jpa.model.Group;
 import com.mmnaseri.utils.samples.spring.data.jpa.model.User;
+
+import java.util.List;
 
 /**
  * @author Milad Naseri (milad.naseri@cdk.com)
@@ -18,4 +21,6 @@ public interface UserService {
   User lookup(String handle);
 
   User authenticate(String handle, String password);
+
+  List<Group> deactivatedGroups(User user);
 }

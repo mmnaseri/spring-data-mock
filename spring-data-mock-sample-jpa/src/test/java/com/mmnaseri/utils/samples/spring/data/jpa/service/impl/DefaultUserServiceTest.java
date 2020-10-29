@@ -1,5 +1,6 @@
 package com.mmnaseri.utils.samples.spring.data.jpa.service.impl;
 
+import com.mmnaseri.utils.samples.spring.data.jpa.model.Group;
 import com.mmnaseri.utils.samples.spring.data.jpa.model.User;
 import com.mmnaseri.utils.samples.spring.data.jpa.repository.GroupRepository;
 import com.mmnaseri.utils.samples.spring.data.jpa.repository.MembershipRepository;
@@ -11,7 +12,11 @@ import org.hamcrest.Matchers;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import java.util.List;
+
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
@@ -145,5 +150,18 @@ public class DefaultUserServiceTest {
     service.deleteUser(user.getUsername());
     assertThat(groupService.groups(user), is(Matchers.empty()));
     assertThat(groupRepository.count(), is(4L));
+  }
+
+  @Test
+  public void testReadingDeactivatedUsers() {
+    User user = service.createUser("milad", "milad@mmnaseri.com", "123456");
+    Group group = groupService.createGroup("Group 1");
+    groupService.join(group, user);
+
+    assertThat(service.deactivatedGroups(user), is(empty()));
+
+    groupService.deactivate(group, user);
+
+    assertThat(service.deactivatedGroups(user), contains(group));
   }
 }

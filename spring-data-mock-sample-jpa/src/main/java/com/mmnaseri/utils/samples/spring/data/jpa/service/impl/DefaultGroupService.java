@@ -10,6 +10,8 @@ import com.mmnaseri.utils.samples.spring.data.jpa.service.GroupService;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.util.stream.Collectors.toList;
+
 /**
  * @author Milad Naseri (milad.naseri@cdk.com)
  * @since 1.0 (6/30/16, 9:16 AM)
@@ -77,5 +79,22 @@ public class DefaultGroupService implements GroupService {
       groups.add(membership.getGroup());
     }
     return groups;
+  }
+
+  @Override
+  public void deactivate(final Group group, final User user) {
+    Membership membership = membershipRepository.findByUserAndGroup(user, group);
+    if (membership == null) {
+      return;
+    }
+    membership.setActive(false);
+    membershipRepository.save(membership);
+  }
+
+  @Override
+  public List<Group> deactivatedGroups(final User user) {
+    return membershipRepository.findAllByUserAndActive(user, false).stream()
+        .map(Membership::getGroup)
+        .collect(toList());
   }
 }
