@@ -4,15 +4,16 @@ import com.mmnaseri.utils.spring.data.tools.PropertyUtils;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.ReflectionUtils;
 
+import javax.annotation.Nonnull;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 /**
- * This property visitor will visit all properties (fields and getter methods) to find out the property that
- * has the specified annotation. The property can later be retrieved by calling {@link #getProperty()}.
+ * This property visitor will visit all properties (fields and getter methods) to find out the property that has the
+ * specified annotation. The property can later be retrieved by calling {@link #getProperty()}.
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (10/12/15)
  */
 class PropertyVisitor implements ReflectionUtils.MethodCallback, ReflectionUtils.FieldCallback {
@@ -25,7 +26,7 @@ class PropertyVisitor implements ReflectionUtils.MethodCallback, ReflectionUtils
     }
 
     @Override
-    public void doWith(Method method) throws IllegalArgumentException, IllegalAccessException {
+    public void doWith(@Nonnull Method method) throws IllegalArgumentException {
         if (property != null) {
             return;
         }
@@ -35,7 +36,7 @@ class PropertyVisitor implements ReflectionUtils.MethodCallback, ReflectionUtils
     }
 
     @Override
-    public void doWith(Field field) throws IllegalArgumentException, IllegalAccessException {
+    public void doWith(@Nonnull Field field) throws IllegalArgumentException {
         if (property != null) {
             return;
         }

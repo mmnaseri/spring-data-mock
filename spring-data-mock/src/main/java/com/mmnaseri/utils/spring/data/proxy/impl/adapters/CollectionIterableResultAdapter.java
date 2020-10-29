@@ -8,12 +8,12 @@ import java.util.Collection;
 
 /**
  * <p>This adapter will adapt results from an iterable to the appropriate collection type. It will accept
- * adaptations if the original value is an iterable object and the target result is some sort
- * {@link java.util.Collection collection}.</p>
+ * adaptations if the original value is an iterable object and the target result is some sort {@link
+ * java.util.Collection collection}.</p>
  *
  * <p>This adapter will execute at priority {@literal -300}.</p>
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/28/15)
  */
 public class CollectionIterableResultAdapter extends AbstractIterableResultAdapter<Collection> {
@@ -39,6 +39,7 @@ public class CollectionIterableResultAdapter extends AbstractIterableResultAdapt
 
     @Override
     public boolean accepts(Invocation invocation, Object originalValue) {
-        return originalValue != null && originalValue instanceof Iterable && Collection.class.isAssignableFrom(invocation.getMethod().getReturnType());
+        return originalValue instanceof Iterable && Collection.class.isAssignableFrom(
+                invocation.getMethod().getReturnType());
     }
 }

@@ -16,7 +16,9 @@ import org.testng.annotations.Test;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 
 /**
  * @author Milad Naseri (milad.naseri@cdk.com)
@@ -30,7 +32,7 @@ public class DefaultGroupServiceTest {
     private MembershipRepository membershipRepository;
 
     @BeforeMethod
-    public void setUp() throws Exception {
+    public void setUp() {
         final Start builder = RepositoryFactoryBuilder.builder();
         groupRepository = builder.mock(GroupRepository.class);
         membershipRepository = builder.mock(MembershipRepository.class);
@@ -40,20 +42,20 @@ public class DefaultGroupServiceTest {
     }
 
     @Test
-    public void testCreatingAGroup() throws Exception {
+    public void testCreatingAGroup() {
         assertThat(groupRepository.count(), is(0L));
         final String name = "My Group";
         final Group group = service.createGroup(name);
         assertThat(group, is(notNullValue()));
         assertThat(group.getName(), is(name));
         assertThat(groupRepository.count(), is(1L));
-        final Group found = groupRepository.findOne(group.getId());
+        final Group found = groupRepository.findById(group.getId()).orElse(null);
         assertThat(found, is(notNullValue()));
         assertThat(found.getName(), is(name));
     }
 
     @Test
-    public void testDeletingAnEmptyGroup() throws Exception {
+    public void testDeletingAnEmptyGroup() {
         Group group = new Group();
         group.setName("My Group");
         group = groupRepository.save(group);
@@ -62,7 +64,7 @@ public class DefaultGroupServiceTest {
     }
 
     @Test
-    public void testEstablishingMembership() throws Exception {
+    public void testEstablishingMembership() {
         Group group = new Group();
         group.setName("My Group");
         group = groupRepository.save(group);
@@ -78,7 +80,7 @@ public class DefaultGroupServiceTest {
     }
 
     @Test
-    public void testBreakingAMembership() throws Exception {
+    public void testBreakingAMembership() {
         Group group = new Group();
         group.setName("My Group");
         group = groupRepository.save(group);
@@ -92,7 +94,7 @@ public class DefaultGroupServiceTest {
     }
 
     @Test
-    public void testListingGroupMembers() throws Exception {
+    public void testListingGroupMembers() {
         Group group = new Group();
         group.setName("My Group");
         group = groupRepository.save(group);
@@ -109,7 +111,7 @@ public class DefaultGroupServiceTest {
     }
 
     @Test
-    public void testListingUserGroups() throws Exception {
+    public void testListingUserGroups() {
         Group group = new Group();
         group.setName("My Group");
         group = groupRepository.save(group);
@@ -126,7 +128,7 @@ public class DefaultGroupServiceTest {
     }
 
     @Test
-    public void testDeletingAGroupWithMembers() throws Exception {
+    public void testDeletingAGroupWithMembers() {
         Group group = new Group();
         group.setName("My Group");
         group = groupRepository.save(group);

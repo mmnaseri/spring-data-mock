@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * This class will use the other resolvers to find out how a data operation should be handled.
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/29/15)
  */
 public class DefaultDataOperationResolver implements DataOperationResolver {
@@ -27,10 +27,14 @@ public class DefaultDataOperationResolver implements DataOperationResolver {
     private static final Log log = LogFactory.getLog(DefaultDataOperationResolver.class);
     private final List<DataOperationResolver> resolvers;
 
-    public DefaultDataOperationResolver(List<TypeMapping<?>> implementations, MethodQueryDescriptionExtractor descriptionExtractor, RepositoryMetadata repositoryMetadata, DataFunctionRegistry functionRegistry, RepositoryFactoryConfiguration configuration) {
+    public DefaultDataOperationResolver(List<TypeMapping<?>> implementations,
+                                        MethodQueryDescriptionExtractor descriptionExtractor,
+                                        RepositoryMetadata repositoryMetadata, DataFunctionRegistry functionRegistry,
+                                        RepositoryFactoryConfiguration configuration) {
         resolvers = new ArrayList<>();
         resolvers.add(new SignatureDataOperationResolver(implementations));
-        resolvers.add(new QueryMethodDataOperationResolver(descriptionExtractor, repositoryMetadata, functionRegistry, configuration));
+        resolvers.add(new QueryMethodDataOperationResolver(descriptionExtractor, repositoryMetadata, functionRegistry,
+                                                           configuration));
     }
 
     @Override

@@ -12,13 +12,13 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.not;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/12/16, 3:28 PM)
  */
 public class AbstractRandomKeyGeneratorTest {
 
     @Test
-    public void testThatGeneratorProtectsUsFromDuplicates() throws Exception {
+    public void testThatGeneratorProtectsUsFromDuplicates() {
         final Set<Integer> generatedKeys = new HashSet<>();
         final KeyGenerator<Integer> generator = new DuplicatingKeyGenerator();
         for (int i = 0; i < 1000; i++) {

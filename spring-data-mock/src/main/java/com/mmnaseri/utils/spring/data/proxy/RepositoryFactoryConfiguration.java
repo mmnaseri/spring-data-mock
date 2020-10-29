@@ -11,7 +11,7 @@ import com.mmnaseri.utils.spring.data.store.DataStoreRegistry;
 /**
  * This class will be used to hold all the pieces of information required to instantiate a repository.
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (10/8/15)
  */
 public interface RepositoryFactoryConfiguration {

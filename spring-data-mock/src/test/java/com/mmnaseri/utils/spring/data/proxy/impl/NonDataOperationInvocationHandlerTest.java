@@ -9,7 +9,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/10/16)
  */
 public class NonDataOperationInvocationHandlerTest {
@@ -18,10 +18,14 @@ public class NonDataOperationInvocationHandlerTest {
     public void testHandlingKnownMethods() throws Throwable {
         final NonDataOperationInvocationHandler handler = new NonDataOperationInvocationHandler();
         final Object proxy = new Object();
-        assertThat(handler.invoke(proxy, Object.class.getMethod("hashCode"), new Object[]{}), Matchers.<Object>is(proxy.hashCode()));
-        assertThat(handler.invoke(proxy, Object.class.getMethod("toString"), new Object[]{}), Matchers.<Object>is(proxy.toString()));
-        assertThat(handler.invoke(proxy, Object.class.getMethod("equals", Object.class), new Object[]{proxy}), Matchers.<Object>is(true));
-        assertThat(handler.invoke(proxy, Object.class.getMethod("equals", Object.class), new Object[]{new Object()}), Matchers.<Object>is(false));
+        assertThat(handler.invoke(proxy, Object.class.getMethod("hashCode"), new Object[]{}),
+                   Matchers.is(proxy.hashCode()));
+        assertThat(handler.invoke(proxy, Object.class.getMethod("toString"), new Object[]{}),
+                   Matchers.is(proxy.toString()));
+        assertThat(handler.invoke(proxy, Object.class.getMethod("equals", Object.class), new Object[]{proxy}),
+                   Matchers.is(true));
+        assertThat(handler.invoke(proxy, Object.class.getMethod("equals", Object.class), new Object[]{new Object()}),
+                   Matchers.is(false));
     }
 
     @Test(expectedExceptions = UnknownDataOperationException.class)

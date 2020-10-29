@@ -14,7 +14,6 @@ import org.hamcrest.Matchers;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -26,7 +25,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/11/16, 1:16 PM)
  */
 public class DefaultJpaRepositoryTest {
@@ -36,8 +35,9 @@ public class DefaultJpaRepositoryTest {
     private DataStore<String, Person> dataStore;
 
     @BeforeMethod
-    public void setUp() throws Exception {
-        repositoryMetadata = new ImmutableRepositoryMetadata(String.class, Person.class, SimplePersonRepository.class, "id");
+    public void setUp() {
+        repositoryMetadata = new ImmutableRepositoryMetadata(String.class, Person.class, SimplePersonRepository.class,
+                                                             "id");
         dataStore = new MemoryDataStore<>(Person.class);
         repository = new DefaultJpaRepository();
         repository.setDataStore(dataStore);
@@ -46,11 +46,11 @@ public class DefaultJpaRepositoryTest {
     }
 
     @Test
-    public void testFlushing() throws Exception {
+    public void testFlushing() {
         final DefaultJpaRepository repository = new DefaultJpaRepository();
         repository.setKeyGenerator(new UUIDKeyGenerator());
         repository.setRepositoryMetadata(repositoryMetadata);
-        final SpyingDataStore<Serializable, Object> dataStore = new SpyingDataStore<>(null, new AtomicLong());
+        final SpyingDataStore<Object, Object> dataStore = new SpyingDataStore<>(null, new AtomicLong());
         repository.setDataStore(dataStore);
         repository.flush();
         assertThat(dataStore.getRequests(), hasSize(1));
@@ -58,7 +58,7 @@ public class DefaultJpaRepositoryTest {
     }
 
     @Test
-    public void testDeleteInBatch() throws Exception {
+    public void testDeleteInBatch() {
         dataStore.save("1", new Person());
         dataStore.save("2", new Person());
         dataStore.save("3", new Person());
@@ -88,12 +88,12 @@ public class DefaultJpaRepositoryTest {
     }
 
     @Test(expectedExceptions = EntityMissingKeyException.class)
-    public void testDeleteInBatchWhenIdIsNull() throws Exception {
+    public void testDeleteInBatchWhenIdIsNull() {
         repository.deleteInBatch(Collections.singleton(new Person()));
     }
 
     @Test
-    public void testDeleteAllInBatch() throws Exception {
+    public void testDeleteAllInBatch() {
         dataStore.save("1", new Person());
         dataStore.save("2", new Person());
         dataStore.save("3", new Person());
@@ -104,8 +104,9 @@ public class DefaultJpaRepositoryTest {
     }
 
     @Test
-    public void testDeleteInBatchWithQueueing() throws Exception {
-        final SpyingDataStore<String, Person> dataStore = new SpyingDataStore<>(new MemoryDataStore<String, Person>(Person.class), new AtomicLong());
+    public void testDeleteInBatchWithQueueing() {
+        final SpyingDataStore<String, Person> dataStore = new SpyingDataStore<>(
+                new MemoryDataStore<>(Person.class), new AtomicLong());
         dataStore.save("1", new Person());
         dataStore.save("2", new Person());
         dataStore.save("3", new Person());
@@ -118,16 +119,16 @@ public class DefaultJpaRepositoryTest {
     }
 
     @Test
-    public void testGetOne() throws Exception {
+    public void testGetOne() {
         final String key = "1234";
         assertThat(repository.getOne(key), is(nullValue()));
         final Person person = new Person();
         dataStore.save("1234", person);
-        assertThat(repository.getOne(key), Matchers.<Object>is(person));
+        assertThat(repository.getOne(key), Matchers.is(person));
     }
 
     @Test
-    public void testSaveAndFlush() throws Exception {
+    public void testSaveAndFlush() {
         final DefaultJpaRepository repository = new DefaultJpaRepository();
         repository.setKeyGenerator(new UUIDKeyGenerator());
         repository.setRepositoryMetadata(repositoryMetadata);

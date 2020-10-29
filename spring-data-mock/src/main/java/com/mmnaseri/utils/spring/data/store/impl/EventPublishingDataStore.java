@@ -9,24 +9,24 @@ import com.mmnaseri.utils.spring.data.store.DataStoreEventPublisher;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import java.io.Serializable;
 import java.util.Collection;
 
 /**
  * This implementation relies on a delegate data store to handling the actual storage/retrieval. It decorates the
  * delegate with event triggering capabilities and some additional data integrity checks (null checking).
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (10/6/15)
  */
-public class EventPublishingDataStore<K extends Serializable, E> implements DataStore<K, E>, DataStoreEventPublisher {
+public class EventPublishingDataStore<K, E> implements DataStore<K, E>, DataStoreEventPublisher {
 
     private static final Log log = LogFactory.getLog(EventPublishingDataStore.class);
     private final DataStore<K, E> delegate;
     private final RepositoryMetadata repositoryMetadata;
     private final DataStoreEventListenerContext listenerContext;
 
-    public EventPublishingDataStore(DataStore<K, E> delegate, RepositoryMetadata repositoryMetadata, DataStoreEventListenerContext listenerContext) {
+    public EventPublishingDataStore(DataStore<K, E> delegate, RepositoryMetadata repositoryMetadata,
+                                    DataStoreEventListenerContext listenerContext) {
         this.delegate = delegate;
         this.repositoryMetadata = repositoryMetadata;
         this.listenerContext = listenerContext;
@@ -109,7 +109,7 @@ public class EventPublishingDataStore<K extends Serializable, E> implements Data
 
     @Override
     public void publishEvent(DataStoreEvent event) {
-         listenerContext.trigger(event);
+        listenerContext.trigger(event);
     }
 
 }

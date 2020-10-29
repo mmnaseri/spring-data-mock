@@ -27,11 +27,7 @@ public class DefaultPlaneService implements PlaneService {
 
     @Override
     public String lookup(Long id) {
-        final Plane plane = repository.findOne(id);
-        if (plane == null) {
-            return null;
-        }
-        return plane.getModel();
+        return repository.findById(id).map(Plane::getModel).orElse(null);
     }
 
     @Override

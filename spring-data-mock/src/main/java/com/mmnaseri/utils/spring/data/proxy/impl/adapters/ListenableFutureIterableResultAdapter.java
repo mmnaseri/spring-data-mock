@@ -7,7 +7,8 @@ import org.springframework.util.concurrent.ListenableFutureTask;
 import java.util.concurrent.Callable;
 
 /**
- * <p>This class will adapt results from an iterable object to a <em>listenable</em> future. The future task returned will have already
+ * <p>This class will adapt results from an iterable object to a <em>listenable</em> future. The future task returned
+ * will have already
  * executed with the results available.</p>
  *
  * <p>It will accept adaptations wherein the original value is some sort of iterable and the required return type
@@ -16,7 +17,7 @@ import java.util.concurrent.Callable;
  *
  * <p>This adapter will execute at priority {@literal -50}.</p>
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/28/15)
  */
 public class ListenableFutureIterableResultAdapter extends AbstractIterableResultAdapter<ListenableFuture> {
@@ -27,20 +28,15 @@ public class ListenableFutureIterableResultAdapter extends AbstractIterableResul
 
     @Override
     protected ListenableFuture doAdapt(Invocation invocation, final Iterable iterable) {
-        final ListenableFutureTask task = new ListenableFutureTask<>(new Callable<Object>() {
-            @Override
-            public Object call() throws Exception {
-                return iterable;
-            }
-        });
+        final ListenableFutureTask task = new ListenableFutureTask<>((Callable<Object>) () -> iterable);
         task.run();
-        //noinspection unchecked
         return task;
     }
 
     @Override
     public boolean accepts(Invocation invocation, Object originalValue) {
-        return originalValue != null && originalValue instanceof Iterable && invocation.getMethod().getReturnType().equals(ListenableFuture.class);
+        return originalValue instanceof Iterable && invocation.getMethod().getReturnType()
+                                                              .equals(ListenableFuture.class);
     }
 
 }

@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * This is an immutable sort
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/17/15)
  */
 public class ImmutableSort implements Sort {

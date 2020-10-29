@@ -14,7 +14,7 @@ import java.util.concurrent.Future;
  *
  * <p>This adapter runs at the priority of {@literal -400}.</p>
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/24/15)
  */
 public class NullSimpleResultAdapter extends AbstractResultAdapter<Object> {

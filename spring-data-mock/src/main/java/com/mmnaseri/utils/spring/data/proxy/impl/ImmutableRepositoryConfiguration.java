@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * <p>This class is an immutable repository configuration.</p>
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (10/12/15)
  */
 public class ImmutableRepositoryConfiguration implements RepositoryConfiguration {
@@ -18,7 +18,8 @@ public class ImmutableRepositoryConfiguration implements RepositoryConfiguration
     private final KeyGenerator<?> keyGenerator;
     private final List<Class<?>> boundImplementations;
 
-    public ImmutableRepositoryConfiguration(RepositoryMetadata repositoryMetadata, KeyGenerator<?> keyGenerator, List<Class<?>> boundImplementations) {
+    public ImmutableRepositoryConfiguration(RepositoryMetadata repositoryMetadata, KeyGenerator<?> keyGenerator,
+                                            List<Class<?>> boundImplementations) {
         this.repositoryMetadata = repositoryMetadata;
         this.keyGenerator = keyGenerator;
         this.boundImplementations = boundImplementations;

@@ -13,28 +13,31 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/10/16)
  */
 public class DefaultRepositoryMetadataResolverTest {
 
     @Test
-    public void testThatItResolvesUsingAnnotations() throws Exception {
-        final RepositoryMetadata metadata = new DefaultRepositoryMetadataResolver().resolveFromInterface(SampleAnnotatedRepository.class);
+    public void testThatItResolvesUsingAnnotations() {
+        final RepositoryMetadata metadata = new DefaultRepositoryMetadataResolver().resolveFromInterface(
+                SampleAnnotatedRepository.class);
         assertThat(metadata, is(notNullValue()));
     }
 
     @Test
-    public void testThatItResolvesUsingInheritance() throws Exception {
-        final RepositoryMetadata metadata = new DefaultRepositoryMetadataResolver().resolveFromInterface(SimplePersonRepository.class);
+    public void testThatItResolvesUsingInheritance() {
+        final RepositoryMetadata metadata = new DefaultRepositoryMetadataResolver().resolveFromInterface(
+                SimplePersonRepository.class);
         assertThat(metadata, is(notNullValue()));
     }
 
     @Test
-    public void testThatAnnotationTakesPrecedenceOverInheritance() throws Exception {
-        final RepositoryMetadata metadata = new DefaultRepositoryMetadataResolver().resolveFromInterface(AnnotatedInheritingRepository.class);
+    public void testThatAnnotationTakesPrecedenceOverInheritance() {
+        final RepositoryMetadata metadata = new DefaultRepositoryMetadataResolver().resolveFromInterface(
+                AnnotatedInheritingRepository.class);
         assertThat(metadata, is(notNullValue()));
-        assertThat(metadata.getEntityType(), is(Matchers.<Class<?>>equalTo(Person.class)));
+        assertThat(metadata.getEntityType(), is(Matchers.equalTo(Person.class)));
     }
 
 }

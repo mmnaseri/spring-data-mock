@@ -10,7 +10,6 @@ import com.mmnaseri.utils.spring.data.store.DataStoreOperation;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -18,10 +17,10 @@ import java.util.*;
  * query description's different decision branches. Once all the values are loaded and filtered, it will then sort them
  * according to the sort instruction, and then paginate them if necessary.
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/17/15)
  */
-public class SelectDataStoreOperation<K extends Serializable, E> implements DataStoreOperation<List<E>, K, E> {
+public class SelectDataStoreOperation<K, E> implements DataStoreOperation<List<E>, K, E> {
 
     private static final Log log = LogFactory.getLog(SelectDataStoreOperation.class);
     private final QueryDescriptor descriptor;
@@ -64,20 +63,14 @@ public class SelectDataStoreOperation<K extends Serializable, E> implements Data
             if (start > selection.size()) {
                 selection.clear();
             } else {
-                final List<E> view = new ArrayList<>();
-                for (E item : selection.subList(start, finish)) {
-                    view.add(item);
-                }
+                final List<E> view = new ArrayList<>(selection.subList(start, finish));
                 selection.clear();
                 selection.addAll(view);
             }
         }
         if (descriptor.getLimit() > 0) {
             log.info("Going to limit the result to " + descriptor.getLimit() + " items");
-            final List<E> view = new ArrayList<>();
-            for (E item : selection.subList(0, Math.min(selection.size(), descriptor.getLimit()))) {
-                view.add(item);
-            }
+            final List<E> view = new ArrayList<>(selection.subList(0, Math.min(selection.size(), descriptor.getLimit())));
             selection.clear();
             selection.addAll(view);
         }

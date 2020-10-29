@@ -34,7 +34,7 @@ public class DefaultGroupService implements GroupService {
     @Override
     public void deleteGroup(Group group) {
         final List<Membership> memberships = membershipRepository.findByGroup(group);
-        membershipRepository.delete(memberships);
+        membershipRepository.deleteAll(memberships);
         groupRepository.delete(group);
     }
 

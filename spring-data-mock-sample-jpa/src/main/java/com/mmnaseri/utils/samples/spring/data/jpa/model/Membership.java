@@ -9,6 +9,7 @@ import javax.persistence.ManyToOne;
  * @since 1.0 (6/29/16, 4:04 PM)
  */
 @Entity
+@SuppressWarnings("unused")
 public class Membership {
 
     @Id

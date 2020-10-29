@@ -3,7 +3,6 @@ package com.mmnaseri.utils.spring.data.store.impl;
 import com.mmnaseri.utils.spring.data.error.InvalidArgumentException;
 import com.mmnaseri.utils.spring.data.sample.mocks.AfterInsertEventListener;
 import com.mmnaseri.utils.spring.data.sample.mocks.AllCatchingEventListener;
-import com.mmnaseri.utils.spring.data.store.DataStoreEvent;
 import com.mmnaseri.utils.spring.data.store.DataStoreEventListener;
 import org.hamcrest.Matchers;
 import org.testng.annotations.Test;
@@ -12,19 +11,19 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/9/16)
  */
 public class DefaultDataStoreEventListenerContextTest {
 
     @Test(expectedExceptions = InvalidArgumentException.class)
-    public void testTriggeringNullEvent() throws Exception {
+    public void testTriggeringNullEvent() {
         DefaultDataStoreEventListenerContext context = new DefaultDataStoreEventListenerContext();
         context.trigger(null);
     }
 
     @Test
-    public void testExactEventType() throws Exception {
+    public void testExactEventType() {
         final AfterInsertEventListener first = new AfterInsertEventListener();
         final AfterInsertEventListener second = new AfterInsertEventListener();
         final AfterInsertDataStoreEvent event = new AfterInsertDataStoreEvent(null, null, null);
@@ -39,7 +38,7 @@ public class DefaultDataStoreEventListenerContextTest {
     }
 
     @Test
-    public void testParentEventType() throws Exception {
+    public void testParentEventType() {
         final AllCatchingEventListener first = new AllCatchingEventListener();
         final AfterInsertEventListener second = new AfterInsertEventListener();
         final AfterInsertDataStoreEvent event = new AfterInsertDataStoreEvent(null, null, null);
@@ -48,13 +47,13 @@ public class DefaultDataStoreEventListenerContextTest {
         context.register(second);
         context.trigger(event);
         assertThat(first.getEvents(), hasSize(1));
-        assertThat(first.getEvents().get(0), Matchers.<DataStoreEvent>is(event));
+        assertThat(first.getEvents().get(0), Matchers.is(event));
         assertThat(second.getEvents(), hasSize(1));
         assertThat(second.getEvents().get(0), is(event));
     }
 
     @Test
-    public void testEventPropagation() throws Exception {
+    public void testEventPropagation() {
         final AfterInsertDataStoreEvent firstEvent = new AfterInsertDataStoreEvent(null, null, null);
         final AfterInsertDataStoreEvent secondEvent = new AfterInsertDataStoreEvent(null, null, null);
         final AfterInsertEventListener first = new AfterInsertEventListener();
@@ -72,7 +71,7 @@ public class DefaultDataStoreEventListenerContextTest {
     }
 
     @Test
-    public void testFindingEventListeners() throws Exception {
+    public void testFindingEventListeners() {
         final AfterInsertEventListener first = new AfterInsertEventListener();
         final AfterInsertEventListener second = new AfterInsertEventListener();
         final DefaultDataStoreEventListenerContext parent = new DefaultDataStoreEventListenerContext();
@@ -80,10 +79,13 @@ public class DefaultDataStoreEventListenerContextTest {
         parent.register(first);
         child.register(second);
         assertThat(parent.getListeners(AfterInsertDataStoreEvent.class), hasSize(1));
-        assertThat(parent.getListeners(AfterInsertDataStoreEvent.class).get(0), Matchers.<DataStoreEventListener>is(first));
+        assertThat(parent.getListeners(AfterInsertDataStoreEvent.class).get(0),
+                   Matchers.<DataStoreEventListener>is(first));
         assertThat(child.getListeners(AfterInsertDataStoreEvent.class), hasSize(2));
-        assertThat(child.getListeners(AfterInsertDataStoreEvent.class).get(0), Matchers.<DataStoreEventListener>is(second));
-        assertThat(child.getListeners(AfterInsertDataStoreEvent.class).get(1), Matchers.<DataStoreEventListener>is(first));
+        assertThat(child.getListeners(AfterInsertDataStoreEvent.class).get(0),
+                   Matchers.<DataStoreEventListener>is(second));
+        assertThat(child.getListeners(AfterInsertDataStoreEvent.class).get(1),
+                   Matchers.<DataStoreEventListener>is(first));
     }
 
 }

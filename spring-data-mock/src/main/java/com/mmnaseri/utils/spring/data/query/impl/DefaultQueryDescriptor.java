@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * This is a mutable query descriptor that you can use to describe what a query does.
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/20/15)
  */
 public class DefaultQueryDescriptor implements QueryDescriptor {
@@ -29,7 +29,9 @@ public class DefaultQueryDescriptor implements QueryDescriptor {
     private final RepositoryFactoryConfiguration configuration;
     private final RepositoryMetadata repositoryMetadata;
 
-    public DefaultQueryDescriptor(boolean distinct, String function, int limit, PageParameterExtractor pageExtractor, SortParameterExtractor sortExtractor, List<List<Parameter>> branches, RepositoryFactoryConfiguration configuration, RepositoryMetadata repositoryMetadata) {
+    public DefaultQueryDescriptor(boolean distinct, String function, int limit, PageParameterExtractor pageExtractor,
+                                  SortParameterExtractor sortExtractor, List<List<Parameter>> branches,
+                                  RepositoryFactoryConfiguration configuration, RepositoryMetadata repositoryMetadata) {
         this.distinct = distinct;
         this.function = function;
         this.limit = limit;
@@ -94,7 +96,7 @@ public class DefaultQueryDescriptor implements QueryDescriptor {
                 final boolean ignoreCase;
                 ignoreCase = parameter.getModifiers().contains(Modifier.IGNORE_CASE);
                 Object value = wrapper.getPropertyValue(parameter.getPath());
-                if (ignoreCase && value != null && value instanceof String) {
+                if (ignoreCase && value instanceof String) {
                     value = ((String) value).toLowerCase();
                 }
                 final Operator operator = parameter.getOperator();

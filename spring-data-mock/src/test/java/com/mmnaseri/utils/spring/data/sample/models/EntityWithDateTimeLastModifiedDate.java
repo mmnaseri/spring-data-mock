@@ -1,17 +1,19 @@
 package com.mmnaseri.utils.spring.data.sample.models;
 
-import org.joda.time.DateTime;
 import org.springframework.data.annotation.LastModifiedDate;
 
+import java.time.Instant;
+
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/12/16, 5:21 PM)
  */
+@SuppressWarnings("unused")
 public class EntityWithDateTimeLastModifiedDate {
 
     private String id;
     @LastModifiedDate
-    private DateTime lastModifiedDate;
+    private Instant lastModifiedDate;
 
     public String getId() {
         return id;
@@ -21,11 +23,11 @@ public class EntityWithDateTimeLastModifiedDate {
         this.id = id;
     }
 
-    public DateTime getLastModifiedDate() {
+    public Instant getLastModifiedDate() {
         return lastModifiedDate;
     }
 
-    public void setLastModifiedDate(DateTime lastModifiedDate) {
+    public void setLastModifiedDate(Instant lastModifiedDate) {
         this.lastModifiedDate = lastModifiedDate;
     }
 

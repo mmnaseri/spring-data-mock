@@ -11,7 +11,7 @@ import java.util.LinkedList;
 /**
  * This class paves the way for matching a value against a collection of items
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/29/15)
  */
 public abstract class AbstractCollectionMatcher extends AbstractSimpleMatcher {
@@ -49,16 +49,23 @@ public abstract class AbstractCollectionMatcher extends AbstractSimpleMatcher {
             //otherwise, we just don't know how to convert it!
             throw new InvalidArgumentException("Expected an array, an iterator, or an iterable object");
         }
-        return matches(parameter, actual, collection);
+        return matches(actual, collection);
     }
 
     /**
      * Used to find out if a collection satisfies the condition set forth by this matcher
-     * @param parameter     the parameter
-     * @param actual        the actual value
-     * @param collection    the collection
+     *
+     * @param actual     the actual value
+     * @param collection the collection
      * @return {@literal true} if the match was a success
      */
-    protected abstract boolean matches(Parameter parameter, Object actual, Collection collection);
+    protected abstract boolean matches(Object actual, Collection collection);
 
+    @Override
+    public boolean isApplicableTo(Class<?> parameterType, Class<?>... propertiesTypes) {
+        Class<?> propertyType = propertiesTypes[0];
+        return Collection.class.isAssignableFrom(propertyType)
+                || Iterator.class.isAssignableFrom(propertyType)
+                || Iterable.class.isAssignableFrom(propertyType);
+    }
 }

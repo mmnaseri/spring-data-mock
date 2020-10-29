@@ -1,9 +1,10 @@
 package com.mmnaseri.utils.spring.data.sample.models;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (10/26/15)
  */
+@SuppressWarnings("unused")
 public class BaseEntity {
 
     private String id;

@@ -7,6 +7,7 @@ import javax.persistence.Id;
  * @author Milad Naseri (milad.naseri@cdk.com)
  * @since 1.0 (6/29/16, 4:03 PM)
  */
+@SuppressWarnings("unused")
 @Entity
 public class Group {
 

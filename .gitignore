@@ -34,3 +34,6 @@ target
 
 # Mac OS X junk
 .DS_Store
+
+# Generated encryption keys
+deployment/key.enc

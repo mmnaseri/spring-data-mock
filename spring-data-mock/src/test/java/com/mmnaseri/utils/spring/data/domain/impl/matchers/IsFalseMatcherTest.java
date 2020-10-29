@@ -6,29 +6,29 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/30/15)
  */
 public class IsFalseMatcherTest {
 
     @Test
-    public void testWhenSubjectIsNull() throws Exception {
-        assertThat(new IsFalseMatcher().matches(null, null), is(false));
+    public void testWhenSubjectIsNull() {
+        assertThat(new IsFalseMatcher().matches(null), is(false));
     }
 
     @Test
-    public void testSubjectIsNonBoolean() throws Exception {
-        assertThat(new IsFalseMatcher().matches(null, ""), is(false));
+    public void testSubjectIsNonBoolean() {
+        assertThat(new IsFalseMatcher().matches(""), is(false));
     }
 
     @Test
-    public void testIsFalse() throws Exception {
-        assertThat(new IsFalseMatcher().matches(null, false), is(true));
+    public void testIsFalse() {
+        assertThat(new IsFalseMatcher().matches(false), is(true));
     }
 
     @Test
-    public void testIsTrue() throws Exception {
-        assertThat(new IsFalseMatcher().matches(null, true), is(false));
+    public void testIsTrue() {
+        assertThat(new IsFalseMatcher().matches(true), is(false));
     }
 
 }

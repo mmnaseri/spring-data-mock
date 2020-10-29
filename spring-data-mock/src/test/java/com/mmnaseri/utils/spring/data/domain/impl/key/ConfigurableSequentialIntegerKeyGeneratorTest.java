@@ -7,13 +7,13 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 /**
- * @author Milad Naseri (milad.naseri@cdk.com)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (6/14/16, 12:25 PM)
  */
 public class ConfigurableSequentialIntegerKeyGeneratorTest {
 
     @Test
-    public void testKeyGenerationWithDefaultSettings() throws Exception {
+    public void testKeyGenerationWithDefaultSettings() {
         final KeyGenerator<Integer> generator = new ConfigurableSequentialIntegerKeyGenerator();
         assertThat(generator.generate(), is(1));
         assertThat(generator.generate(), is(2));
@@ -21,7 +21,7 @@ public class ConfigurableSequentialIntegerKeyGeneratorTest {
     }
 
     @Test
-    public void testKeyGenerationWithDefaultStepAndCustomInitialValue() throws Exception {
+    public void testKeyGenerationWithDefaultStepAndCustomInitialValue() {
         final int initialValue = 100;
         final KeyGenerator<Integer> generator = new ConfigurableSequentialIntegerKeyGenerator(initialValue);
         assertThat(generator.generate(), is(initialValue));
@@ -30,7 +30,7 @@ public class ConfigurableSequentialIntegerKeyGeneratorTest {
     }
 
     @Test
-    public void testKeyGenerationWithCustomStepAndCustomInitialValue() throws Exception {
+    public void testKeyGenerationWithCustomStepAndCustomInitialValue() {
         final int initialValue = 100;
         final int step = 3;
         final KeyGenerator<Integer> generator = new ConfigurableSequentialIntegerKeyGenerator(initialValue, step);

@@ -10,8 +10,6 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import java.io.Serializable;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
@@ -26,7 +24,7 @@ public class DefaultPlaneServiceTest {
     private DefaultPlaneService service;
 
     @BeforeMethod
-    public void setUp() throws Exception {
+    public void setUp() {
         final RepositoryFactoryConfiguration configuration = RepositoryConfigUtils.getConfiguration();
         repository = new RepositoryMockBuilder()
                 .useConfiguration(configuration)
@@ -35,31 +33,31 @@ public class DefaultPlaneServiceTest {
     }
 
     @AfterMethod
-    public void tearDown() throws Exception {
+    public void tearDown() {
         final RepositoryFactoryConfiguration configuration = RepositoryConfigUtils.getConfiguration();
         //because the configuration is now shared, it means that the data store registry is shared across all
         //the tests, too.
         //This is the same as using a shared database for doing all the tests. So, at the end of the tests we need
         //to clear the database after us like using a regular data store
-        final DataStore<Serializable, Plane> dataStore = configuration.getDataStoreRegistry().getDataStore(Plane.class);
+        final DataStore<Object, Plane> dataStore = configuration.getDataStoreRegistry().getDataStore(Plane.class);
         dataStore.truncate();
     }
 
     @Test
-    public void testCreate() throws Exception {
+    public void testCreate() {
         assertThat(repository.count(), is(0L));
         final String model = "F-22";
         final String serial = "123456";
         final Long id = service.create(model, serial);
         assertThat(id, is(notNullValue()));
-        final Plane loaded = repository.findOne(id);
+        final Plane loaded = repository.findById(id).orElse(null);
         assertThat(loaded, is(notNullValue()));
         assertThat(loaded.getModel(), is(model));
         assertThat(loaded.getSerial(), is(serial));
     }
 
     @Test
-    public void testLookupById() throws Exception {
+    public void testLookupById() {
         final Plane entity = new Plane();
         entity.setModel("Boeing 747");
         entity.setSerial("123456");
@@ -71,7 +69,7 @@ public class DefaultPlaneServiceTest {
     }
 
     @Test
-    public void testLookupBySerial() throws Exception {
+    public void testLookupBySerial() {
         final Plane entity = new Plane();
         entity.setModel("Boeing 747");
         entity.setSerial("123456");

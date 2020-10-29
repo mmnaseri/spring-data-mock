@@ -2,7 +2,6 @@ package com.mmnaseri.utils.spring.data.proxy.impl.adapters;
 
 import com.mmnaseri.utils.spring.data.domain.Invocation;
 
-import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
 
@@ -13,7 +12,7 @@ import java.util.concurrent.FutureTask;
  *
  * <p>This adapter runs at the priority of {@literal -150}.</p>
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/24/15)
  */
 public class NullToFutureResultAdapter extends AbstractResultAdapter<Future> {
@@ -30,12 +29,7 @@ public class NullToFutureResultAdapter extends AbstractResultAdapter<Future> {
     @Override
     public Future adapt(Invocation invocation, Object originalValue) {
         //noinspection unchecked
-        final FutureTask task = new FutureTask(new Callable() {
-            @Override
-            public Object call() throws Exception {
-                return null;
-            }
-        });
+        final FutureTask task = new FutureTask(() -> null);
         task.run();
         return task;
     }

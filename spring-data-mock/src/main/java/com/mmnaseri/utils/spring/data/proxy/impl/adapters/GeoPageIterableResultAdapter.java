@@ -16,7 +16,7 @@ import java.util.List;
  *
  * <p>This adapter will execute at priority {@literal -150}.</p>
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/28/15)
  */
 public class GeoPageIterableResultAdapter extends AbstractIterableResultAdapter<GeoPage> {
@@ -38,7 +38,8 @@ public class GeoPageIterableResultAdapter extends AbstractIterableResultAdapter<
 
     @Override
     public boolean accepts(Invocation invocation, Object originalValue) {
-        return originalValue != null && originalValue instanceof Iterable && invocation.getMethod().getReturnType().equals(GeoPage.class);
+        return originalValue instanceof Iterable && invocation.getMethod().getReturnType()
+                                                              .equals(GeoPage.class);
     }
 
 }

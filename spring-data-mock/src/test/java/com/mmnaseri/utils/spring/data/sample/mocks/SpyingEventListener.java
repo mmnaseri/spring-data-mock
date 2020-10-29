@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/12/16, 1:03 PM)
  */
 public class SpyingEventListener<E extends DataStoreEvent> implements DataStoreEventListener<E> {

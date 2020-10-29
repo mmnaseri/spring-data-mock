@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.mmnaseri.utils</groupId>
+    <artifactId>spring-data-mock-sample-mongo</artifactId>
+    <version>1.0</version>
+
+    <name>Spring Data Mock: Samples (MongoDB)</name>
+
+    <description>This module tries to demonstrate how Spring Data Mock could be used to test an application that
+        is using Spring Data JPA.</description>
+    <inceptionYear>2016</inceptionYear>
+    <licenses>
+        <license>
+            <name>MIT</name>
+            <url>http://mit-license.org</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Milad Naseri</name>
+            <email>mmnaseri@programmer.net</email>
+            <url>http://www.mmnaseri.com</url>
+            <roles>
+                <role>designer</role>
+                <role>developer</role>
+            </roles>
+        </developer>
+    </developers>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <spring-data-commons.version>2.2.6.RELEASE</spring-data-commons.version>
+        <spring-data-mongo.version>2.2.6.RELEASE</spring-data-mongo.version>
+        <spring-data-mock.version>2.1.0</spring-data-mock.version>
+        <testng.version>7.1.0</testng.version>
+        <hamcrest.version>1.3</hamcrest.version>
+        <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
+        <target-jdk.version>1.8</target-jdk.version>
+        <cobertura-maven-plugin.version>2.7</cobertura-maven-plugin.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-commons</artifactId>
+            <version>${spring-data-commons.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-mongodb</artifactId>
+            <version>${spring-data-mongo.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-all</artifactId>
+            <version>${hamcrest.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>${testng.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.mmnaseri.utils</groupId>
+            <artifactId>spring-data-mock</artifactId>
+            <version>${spring-data-mock.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler-plugin.version}</version>
+                <configuration>
+                    <source>${target-jdk.version}</source>
+                    <target>${target-jdk.version}</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>cobertura-maven-plugin</artifactId>
+                <version>${cobertura-maven-plugin.version}</version>
+                <configuration>
+                    <format>xml</format>
+                    <maxmem>256m</maxmem>
+                    <!-- aggregated reports for multi-module projects -->
+                    <aggregate>true</aggregate>
+                    <check/>
+                    <outputDirectory>target/reports</outputDirectory>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

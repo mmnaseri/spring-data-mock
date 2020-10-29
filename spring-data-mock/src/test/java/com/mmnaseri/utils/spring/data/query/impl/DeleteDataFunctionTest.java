@@ -14,7 +14,6 @@ import org.hamcrest.Matchers;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import java.io.Serializable;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -22,7 +21,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/10/16)
  */
 public class DeleteDataFunctionTest {
@@ -32,8 +31,9 @@ public class DeleteDataFunctionTest {
     private SpyingDataStore<String, Person> dataStore;
 
     @BeforeMethod
-    public void setUp() throws Exception {
-        final RepositoryMetadata repositoryMetadata = new ImmutableRepositoryMetadata(String.class, Person.class, null, "id");
+    public void setUp() {
+        final RepositoryMetadata repositoryMetadata = new ImmutableRepositoryMetadata(String.class, Person.class, null,
+                                                                                      "id");
         final MemoryDataStore<String, Person> delegate = new MemoryDataStore<>(Person.class);
         query = new DefaultQueryDescriptor(false, null, 0, null, null, null, null, repositoryMetadata);
         function = new DeleteDataFunction();
@@ -41,51 +41,54 @@ public class DeleteDataFunctionTest {
     }
 
     @Test(expectedExceptions = InvalidArgumentException.class, expectedExceptionsMessageRegExp = "Data store .*")
-    public void testPassingNullDataStore() throws Exception {
+    public void testPassingNullDataStore() {
         final DataFunction<List<?>> function = new DeleteDataFunction();
         function.apply(null, query, null, new LinkedList<>());
     }
 
     @Test(expectedExceptions = InvalidArgumentException.class, expectedExceptionsMessageRegExp = "Query .*")
-    public void testPassingNullQuery() throws Exception {
+    public void testPassingNullQuery() {
         final DataFunction<List<?>> function = new DeleteDataFunction();
-        function.apply(dataStore, null, null, new LinkedList<Person>());
+        function.apply(dataStore, null, null, new LinkedList<>());
     }
 
     @Test(expectedExceptions = InvalidArgumentException.class, expectedExceptionsMessageRegExp = "Selection .*")
-    public void testPassingNullSelection() throws Exception {
+    public void testPassingNullSelection() {
         function.apply(dataStore, query, null, null);
     }
 
     @Test(expectedExceptions = DataFunctionException.class, expectedExceptionsMessageRegExp = "Failed to read .*")
-    public void testWrongIdentifierProperty() throws Exception {
+    public void testWrongIdentifierProperty() {
         final DataFunction<List<?>> function = new DeleteDataFunction();
-        final RepositoryMetadata repositoryMetadata = new ImmutableRepositoryMetadata(String.class, Person.class, null, "xyz");
-        final QueryDescriptor descriptor = new DefaultQueryDescriptor(false, null, 0, null, null, null, null, repositoryMetadata);
+        final RepositoryMetadata repositoryMetadata = new ImmutableRepositoryMetadata(String.class, Person.class, null,
+                                                                                      "xyz");
+        final QueryDescriptor descriptor = new DefaultQueryDescriptor(false, null, 0, null, null, null, null,
+                                                                      repositoryMetadata);
         function.apply(dataStore, descriptor, null, Collections.singletonList(new Person()));
     }
 
-    @Test(expectedExceptions = DataFunctionException.class, expectedExceptionsMessageRegExp = "Cannot delete an entity without the key property being set: id")
-    public void testNullIdentifierValue() throws Exception {
+    @Test(expectedExceptions = DataFunctionException.class,
+          expectedExceptionsMessageRegExp = "Cannot delete an entity without the key property being set: id")
+    public void testNullIdentifierValue() {
         final DataFunction<List<?>> function = new DeleteDataFunction();
         function.apply(dataStore, query, null, Collections.singletonList(new Person()));
     }
 
     @Test
-    public void testThatItSendsRequestsToTheUnderlyingDataStore() throws Exception {
+    public void testThatItSendsRequestsToTheUnderlyingDataStore() {
         final List<Person> selection = new ArrayList<>();
         selection.add(new Person().setId("1"));
         selection.add(new Person().setId("2"));
         function.apply(dataStore, query, null, selection);
         assertThat(dataStore.getRequests(), hasSize(2));
         assertThat(dataStore.getRequests().get(0).getOperation(), is(Operation.DELETE));
-        assertThat(dataStore.getRequests().get(0).getKey(), Matchers.<Serializable>is(selection.get(0).getId()));
+        assertThat(dataStore.getRequests().get(0).getKey(), Matchers.is(selection.get(0).getId()));
         assertThat(dataStore.getRequests().get(1).getOperation(), is(Operation.DELETE));
-        assertThat(dataStore.getRequests().get(1).getKey(), Matchers.<Serializable>is(selection.get(1).getId()));
+        assertThat(dataStore.getRequests().get(1).getKey(), Matchers.is(selection.get(1).getId()));
     }
 
     @Test
-    public void testThatItDeletesTheExactSetOfItemsSpecified() throws Exception {
+    public void testThatItDeletesTheExactSetOfItemsSpecified() {
         final List<Person> entities = new ArrayList<>();
         entities.add(new Person().setId("1"));
         entities.add(new Person().setId("2"));
@@ -99,9 +102,9 @@ public class DeleteDataFunctionTest {
         function.apply(dataStore, query, null, selection);
         assertThat(dataStore.getRequests(), hasSize(2));
         assertThat(dataStore.getRequests().get(0).getOperation(), is(Operation.DELETE));
-        assertThat(dataStore.getRequests().get(0).getKey(), Matchers.<Serializable>is(entities.get(1).getId()));
+        assertThat(dataStore.getRequests().get(0).getKey(), Matchers.is(entities.get(1).getId()));
         assertThat(dataStore.getRequests().get(1).getOperation(), is(Operation.DELETE));
-        assertThat(dataStore.getRequests().get(1).getKey(), Matchers.<Serializable>is(entities.get(2).getId()));
+        assertThat(dataStore.getRequests().get(1).getKey(), Matchers.is(entities.get(2).getId()));
         assertThat(dataStore.hasKey(entities.get(0).getId()), is(true));
         assertThat(dataStore.hasKey(entities.get(1).getId()), is(false));
         assertThat(dataStore.hasKey(entities.get(2).getId()), is(false));
@@ -109,7 +112,7 @@ public class DeleteDataFunctionTest {
     }
 
     @Test
-    public void testThatItReturnsTheDeletedItems() throws Exception {
+    public void testThatItReturnsTheDeletedItems() {
         final List<Person> entities = new ArrayList<>();
         entities.add(new Person().setId("1"));
         entities.add(new Person().setId("2"));
@@ -124,13 +127,14 @@ public class DeleteDataFunctionTest {
         final List<Person> deleted = function.apply(dataStore, query, null, selection);
         assertThat(dataStore.getRequests(), hasSize(3));
         assertThat(dataStore.getRequests().get(0).getOperation(), is(Operation.DELETE));
-        assertThat(dataStore.getRequests().get(0).getKey(), Matchers.<Serializable>is(entities.get(1).getId()));
+        assertThat(dataStore.getRequests().get(0).getKey(), Matchers.is(entities.get(1).getId()));
         assertThat(dataStore.getRequests().get(1).getOperation(), is(Operation.DELETE));
-        assertThat(dataStore.getRequests().get(1).getKey(), Matchers.<Serializable>is(entities.get(2).getId()));
+        assertThat(dataStore.getRequests().get(1).getKey(), Matchers.is(entities.get(2).getId()));
         assertThat(dataStore.getRequests().get(2).getOperation(), is(Operation.DELETE));
-        assertThat(dataStore.getRequests().get(2).getKey(), Matchers.<Serializable>is(selection.get(2).getId()));
+        assertThat(dataStore.getRequests().get(2).getKey(), Matchers.is(selection.get(2).getId()));
         assertThat(deleted, hasSize(2));
-        final List<String> deletedIds = new ArrayList<>(Arrays.asList(entities.get(1).getId(), entities.get(2).getId()));
+        final List<String> deletedIds = new ArrayList<>(
+                Arrays.asList(entities.get(1).getId(), entities.get(2).getId()));
         for (Person person : deleted) {
             assertThat(person.getId(), isIn(deletedIds));
             deletedIds.remove(person.getId());

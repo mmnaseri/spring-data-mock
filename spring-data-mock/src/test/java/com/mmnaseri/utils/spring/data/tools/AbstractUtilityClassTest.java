@@ -9,7 +9,7 @@ import static org.hamcrest.Matchers.*;
 import static org.testng.Assert.fail;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/8/16)
  */
 public abstract class AbstractUtilityClassTest {
@@ -17,7 +17,7 @@ public abstract class AbstractUtilityClassTest {
     protected abstract Class<?> getUtilityClass();
 
     @Test
-    public void testConstructorIsPrivate() throws Exception {
+    public void testConstructorIsPrivate() {
         final Constructor<?>[] constructors = getUtilityClass().getDeclaredConstructors();
         assertThat(constructors, is(arrayWithSize(1)));
         final Constructor<?> constructor = constructors[0];
@@ -40,26 +40,26 @@ public abstract class AbstractUtilityClassTest {
     }
 
     @Test
-    public void testClassIsFinal() throws Exception {
+    public void testClassIsFinal() {
         assertThat(Modifier.isFinal(getUtilityClass().getModifiers()), is(true));
     }
 
     @Test
-    public void testClassHasNoInstanceMethods() throws Exception {
+    public void testClassHasNoInstanceMethods() {
         for (Method method : getUtilityClass().getDeclaredMethods()) {
             assertThat(Modifier.isStatic(method.getModifiers()), is(true));
         }
     }
 
     @Test
-    public void testClassHasNoInstanceFields() throws Exception {
+    public void testClassHasNoInstanceFields() {
         for (Field field : getUtilityClass().getDeclaredFields()) {
             assertThat(Modifier.isStatic(field.getModifiers()), is(true));
         }
     }
 
     @Test
-    public void testClassHasNoSuperClass() throws Exception {
+    public void testClassHasNoSuperClass() {
         assertThat(getUtilityClass().getSuperclass(), is(equalTo((Class) Object.class)));
     }
 

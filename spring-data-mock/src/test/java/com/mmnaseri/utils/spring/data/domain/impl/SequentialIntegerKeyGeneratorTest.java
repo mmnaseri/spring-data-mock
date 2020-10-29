@@ -8,7 +8,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (10/8/15)
  */
 public class SequentialIntegerKeyGeneratorTest extends BaseKeyGeneratorTest<Integer> {
@@ -19,7 +19,7 @@ public class SequentialIntegerKeyGeneratorTest extends BaseKeyGeneratorTest<Inte
     }
 
     @Test
-    public void testKeysBeingSequential() throws Exception {
+    public void testKeysBeingSequential() {
         final KeyGenerator<Integer> keyGenerator = getKeyGenerator();
         Integer last = 0;
         for (int i = 0; i < 100; i++) {

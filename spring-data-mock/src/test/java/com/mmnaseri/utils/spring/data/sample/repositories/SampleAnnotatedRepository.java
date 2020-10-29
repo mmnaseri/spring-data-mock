@@ -4,7 +4,7 @@ import com.mmnaseri.utils.spring.data.sample.models.Person;
 import org.springframework.data.repository.RepositoryDefinition;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/12/16, 7:04 PM)
  */
 @RepositoryDefinition(domainClass = Person.class, idClass = String.class)

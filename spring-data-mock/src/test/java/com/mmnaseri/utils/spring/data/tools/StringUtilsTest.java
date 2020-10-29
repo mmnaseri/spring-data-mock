@@ -6,7 +6,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (10/5/15)
  */
 public class StringUtilsTest extends AbstractUtilityClassTest {
@@ -16,43 +16,45 @@ public class StringUtilsTest extends AbstractUtilityClassTest {
         return StringUtils.class;
     }
 
-    @Test(expectedExceptions = NullPointerException.class, expectedExceptionsMessageRegExp = "String value cannot be null")
-    public void testCapitalizingNullValue() throws Exception {
+    @Test(expectedExceptions = NullPointerException.class,
+          expectedExceptionsMessageRegExp = "String value cannot be null")
+    public void testCapitalizingNullValue() {
         StringUtils.capitalize(null);
     }
 
     @Test
-    public void testCapitalizingEmptyString() throws Exception {
+    public void testCapitalizingEmptyString() {
         assertThat(StringUtils.capitalize(""), is(""));
     }
 
     @Test
-    public void testCapitalizingUncapitalizedString() throws Exception {
+    public void testCapitalizingUncapitalizedString() {
         assertThat(StringUtils.capitalize("hello"), is("Hello"));
     }
 
     @Test
-    public void testCapitalizingCapitalizedString() throws Exception {
+    public void testCapitalizingCapitalizedString() {
         assertThat(StringUtils.capitalize("Hello"), is("Hello"));
     }
 
-    @Test(expectedExceptions = NullPointerException.class, expectedExceptionsMessageRegExp = "String value cannot be null")
-    public void testUncapitalizingNullValue() throws Exception {
+    @Test(expectedExceptions = NullPointerException.class,
+          expectedExceptionsMessageRegExp = "String value cannot be null")
+    public void testUncapitalizingNullValue() {
         StringUtils.uncapitalize(null);
     }
 
     @Test
-    public void testUncapitalizingEmptyString() throws Exception {
+    public void testUncapitalizingEmptyString() {
         assertThat(StringUtils.uncapitalize(""), is(""));
     }
 
     @Test
-    public void testUncapitalizingUncapitalizedString() throws Exception {
+    public void testUncapitalizingUncapitalizedString() {
         assertThat(StringUtils.uncapitalize("hello"), is("hello"));
     }
 
     @Test
-    public void testUncapitalizingCapitalizedString() throws Exception {
+    public void testUncapitalizingCapitalizedString() {
         assertThat(StringUtils.uncapitalize("Hello"), is("hello"));
     }
 }

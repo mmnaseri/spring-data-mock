@@ -6,29 +6,29 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/29/15)
  */
 public class ContainingMatcherTest {
 
     @Test
-    public void testMatchingWhenActualIsNull() throws Exception {
-        assertThat(new ContainingMatcher().matches(null, null, ""), is(false));
+    public void testMatchingWhenActualIsNull() {
+        assertThat(new ContainingMatcher().matches(null, ""), is(false));
     }
 
     @Test
-    public void testMatchingWhenParameterIsNull() throws Exception {
-        assertThat(new ContainingMatcher().matches(null, "", (String) null), is(false));
+    public void testMatchingWhenParameterIsNull() {
+        assertThat(new ContainingMatcher().matches("", null), is(false));
     }
 
     @Test
-    public void testMatchingWhenParameterDoesNotContainActual() throws Exception {
-        assertThat(new ContainingMatcher().matches(null, "xyz", "abc"), is(false));
+    public void testMatchingWhenParameterDoesNotContainActual() {
+        assertThat(new ContainingMatcher().matches("xyz", "abc"), is(false));
     }
 
     @Test
-    public void testMatchingWhenParameterContainsActual() throws Exception {
-        assertThat(new ContainingMatcher().matches(null, "HelloWorld", "owo"), is(true));
+    public void testMatchingWhenParameterContainsActual() {
+        assertThat(new ContainingMatcher().matches("HelloWorld", "owo"), is(true));
     }
 
 }

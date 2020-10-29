@@ -2,7 +2,6 @@ package com.mmnaseri.utils.spring.data.proxy.impl.adapters;
 
 import com.mmnaseri.utils.spring.data.domain.Invocation;
 
-import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
 
@@ -16,7 +15,7 @@ import java.util.concurrent.FutureTask;
  *
  * <p>This adapter will execute at priority {@literal -100}.</p>
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/28/15)
  */
 public class FutureIterableResultAdapter extends AbstractIterableResultAdapter<Future> {
@@ -28,19 +27,14 @@ public class FutureIterableResultAdapter extends AbstractIterableResultAdapter<F
     @Override
     protected Future doAdapt(Invocation invocation, final Iterable iterable) {
         //noinspection unchecked
-        final FutureTask task = new FutureTask(new Callable() {
-            @Override
-            public Object call() throws Exception {
-                return iterable;
-            }
-        });
+        final FutureTask task = new FutureTask(() -> iterable);
         task.run();
         return task;
     }
 
     @Override
     public boolean accepts(Invocation invocation, Object originalValue) {
-        return originalValue != null && originalValue instanceof Iterable && invocation.getMethod().getReturnType().equals(Future.class);
+        return originalValue instanceof Iterable && invocation.getMethod().getReturnType().equals(Future.class);
     }
 
 }

@@ -6,6 +6,7 @@ import com.mmnaseri.utils.samples.spring.data.jpa.service.CustomerService;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -32,7 +33,7 @@ public class DefaultCustomerService implements CustomerService {
     }
 
     public Customer findCustomer(long id) {
-        return repository.findOne(id);
+        return repository.findById(id).orElse(null);
     }
 
     public List<Customer> findCustomersByBirthday(Date from, Date to) {
@@ -48,6 +49,15 @@ public class DefaultCustomerService implements CustomerService {
                 .withMatcher("lastName", ignoreCase());
         final Example<Customer> example = Example.of(probe, matcher);
         return repository.findByExample(example);
+    }
+
+    public List<Customer> findCustomersByFirstNames(Collection<String> firstNames) {
+        return repository.findByFirstNameIn(firstNames);
+    }
+
+    @Override
+    public List<Customer> findByFirstNamePart(final String part) {
+        return repository.findByFirstNameIgnoreCaseContaining(part);
     }
 
 }

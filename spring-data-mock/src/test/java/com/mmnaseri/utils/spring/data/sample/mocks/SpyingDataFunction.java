@@ -5,14 +5,14 @@ import com.mmnaseri.utils.spring.data.query.DataFunction;
 import com.mmnaseri.utils.spring.data.query.QueryDescriptor;
 import com.mmnaseri.utils.spring.data.store.DataStore;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/10/16)
  */
+@SuppressWarnings("unused")
 public class SpyingDataFunction<R> implements DataFunction<R> {
 
     private final List<DataFunctionInvocation<?, ?>> invocations = new ArrayList<>();
@@ -23,7 +23,8 @@ public class SpyingDataFunction<R> implements DataFunction<R> {
     }
 
     @Override
-    public <K extends Serializable, E> R apply(DataStore<K, E> dataStore, QueryDescriptor query, RepositoryConfiguration configuration, List<E> selection) {
+    public <K, E> R apply(DataStore<K, E> dataStore, QueryDescriptor query, RepositoryConfiguration configuration,
+                          List<E> selection) {
         invocations.add(new DataFunctionInvocation<>(dataStore, query, configuration, selection));
         if (delegate != null) {
             return delegate.apply(dataStore, query, configuration, selection);

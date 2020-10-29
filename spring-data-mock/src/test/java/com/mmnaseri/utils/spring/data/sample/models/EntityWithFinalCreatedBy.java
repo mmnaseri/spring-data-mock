@@ -3,9 +3,10 @@ package com.mmnaseri.utils.spring.data.sample.models;
 import org.springframework.data.annotation.CreatedBy;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/12/16, 5:21 PM)
  */
+@SuppressWarnings("unused")
 public class EntityWithFinalCreatedBy {
 
     private String id;
@@ -21,6 +22,7 @@ public class EntityWithFinalCreatedBy {
     }
 
     public String getCreatedBy() {
+        //noinspection ConstantConditions
         return createdBy;
     }
 }

@@ -10,33 +10,39 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/30/15)
  */
 public class AbstractRepositoryMetadataResolverTest {
 
-    @Test(expectedExceptions = RepositoryDefinitionException.class, expectedExceptionsMessageRegExp = ".*?: Repository interface must not be null")
-    public void testThatItDoesNotAcceptNull() throws Exception {
+    @Test(expectedExceptions = RepositoryDefinitionException.class,
+          expectedExceptionsMessageRegExp = ".*?: Repository interface must not be null")
+    public void testThatItDoesNotAcceptNull() {
         new NullReturningRepositoryMetadataResolver().resolve(null);
     }
 
-    @Test(expectedExceptions = RepositoryDefinitionException.class, expectedExceptionsMessageRegExp = ".*?: Cannot resolve repository metadata for a class object that isn't an interface")
-    public void testThatItOnlyAcceptsInterfaces() throws Exception {
+    @Test(expectedExceptions = RepositoryDefinitionException.class,
+          expectedExceptionsMessageRegExp = ".*?: Cannot resolve repository metadata for a class object that isn't an"
+                  + " interface")
+    public void testThatItOnlyAcceptsInterfaces() {
         new NullReturningRepositoryMetadataResolver().resolve(EmptyEntity.class);
     }
 
-    @Test(expectedExceptions = RepositoryDefinitionException.class, expectedExceptionsMessageRegExp = ".*?: Repository interface needs to be declared as public")
-    public void testThatItOnlyAcceptsPublicInterfaces() throws Exception {
+    @Test(expectedExceptions = RepositoryDefinitionException.class,
+          expectedExceptionsMessageRegExp = ".*?: Repository interface needs to be declared as public")
+    public void testThatItOnlyAcceptsPublicInterfaces() {
         new NullReturningRepositoryMetadataResolver().resolve(SamplePrivateInterface.class);
     }
 
     @Test
-    public void testThatItPassesAPublicInterfaceToTheSubClass() throws Exception {
+    public void testThatItPassesAPublicInterfaceToTheSubClass() {
         final NullReturningRepositoryMetadataResolver resolver = new NullReturningRepositoryMetadataResolver();
         resolver.resolve(Repository.class);
         assertThat(resolver.getRepositoryInterface(), equalTo((Class) Repository.class));
     }
 
-    private interface SamplePrivateInterface {}
+    private interface SamplePrivateInterface {
+
+    }
 
 }

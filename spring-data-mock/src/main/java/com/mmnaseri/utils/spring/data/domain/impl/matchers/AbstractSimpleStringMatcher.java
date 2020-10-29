@@ -7,7 +7,7 @@ import com.mmnaseri.utils.spring.data.error.InvalidArgumentException;
 /**
  * Used when the subject of the operation is a string
  *
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/29/15)
  */
 public abstract class AbstractSimpleStringMatcher extends AbstractSimpleMatcher {
@@ -23,16 +23,16 @@ public abstract class AbstractSimpleStringMatcher extends AbstractSimpleMatcher 
             first = first.toLowerCase();
             second = second.toLowerCase();
         }
-        return matches(parameter, first, second);
+        return matches(first, second);
     }
 
     /**
      * Called when we want to check the expectation
-     * @param parameter    the parameter
-     * @param actual       the actual value
-     * @param argument     the argument to the operator
+     *
+     * @param actual    the actual value
+     * @param argument  the argument to the operator
      * @return {@literal true} if the match succeeded
      */
-    protected abstract boolean matches(Parameter parameter, String actual, String argument);
+    protected abstract boolean matches(String actual, String argument);
 
 }

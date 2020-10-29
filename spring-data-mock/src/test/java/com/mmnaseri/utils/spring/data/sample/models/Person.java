@@ -1,9 +1,12 @@
 package com.mmnaseri.utils.spring.data.sample.models;
 
+import java.util.Objects;
+
 /**
- * @author Milad Naseri (mmnaseri@programmer.net)
+ * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/21/15)
  */
+@SuppressWarnings("unused")
 public class Person {
 
     private String id;
@@ -76,7 +79,7 @@ public class Person {
             return false;
         }
         Person person = (Person) o;
-        return id != null ? id.equals(person.id) : person.id == null;
+        return Objects.equals(id, person.id);
     }
 
     @Override
