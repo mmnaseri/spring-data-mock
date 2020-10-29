@@ -104,8 +104,6 @@ your shiny applications.
 
 - As well it should, it is now adopting all the new method signatures for the new Spring Data, meaning that those
 are now automatic breaking changes.
-- We have now dropped support for Querydsl repositories until further notice, due to compiler issues with the EJC
-dependency used by Querydsl.
 - The library now runs on Java 8+, meaning we do not support JDK 7 anymore.
 
 ## History

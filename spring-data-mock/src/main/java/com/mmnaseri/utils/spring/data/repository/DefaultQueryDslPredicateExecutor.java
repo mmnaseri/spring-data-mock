@@ -14,10 +14,7 @@ import org.springframework.data.domain.Sort;
 /**
  * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/28/16)
- * @deprecated This class is kept for backward compilation compatibility, however, it is not functional as of version
- * 2.0.
  */
-@Deprecated
 public class DefaultQueryDslPredicateExecutor extends PagingAndSortingSupport implements DataStoreAware {
 
     private DataStore dataStore;

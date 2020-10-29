@@ -25,8 +25,6 @@ import static org.hamcrest.Matchers.*;
  * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (4/28/16)
  */
-@SuppressWarnings("deprecation")
-@Ignore
 public class DefaultQueryDslPredicateExecutorTest {
 
     private MemoryDataStore<Object, Person> dataStore;
