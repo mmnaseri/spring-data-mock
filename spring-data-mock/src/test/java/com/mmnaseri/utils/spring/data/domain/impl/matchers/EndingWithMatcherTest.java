@@ -11,29 +11,28 @@ import static org.hamcrest.Matchers.is;
  */
 public class EndingWithMatcherTest {
 
-    @Test
-    public void testWhenActualIsNull() {
-        assertThat(new EndingWithMatcher().matches(null, ""), is(false));
-    }
+  @Test
+  public void testWhenActualIsNull() {
+    assertThat(new EndingWithMatcher().matches(null, ""), is(false));
+  }
 
-    @Test
-    public void testWhenParameterIsNull() {
-        assertThat(new EndingWithMatcher().matches("", null), is(false));
-    }
+  @Test
+  public void testWhenParameterIsNull() {
+    assertThat(new EndingWithMatcher().matches("", null), is(false));
+  }
 
-    @Test
-    public void testWhenBothAreNull() {
-        assertThat(new EndingWithMatcher().matches(null, null), is(false));
-    }
+  @Test
+  public void testWhenBothAreNull() {
+    assertThat(new EndingWithMatcher().matches(null, null), is(false));
+  }
 
-    @Test
-    public void testWhenActualDoesNotEndWithParameter() {
-        assertThat(new EndingWithMatcher().matches("xyz", "abc"), is(false));
-    }
+  @Test
+  public void testWhenActualDoesNotEndWithParameter() {
+    assertThat(new EndingWithMatcher().matches("xyz", "abc"), is(false));
+  }
 
-    @Test
-    public void testWhenActualEndsWithParameter() {
-        assertThat(new EndingWithMatcher().matches("HelloWorld", "WORLD"), is(true));
-    }
-
+  @Test
+  public void testWhenActualEndsWithParameter() {
+    assertThat(new EndingWithMatcher().matches("HelloWorld", "WORLD"), is(true));
+  }
 }

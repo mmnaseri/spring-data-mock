@@ -11,23 +11,23 @@ import static org.hamcrest.Matchers.is;
  */
 public class IsLikeMatcherTest {
 
-    @Test
-    public void testWhenSubjectIsNull() {
-        assertThat(new IsLikeMatcher().matches(null, ""), is(false));
-    }
+  @Test
+  public void testWhenSubjectIsNull() {
+    assertThat(new IsLikeMatcher().matches(null, ""), is(false));
+  }
 
-    @Test
-    public void testWhenReferenceIsNull() {
-        assertThat(new IsLikeMatcher().matches("", null), is(false));
-    }
+  @Test
+  public void testWhenReferenceIsNull() {
+    assertThat(new IsLikeMatcher().matches("", null), is(false));
+  }
 
-    @Test
-    public void testWhenTheyAreNotAlike() {
-        assertThat(new IsLikeMatcher().matches("Hello World", "World"), is(false));
-    }
+  @Test
+  public void testWhenTheyAreNotAlike() {
+    assertThat(new IsLikeMatcher().matches("Hello World", "World"), is(false));
+  }
 
-    @Test
-    public void testWhenTheyAreAlike() {
-        assertThat(new IsLikeMatcher().matches("Hello world!", "hello WORLD!"), is(true));
-    }
+  @Test
+  public void testWhenTheyAreAlike() {
+    assertThat(new IsLikeMatcher().matches("Hello world!", "hello WORLD!"), is(true));
+  }
 }

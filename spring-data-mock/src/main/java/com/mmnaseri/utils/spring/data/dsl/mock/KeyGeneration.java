@@ -10,30 +10,29 @@ import com.mmnaseri.utils.spring.data.domain.KeyGenerator;
  */
 public interface KeyGeneration extends Implementation {
 
-    /**
-     * Sets the key generator to the provided instance
-     *
-     * @param keyGenerator the key generator
-     * @param <S>          the type of the keys
-     * @return the rest of the configuration
-     */
-    <S> Implementation generateKeysUsing(KeyGenerator<S> keyGenerator);
+  /**
+   * Sets the key generator to the provided instance
+   *
+   * @param keyGenerator the key generator
+   * @param <S> the type of the keys
+   * @return the rest of the configuration
+   */
+  <S> Implementation generateKeysUsing(KeyGenerator<S> keyGenerator);
 
-    /**
-     * Sets the key generator to an instance of the provided type.
-     *
-     * @param generatorType the type of the key generator to use
-     * @param <S>           the type of the keys the generator will be generating
-     * @param <G>           the type of the generator
-     * @return the rest of the configuration
-     */
-    <S, G extends KeyGenerator<S>> Implementation generateKeysUsing(Class<G> generatorType);
+  /**
+   * Sets the key generator to an instance of the provided type.
+   *
+   * @param generatorType the type of the key generator to use
+   * @param <S> the type of the keys the generator will be generating
+   * @param <G> the type of the generator
+   * @return the rest of the configuration
+   */
+  <S, G extends KeyGenerator<S>> Implementation generateKeysUsing(Class<G> generatorType);
 
-    /**
-     * Tells the builder that we are not going to have any auto-generated keys
-     *
-     * @return the rest of the configuration
-     */
-    Implementation withoutGeneratingKeys();
-
+  /**
+   * Tells the builder that we are not going to have any auto-generated keys
+   *
+   * @return the rest of the configuration
+   */
+  Implementation withoutGeneratingKeys();
 }

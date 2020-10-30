@@ -10,19 +10,18 @@ import com.mmnaseri.utils.spring.data.sample.models.EntityWithIdField;
  */
 public class NamedFieldIdPropertyResolverTest extends BaseIdPropertyResolverTest {
 
-    @Override
-    protected IdPropertyResolver getIdPropertyResolver() {
-        return new NamedFieldIdPropertyResolver();
-    }
+  @Override
+  protected IdPropertyResolver getIdPropertyResolver() {
+    return new NamedFieldIdPropertyResolver();
+  }
 
-    @Override
-    protected Class<?> properEntity() {
-        return EntityWithIdField.class;
-    }
+  @Override
+  protected Class<?> properEntity() {
+    return EntityWithIdField.class;
+  }
 
-    @Override
-    protected Class<?> entityWithNoProperty() {
-        return EmptyEntity.class;
-    }
-
+  @Override
+  protected Class<?> entityWithNoProperty() {
+    return EmptyEntity.class;
+  }
 }

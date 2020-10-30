@@ -7,6 +7,4 @@ package com.mmnaseri.utils.spring.data.dsl.mock;
  * @since 1.0 (10/14/15)
  */
 @SuppressWarnings("WeakerAccess")
-public interface Start extends Factory, Configuration {
-
-}
+public interface Start extends Factory, Configuration {}

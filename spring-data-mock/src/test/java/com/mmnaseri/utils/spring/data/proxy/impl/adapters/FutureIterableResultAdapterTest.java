@@ -10,7 +10,11 @@ import java.util.Collection;
 import java.util.concurrent.Future;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 
 /**
  * @author Milad Naseri (m.m.naseri@gmail.com)
@@ -18,32 +22,41 @@ import static org.hamcrest.Matchers.*;
  */
 public class FutureIterableResultAdapterTest {
 
-    @Test
-    public void testAdapting() throws Exception {
-        final FutureIterableResultAdapter adapter = new FutureIterableResultAdapter();
-        final Future<?> value = adapter.adapt(
-                new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findFuture"), null),
-                Arrays.asList(1, 2, 3, 4));
-        assertThat(value, is(notNullValue()));
-        assertThat(value.get(), is(instanceOf((Class) Collection.class)));
-        final Collection<?> collection = (Collection<?>) value.get();
-        assertThat(collection, hasSize(4));
-        assertThat(collection, containsInAnyOrder(1, 2, 3, 4));
-    }
+  @Test
+  public void testAdapting() throws Exception {
+    final FutureIterableResultAdapter adapter = new FutureIterableResultAdapter();
+    final Future<?> value =
+        adapter.adapt(
+            new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findFuture"), null),
+            Arrays.asList(1, 2, 3, 4));
+    assertThat(value, is(notNullValue()));
+    assertThat(value.get(), is(instanceOf((Class) Collection.class)));
+    final Collection<?> collection = (Collection<?>) value.get();
+    assertThat(collection, hasSize(4));
+    assertThat(collection, containsInAnyOrder(1, 2, 3, 4));
+  }
 
-    @Test
-    public void testAccepting() throws Exception {
-        final FutureIterableResultAdapter adapter = new FutureIterableResultAdapter();
-        assertThat(adapter.accepts(null, null), is(false));
-        assertThat(adapter.accepts(
-                new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findOther"), new Object[]{}),
-                new Object()), is(false));
-        assertThat(adapter.accepts(
-                new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findFuture"), new Object[]{}),
-                new Object()), is(false));
-        assertThat(adapter.accepts(
-                new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findFuture"), new Object[]{}),
-                new ArrayList<>()), is(true));
-    }
-
+  @Test
+  public void testAccepting() throws Exception {
+    final FutureIterableResultAdapter adapter = new FutureIterableResultAdapter();
+    assertThat(adapter.accepts(null, null), is(false));
+    assertThat(
+        adapter.accepts(
+            new ImmutableInvocation(
+                ReturnTypeSampleRepository.class.getMethod("findOther"), new Object[] {}),
+            new Object()),
+        is(false));
+    assertThat(
+        adapter.accepts(
+            new ImmutableInvocation(
+                ReturnTypeSampleRepository.class.getMethod("findFuture"), new Object[] {}),
+            new Object()),
+        is(false));
+    assertThat(
+        adapter.accepts(
+            new ImmutableInvocation(
+                ReturnTypeSampleRepository.class.getMethod("findFuture"), new Object[] {}),
+            new ArrayList<>()),
+        is(true));
+  }
 }

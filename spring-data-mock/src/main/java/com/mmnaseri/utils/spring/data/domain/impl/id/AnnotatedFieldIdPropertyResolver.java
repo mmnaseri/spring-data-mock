@@ -13,7 +13,8 @@ import java.util.concurrent.atomic.AtomicReference;
 import static com.mmnaseri.utils.spring.data.domain.impl.id.IdPropertyResolverUtils.isAnnotated;
 
 /**
- * This class will help resolve ID property name if the entity has a field that is annotated with {@link Id @Id}
+ * This class will help resolve ID property name if the entity has a field that is annotated with
+ * {@link Id @Id}
  *
  * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/23/15)
@@ -21,31 +22,32 @@ import static com.mmnaseri.utils.spring.data.domain.impl.id.IdPropertyResolverUt
 @SuppressWarnings("WeakerAccess")
 public class AnnotatedFieldIdPropertyResolver implements IdPropertyResolver {
 
-    @Override
-    public String resolve(final Class<?> entityType, Class<?> idType) {
-        final AtomicReference<Field> found = new AtomicReference<>();
-        //try to find the ID field
-        ReflectionUtils.doWithFields(entityType, field -> {
-            if (isAnnotated(field)) {
-                if (found.get() == null) {
-                    found.set(field);
-                } else {
-                    throw new MultipleIdPropertiesException(entityType);
-                }
-            }
-        });
-        final Field idAnnotatedField = found.get();
-        //if a field was found, try to get the ID property name
-        if (idAnnotatedField != null) {
-            if (!PropertyUtils.getTypeOf(idType).isAssignableFrom(
-                    PropertyUtils.getTypeOf(idAnnotatedField.getType()))) {
-                throw new PropertyTypeMismatchException(entityType, idAnnotatedField.getName(), idType,
-                                                        idAnnotatedField.getType());
+  @Override
+  public String resolve(final Class<?> entityType, Class<?> idType) {
+    final AtomicReference<Field> found = new AtomicReference<>();
+    // try to find the ID field
+    ReflectionUtils.doWithFields(
+        entityType,
+        field -> {
+          if (isAnnotated(field)) {
+            if (found.get() == null) {
+              found.set(field);
             } else {
-                return idAnnotatedField.getName();
+              throw new MultipleIdPropertiesException(entityType);
             }
-        }
-        return null;
+          }
+        });
+    final Field idAnnotatedField = found.get();
+    // if a field was found, try to get the ID property name
+    if (idAnnotatedField != null) {
+      if (!PropertyUtils.getTypeOf(idType)
+          .isAssignableFrom(PropertyUtils.getTypeOf(idAnnotatedField.getType()))) {
+        throw new PropertyTypeMismatchException(
+            entityType, idAnnotatedField.getName(), idType, idAnnotatedField.getType());
+      } else {
+        return idAnnotatedField.getName();
+      }
     }
-
+    return null;
+  }
 }

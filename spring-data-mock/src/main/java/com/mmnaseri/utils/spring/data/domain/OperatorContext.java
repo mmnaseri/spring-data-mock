@@ -8,18 +8,17 @@ package com.mmnaseri.utils.spring.data.domain;
  */
 public interface OperatorContext {
 
-    /**
-     * @param operator registers a new operator, taking care to avoid registration of new operators that override a
-     *                 predefined operator suffix.
-     */
-    void register(Operator operator);
+  /**
+   * @param operator registers a new operator, taking care to avoid registration of new operators
+   *     that override a predefined operator suffix.
+   */
+  void register(Operator operator);
 
-    /**
-     * Finds the operator that matches the given suffix
-     *
-     * @param suffix the suffix to look for
-     * @return the operator that matches the suffix or {@literal null} if none matches.
-     */
-    Operator getBySuffix(String suffix);
-
+  /**
+   * Finds the operator that matches the given suffix
+   *
+   * @param suffix the suffix to look for
+   * @return the operator that matches the suffix or {@literal null} if none matches.
+   */
+  Operator getBySuffix(String suffix);
 }

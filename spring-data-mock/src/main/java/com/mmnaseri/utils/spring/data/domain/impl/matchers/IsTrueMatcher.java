@@ -8,9 +8,8 @@ package com.mmnaseri.utils.spring.data.domain.impl.matchers;
  */
 public class IsTrueMatcher extends AbstractUnaryMatcher {
 
-    @Override
-    protected boolean matches(Object value) {
-        return Boolean.TRUE.equals(value);
-    }
-
+  @Override
+  protected boolean matches(Object value) {
+    return Boolean.TRUE.equals(value);
+  }
 }

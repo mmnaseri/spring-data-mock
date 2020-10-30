@@ -12,31 +12,32 @@ import static org.hamcrest.Matchers.is;
  */
 public class ConfigurableSequentialIntegerKeyGeneratorTest {
 
-    @Test
-    public void testKeyGenerationWithDefaultSettings() {
-        final KeyGenerator<Integer> generator = new ConfigurableSequentialIntegerKeyGenerator();
-        assertThat(generator.generate(), is(1));
-        assertThat(generator.generate(), is(2));
-        assertThat(generator.generate(), is(3));
-    }
+  @Test
+  public void testKeyGenerationWithDefaultSettings() {
+    final KeyGenerator<Integer> generator = new ConfigurableSequentialIntegerKeyGenerator();
+    assertThat(generator.generate(), is(1));
+    assertThat(generator.generate(), is(2));
+    assertThat(generator.generate(), is(3));
+  }
 
-    @Test
-    public void testKeyGenerationWithDefaultStepAndCustomInitialValue() {
-        final int initialValue = 100;
-        final KeyGenerator<Integer> generator = new ConfigurableSequentialIntegerKeyGenerator(initialValue);
-        assertThat(generator.generate(), is(initialValue));
-        assertThat(generator.generate(), is(initialValue + 1));
-        assertThat(generator.generate(), is(initialValue + 2));
-    }
+  @Test
+  public void testKeyGenerationWithDefaultStepAndCustomInitialValue() {
+    final int initialValue = 100;
+    final KeyGenerator<Integer> generator =
+        new ConfigurableSequentialIntegerKeyGenerator(initialValue);
+    assertThat(generator.generate(), is(initialValue));
+    assertThat(generator.generate(), is(initialValue + 1));
+    assertThat(generator.generate(), is(initialValue + 2));
+  }
 
-    @Test
-    public void testKeyGenerationWithCustomStepAndCustomInitialValue() {
-        final int initialValue = 100;
-        final int step = 3;
-        final KeyGenerator<Integer> generator = new ConfigurableSequentialIntegerKeyGenerator(initialValue, step);
-        assertThat(generator.generate(), is(initialValue));
-        assertThat(generator.generate(), is(initialValue + step));
-        assertThat(generator.generate(), is(initialValue + step * 2));
-    }
-
+  @Test
+  public void testKeyGenerationWithCustomStepAndCustomInitialValue() {
+    final int initialValue = 100;
+    final int step = 3;
+    final KeyGenerator<Integer> generator =
+        new ConfigurableSequentialIntegerKeyGenerator(initialValue, step);
+    assertThat(generator.generate(), is(initialValue));
+    assertThat(generator.generate(), is(initialValue + step));
+    assertThat(generator.generate(), is(initialValue + step * 2));
+  }
 }

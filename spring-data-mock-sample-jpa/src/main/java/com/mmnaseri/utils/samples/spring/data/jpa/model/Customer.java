@@ -14,43 +14,43 @@ import java.util.Date;
 @SuppressWarnings("unused")
 public class Customer {
 
-    @Id
-    private Long id;
-    @Temporal(TemporalType.DATE)
-    private Date birthday;
-    private String firstName;
-    private String lastName;
+  @Id private Long id;
 
-    public Long getId() {
-        return id;
-    }
+  @Temporal(TemporalType.DATE)
+  private Date birthday;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+  private String firstName;
+  private String lastName;
 
-    public Date getBirthday() {
-        return birthday;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public void setBirthday(Date birthday) {
-        this.birthday = birthday;
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    public String getFirstName() {
-        return firstName;
-    }
+  public Date getBirthday() {
+    return birthday;
+  }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
+  public void setBirthday(Date birthday) {
+    this.birthday = birthday;
+  }
 
-    public String getLastName() {
-        return lastName;
-    }
+  public String getFirstName() {
+    return firstName;
+  }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
+  public void setFirstName(String firstName) {
+    this.firstName = firstName;
+  }
 
+  public String getLastName() {
+    return lastName;
+  }
+
+  public void setLastName(String lastName) {
+    this.lastName = lastName;
+  }
 }

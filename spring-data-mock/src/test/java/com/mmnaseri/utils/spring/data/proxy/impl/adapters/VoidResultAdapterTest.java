@@ -14,24 +14,31 @@ import static org.hamcrest.Matchers.nullValue;
  */
 public class VoidResultAdapterTest {
 
-    @Test
-    public void testAccepting() throws Exception {
-        final VoidResultAdapter adapter = new VoidResultAdapter();
-        assertThat(adapter.accepts(
-                new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findOther"), new Object[]{}), null),
-                   is(false));
-        assertThat(adapter.accepts(
-                new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("doSomething"), new Object[]{}),
-                null), is(true));
-    }
+  @Test
+  public void testAccepting() throws Exception {
+    final VoidResultAdapter adapter = new VoidResultAdapter();
+    assertThat(
+        adapter.accepts(
+            new ImmutableInvocation(
+                ReturnTypeSampleRepository.class.getMethod("findOther"), new Object[] {}),
+            null),
+        is(false));
+    assertThat(
+        adapter.accepts(
+            new ImmutableInvocation(
+                ReturnTypeSampleRepository.class.getMethod("doSomething"), new Object[] {}),
+            null),
+        is(true));
+  }
 
-    @Test
-    public void testAdapting() throws Exception {
-        final VoidResultAdapter adapter = new VoidResultAdapter();
-        final Object adapted = adapter.adapt(
-                new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("doSomething"), new Object[]{}),
-                new Object());
-        assertThat(adapted, is(nullValue()));
-    }
-
+  @Test
+  public void testAdapting() throws Exception {
+    final VoidResultAdapter adapter = new VoidResultAdapter();
+    final Object adapted =
+        adapter.adapt(
+            new ImmutableInvocation(
+                ReturnTypeSampleRepository.class.getMethod("doSomething"), new Object[] {}),
+            new Object());
+    assertThat(adapted, is(nullValue()));
+  }
 }

@@ -2,10 +2,18 @@ package com.mmnaseri.utils.spring.data.tools;
 
 import org.testng.annotations.Test;
 
-import java.lang.reflect.*;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.arrayWithSize;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.testng.Assert.fail;
 
 /**
@@ -14,53 +22,52 @@ import static org.testng.Assert.fail;
  */
 public abstract class AbstractUtilityClassTest {
 
-    protected abstract Class<?> getUtilityClass();
+  protected abstract Class<?> getUtilityClass();
 
-    @Test
-    public void testConstructorIsPrivate() {
-        final Constructor<?>[] constructors = getUtilityClass().getDeclaredConstructors();
-        assertThat(constructors, is(arrayWithSize(1)));
-        final Constructor<?> constructor = constructors[0];
-        assertThat(Modifier.isPrivate(constructor.getModifiers()), is(true));
+  @Test
+  public void testConstructorIsPrivate() {
+    final Constructor<?>[] constructors = getUtilityClass().getDeclaredConstructors();
+    assertThat(constructors, is(arrayWithSize(1)));
+    final Constructor<?> constructor = constructors[0];
+    assertThat(Modifier.isPrivate(constructor.getModifiers()), is(true));
+  }
+
+  @Test
+  public void testConstructorThrowsException() throws Exception {
+    final Constructor<?>[] constructors = getUtilityClass().getDeclaredConstructors();
+    final Constructor<?> constructor = constructors[0];
+    constructor.setAccessible(true);
+    try {
+      constructor.newInstance();
+    } catch (InvocationTargetException e) {
+      assertThat(e.getCause(), is(notNullValue()));
+      assertThat(e.getCause(), is(instanceOf(UnsupportedOperationException.class)));
+      return;
     }
+    fail("Expected utility class constructor to throw an exception");
+  }
 
-    @Test
-    public void testConstructorThrowsException() throws Exception {
-        final Constructor<?>[] constructors = getUtilityClass().getDeclaredConstructors();
-        final Constructor<?> constructor = constructors[0];
-        constructor.setAccessible(true);
-        try {
-            constructor.newInstance();
-        } catch (InvocationTargetException e) {
-            assertThat(e.getCause(), is(notNullValue()));
-            assertThat(e.getCause(), is(instanceOf(UnsupportedOperationException.class)));
-            return;
-        }
-        fail("Expected utility class constructor to throw an exception");
+  @Test
+  public void testClassIsFinal() {
+    assertThat(Modifier.isFinal(getUtilityClass().getModifiers()), is(true));
+  }
+
+  @Test
+  public void testClassHasNoInstanceMethods() {
+    for (Method method : getUtilityClass().getDeclaredMethods()) {
+      assertThat(Modifier.isStatic(method.getModifiers()), is(true));
     }
+  }
 
-    @Test
-    public void testClassIsFinal() {
-        assertThat(Modifier.isFinal(getUtilityClass().getModifiers()), is(true));
+  @Test
+  public void testClassHasNoInstanceFields() {
+    for (Field field : getUtilityClass().getDeclaredFields()) {
+      assertThat(Modifier.isStatic(field.getModifiers()), is(true));
     }
+  }
 
-    @Test
-    public void testClassHasNoInstanceMethods() {
-        for (Method method : getUtilityClass().getDeclaredMethods()) {
-            assertThat(Modifier.isStatic(method.getModifiers()), is(true));
-        }
-    }
-
-    @Test
-    public void testClassHasNoInstanceFields() {
-        for (Field field : getUtilityClass().getDeclaredFields()) {
-            assertThat(Modifier.isStatic(field.getModifiers()), is(true));
-        }
-    }
-
-    @Test
-    public void testClassHasNoSuperClass() {
-        assertThat(getUtilityClass().getSuperclass(), is(equalTo((Class) Object.class)));
-    }
-
+  @Test
+  public void testClassHasNoSuperClass() {
+    assertThat(getUtilityClass().getSuperclass(), is(equalTo((Class) Object.class)));
+  }
 }

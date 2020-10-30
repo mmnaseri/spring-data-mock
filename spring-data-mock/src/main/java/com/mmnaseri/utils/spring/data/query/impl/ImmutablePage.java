@@ -11,22 +11,21 @@ import com.mmnaseri.utils.spring.data.query.Page;
 @SuppressWarnings("WeakerAccess")
 public class ImmutablePage implements Page {
 
-    private final int pageSize;
-    private final int pageNumber;
+  private final int pageSize;
+  private final int pageNumber;
 
-    public ImmutablePage(int pageSize, int pageNumber) {
-        this.pageSize = pageSize;
-        this.pageNumber = pageNumber;
-    }
+  public ImmutablePage(int pageSize, int pageNumber) {
+    this.pageSize = pageSize;
+    this.pageNumber = pageNumber;
+  }
 
-    @Override
-    public int getPageSize() {
-        return pageSize;
-    }
+  @Override
+  public int getPageSize() {
+    return pageSize;
+  }
 
-    @Override
-    public int getPageNumber() {
-        return pageNumber;
-    }
-
+  @Override
+  public int getPageNumber() {
+    return pageNumber;
+  }
 }

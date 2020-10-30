@@ -8,8 +8,7 @@ import java.lang.reflect.Method;
  */
 public class UnknownDataOperationException extends DataOperationException {
 
-    public UnknownDataOperationException(Method method) {
-        super("Failed to resolve operation for method: " + method);
-    }
-
+  public UnknownDataOperationException(Method method) {
+    super("Failed to resolve operation for method: " + method);
+  }
 }

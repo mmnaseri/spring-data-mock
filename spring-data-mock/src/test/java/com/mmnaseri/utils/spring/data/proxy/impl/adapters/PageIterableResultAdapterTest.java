@@ -9,7 +9,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 
 /**
  * @author Milad Naseri (m.m.naseri@gmail.com)
@@ -17,36 +20,45 @@ import static org.hamcrest.Matchers.*;
  */
 public class PageIterableResultAdapterTest {
 
-    @Test
-    public void testAdapting() throws Exception {
-        final PageIterableResultAdapter adapter = new PageIterableResultAdapter();
-        final org.springframework.data.domain.Page<?> value = adapter.adapt(
-                new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findPage"), null),
-                Arrays.asList(1, 2, 3, 4));
-        assertThat(value, is(notNullValue()));
-        assertThat(value.getTotalElements(), is(4L));
-        assertThat(value.getTotalPages(), is(1));
-        assertThat(value.getNumber(), is(0));
-        assertThat(value.getNumberOfElements(), is(4));
-        assertThat(value.getSize(), is(4));
-        assertThat(value.getSort(), is(Sort.unsorted()));
-        assertThat(value.getContent(), hasSize(4));
-        assertThat(value.getContent(), containsInAnyOrder(1, 2, 3, 4));
-    }
+  @Test
+  public void testAdapting() throws Exception {
+    final PageIterableResultAdapter adapter = new PageIterableResultAdapter();
+    final org.springframework.data.domain.Page<?> value =
+        adapter.adapt(
+            new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findPage"), null),
+            Arrays.asList(1, 2, 3, 4));
+    assertThat(value, is(notNullValue()));
+    assertThat(value.getTotalElements(), is(4L));
+    assertThat(value.getTotalPages(), is(1));
+    assertThat(value.getNumber(), is(0));
+    assertThat(value.getNumberOfElements(), is(4));
+    assertThat(value.getSize(), is(4));
+    assertThat(value.getSort(), is(Sort.unsorted()));
+    assertThat(value.getContent(), hasSize(4));
+    assertThat(value.getContent(), containsInAnyOrder(1, 2, 3, 4));
+  }
 
-    @Test
-    public void testAccepting() throws Exception {
-        final PageIterableResultAdapter adapter = new PageIterableResultAdapter();
-        assertThat(adapter.accepts(null, null), is(false));
-        assertThat(adapter.accepts(
-                new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findOther"), new Object[]{}),
-                new Object()), is(false));
-        assertThat(adapter.accepts(
-                new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findPage"), new Object[]{}),
-                new Object()), is(false));
-        assertThat(adapter.accepts(
-                new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findPage"), new Object[]{}),
-                new ArrayList<>()), is(true));
-    }
-
+  @Test
+  public void testAccepting() throws Exception {
+    final PageIterableResultAdapter adapter = new PageIterableResultAdapter();
+    assertThat(adapter.accepts(null, null), is(false));
+    assertThat(
+        adapter.accepts(
+            new ImmutableInvocation(
+                ReturnTypeSampleRepository.class.getMethod("findOther"), new Object[] {}),
+            new Object()),
+        is(false));
+    assertThat(
+        adapter.accepts(
+            new ImmutableInvocation(
+                ReturnTypeSampleRepository.class.getMethod("findPage"), new Object[] {}),
+            new Object()),
+        is(false));
+    assertThat(
+        adapter.accepts(
+            new ImmutableInvocation(
+                ReturnTypeSampleRepository.class.getMethod("findPage"), new Object[] {}),
+            new ArrayList<>()),
+        is(true));
+  }
 }

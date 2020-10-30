@@ -6,8 +6,11 @@ package com.mmnaseri.utils.spring.data.error;
  */
 public class EntityMissingKeyException extends EntityStateException {
 
-    public EntityMissingKeyException(Class<?> entityType, String keyProperty) {
-        super("An object of instance " + entityType + " must declare a valid key under property " + keyProperty);
-    }
-
+  public EntityMissingKeyException(Class<?> entityType, String keyProperty) {
+    super(
+        "An object of instance "
+            + entityType
+            + " must declare a valid key under property "
+            + keyProperty);
+  }
 }

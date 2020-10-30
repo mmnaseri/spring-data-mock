@@ -11,8 +11,7 @@ import java.util.Collection;
  */
 public abstract class PagingAndSortingSupport {
 
-    public static Page page(Collection entries, Pageable pageable) {
-        return PagingAndSortingUtils.page(entries, pageable);
-    }
-
+  public static Page page(Collection entries, Pageable pageable) {
+    return PagingAndSortingUtils.page(entries, pageable);
+  }
 }

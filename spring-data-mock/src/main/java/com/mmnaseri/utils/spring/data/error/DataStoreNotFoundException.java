@@ -6,8 +6,7 @@ package com.mmnaseri.utils.spring.data.error;
  */
 public class DataStoreNotFoundException extends DataStoreException {
 
-    public DataStoreNotFoundException(Class<?> entityType) {
-        super(entityType, "No data store could be found for this entity type: " + entityType);
-    }
-
+  public DataStoreNotFoundException(Class<?> entityType) {
+    super(entityType, "No data store could be found for this entity type: " + entityType);
+  }
 }

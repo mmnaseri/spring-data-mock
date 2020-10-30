@@ -8,9 +8,6 @@ package com.mmnaseri.utils.spring.data.domain;
  */
 public enum Modifier {
 
-    /**
-     * Indicates that the parameter's case should be ignored.
-     */
-    IGNORE_CASE
-
+  /** Indicates that the parameter's case should be ignored. */
+  IGNORE_CASE
 }

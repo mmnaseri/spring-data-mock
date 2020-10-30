@@ -17,7 +17,10 @@ import org.testng.annotations.Test;
 import java.util.Collection;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 
 /**
  * @author Milad Naseri (m.m.naseri@gmail.com)
@@ -25,90 +28,99 @@ import static org.hamcrest.Matchers.*;
  */
 public class DefaultRepositoryFactoryTest {
 
-    @Test
-    public void testRepositoryInstance() {
-        final DefaultRepositoryFactoryConfiguration configuration = new DefaultRepositoryFactoryConfiguration();
-        final DefaultDataStoreRegistry dataStoreRegistry = new DefaultDataStoreRegistry();
-        configuration.setDataStoreRegistry(dataStoreRegistry);
-        configuration.setDescriptionExtractor(new MethodQueryDescriptionExtractor(new DefaultOperatorContext()));
-        configuration.setEventListenerContext(new DefaultDataStoreEventListenerContext());
-        configuration.setFunctionRegistry(new DefaultDataFunctionRegistry());
-        configuration.setOperationInvocationHandler(new NonDataOperationInvocationHandler());
-        configuration.setRepositoryMetadataResolver(new DefaultRepositoryMetadataResolver());
-        configuration.setResultAdapterContext(new DefaultResultAdapterContext());
-        configuration.setTypeMappingContext(new DefaultTypeMappingContext());
-        configuration.setDefaultKeyGenerator(null);
-        final DefaultRepositoryFactory factory = new DefaultRepositoryFactory(configuration);
-        assertThat(factory.getConfiguration(), Matchers.is(configuration));
-        assertThat(dataStoreRegistry.has(Person.class), is(false));
-        factory.getInstance(null, ClearableSimpleCrudPersonRepository.class, RepositoryClearerMapping.class);
-        assertThat(dataStoreRegistry.has(Person.class), is(true));
-        final ClearableSimpleCrudPersonRepository repository = factory.getInstance(null,
-                                                                                   ClearableSimpleCrudPersonRepository.class,
-                                                                                   RepositoryClearerMapping.class);
-        final DataStore<Object, Person> dataStore = dataStoreRegistry.getDataStore(Person.class);
-        dataStore.save("k1", new Person().setId("k1").setLastName("Sadeghi"));
-        dataStore.save("k2", new Person().setId("k2").setLastName("Naseri"));
-        dataStore.save("k3", new Person().setId("k3").setLastName("Sadeghi"));
-        dataStore.save("k4", new Person().setId("k4").setLastName("Naseri"));
-        assertThat(repository.findAll(), containsInAnyOrder(dataStore.retrieveAll().toArray()));
-        assertThat(repository.findByLastName("Naseri"),
-                   containsInAnyOrder(dataStore.retrieve("k2"), dataStore.retrieve("k4")));
-        assertThat(repository.findByLastName("Sadeghi"),
-                   containsInAnyOrder(dataStore.retrieve("k1"), dataStore.retrieve("k3")));
-        assertThat(repository.findByLastName("Ghomboli"), is(empty()));
-        final Collection<Person> all = dataStore.retrieveAll();
-        assertThat(repository.deleteAll(), containsInAnyOrder(all.toArray()));
-        dataStore.save("k1", new Person().setId("k1").setLastName("Sadeghi"));
-        dataStore.save("k2", new Person().setId("k2").setLastName("Naseri"));
-        dataStore.save("k3", new Person().setId("k3").setLastName("Sadeghi"));
-        dataStore.save("k4", new Person().setId("k4").setLastName("Naseri"));
-        assertThat(dataStore.retrieveAll(), hasSize(4));
-        repository.clearRepo();
-        assertThat(dataStore.retrieveAll(), is(empty()));
-    }
+  @Test
+  public void testRepositoryInstance() {
+    final DefaultRepositoryFactoryConfiguration configuration =
+        new DefaultRepositoryFactoryConfiguration();
+    final DefaultDataStoreRegistry dataStoreRegistry = new DefaultDataStoreRegistry();
+    configuration.setDataStoreRegistry(dataStoreRegistry);
+    configuration.setDescriptionExtractor(
+        new MethodQueryDescriptionExtractor(new DefaultOperatorContext()));
+    configuration.setEventListenerContext(new DefaultDataStoreEventListenerContext());
+    configuration.setFunctionRegistry(new DefaultDataFunctionRegistry());
+    configuration.setOperationInvocationHandler(new NonDataOperationInvocationHandler());
+    configuration.setRepositoryMetadataResolver(new DefaultRepositoryMetadataResolver());
+    configuration.setResultAdapterContext(new DefaultResultAdapterContext());
+    configuration.setTypeMappingContext(new DefaultTypeMappingContext());
+    configuration.setDefaultKeyGenerator(null);
+    final DefaultRepositoryFactory factory = new DefaultRepositoryFactory(configuration);
+    assertThat(factory.getConfiguration(), Matchers.is(configuration));
+    assertThat(dataStoreRegistry.has(Person.class), is(false));
+    factory.getInstance(
+        null, ClearableSimpleCrudPersonRepository.class, RepositoryClearerMapping.class);
+    assertThat(dataStoreRegistry.has(Person.class), is(true));
+    final ClearableSimpleCrudPersonRepository repository =
+        factory.getInstance(
+            null, ClearableSimpleCrudPersonRepository.class, RepositoryClearerMapping.class);
+    final DataStore<Object, Person> dataStore = dataStoreRegistry.getDataStore(Person.class);
+    dataStore.save("k1", new Person().setId("k1").setLastName("Sadeghi"));
+    dataStore.save("k2", new Person().setId("k2").setLastName("Naseri"));
+    dataStore.save("k3", new Person().setId("k3").setLastName("Sadeghi"));
+    dataStore.save("k4", new Person().setId("k4").setLastName("Naseri"));
+    assertThat(repository.findAll(), containsInAnyOrder(dataStore.retrieveAll().toArray()));
+    assertThat(
+        repository.findByLastName("Naseri"),
+        containsInAnyOrder(dataStore.retrieve("k2"), dataStore.retrieve("k4")));
+    assertThat(
+        repository.findByLastName("Sadeghi"),
+        containsInAnyOrder(dataStore.retrieve("k1"), dataStore.retrieve("k3")));
+    assertThat(repository.findByLastName("Ghomboli"), is(empty()));
+    final Collection<Person> all = dataStore.retrieveAll();
+    assertThat(repository.deleteAll(), containsInAnyOrder(all.toArray()));
+    dataStore.save("k1", new Person().setId("k1").setLastName("Sadeghi"));
+    dataStore.save("k2", new Person().setId("k2").setLastName("Naseri"));
+    dataStore.save("k3", new Person().setId("k3").setLastName("Sadeghi"));
+    dataStore.save("k4", new Person().setId("k4").setLastName("Naseri"));
+    assertThat(dataStore.retrieveAll(), hasSize(4));
+    repository.clearRepo();
+    assertThat(dataStore.retrieveAll(), is(empty()));
+  }
 
-    @Test
-    public void testRepositoryInstanceWithKeyGenerationFallback() {
-        final DefaultRepositoryFactoryConfiguration configuration = new DefaultRepositoryFactoryConfiguration();
-        final DefaultDataStoreRegistry dataStoreRegistry = new DefaultDataStoreRegistry();
-        configuration.setDataStoreRegistry(dataStoreRegistry);
-        configuration.setDescriptionExtractor(new MethodQueryDescriptionExtractor(new DefaultOperatorContext()));
-        configuration.setEventListenerContext(new DefaultDataStoreEventListenerContext());
-        configuration.setFunctionRegistry(new DefaultDataFunctionRegistry());
-        configuration.setOperationInvocationHandler(new NonDataOperationInvocationHandler());
-        configuration.setRepositoryMetadataResolver(new DefaultRepositoryMetadataResolver());
-        configuration.setResultAdapterContext(new DefaultResultAdapterContext());
-        configuration.setTypeMappingContext(new DefaultTypeMappingContext());
-        configuration.setDefaultKeyGenerator(new NoOpKeyGenerator<>());
-        final DefaultRepositoryFactory factory = new DefaultRepositoryFactory(configuration);
-        assertThat(factory.getConfiguration(), Matchers.is(configuration));
-        assertThat(dataStoreRegistry.has(Person.class), is(false));
-        factory.getInstance(null, ClearableSimpleCrudPersonRepository.class, RepositoryClearerMapping.class);
-        assertThat(dataStoreRegistry.has(Person.class), is(true));
-        final ClearableSimpleCrudPersonRepository repository = factory.getInstance(null,
-                                                                                   ClearableSimpleCrudPersonRepository.class,
-                                                                                   RepositoryClearerMapping.class);
-        final DataStore<Object, Person> dataStore = dataStoreRegistry.getDataStore(Person.class);
-        dataStore.save("k1", new Person().setId("k1").setLastName("Sadeghi"));
-        dataStore.save("k2", new Person().setId("k2").setLastName("Naseri"));
-        dataStore.save("k3", new Person().setId("k3").setLastName("Sadeghi"));
-        dataStore.save("k4", new Person().setId("k4").setLastName("Naseri"));
-        assertThat(repository.findAll(), containsInAnyOrder(dataStore.retrieveAll().toArray()));
-        assertThat(repository.findByLastName("Naseri"),
-                   containsInAnyOrder(dataStore.retrieve("k2"), dataStore.retrieve("k4")));
-        assertThat(repository.findByLastName("Sadeghi"),
-                   containsInAnyOrder(dataStore.retrieve("k1"), dataStore.retrieve("k3")));
-        assertThat(repository.findByLastName("Ghomboli"), is(empty()));
-        final Collection<Person> all = dataStore.retrieveAll();
-        assertThat(repository.deleteAll(), containsInAnyOrder(all.toArray()));
-        dataStore.save("k1", new Person().setId("k1").setLastName("Sadeghi"));
-        dataStore.save("k2", new Person().setId("k2").setLastName("Naseri"));
-        dataStore.save("k3", new Person().setId("k3").setLastName("Sadeghi"));
-        dataStore.save("k4", new Person().setId("k4").setLastName("Naseri"));
-        assertThat(dataStore.retrieveAll(), hasSize(4));
-        repository.clearRepo();
-        assertThat(dataStore.retrieveAll(), is(empty()));
-    }
-
+  @Test
+  public void testRepositoryInstanceWithKeyGenerationFallback() {
+    final DefaultRepositoryFactoryConfiguration configuration =
+        new DefaultRepositoryFactoryConfiguration();
+    final DefaultDataStoreRegistry dataStoreRegistry = new DefaultDataStoreRegistry();
+    configuration.setDataStoreRegistry(dataStoreRegistry);
+    configuration.setDescriptionExtractor(
+        new MethodQueryDescriptionExtractor(new DefaultOperatorContext()));
+    configuration.setEventListenerContext(new DefaultDataStoreEventListenerContext());
+    configuration.setFunctionRegistry(new DefaultDataFunctionRegistry());
+    configuration.setOperationInvocationHandler(new NonDataOperationInvocationHandler());
+    configuration.setRepositoryMetadataResolver(new DefaultRepositoryMetadataResolver());
+    configuration.setResultAdapterContext(new DefaultResultAdapterContext());
+    configuration.setTypeMappingContext(new DefaultTypeMappingContext());
+    configuration.setDefaultKeyGenerator(new NoOpKeyGenerator<>());
+    final DefaultRepositoryFactory factory = new DefaultRepositoryFactory(configuration);
+    assertThat(factory.getConfiguration(), Matchers.is(configuration));
+    assertThat(dataStoreRegistry.has(Person.class), is(false));
+    factory.getInstance(
+        null, ClearableSimpleCrudPersonRepository.class, RepositoryClearerMapping.class);
+    assertThat(dataStoreRegistry.has(Person.class), is(true));
+    final ClearableSimpleCrudPersonRepository repository =
+        factory.getInstance(
+            null, ClearableSimpleCrudPersonRepository.class, RepositoryClearerMapping.class);
+    final DataStore<Object, Person> dataStore = dataStoreRegistry.getDataStore(Person.class);
+    dataStore.save("k1", new Person().setId("k1").setLastName("Sadeghi"));
+    dataStore.save("k2", new Person().setId("k2").setLastName("Naseri"));
+    dataStore.save("k3", new Person().setId("k3").setLastName("Sadeghi"));
+    dataStore.save("k4", new Person().setId("k4").setLastName("Naseri"));
+    assertThat(repository.findAll(), containsInAnyOrder(dataStore.retrieveAll().toArray()));
+    assertThat(
+        repository.findByLastName("Naseri"),
+        containsInAnyOrder(dataStore.retrieve("k2"), dataStore.retrieve("k4")));
+    assertThat(
+        repository.findByLastName("Sadeghi"),
+        containsInAnyOrder(dataStore.retrieve("k1"), dataStore.retrieve("k3")));
+    assertThat(repository.findByLastName("Ghomboli"), is(empty()));
+    final Collection<Person> all = dataStore.retrieveAll();
+    assertThat(repository.deleteAll(), containsInAnyOrder(all.toArray()));
+    dataStore.save("k1", new Person().setId("k1").setLastName("Sadeghi"));
+    dataStore.save("k2", new Person().setId("k2").setLastName("Naseri"));
+    dataStore.save("k3", new Person().setId("k3").setLastName("Sadeghi"));
+    dataStore.save("k4", new Person().setId("k4").setLastName("Naseri"));
+    assertThat(dataStore.retrieveAll(), hasSize(4));
+    repository.clearRepo();
+    assertThat(dataStore.retrieveAll(), is(empty()));
+  }
 }

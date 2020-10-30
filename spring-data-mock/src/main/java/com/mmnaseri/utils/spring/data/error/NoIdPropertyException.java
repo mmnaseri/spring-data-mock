@@ -6,8 +6,7 @@ package com.mmnaseri.utils.spring.data.error;
  */
 public class NoIdPropertyException extends EntityDefinitionException {
 
-    public NoIdPropertyException(Class<?> entityType) {
-        super("No id property could be resolved for type " + entityType);
-    }
-
+  public NoIdPropertyException(Class<?> entityType) {
+    super("No id property could be resolved for type " + entityType);
+  }
 }

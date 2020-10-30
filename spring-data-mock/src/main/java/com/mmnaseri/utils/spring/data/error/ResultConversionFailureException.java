@@ -6,8 +6,7 @@ package com.mmnaseri.utils.spring.data.error;
  */
 public class ResultConversionFailureException extends DataOperationException {
 
-    public ResultConversionFailureException(Throwable cause) {
-        super("Failed to retrieve promised result", cause);
-    }
-
+  public ResultConversionFailureException(Throwable cause) {
+    super("Failed to retrieve promised result", cause);
+  }
 }

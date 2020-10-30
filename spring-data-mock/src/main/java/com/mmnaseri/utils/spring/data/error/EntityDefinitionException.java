@@ -6,8 +6,7 @@ package com.mmnaseri.utils.spring.data.error;
  */
 public abstract class EntityDefinitionException extends RepositoryMockException {
 
-    public EntityDefinitionException(String message) {
-        super(message);
-    }
-
+  public EntityDefinitionException(String message) {
+    super(message);
+  }
 }

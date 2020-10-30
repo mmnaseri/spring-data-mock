@@ -7,10 +7,9 @@ package com.mmnaseri.utils.samples.spring.data.jpa.service;
 @SuppressWarnings("unused")
 public interface PlaneService {
 
-    Long create(String model, String serial);
+  Long create(String model, String serial);
 
-    String lookup(Long id);
+  String lookup(Long id);
 
-    String lookup(String serial);
-
+  String lookup(String serial);
 }

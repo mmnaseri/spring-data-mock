@@ -6,6 +6,7 @@ import com.mmnaseri.utils.samples.spring.data.jpa.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Milad Naseri (milad.naseri@cdk.com)
@@ -13,9 +14,11 @@ import java.util.List;
  */
 public interface MembershipRepository extends JpaRepository<Membership, String> {
 
-    List<Membership> findByUser(User user);
+  List<Membership> findByUser(User user);
 
-    List<Membership> findByGroup(Group group);
+  List<Membership> findByGroup(Group group);
 
-    Membership findByUserAndGroup(User user, Group group);
+  Optional<Membership> findByUserAndGroup(User user, Group group);
+
+  List<Membership> findAllByUserAndActive(User user, boolean active);
 }

@@ -12,13 +12,12 @@ import com.mmnaseri.utils.spring.data.store.DataStoreEventListener;
 @SuppressWarnings("WeakerAccess")
 public interface EventListenerAnd extends Auditing {
 
-    /**
-     * Registers an extra event listener
-     *
-     * @param listener the listener
-     * @param <E>      the type of the events the listener is subscribed to
-     * @return the rest of the configuration
-     */
-    <E extends DataStoreEvent> EventListenerAnd and(DataStoreEventListener<E> listener);
-
+  /**
+   * Registers an extra event listener
+   *
+   * @param listener the listener
+   * @param <E> the type of the events the listener is subscribed to
+   * @return the rest of the configuration
+   */
+  <E extends DataStoreEvent> EventListenerAnd and(DataStoreEventListener<E> listener);
 }

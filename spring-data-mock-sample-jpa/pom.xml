@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.mmnaseri.utils.sample</groupId>
     <artifactId>spring-data-mock-sample-jpa</artifactId>
-    <version>1.0</version>
+    <version>1.0.0</version>
 
     <name>Spring Data Mock: Samples (JPA)</name>
     <description>This module tries to demonstrate how Spring Data Mock could be used to test an application that
-    is using Spring Data JPA.</description>
+        is using Spring Data JPA.
+    </description>
     <inceptionYear>2016</inceptionYear>
     <licenses>
         <license>
@@ -36,7 +37,7 @@
         <spring-data-commons.version>2.2.6.RELEASE</spring-data-commons.version>
         <spring-data-jpa.version>2.2.6.RELEASE</spring-data-jpa.version>
         <persistence-api.version>1.0.2</persistence-api.version>
-        <spring-data-mock.version>2.1.0</spring-data-mock.version>
+        <spring-data-mock.version>2.1.1</spring-data-mock.version>
         <testng.version>7.1.0</testng.version>
         <hamcrest.version>1.3</hamcrest.version>
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>

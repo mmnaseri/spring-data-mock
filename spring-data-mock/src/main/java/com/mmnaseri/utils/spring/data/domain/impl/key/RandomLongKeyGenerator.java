@@ -13,11 +13,10 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class RandomLongKeyGenerator extends AbstractRandomKeyGenerator<Long> {
 
-    private final Random seed = ThreadLocalRandom.current();
+  private final Random seed = ThreadLocalRandom.current();
 
-    @Override
-    protected Long getNext() {
-        return seed.nextLong();
-    }
-
+  @Override
+  protected Long getNext() {
+    return seed.nextLong();
+  }
 }

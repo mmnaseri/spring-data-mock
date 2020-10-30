@@ -18,59 +18,96 @@ import static org.hamcrest.Matchers.is;
  */
 public class NumberIterableResultAdapterTest {
 
-    @Test
-    public void testAccepting() throws Exception {
-        final NumberIterableResultAdapter adapter = new NumberIterableResultAdapter();
-        assertThat(adapter.accepts(null, null), is(false));
-        assertThat(adapter.accepts(
-                new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findOther"), new Object[]{}),
-                new Object()), is(false));
-        assertThat(adapter.accepts(
-                new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findInt"), new Object[]{}),
-                new Object()), is(false));
-        assertThat(adapter.accepts(
-                new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findInt"), new Object[]{}),
-                Arrays.asList("", 1)), is(false));
-        assertThat(adapter.accepts(
-                new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findInt"), new Object[]{}),
-                Arrays.asList(1, 2)), is(false));
-        assertThat(adapter.accepts(
-                new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findInt"), new Object[]{}),
-                Collections.singletonList(1)), is(true));
-        assertThat(adapter.accepts(
-                new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findInteger"), new Object[]{}),
-                Collections.singletonList(1)), is(true));
-    }
+  @Test
+  public void testAccepting() throws Exception {
+    final NumberIterableResultAdapter adapter = new NumberIterableResultAdapter();
+    assertThat(adapter.accepts(null, null), is(false));
+    assertThat(
+        adapter.accepts(
+            new ImmutableInvocation(
+                ReturnTypeSampleRepository.class.getMethod("findOther"), new Object[] {}),
+            new Object()),
+        is(false));
+    assertThat(
+        adapter.accepts(
+            new ImmutableInvocation(
+                ReturnTypeSampleRepository.class.getMethod("findInt"), new Object[] {}),
+            new Object()),
+        is(false));
+    assertThat(
+        adapter.accepts(
+            new ImmutableInvocation(
+                ReturnTypeSampleRepository.class.getMethod("findInt"), new Object[] {}),
+            Arrays.asList("", 1)),
+        is(false));
+    assertThat(
+        adapter.accepts(
+            new ImmutableInvocation(
+                ReturnTypeSampleRepository.class.getMethod("findInt"), new Object[] {}),
+            Arrays.asList(1, 2)),
+        is(false));
+    assertThat(
+        adapter.accepts(
+            new ImmutableInvocation(
+                ReturnTypeSampleRepository.class.getMethod("findInt"), new Object[] {}),
+            Collections.singletonList(1)),
+        is(true));
+    assertThat(
+        adapter.accepts(
+            new ImmutableInvocation(
+                ReturnTypeSampleRepository.class.getMethod("findInteger"), new Object[] {}),
+            Collections.singletonList(1)),
+        is(true));
+  }
 
-    @Test
-    public void testAdapting() throws Exception {
-        final NumberIterableResultAdapter adapter = new NumberIterableResultAdapter();
-        Long value = 100L;
-        assertThat(adapter.adapt(
-                new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findInt"), new Object[]{}),
-                Collections.singleton(value)), Matchers.is(value.intValue()));
-        assertThat(adapter.adapt(
-                new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findLong"), new Object[]{}),
-                Collections.singleton(value)), Matchers.is(value));
-        assertThat(adapter.adapt(
-                new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findShort"), new Object[]{}),
-                Collections.singleton(value)), Matchers.is(value.shortValue()));
-        assertThat(adapter.adapt(
-                new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findDouble"), new Object[]{}),
-                Collections.singleton(value)), Matchers.is(value.doubleValue()));
-        assertThat(adapter.adapt(
-                new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findFloat"), new Object[]{}),
-                Collections.singleton(value)), Matchers.is(value.floatValue()));
-        assertThat(adapter.adapt(
-                new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findByte"), new Object[]{}),
-                Collections.singleton(value)), Matchers.is(value.byteValue()));
-    }
-
-    @Test(expectedExceptions = ResultAdapterFailureException.class)
-    public void testAdaptingUnsupportedNumberType() throws Exception {
-        final NumberIterableResultAdapter adapter = new NumberIterableResultAdapter();
+  @Test
+  public void testAdapting() throws Exception {
+    final NumberIterableResultAdapter adapter = new NumberIterableResultAdapter();
+    Long value = 100L;
+    assertThat(
         adapter.adapt(
-                new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findBigDecimal"), new Object[]{}),
-                Collections.singletonList(1));
-    }
+            new ImmutableInvocation(
+                ReturnTypeSampleRepository.class.getMethod("findInt"), new Object[] {}),
+            Collections.singleton(value)),
+        Matchers.is(value.intValue()));
+    assertThat(
+        adapter.adapt(
+            new ImmutableInvocation(
+                ReturnTypeSampleRepository.class.getMethod("findLong"), new Object[] {}),
+            Collections.singleton(value)),
+        Matchers.is(value));
+    assertThat(
+        adapter.adapt(
+            new ImmutableInvocation(
+                ReturnTypeSampleRepository.class.getMethod("findShort"), new Object[] {}),
+            Collections.singleton(value)),
+        Matchers.is(value.shortValue()));
+    assertThat(
+        adapter.adapt(
+            new ImmutableInvocation(
+                ReturnTypeSampleRepository.class.getMethod("findDouble"), new Object[] {}),
+            Collections.singleton(value)),
+        Matchers.is(value.doubleValue()));
+    assertThat(
+        adapter.adapt(
+            new ImmutableInvocation(
+                ReturnTypeSampleRepository.class.getMethod("findFloat"), new Object[] {}),
+            Collections.singleton(value)),
+        Matchers.is(value.floatValue()));
+    assertThat(
+        adapter.adapt(
+            new ImmutableInvocation(
+                ReturnTypeSampleRepository.class.getMethod("findByte"), new Object[] {}),
+            Collections.singleton(value)),
+        Matchers.is(value.byteValue()));
+  }
+
+  @Test(expectedExceptions = ResultAdapterFailureException.class)
+  public void testAdaptingUnsupportedNumberType() throws Exception {
+    final NumberIterableResultAdapter adapter = new NumberIterableResultAdapter();
+    adapter.adapt(
+        new ImmutableInvocation(
+            ReturnTypeSampleRepository.class.getMethod("findBigDecimal"), new Object[] {}),
+        Collections.singletonList(1));
+  }
 }

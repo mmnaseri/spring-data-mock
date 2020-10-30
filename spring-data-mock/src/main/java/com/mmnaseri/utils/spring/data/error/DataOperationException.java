@@ -6,12 +6,11 @@ package com.mmnaseri.utils.spring.data.error;
  */
 public abstract class DataOperationException extends RepositoryMockException {
 
-    public DataOperationException(String message) {
-        super(message);
-    }
+  public DataOperationException(String message) {
+    super(message);
+  }
 
-    public DataOperationException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
+  public DataOperationException(String message, Throwable cause) {
+    super(message, cause);
+  }
 }

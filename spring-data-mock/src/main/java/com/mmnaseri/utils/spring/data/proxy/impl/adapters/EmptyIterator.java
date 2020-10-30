@@ -10,24 +10,21 @@ import java.util.Iterator;
  */
 public class EmptyIterator implements Iterator {
 
-    /**
-     * This is the shared instance of the empty iterator
-     */
-    public static final EmptyIterator INSTANCE = new EmptyIterator();
+  /** This is the shared instance of the empty iterator */
+  public static final EmptyIterator INSTANCE = new EmptyIterator();
 
-    @Override
-    public boolean hasNext() {
-        return false;
-    }
+  @Override
+  public boolean hasNext() {
+    return false;
+  }
 
-    @Override
-    public Object next() {
-        throw new IndexOutOfBoundsException();
-    }
+  @Override
+  public Object next() {
+    throw new IndexOutOfBoundsException();
+  }
 
-    @Override
-    public void remove() {
-        throw new IndexOutOfBoundsException();
-    }
-
+  @Override
+  public void remove() {
+    throw new IndexOutOfBoundsException();
+  }
 }

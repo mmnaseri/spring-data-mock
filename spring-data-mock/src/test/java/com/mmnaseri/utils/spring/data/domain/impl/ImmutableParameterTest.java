@@ -13,12 +13,14 @@ import static org.hamcrest.Matchers.is;
  */
 public class ImmutableParameterTest {
 
-    @Test
-    public void testToString() {
-        final ImmutableParameter parameter = new ImmutableParameter("x.y.z", Collections.emptySet(),
-                                                                    new int[]{2, 3, 4},
-                                                                    new ImmutableOperator("op", 0, null));
-        assertThat(parameter.toString(), is("(x.y.z,op,[2, 3, 4],[])"));
-    }
-
+  @Test
+  public void testToString() {
+    final ImmutableParameter parameter =
+        new ImmutableParameter(
+            "x.y.z",
+            Collections.emptySet(),
+            new int[] {2, 3, 4},
+            new ImmutableOperator("op", 0, null));
+    assertThat(parameter.toString(), is("(x.y.z,op,[2, 3, 4],[])"));
+  }
 }

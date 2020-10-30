@@ -8,14 +8,9 @@ package com.mmnaseri.utils.spring.data.query;
  */
 public interface Page {
 
-    /**
-     * @return the size of the page
-     */
-    int getPageSize();
+  /** @return the size of the page */
+  int getPageSize();
 
-    /**
-     * @return the maximum number of the items in each page
-     */
-    int getPageNumber();
-
+  /** @return the maximum number of the items in each page */
+  int getPageNumber();
 }

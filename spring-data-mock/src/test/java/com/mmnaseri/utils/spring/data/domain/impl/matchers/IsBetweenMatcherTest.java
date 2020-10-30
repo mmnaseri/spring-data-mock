@@ -11,35 +11,34 @@ import static org.hamcrest.Matchers.is;
  */
 public class IsBetweenMatcherTest {
 
-    @Test
-    public void testWhenActualIsNull() {
-        assertThat(new IsBetweenMatcher().matches(null, 1, 2), is(false));
-    }
+  @Test
+  public void testWhenActualIsNull() {
+    assertThat(new IsBetweenMatcher().matches(null, 1, 2), is(false));
+  }
 
-    @Test
-    public void testWhenLowerBoundIsNull() {
-        assertThat(new IsBetweenMatcher().matches(1, null, 2), is(false));
-    }
+  @Test
+  public void testWhenLowerBoundIsNull() {
+    assertThat(new IsBetweenMatcher().matches(1, null, 2), is(false));
+  }
 
-    @Test
-    public void testWhenUpperBoundIsNull() {
-        assertThat(new IsBetweenMatcher().matches(1, 2, null), is(false));
-    }
+  @Test
+  public void testWhenUpperBoundIsNull() {
+    assertThat(new IsBetweenMatcher().matches(1, 2, null), is(false));
+  }
 
-    @Test
-    public void testWhenRangeDoesNotContainValue() {
-        assertThat(new IsBetweenMatcher().matches(1, 3, 6), is(false));
-    }
+  @Test
+  public void testWhenRangeDoesNotContainValue() {
+    assertThat(new IsBetweenMatcher().matches(1, 3, 6), is(false));
+  }
 
-    @Test
-    public void testWhenRangeContainsValueInclusive() {
-        assertThat(new IsBetweenMatcher().matches(3, 3, 6), is(true));
-        assertThat(new IsBetweenMatcher().matches(6, 3, 6), is(true));
-    }
+  @Test
+  public void testWhenRangeContainsValueInclusive() {
+    assertThat(new IsBetweenMatcher().matches(3, 3, 6), is(true));
+    assertThat(new IsBetweenMatcher().matches(6, 3, 6), is(true));
+  }
 
-    @Test
-    public void testWhenRangeContainsValueMidRange() {
-        assertThat(new IsBetweenMatcher().matches(4, 3, 6), is(true));
-    }
-
+  @Test
+  public void testWhenRangeContainsValueMidRange() {
+    assertThat(new IsBetweenMatcher().matches(4, 3, 6), is(true));
+  }
 }

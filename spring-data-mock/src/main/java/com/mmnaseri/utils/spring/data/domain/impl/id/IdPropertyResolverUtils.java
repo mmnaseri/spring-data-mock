@@ -22,78 +22,79 @@ import java.util.List;
 @SuppressWarnings("WeakerAccess")
 public final class IdPropertyResolverUtils {
 
-    private static final List<String> ID_ANNOTATIONS = new ArrayList<>();
-    private static final Log log = LogFactory.getLog(IdPropertyResolverUtils.class);
+  private static final List<String> ID_ANNOTATIONS = new ArrayList<>();
+  private static final Log log = LogFactory.getLog(IdPropertyResolverUtils.class);
 
-    static {
-        ID_ANNOTATIONS.add("org.springframework.data.annotation.Id");
-        ID_ANNOTATIONS.add("javax.persistence.Id");
-        ID_ANNOTATIONS.add("javax.persistence.EmbeddedId");
+  static {
+    ID_ANNOTATIONS.add("org.springframework.data.annotation.Id");
+    ID_ANNOTATIONS.add("javax.persistence.Id");
+    ID_ANNOTATIONS.add("javax.persistence.EmbeddedId");
+  }
+
+  private IdPropertyResolverUtils() {
+    throw new UnsupportedOperationException();
+  }
+
+  /**
+   * Returns the name of the property as represented by the method given
+   *
+   * @param entityType the type of the entity that the ID is being resolved for
+   * @param idType the type of the ID expected for the entity
+   * @param idAnnotatedMethod the method that will return the ID (e.g. getter for the ID property)
+   * @return the name of the property, or {@literal null} if the method is {@literal null}
+   */
+  public static String getPropertyNameFromAnnotatedMethod(
+      Class<?> entityType, Class<?> idType, Method idAnnotatedMethod) {
+    if (idAnnotatedMethod != null) {
+      final String name = PropertyUtils.getPropertyName(idAnnotatedMethod);
+      if (!PropertyUtils.getTypeOf(idType)
+          .isAssignableFrom(PropertyUtils.getTypeOf(idAnnotatedMethod.getReturnType()))) {
+        throw new PropertyTypeMismatchException(
+            entityType, name, idType, idAnnotatedMethod.getReturnType());
+      } else {
+        return name;
+      }
     }
+    return null;
+  }
 
-    private IdPropertyResolverUtils() {
-        throw new UnsupportedOperationException();
+  /**
+   * Determines whether or not the given element is annotated with the annotations specified by
+   * {@link #getIdAnnotations()}
+   *
+   * @param element the element to be examined
+   * @return {@literal true} if the element has any of the ID annotations
+   */
+  public static boolean isAnnotated(AnnotatedElement element) {
+    final List<Class<? extends Annotation>> annotations = getIdAnnotations();
+    for (Class<? extends Annotation> annotation : annotations) {
+      if (AnnotationUtils.findAnnotation(element, annotation) != null) {
+        return true;
+      }
     }
+    return false;
+  }
 
-    /**
-     * Returns the name of the property as represented by the method given
-     *
-     * @param entityType        the type of the entity that the ID is being resolved for
-     * @param idType            the type of the ID expected for the entity
-     * @param idAnnotatedMethod the method that will return the ID (e.g. getter for the ID property)
-     * @return the name of the property, or {@literal null} if the method is {@literal null}
-     */
-    public static String getPropertyNameFromAnnotatedMethod(Class<?> entityType, Class<?> idType,
-                                                            Method idAnnotatedMethod) {
-        if (idAnnotatedMethod != null) {
-            final String name = PropertyUtils.getPropertyName(idAnnotatedMethod);
-            if (!PropertyUtils.getTypeOf(idType).isAssignableFrom(
-                    PropertyUtils.getTypeOf(idAnnotatedMethod.getReturnType()))) {
-                throw new PropertyTypeMismatchException(entityType, name, idType, idAnnotatedMethod.getReturnType());
-            } else {
-                return name;
-            }
-        }
-        return null;
+  /**
+   * Lists all the annotations that can be used to mark a property as the ID property based on the
+   * libraries that can be found in the classpath
+   *
+   * @return the list of annotations
+   */
+  private static List<Class<? extends Annotation>> getIdAnnotations() {
+    final List<Class<? extends Annotation>> annotations = new ArrayList<>();
+    final ClassLoader classLoader = ClassUtils.getDefaultClassLoader();
+    for (String idAnnotation : ID_ANNOTATIONS) {
+      try {
+        final Class<?> type = ClassUtils.forName(idAnnotation, classLoader);
+        final Class<? extends Annotation> annotationType = type.asSubclass(Annotation.class);
+        annotations.add(annotationType);
+      } catch (ClassNotFoundException ignored) {
+        // if the class for the annotation wasn't found, we just ignore it
+        log.debug(
+            "Requested ID annotation type " + idAnnotation + " is not present in the classpath");
+      }
     }
-
-    /**
-     * Determines whether or not the given element is annotated with the annotations specified by {@link
-     * #getIdAnnotations()}
-     *
-     * @param element the element to be examined
-     * @return {@literal true} if the element has any of the ID annotations
-     */
-    public static boolean isAnnotated(AnnotatedElement element) {
-        final List<Class<? extends Annotation>> annotations = getIdAnnotations();
-        for (Class<? extends Annotation> annotation : annotations) {
-            if (AnnotationUtils.findAnnotation(element, annotation) != null) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Lists all the annotations that can be used to mark a property as the ID property based on the libraries that can
-     * be found in the classpath
-     *
-     * @return the list of annotations
-     */
-    private static List<Class<? extends Annotation>> getIdAnnotations() {
-        final List<Class<? extends Annotation>> annotations = new ArrayList<>();
-        final ClassLoader classLoader = ClassUtils.getDefaultClassLoader();
-        for (String idAnnotation : ID_ANNOTATIONS) {
-            try {
-                final Class<?> type = ClassUtils.forName(idAnnotation, classLoader);
-                final Class<? extends Annotation> annotationType = type.asSubclass(Annotation.class);
-                annotations.add(annotationType);
-            } catch (ClassNotFoundException ignored) {
-                //if the class for the annotation wasn't found, we just ignore it
-                log.debug("Requested ID annotation type " + idAnnotation + " is not present in the classpath");
-            }
-        }
-        return annotations;
-    }
-
+    return annotations;
+  }
 }

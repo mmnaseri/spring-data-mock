@@ -6,8 +6,7 @@ package com.mmnaseri.utils.spring.data.error;
  */
 public class OperatorContextException extends RepositoryMockException {
 
-    public OperatorContextException(String message) {
-        super(message);
-    }
-
+  public OperatorContextException(String message) {
+    super(message);
+  }
 }

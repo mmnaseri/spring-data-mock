@@ -9,9 +9,8 @@ import com.mmnaseri.utils.spring.data.domain.impl.key.UUIDKeyGenerator;
  */
 public class UUIDKeyGeneratorTest extends BaseKeyGeneratorTest<String> {
 
-    @Override
-    protected KeyGenerator<String> getKeyGenerator() {
-        return new UUIDKeyGenerator();
-    }
-
+  @Override
+  protected KeyGenerator<String> getKeyGenerator() {
+    return new UUIDKeyGenerator();
+  }
 }

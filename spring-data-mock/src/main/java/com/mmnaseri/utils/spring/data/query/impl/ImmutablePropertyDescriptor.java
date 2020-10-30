@@ -10,22 +10,21 @@ import com.mmnaseri.utils.spring.data.query.PropertyDescriptor;
  */
 public class ImmutablePropertyDescriptor implements PropertyDescriptor {
 
-    private final String path;
-    private final Class<?> type;
+  private final String path;
+  private final Class<?> type;
 
-    public ImmutablePropertyDescriptor(String path, Class<?> type) {
-        this.path = path;
-        this.type = type;
-    }
+  public ImmutablePropertyDescriptor(String path, Class<?> type) {
+    this.path = path;
+    this.type = type;
+  }
 
-    @Override
-    public String getPath() {
-        return path;
-    }
+  @Override
+  public String getPath() {
+    return path;
+  }
 
-    @Override
-    public Class<?> getType() {
-        return type;
-    }
-
+  @Override
+  public Class<?> getType() {
+    return type;
+  }
 }

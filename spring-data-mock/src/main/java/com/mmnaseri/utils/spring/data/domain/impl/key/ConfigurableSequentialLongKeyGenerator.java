@@ -10,26 +10,24 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 public class ConfigurableSequentialLongKeyGenerator extends AbstractRandomKeyGenerator<Long> {
 
-    private final AtomicLong current;
-    private final long step;
+  private final AtomicLong current;
+  private final long step;
 
-    public ConfigurableSequentialLongKeyGenerator() {
-        this(1L);
-    }
+  public ConfigurableSequentialLongKeyGenerator() {
+    this(1L);
+  }
 
+  public ConfigurableSequentialLongKeyGenerator(long initialValue) {
+    this(initialValue, 1L);
+  }
 
-    public ConfigurableSequentialLongKeyGenerator(long initialValue) {
-        this(initialValue, 1L);
-    }
+  public ConfigurableSequentialLongKeyGenerator(long initialValue, long step) {
+    current = new AtomicLong(initialValue);
+    this.step = step;
+  }
 
-    public ConfigurableSequentialLongKeyGenerator(long initialValue, long step) {
-        current = new AtomicLong(initialValue);
-        this.step = step;
-    }
-
-    @Override
-    protected Long getNext() {
-        return current.getAndAdd(step);
-    }
-
+  @Override
+  protected Long getNext() {
+    return current.getAndAdd(step);
+  }
 }

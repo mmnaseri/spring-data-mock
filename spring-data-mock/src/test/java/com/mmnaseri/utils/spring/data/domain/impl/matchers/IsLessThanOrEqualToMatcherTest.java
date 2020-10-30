@@ -13,36 +13,36 @@ import static org.hamcrest.Matchers.is;
  */
 public class IsLessThanOrEqualToMatcherTest {
 
-    @Test(expectedExceptions = InvalidArgumentException.class,
-          expectedExceptionsMessageRegExp = "Expected property to be comparable: xyz")
-    public void testValueIsNotComparable() {
-        new IsLessThanOrEqualToMatcher().matches(new ImmutableParameter("xyz", null, null, null), new Object(),
-                                                 new Object());
-    }
+  @Test(
+      expectedExceptions = InvalidArgumentException.class,
+      expectedExceptionsMessageRegExp = "Expected property to be comparable: xyz")
+  public void testValueIsNotComparable() {
+    new IsLessThanOrEqualToMatcher()
+        .matches(new ImmutableParameter("xyz", null, null, null), new Object(), new Object());
+  }
 
-    @Test
-    public void testValuesAreEqual() {
-        assertThat(new IsLessThanOrEqualToMatcher().matches(5, 5), is(true));
-    }
+  @Test
+  public void testValuesAreEqual() {
+    assertThat(new IsLessThanOrEqualToMatcher().matches(5, 5), is(true));
+  }
 
-    @Test
-    public void testActualIsLessThanPivot() {
-        assertThat(new IsLessThanOrEqualToMatcher().matches(1, 5), is(true));
-    }
+  @Test
+  public void testActualIsLessThanPivot() {
+    assertThat(new IsLessThanOrEqualToMatcher().matches(1, 5), is(true));
+  }
 
-    @Test
-    public void testActualIsGreaterThanPivot() {
-        assertThat(new IsLessThanOrEqualToMatcher().matches(10, 5), is(false));
-    }
+  @Test
+  public void testActualIsGreaterThanPivot() {
+    assertThat(new IsLessThanOrEqualToMatcher().matches(10, 5), is(false));
+  }
 
-    @Test
-    public void testActualIsNull() {
-        assertThat(new IsLessThanOrEqualToMatcher().matches(null, 5), is(false));
-    }
+  @Test
+  public void testActualIsNull() {
+    assertThat(new IsLessThanOrEqualToMatcher().matches(null, 5), is(false));
+  }
 
-    @Test
-    public void testPivotIsNull() {
-        assertThat(new IsLessThanOrEqualToMatcher().matches(5, null), is(false));
-    }
-
+  @Test
+  public void testPivotIsNull() {
+    assertThat(new IsLessThanOrEqualToMatcher().matches(5, null), is(false));
+  }
 }

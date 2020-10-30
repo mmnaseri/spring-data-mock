@@ -8,8 +8,11 @@ import com.mmnaseri.utils.spring.data.domain.Operator;
  */
 public class DuplicateOperatorException extends OperatorContextException {
 
-    public DuplicateOperatorException(Operator existing, String token) {
-        super("Another operator (" + existing.getName() + ") already defines answers to this token: " + token);
-    }
-
+  public DuplicateOperatorException(Operator existing, String token) {
+    super(
+        "Another operator ("
+            + existing.getName()
+            + ") already defines answers to this token: "
+            + token);
+  }
 }

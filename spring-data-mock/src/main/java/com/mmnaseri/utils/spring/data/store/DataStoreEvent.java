@@ -10,14 +10,9 @@ import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
  */
 public interface DataStoreEvent {
 
-    /**
-     * @return the repository metadata associated with the given data store
-     */
-    RepositoryMetadata getRepositoryMetadata();
+  /** @return the repository metadata associated with the given data store */
+  RepositoryMetadata getRepositoryMetadata();
 
-    /**
-     * @return the data store that triggered this event
-     */
-    DataStore<?, ?> getDataStore();
-
+  /** @return the data store that triggered this event */
+  DataStore<?, ?> getDataStore();
 }

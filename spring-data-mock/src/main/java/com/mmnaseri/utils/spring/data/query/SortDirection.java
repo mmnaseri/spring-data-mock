@@ -8,13 +8,8 @@ package com.mmnaseri.utils.spring.data.query;
  */
 public enum SortDirection {
 
-    /**
-     * Items should be sorted as per their natural ordering
-     */
-    ASCENDING,
-    /**
-     * Items should be sorted in the reverse direction of their natural ordering
-     */
-    DESCENDING
-
+  /** Items should be sorted as per their natural ordering */
+  ASCENDING,
+  /** Items should be sorted in the reverse direction of their natural ordering */
+  DESCENDING
 }

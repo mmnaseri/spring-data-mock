@@ -5,9 +5,8 @@ import org.bson.types.ObjectId;
 
 public class BsonObjectIdKeyGenerator implements KeyGenerator<ObjectId> {
 
-    @Override
-    public ObjectId generate() {
-        return ObjectId.get();
-    }
-
+  @Override
+  public ObjectId generate() {
+    return ObjectId.get();
+  }
 }

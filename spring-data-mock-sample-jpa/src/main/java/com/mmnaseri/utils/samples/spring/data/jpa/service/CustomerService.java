@@ -13,16 +13,15 @@ import java.util.List;
 @SuppressWarnings("unused")
 public interface CustomerService {
 
-    long register(String firstName, String lastName, Date birthday);
+  long register(String firstName, String lastName, Date birthday);
 
-    Customer findCustomer(long id);
+  Customer findCustomer(long id);
 
-    List<Customer> findCustomersByBirthday(Date from, Date to);
+  List<Customer> findCustomersByBirthday(Date from, Date to);
 
-    List<Customer> findCustomersByName(String firstName, String lastName);
+  List<Customer> findCustomersByName(String firstName, String lastName);
 
-    List<Customer> findCustomersByFirstNames(Collection<String> firstNames);
+  List<Customer> findCustomersByFirstNames(Collection<String> firstNames);
 
-    List<Customer> findByFirstNamePart(String part);
-
+  List<Customer> findByFirstNamePart(String part);
 }

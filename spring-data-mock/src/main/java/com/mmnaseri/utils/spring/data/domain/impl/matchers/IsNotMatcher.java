@@ -12,8 +12,8 @@ import java.util.Objects;
  */
 public class IsNotMatcher extends AbstractSimpleMatcher {
 
-    @Override
-    protected boolean matches(Parameter parameter, Object actual, Object expected) {
-        return !Objects.equals(actual, expected);
-    }
+  @Override
+  protected boolean matches(Parameter parameter, Object actual, Object expected) {
+    return !Objects.equals(actual, expected);
+  }
 }

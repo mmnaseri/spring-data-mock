@@ -11,12 +11,11 @@ import com.mmnaseri.utils.spring.data.domain.RepositoryMetadataResolver;
 @SuppressWarnings("WeakerAccess")
 public interface MetadataResolver extends QueryDescriptionConfigurer {
 
-    /**
-     * Tells the builder to use the given repository metadata resolver instead of the default it has
-     *
-     * @param metadataResolver the resolver to use
-     * @return the rest of the configuration
-     */
-    QueryDescriptionConfigurer resolveMetadataUsing(RepositoryMetadataResolver metadataResolver);
-
+  /**
+   * Tells the builder to use the given repository metadata resolver instead of the default it has
+   *
+   * @param metadataResolver the resolver to use
+   * @return the rest of the configuration
+   */
+  QueryDescriptionConfigurer resolveMetadataUsing(RepositoryMetadataResolver metadataResolver);
 }

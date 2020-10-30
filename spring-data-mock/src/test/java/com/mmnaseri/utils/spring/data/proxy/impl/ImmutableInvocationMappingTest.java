@@ -15,14 +15,12 @@ import static org.hamcrest.Matchers.is;
  */
 public class ImmutableInvocationMappingTest {
 
-    @Test
-    public void testToString() throws Exception {
-        final String string = "string representation";
-        final Method method = ReturnTypeSampleRepository.class.getMethod("doSomething");
-        final ImmutableInvocationMapping<Object, Object> mapping = new ImmutableInvocationMapping<>(method,
-                                                                                                    new StringifiableDataStoreOperation<>(
-                                                                                                            string));
-        assertThat(mapping.toString(), is(method.toString() + " -> " + string));
-    }
-
+  @Test
+  public void testToString() throws Exception {
+    final String string = "string representation";
+    final Method method = ReturnTypeSampleRepository.class.getMethod("doSomething");
+    final ImmutableInvocationMapping<Object, Object> mapping =
+        new ImmutableInvocationMapping<>(method, new StringifiableDataStoreOperation<>(string));
+    assertThat(mapping.toString(), is(method.toString() + " -> " + string));
+  }
 }

@@ -10,37 +10,39 @@ import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
  */
 public class ImmutableRepositoryMetadata implements RepositoryMetadata {
 
-    private final Class<?> identifierType;
-    private final Class<?> entityType;
-    private final Class<?> repositoryInterface;
-    private final String identifier;
+  private final Class<?> identifierType;
+  private final Class<?> entityType;
+  private final Class<?> repositoryInterface;
+  private final String identifier;
 
-    public ImmutableRepositoryMetadata(Class<?> identifierType, Class<?> entityType, Class<?> repositoryInterface,
-                                       String identifier) {
-        this.identifierType = identifierType;
-        this.entityType = entityType;
-        this.repositoryInterface = repositoryInterface;
-        this.identifier = identifier;
-    }
+  public ImmutableRepositoryMetadata(
+      Class<?> identifierType,
+      Class<?> entityType,
+      Class<?> repositoryInterface,
+      String identifier) {
+    this.identifierType = identifierType;
+    this.entityType = entityType;
+    this.repositoryInterface = repositoryInterface;
+    this.identifier = identifier;
+  }
 
-    @Override
-    public String getIdentifierProperty() {
-        return identifier;
-    }
+  @Override
+  public String getIdentifierProperty() {
+    return identifier;
+  }
 
-    @Override
-    public Class<?> getIdentifierType() {
-        return identifierType;
-    }
+  @Override
+  public Class<?> getIdentifierType() {
+    return identifierType;
+  }
 
-    @Override
-    public Class<?> getEntityType() {
-        return entityType;
-    }
+  @Override
+  public Class<?> getEntityType() {
+    return entityType;
+  }
 
-    @Override
-    public Class<?> getRepositoryInterface() {
-        return repositoryInterface;
-    }
-
+  @Override
+  public Class<?> getRepositoryInterface() {
+    return repositoryInterface;
+  }
 }

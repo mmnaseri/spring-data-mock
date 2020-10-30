@@ -6,12 +6,11 @@ package com.mmnaseri.utils.spring.data.error;
  */
 public class QueryParserException extends RepositoryDefinitionException {
 
-    public QueryParserException(Class<?> repositoryInterface, String message) {
-        super(repositoryInterface, message);
-    }
+  public QueryParserException(Class<?> repositoryInterface, String message) {
+    super(repositoryInterface, message);
+  }
 
-    public QueryParserException(Class<?> repositoryInterface, String message, Throwable cause) {
-        super(repositoryInterface, message, cause);
-    }
-
+  public QueryParserException(Class<?> repositoryInterface, String message, Throwable cause) {
+    super(repositoryInterface, message, cause);
+  }
 }

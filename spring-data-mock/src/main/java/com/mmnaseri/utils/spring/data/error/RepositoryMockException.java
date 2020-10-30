@@ -6,12 +6,11 @@ package com.mmnaseri.utils.spring.data.error;
  */
 public abstract class RepositoryMockException extends RuntimeException {
 
-    public RepositoryMockException(String message) {
-        super(message);
-    }
+  public RepositoryMockException(String message) {
+    super(message);
+  }
 
-    public RepositoryMockException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
+  public RepositoryMockException(String message, Throwable cause) {
+    super(message, cause);
+  }
 }

@@ -7,37 +7,36 @@ import java.util.Iterator;
 import java.util.concurrent.Future;
 
 /**
- * <p>This adapter will try to adapt a {@literal null} value to a simple value. Simple here is defined as anything
- * that is not an iterable, an iterator, or a future promise.</p>
+ * This adapter will try to adapt a {@literal null} value to a simple value. Simple here is defined
+ * as anything that is not an iterable, an iterator, or a future promise.
  *
- * <p>It adapts results if the return type is simple and the original value is {@literal null}.</p>
+ * <p>It adapts results if the return type is simple and the original value is {@literal null}.
  *
- * <p>This adapter runs at the priority of {@literal -400}.</p>
+ * <p>This adapter runs at the priority of {@literal -400}.
  *
  * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (9/24/15)
  */
 public class NullSimpleResultAdapter extends AbstractResultAdapter<Object> {
 
-    public NullSimpleResultAdapter() {
-        super(-400);
-    }
+  public NullSimpleResultAdapter() {
+    super(-400);
+  }
 
-    @Override
-    public boolean accepts(Invocation invocation, Object originalValue) {
-        final Class<?> returnType = invocation.getMethod().getReturnType();
-        return !Iterable.class.isAssignableFrom(returnType) &&
-                !Iterator.class.isAssignableFrom(returnType) &&
-                !Future.class.isAssignableFrom(returnType) &&
-                originalValue == null;
-    }
+  @Override
+  public boolean accepts(Invocation invocation, Object originalValue) {
+    final Class<?> returnType = invocation.getMethod().getReturnType();
+    return !Iterable.class.isAssignableFrom(returnType)
+        && !Iterator.class.isAssignableFrom(returnType)
+        && !Future.class.isAssignableFrom(returnType)
+        && originalValue == null;
+  }
 
-    @Override
-    public Object adapt(Invocation invocation, Object originalValue) {
-        if (invocation.getMethod().getReturnType().isPrimitive()) {
-            throw new ResultAdapterFailureException(null, invocation.getMethod().getReturnType());
-        }
-        return null;
+  @Override
+  public Object adapt(Invocation invocation, Object originalValue) {
+    if (invocation.getMethod().getReturnType().isPrimitive()) {
+      throw new ResultAdapterFailureException(null, invocation.getMethod().getReturnType());
     }
-
+    return null;
+  }
 }

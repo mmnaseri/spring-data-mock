@@ -9,11 +9,10 @@ package com.mmnaseri.utils.spring.data.store;
  */
 public interface DataStoreEventListener<E extends DataStoreEvent> {
 
-    /**
-     * Will be called by the data store when a relevant event happens
-     *
-     * @param event the event that has taken place
-     */
-    void onEvent(E event);
-
+  /**
+   * Will be called by the data store when a relevant event happens
+   *
+   * @param event the event that has taken place
+   */
+  void onEvent(E event);
 }

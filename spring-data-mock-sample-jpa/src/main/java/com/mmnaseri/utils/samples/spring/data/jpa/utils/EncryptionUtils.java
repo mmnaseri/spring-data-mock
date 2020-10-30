@@ -9,13 +9,12 @@ import java.security.NoSuchAlgorithmException;
  */
 public class EncryptionUtils {
 
-    public static String encrypt(String text) {
-        try {
-            final MessageDigest digest = MessageDigest.getInstance("SHA-1");
-            return new String(digest.digest(text.getBytes()));
-        } catch (NoSuchAlgorithmException e) {
-            return text;
-        }
+  public static String encrypt(String text) {
+    try {
+      final MessageDigest digest = MessageDigest.getInstance("SHA-1");
+      return new String(digest.digest(text.getBytes()));
+    } catch (NoSuchAlgorithmException e) {
+      return text;
     }
-
+  }
 }

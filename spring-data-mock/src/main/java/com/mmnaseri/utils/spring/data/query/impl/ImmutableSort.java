@@ -15,20 +15,19 @@ import java.util.List;
  */
 public class ImmutableSort implements Sort {
 
-    private final List<Order> orders;
+  private final List<Order> orders;
 
-    public ImmutableSort(List<Order> orders) {
-        this.orders = new ArrayList<>();
-        if (orders != null) {
-            for (Order order : orders) {
-                this.orders.add(new ImmutableOrder(order));
-            }
-        }
+  public ImmutableSort(List<Order> orders) {
+    this.orders = new ArrayList<>();
+    if (orders != null) {
+      for (Order order : orders) {
+        this.orders.add(new ImmutableOrder(order));
+      }
     }
+  }
 
-    @Override
-    public List<Order> getOrders() {
-        return Collections.unmodifiableList(orders);
-    }
-
+  @Override
+  public List<Order> getOrders() {
+    return Collections.unmodifiableList(orders);
+  }
 }

@@ -16,40 +16,40 @@ import java.util.List;
  * @since 1.0 (10/12/15)
  */
 @SuppressWarnings("WeakerAccess")
-public class DefaultPagingAndSortingRepository extends PagingAndSortingSupport implements DataStoreAware {
+public class DefaultPagingAndSortingRepository extends PagingAndSortingSupport
+    implements DataStoreAware {
 
-    private static final Log log = LogFactory.getLog(DefaultPagingAndSortingRepository.class);
+  private static final Log log = LogFactory.getLog(DefaultPagingAndSortingRepository.class);
 
-    private DataStore dataStore;
+  private DataStore dataStore;
 
-    /**
-     * Finds everything and sorts it using the given sort property
-     *
-     * @param sort how to sort the data
-     * @return sorted entries, unless sort is null.
-     */
-    public List findAll(Sort sort) {
-        return PagingAndSortingUtils.sort(retrieveAll(), sort);
-    }
+  /**
+   * Finds everything and sorts it using the given sort property
+   *
+   * @param sort how to sort the data
+   * @return sorted entries, unless sort is null.
+   */
+  public List findAll(Sort sort) {
+    return PagingAndSortingUtils.sort(retrieveAll(), sort);
+  }
 
-    /**
-     * Loads everything, sorts them, and pages the according to the spec.
-     *
-     * @param pageable the pagination and sort spec
-     * @return the specified view of the data
-     */
-    public Page findAll(Pageable pageable) {
-        return page(retrieveAll(), pageable);
-    }
+  /**
+   * Loads everything, sorts them, and pages the according to the spec.
+   *
+   * @param pageable the pagination and sort spec
+   * @return the specified view of the data
+   */
+  public Page findAll(Pageable pageable) {
+    return page(retrieveAll(), pageable);
+  }
 
-    @Override
-    public void setDataStore(DataStore dataStore) {
-        this.dataStore = dataStore;
-    }
+  @Override
+  public void setDataStore(DataStore dataStore) {
+    this.dataStore = dataStore;
+  }
 
-    private Collection retrieveAll() {
-        log.info("Loading all the data in the data store");
-        return dataStore.retrieveAll();
-    }
-
+  private Collection retrieveAll() {
+    log.info("Loading all the data in the data store");
+    return dataStore.retrieveAll();
+  }
 }

@@ -11,22 +11,25 @@ import org.testng.annotations.Test;
  */
 public class AbstractSimpleComparableMatcherTest {
 
-    @Test(expectedExceptions = InvalidArgumentException.class, expectedExceptionsMessageRegExp = ".*x.y.z.*")
-    public void testWhenActualIsNotComparable() {
-        final NotMatchingSimpleComparableMatcher matcher = new NotMatchingSimpleComparableMatcher();
-        matcher.matches(new ImmutableParameter("x.y.z", null, null, null), new Object(), 2);
-    }
+  @Test(
+      expectedExceptions = InvalidArgumentException.class,
+      expectedExceptionsMessageRegExp = ".*x.y.z.*")
+  public void testWhenActualIsNotComparable() {
+    final NotMatchingSimpleComparableMatcher matcher = new NotMatchingSimpleComparableMatcher();
+    matcher.matches(new ImmutableParameter("x.y.z", null, null, null), new Object(), 2);
+  }
 
-    @Test(expectedExceptions = InvalidArgumentException.class, expectedExceptionsMessageRegExp = ".*x.y.z.*")
-    public void testWhenPivotIsNotComparable() {
-        final NotMatchingSimpleComparableMatcher matcher = new NotMatchingSimpleComparableMatcher();
-        matcher.matches(new ImmutableParameter("x.y.z", null, null, null), 1, new Object());
-    }
+  @Test(
+      expectedExceptions = InvalidArgumentException.class,
+      expectedExceptionsMessageRegExp = ".*x.y.z.*")
+  public void testWhenPivotIsNotComparable() {
+    final NotMatchingSimpleComparableMatcher matcher = new NotMatchingSimpleComparableMatcher();
+    matcher.matches(new ImmutableParameter("x.y.z", null, null, null), 1, new Object());
+  }
 
-    @Test
-    public void testWhenBothAreComparable() {
-        final NotMatchingSimpleComparableMatcher matcher = new NotMatchingSimpleComparableMatcher();
-        matcher.matches(new ImmutableParameter("x.y.z", null, null, null), 1, 2);
-    }
-
+  @Test
+  public void testWhenBothAreComparable() {
+    final NotMatchingSimpleComparableMatcher matcher = new NotMatchingSimpleComparableMatcher();
+    matcher.matches(new ImmutableParameter("x.y.z", null, null, null), 1, 2);
+  }
 }

@@ -7,13 +7,13 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * <p>This class is the default result converter that also acts as a registry for other converters. It will
- * execute the default converters in the following order</p>
+ * This class is the default result converter that also acts as a registry for other converters. It
+ * will execute the default converters in the following order
  *
  * <ol>
- *     <li>{@link FutureToIterableConverter}</li>
- *     <li>{@link IteratorToIterableConverter}</li>
- *     <li>{@link SingleValueToIterableConverter}</li>
+ *   <li>{@link FutureToIterableConverter}
+ *   <li>{@link IteratorToIterableConverter}
+ *   <li>{@link SingleValueToIterableConverter}
  * </ol>
  *
  * @author Milad Naseri (m.m.naseri@gmail.com)
@@ -22,36 +22,33 @@ import java.util.List;
 @SuppressWarnings("WeakerAccess")
 public class DefaultResultConverter implements ResultConverter {
 
-    private final List<ResultConverter> converters;
+  private final List<ResultConverter> converters;
 
-    /**
-     * Instantiates the converter and registers the default converters
-     */
-    public DefaultResultConverter() {
-        this(true);
+  /** Instantiates the converter and registers the default converters */
+  public DefaultResultConverter() {
+    this(true);
+  }
+
+  /**
+   * Instantiates the converter
+   *
+   * @param registerDefaults whether or not default converters should be registered
+   */
+  public DefaultResultConverter(boolean registerDefaults) {
+    converters = new LinkedList<>();
+    if (registerDefaults) {
+      converters.add(new FutureToIterableConverter());
+      converters.add(new IteratorToIterableConverter());
+      converters.add(new SingleValueToIterableConverter());
     }
+  }
 
-    /**
-     * Instantiates the converter
-     *
-     * @param registerDefaults whether or not default converters should be registered
-     */
-    public DefaultResultConverter(boolean registerDefaults) {
-        converters = new LinkedList<>();
-        if (registerDefaults) {
-            converters.add(new FutureToIterableConverter());
-            converters.add(new IteratorToIterableConverter());
-            converters.add(new SingleValueToIterableConverter());
-        }
+  @Override
+  public Object convert(Invocation invocation, Object original) {
+    Object value = original;
+    for (ResultConverter converter : converters) {
+      value = converter.convert(invocation, value);
     }
-
-    @Override
-    public Object convert(Invocation invocation, Object original) {
-        Object value = original;
-        for (ResultConverter converter : converters) {
-            value = converter.convert(invocation, value);
-        }
-        return value;
-    }
-
+    return value;
+  }
 }

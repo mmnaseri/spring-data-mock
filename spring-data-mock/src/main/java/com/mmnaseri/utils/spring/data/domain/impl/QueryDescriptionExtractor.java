@@ -10,7 +10,8 @@ import com.mmnaseri.utils.spring.data.query.QueryDescriptor;
  */
 public interface QueryDescriptionExtractor<T> {
 
-    QueryDescriptor extract(RepositoryMetadata repositoryMetadata, RepositoryFactoryConfiguration configuration,
-                            T target);
-
+  QueryDescriptor extract(
+      RepositoryMetadata repositoryMetadata,
+      RepositoryFactoryConfiguration configuration,
+      T target);
 }

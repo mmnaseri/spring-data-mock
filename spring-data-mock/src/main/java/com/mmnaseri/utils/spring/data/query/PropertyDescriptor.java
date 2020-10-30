@@ -8,15 +8,12 @@ package com.mmnaseri.utils.spring.data.query;
  */
 public interface PropertyDescriptor {
 
-    /**
-     * @return the path leading to the property
-     * @see com.mmnaseri.utils.spring.data.tools.PropertyUtils#getPropertyValue(Object, String)
-     */
-    String getPath();
+  /**
+   * @return the path leading to the property
+   * @see com.mmnaseri.utils.spring.data.tools.PropertyUtils#getPropertyValue(Object, String)
+   */
+  String getPath();
 
-    /**
-     * @return the type of the property
-     */
-    Class<?> getType();
-
+  /** @return the type of the property */
+  Class<?> getType();
 }

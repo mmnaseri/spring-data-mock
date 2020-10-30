@@ -11,12 +11,11 @@ import com.mmnaseri.utils.spring.data.proxy.RepositoryFactoryConfiguration;
 @SuppressWarnings("WeakerAccess")
 public interface Configuration {
 
-    /**
-     * Tells the builder to use the given configuration
-     *
-     * @param configuration the configuration
-     * @return the rest of the configuration
-     */
-    KeyGeneration useConfiguration(RepositoryFactoryConfiguration configuration);
-
+  /**
+   * Tells the builder to use the given configuration
+   *
+   * @param configuration the configuration
+   * @return the rest of the configuration
+   */
+  KeyGeneration useConfiguration(RepositoryFactoryConfiguration configuration);
 }

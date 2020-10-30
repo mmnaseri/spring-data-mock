@@ -8,8 +8,7 @@ import java.lang.reflect.Method;
  */
 public class DataOperationDefinitionException extends DataOperationException {
 
-    public DataOperationDefinitionException(Method method, Throwable cause) {
-        super("Encountered an error while resolving operation metadata: " + method, cause);
-    }
-
+  public DataOperationDefinitionException(Method method, Throwable cause) {
+    super("Encountered an error while resolving operation metadata: " + method, cause);
+  }
 }

@@ -11,24 +11,23 @@ import static org.hamcrest.Matchers.is;
  */
 public class IsFalseMatcherTest {
 
-    @Test
-    public void testWhenSubjectIsNull() {
-        assertThat(new IsFalseMatcher().matches(null), is(false));
-    }
+  @Test
+  public void testWhenSubjectIsNull() {
+    assertThat(new IsFalseMatcher().matches(null), is(false));
+  }
 
-    @Test
-    public void testSubjectIsNonBoolean() {
-        assertThat(new IsFalseMatcher().matches(""), is(false));
-    }
+  @Test
+  public void testSubjectIsNonBoolean() {
+    assertThat(new IsFalseMatcher().matches(""), is(false));
+  }
 
-    @Test
-    public void testIsFalse() {
-        assertThat(new IsFalseMatcher().matches(false), is(true));
-    }
+  @Test
+  public void testIsFalse() {
+    assertThat(new IsFalseMatcher().matches(false), is(true));
+  }
 
-    @Test
-    public void testIsTrue() {
-        assertThat(new IsFalseMatcher().matches(true), is(false));
-    }
-
+  @Test
+  public void testIsTrue() {
+    assertThat(new IsFalseMatcher().matches(true), is(false));
+  }
 }

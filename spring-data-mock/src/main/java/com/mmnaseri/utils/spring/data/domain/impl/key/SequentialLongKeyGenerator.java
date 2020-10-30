@@ -12,11 +12,10 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 public class SequentialLongKeyGenerator implements KeyGenerator<Long> {
 
-    private final AtomicLong seed = new AtomicLong(1);
+  private final AtomicLong seed = new AtomicLong(1);
 
-    @Override
-    public Long generate() {
-        return seed.getAndIncrement();
-    }
-
+  @Override
+  public Long generate() {
+    return seed.getAndIncrement();
+  }
 }

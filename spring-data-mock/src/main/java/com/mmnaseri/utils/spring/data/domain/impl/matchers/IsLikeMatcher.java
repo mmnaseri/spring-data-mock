@@ -8,9 +8,8 @@ package com.mmnaseri.utils.spring.data.domain.impl.matchers;
  */
 public class IsLikeMatcher extends AbstractSimpleStringMatcher {
 
-    @Override
-    protected boolean matches(String actual, String argument) {
-        return actual != null && actual.equalsIgnoreCase(argument);
-    }
-
+  @Override
+  protected boolean matches(String actual, String argument) {
+    return actual != null && actual.equalsIgnoreCase(argument);
+  }
 }

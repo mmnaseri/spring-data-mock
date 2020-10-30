@@ -13,15 +13,14 @@ import java.util.List;
 @SuppressWarnings("unused")
 public class CustomerRepositoryExampleSupport implements RepositoryAware<CustomerRepository> {
 
-    private CustomerRepository repository;
+  private CustomerRepository repository;
 
-    public List<Customer> findByExample(Example<Customer> example) {
-        return repository.findAll(example);
-    }
+  public List<Customer> findByExample(Example<Customer> example) {
+    return repository.findAll(example);
+  }
 
-    @Override
-    public void setRepository(CustomerRepository repository) {
-        this.repository = repository;
-    }
-
+  @Override
+  public void setRepository(CustomerRepository repository) {
+    this.repository = repository;
+  }
 }

@@ -3,6 +3,7 @@ package com.mmnaseri.utils.spring.data.domain.impl.matchers;
 import com.mmnaseri.utils.spring.data.domain.Matcher;
 import com.mmnaseri.utils.spring.data.domain.Parameter;
 import com.mmnaseri.utils.spring.data.error.InvalidArgumentException;
+import com.mmnaseri.utils.spring.data.tools.PropertyUtils;
 
 /**
  * This matcher is used to determine if a condition holds for a single parameter
@@ -12,27 +13,29 @@ import com.mmnaseri.utils.spring.data.error.InvalidArgumentException;
  */
 public abstract class AbstractSimpleMatcher implements Matcher {
 
-    @Override
-    public final boolean matches(Parameter parameter, Object value, Object... properties) {
-        if (properties.length != 1) {
-            throw new InvalidArgumentException(
-                    "Expected exactly one parameter to be passed down: " + parameter.getPath());
-        }
-        return matches(parameter, value, properties[0]);
+  @Override
+  public final boolean matches(Parameter parameter, Object value, Object... properties) {
+    if (properties.length != 1) {
+      throw new InvalidArgumentException(
+          "Expected exactly one parameter to be passed down: " + parameter.getPath());
     }
+    return matches(parameter, value, properties[0]);
+  }
 
-    /**
-     * Called to see if the condition holds
-     *
-     * @param parameter the parameter
-     * @param actual    the actual value
-     * @param expected  the expectation
-     * @return {@literal true} if the condition holds
-     */
-    protected abstract boolean matches(Parameter parameter, Object actual, Object expected);
+  /**
+   * Called to see if the condition holds
+   *
+   * @param parameter the parameter
+   * @param actual the actual value
+   * @param expected the expectation
+   * @return {@literal true} if the condition holds
+   */
+  protected abstract boolean matches(Parameter parameter, Object actual, Object expected);
 
-    @Override
-    public boolean isApplicableTo(Class<?> parameterType, Class<?>... propertiesTypes) {
-        return propertiesTypes.length == 1 && parameterType.isAssignableFrom(propertiesTypes[0]);
-    }
+  @Override
+  public boolean isApplicableTo(Class<?> parameterType, Class<?>... propertiesTypes) {
+    return propertiesTypes.length == 1
+        && PropertyUtils.getTypeOf(parameterType)
+            .isAssignableFrom(PropertyUtils.getTypeOf(propertiesTypes[0]));
+  }
 }

@@ -13,20 +13,19 @@ import static org.hamcrest.Matchers.is;
  */
 public class SequentialLongKeyGeneratorTest extends BaseKeyGeneratorTest<Long> {
 
-    @Override
-    protected KeyGenerator<Long> getKeyGenerator() {
-        return new SequentialLongKeyGenerator();
-    }
+  @Override
+  protected KeyGenerator<Long> getKeyGenerator() {
+    return new SequentialLongKeyGenerator();
+  }
 
-    @Test
-    public void testKeysBeingSequential() {
-        final KeyGenerator<Long> keyGenerator = getKeyGenerator();
-        Long last = 0L;
-        for (int i = 0; i < 100; i++) {
-            final Long key = keyGenerator.generate();
-            assertThat(key, is(last + 1));
-            last = key;
-        }
+  @Test
+  public void testKeysBeingSequential() {
+    final KeyGenerator<Long> keyGenerator = getKeyGenerator();
+    Long last = 0L;
+    for (int i = 0; i < 100; i++) {
+      final Long key = keyGenerator.generate();
+      assertThat(key, is(last + 1));
+      last = key;
     }
-
+  }
 }

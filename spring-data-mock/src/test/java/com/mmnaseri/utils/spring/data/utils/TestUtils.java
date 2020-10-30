@@ -9,12 +9,11 @@ import java.util.List;
  */
 public class TestUtils {
 
-    public static <E> List<E> iterableToList(Iterable<E> iterable) {
-        final List<E> list = new ArrayList<>();
-        for (E item : iterable) {
-            list.add(item);
-        }
-        return list;
+  public static <E> List<E> iterableToList(Iterable<E> iterable) {
+    final List<E> list = new ArrayList<>();
+    for (E item : iterable) {
+      list.add(item);
     }
-
+    return list;
+  }
 }

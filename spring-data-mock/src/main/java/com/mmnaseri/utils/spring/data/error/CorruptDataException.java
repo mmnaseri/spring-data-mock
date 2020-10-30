@@ -6,8 +6,7 @@ package com.mmnaseri.utils.spring.data.error;
  */
 public class CorruptDataException extends DataStoreException {
 
-    public CorruptDataException(Class<?> entityType, Object data, String corruption) {
-        super(entityType, entityType + ": Data <" + data + "> is unacceptable. " + corruption);
-    }
-
+  public CorruptDataException(Class<?> entityType, Object data, String corruption) {
+    super(entityType, entityType + ": Data <" + data + "> is unacceptable. " + corruption);
+  }
 }

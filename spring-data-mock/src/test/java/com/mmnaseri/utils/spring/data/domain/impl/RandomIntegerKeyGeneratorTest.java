@@ -9,9 +9,8 @@ import com.mmnaseri.utils.spring.data.domain.impl.key.RandomIntegerKeyGenerator;
  */
 public class RandomIntegerKeyGeneratorTest extends BaseKeyGeneratorTest<Integer> {
 
-    @Override
-    protected KeyGenerator<Integer> getKeyGenerator() {
-        return new RandomIntegerKeyGenerator();
-    }
-
+  @Override
+  protected KeyGenerator<Integer> getKeyGenerator() {
+    return new RandomIntegerKeyGenerator();
+  }
 }

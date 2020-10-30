@@ -17,26 +17,28 @@ import static org.hamcrest.Matchers.is;
  */
 public class ImmutableRepositoryFactoryConfigurationTest {
 
-    @Test
-    public void testCopyConstructor() {
-        final DefaultRepositoryFactoryConfiguration original = new DefaultRepositoryFactoryConfiguration();
-        original.setDescriptionExtractor(new MethodQueryDescriptionExtractor(new DefaultOperatorContext()));
-        original.setEventListenerContext(new DefaultDataStoreEventListenerContext());
-        original.setFunctionRegistry(new DefaultDataFunctionRegistry());
-        original.setRepositoryMetadataResolver(new DefaultRepositoryMetadataResolver());
-        original.setResultAdapterContext(new DefaultResultAdapterContext());
-        original.setTypeMappingContext(new DefaultTypeMappingContext());
-        original.setDataStoreRegistry(new DefaultDataStoreRegistry());
-        original.setOperationInvocationHandler(new NonDataOperationInvocationHandler());
-        final ImmutableRepositoryFactoryConfiguration copy = new ImmutableRepositoryFactoryConfiguration(original);
-        assertThat(copy.getTypeMappingContext(), is(original.getTypeMappingContext()));
-        assertThat(copy.getResultAdapterContext(), is(original.getResultAdapterContext()));
-        assertThat(copy.getRepositoryMetadataResolver(), is(original.getRepositoryMetadataResolver()));
-        assertThat(copy.getOperationInvocationHandler(), is(original.getOperationInvocationHandler()));
-        assertThat(copy.getFunctionRegistry(), is(original.getFunctionRegistry()));
-        assertThat(copy.getEventListenerContext(), is(original.getEventListenerContext()));
-        assertThat(copy.getDescriptionExtractor(), is(original.getDescriptionExtractor()));
-        assertThat(copy.getDataStoreRegistry(), is(original.getDataStoreRegistry()));
-    }
-
+  @Test
+  public void testCopyConstructor() {
+    final DefaultRepositoryFactoryConfiguration original =
+        new DefaultRepositoryFactoryConfiguration();
+    original.setDescriptionExtractor(
+        new MethodQueryDescriptionExtractor(new DefaultOperatorContext()));
+    original.setEventListenerContext(new DefaultDataStoreEventListenerContext());
+    original.setFunctionRegistry(new DefaultDataFunctionRegistry());
+    original.setRepositoryMetadataResolver(new DefaultRepositoryMetadataResolver());
+    original.setResultAdapterContext(new DefaultResultAdapterContext());
+    original.setTypeMappingContext(new DefaultTypeMappingContext());
+    original.setDataStoreRegistry(new DefaultDataStoreRegistry());
+    original.setOperationInvocationHandler(new NonDataOperationInvocationHandler());
+    final ImmutableRepositoryFactoryConfiguration copy =
+        new ImmutableRepositoryFactoryConfiguration(original);
+    assertThat(copy.getTypeMappingContext(), is(original.getTypeMappingContext()));
+    assertThat(copy.getResultAdapterContext(), is(original.getResultAdapterContext()));
+    assertThat(copy.getRepositoryMetadataResolver(), is(original.getRepositoryMetadataResolver()));
+    assertThat(copy.getOperationInvocationHandler(), is(original.getOperationInvocationHandler()));
+    assertThat(copy.getFunctionRegistry(), is(original.getFunctionRegistry()));
+    assertThat(copy.getEventListenerContext(), is(original.getEventListenerContext()));
+    assertThat(copy.getDescriptionExtractor(), is(original.getDescriptionExtractor()));
+    assertThat(copy.getDataStoreRegistry(), is(original.getDataStoreRegistry()));
+  }
 }

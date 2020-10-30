@@ -12,16 +12,15 @@ import java.lang.reflect.Method;
  */
 public class ToStringNonDataOperationHandler implements NonDataOperationHandler {
 
-    private static final String TO_STRING = "toString";
+  private static final String TO_STRING = "toString";
 
-    @Override
-    public boolean handles(Object proxy, Method method, Object... args) {
-        return Object.class.equals(method.getDeclaringClass()) && TO_STRING.equals(method.getName());
-    }
+  @Override
+  public boolean handles(Object proxy, Method method, Object... args) {
+    return Object.class.equals(method.getDeclaringClass()) && TO_STRING.equals(method.getName());
+  }
 
-    @Override
-    public Object invoke(Object proxy, Object... args) {
-        return proxy.getClass().getName() + "@" + Integer.toHexString(System.identityHashCode(proxy));
-    }
-
+  @Override
+  public Object invoke(Object proxy, Object... args) {
+    return proxy.getClass().getName() + "@" + Integer.toHexString(System.identityHashCode(proxy));
+  }
 }

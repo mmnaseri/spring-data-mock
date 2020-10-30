@@ -15,17 +15,16 @@ import java.util.List;
 @SuppressWarnings("WeakerAccess")
 public class IteratorToIterableConverter extends AbstractResultConverter {
 
-    @Override
-    protected Object doConvert(Invocation invocation, Object original) {
-        if (original instanceof Iterator) {
-            Iterator iterator = (Iterator) original;
-            final List<Object> list = new LinkedList<>();
-            while (iterator.hasNext()) {
-                list.add(iterator.next());
-            }
-            return list;
-        }
-        return original;
+  @Override
+  protected Object doConvert(Invocation invocation, Object original) {
+    if (original instanceof Iterator) {
+      Iterator iterator = (Iterator) original;
+      final List<Object> list = new LinkedList<>();
+      while (iterator.hasNext()) {
+        list.add(iterator.next());
+      }
+      return list;
     }
-
+    return original;
+  }
 }

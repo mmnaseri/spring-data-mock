@@ -10,25 +10,24 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class ConfigurableSequentialIntegerKeyGenerator extends AbstractRandomKeyGenerator<Integer> {
 
-    private final AtomicInteger current;
-    private final int step;
+  private final AtomicInteger current;
+  private final int step;
 
-    public ConfigurableSequentialIntegerKeyGenerator() {
-        this(1);
-    }
+  public ConfigurableSequentialIntegerKeyGenerator() {
+    this(1);
+  }
 
-    public ConfigurableSequentialIntegerKeyGenerator(int initialValue) {
-        this(initialValue, 1);
-    }
+  public ConfigurableSequentialIntegerKeyGenerator(int initialValue) {
+    this(initialValue, 1);
+  }
 
-    public ConfigurableSequentialIntegerKeyGenerator(int initialValue, int step) {
-        current = new AtomicInteger(initialValue);
-        this.step = step;
-    }
+  public ConfigurableSequentialIntegerKeyGenerator(int initialValue, int step) {
+    current = new AtomicInteger(initialValue);
+    this.step = step;
+  }
 
-    @Override
-    protected Integer getNext() {
-        return current.getAndAdd(step);
-    }
-
+  @Override
+  protected Integer getNext() {
+    return current.getAndAdd(step);
+  }
 }

@@ -7,7 +7,10 @@ import com.mmnaseri.utils.spring.data.sample.usecases.proxy.converters.NoOpResul
 import org.testng.annotations.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
 
 /**
  * @author Milad Naseri (m.m.naseri@gmail.com)
@@ -15,38 +18,47 @@ import static org.hamcrest.Matchers.*;
  */
 public class AbstractResultConverterTest {
 
-    @Test
-    public void testConversionWhenInputIsNull() {
-        final Object converted = new NoOpResultConverter().convert(null, null);
-        assertThat(converted, is(nullValue()));
-    }
+  @Test
+  public void testConversionWhenInputIsNull() {
+    final Object converted = new NoOpResultConverter().convert(null, null);
+    assertThat(converted, is(nullValue()));
+  }
 
-    @Test
-    public void testConversionWhenTargetReturnsVoid() throws Exception {
-        final Object converted = new NoOpResultConverter().convert(
-                new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("doSomething"), null), new Object());
-        assertThat(converted, is(nullValue()));
-    }
+  @Test
+  public void testConversionWhenTargetReturnsVoid() throws Exception {
+    final Object converted =
+        new NoOpResultConverter()
+            .convert(
+                new ImmutableInvocation(
+                    ReturnTypeSampleRepository.class.getMethod("doSomething"), null),
+                new Object());
+    assertThat(converted, is(nullValue()));
+  }
 
-    @Test
-    public void testWhenTypeMatchesTheReturnType() throws Exception {
-        final Person original = new Person();
-        final Object converted = new NoOpResultConverter().convert(
-                new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findPerson"), null), original);
-        assertThat(converted, is(notNullValue()));
-        assertThat(converted, is(instanceOf(Person.class)));
-        assertThat(converted, is(original));
-    }
+  @Test
+  public void testWhenTypeMatchesTheReturnType() throws Exception {
+    final Person original = new Person();
+    final Object converted =
+        new NoOpResultConverter()
+            .convert(
+                new ImmutableInvocation(
+                    ReturnTypeSampleRepository.class.getMethod("findPerson"), null),
+                original);
+    assertThat(converted, is(notNullValue()));
+    assertThat(converted, is(instanceOf(Person.class)));
+    assertThat(converted, is(original));
+  }
 
-    @Test
-    public void testThatPassesToSubClassOtherwise() throws Exception {
-        final Object original = new Object();
-        final NoOpResultConverter converter = new NoOpResultConverter();
-        final Object converted = converter.convert(
-                new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findPerson"), null), original);
-        assertThat(converted, is(notNullValue()));
-        assertThat(converted, is(original));
-        assertThat(converter.getOriginal(), is(original));
-    }
-
+  @Test
+  public void testThatPassesToSubClassOtherwise() throws Exception {
+    final Object original = new Object();
+    final NoOpResultConverter converter = new NoOpResultConverter();
+    final Object converted =
+        converter.convert(
+            new ImmutableInvocation(ReturnTypeSampleRepository.class.getMethod("findPerson"), null),
+            original);
+    assertThat(converted, is(notNullValue()));
+    assertThat(converted, is(original));
+    assertThat(converter.getOriginal(), is(original));
+  }
 }

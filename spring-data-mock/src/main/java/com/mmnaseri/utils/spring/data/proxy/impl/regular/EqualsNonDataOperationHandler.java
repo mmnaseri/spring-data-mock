@@ -12,17 +12,16 @@ import java.lang.reflect.Method;
  */
 public class EqualsNonDataOperationHandler implements NonDataOperationHandler {
 
-    private static final String EQUALS = "equals";
+  private static final String EQUALS = "equals";
 
-    @Override
-    public boolean handles(Object proxy, Method method, Object... args) {
-        return Object.class.equals(method.getDeclaringClass()) && EQUALS.equals(method.getName());
-    }
+  @Override
+  public boolean handles(Object proxy, Method method, Object... args) {
+    return Object.class.equals(method.getDeclaringClass()) && EQUALS.equals(method.getName());
+  }
 
-    @Override
-    public Object invoke(Object proxy, Object... args) {
-        final Object that = args[0];
-        return proxy.equals(that);
-    }
-
+  @Override
+  public Object invoke(Object proxy, Object... args) {
+    final Object that = args[0];
+    return proxy.equals(that);
+  }
 }

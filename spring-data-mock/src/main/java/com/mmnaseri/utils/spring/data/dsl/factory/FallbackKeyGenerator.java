@@ -8,13 +8,12 @@ import com.mmnaseri.utils.spring.data.domain.KeyGenerator;
  */
 public interface FallbackKeyGenerator extends EventListener {
 
-    /**
-     * Sets up a default key generator that would be used as a fallback if no key generation scheme is specified for the
-     * repository
-     *
-     * @param keyGenerator the key generator to be used
-     * @return the rest of the configuration
-     */
-    EventListener withDefaultKeyGenerator(KeyGenerator<?> keyGenerator);
-
+  /**
+   * Sets up a default key generator that would be used as a fallback if no key generation scheme is
+   * specified for the repository
+   *
+   * @param keyGenerator the key generator to be used
+   * @return the rest of the configuration
+   */
+  EventListener withDefaultKeyGenerator(KeyGenerator<?> keyGenerator);
 }

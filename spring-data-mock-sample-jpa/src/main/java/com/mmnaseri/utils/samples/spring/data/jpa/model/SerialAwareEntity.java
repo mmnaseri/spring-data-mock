@@ -9,14 +9,13 @@ import javax.persistence.MappedSuperclass;
 @MappedSuperclass
 public class SerialAwareEntity {
 
-    private String serial;
+  private String serial;
 
-    public String getSerial() {
-        return serial;
-    }
+  public String getSerial() {
+    return serial;
+  }
 
-    public void setSerial(String serial) {
-        this.serial = serial;
-    }
-
+  public void setSerial(String serial) {
+    this.serial = serial;
+  }
 }

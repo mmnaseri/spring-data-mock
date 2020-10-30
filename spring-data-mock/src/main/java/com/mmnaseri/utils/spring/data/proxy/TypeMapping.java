@@ -8,14 +8,9 @@ package com.mmnaseri.utils.spring.data.proxy;
  */
 public interface TypeMapping<E> {
 
-    /**
-     * @return the type of the mapped class
-     */
-    Class<E> getType();
+  /** @return the type of the mapped class */
+  Class<E> getType();
 
-    /**
-     * @return an instance of the mapped class
-     */
-    E getInstance();
-
+  /** @return an instance of the mapped class */
+  E getInstance();
 }
