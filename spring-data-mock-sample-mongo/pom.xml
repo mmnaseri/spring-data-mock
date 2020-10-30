@@ -7,7 +7,7 @@
 
     <groupId>com.mmnaseri.utils</groupId>
     <artifactId>spring-data-mock-sample-mongo</artifactId>
-    <version>1.0</version>
+    <version>1.0.0</version>
 
     <name>Spring Data Mock: Samples (MongoDB)</name>
 
@@ -38,7 +38,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring-data-commons.version>2.2.6.RELEASE</spring-data-commons.version>
         <spring-data-mongo.version>2.2.6.RELEASE</spring-data-mongo.version>
-        <spring-data-mock.version>2.1.0</spring-data-mock.version>
+        <spring-data-mock.version>2.1.1</spring-data-mock.version>
         <testng.version>7.1.0</testng.version>
         <hamcrest.version>1.3</hamcrest.version>
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
