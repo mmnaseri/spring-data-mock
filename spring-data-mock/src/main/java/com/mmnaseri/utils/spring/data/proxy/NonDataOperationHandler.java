@@ -28,8 +28,9 @@ public interface NonDataOperationHandler {
    * indeed handle this method invocation.
    *
    * @param proxy the proxy object
+   * @param method the method being called
    * @param args the arguments
    * @return the result
    */
-  Object invoke(Object proxy, Object... args);
+  Object invoke(Object proxy, Method method, Object... args);
 }

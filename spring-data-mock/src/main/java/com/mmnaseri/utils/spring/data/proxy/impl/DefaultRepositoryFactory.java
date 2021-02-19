@@ -275,6 +275,9 @@ public class DefaultRepositoryFactory implements RepositoryFactory {
       DataOperationResolver operationResolver, Method[] methods) {
     final List<InvocationMapping<?, ?>> invocationMappings = new LinkedList<>();
     for (Method method : methods) {
+      if (method.isDefault()) {
+        continue;
+      }
       final DataStoreOperation<?, ?, ?> operation = operationResolver.resolve(method);
       //noinspection unchecked
       invocationMappings.add(
