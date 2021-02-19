@@ -11,8 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * This class will provide implementations for the methods introduced by the Spring framework
- * through {@link org.springframework.data.repository.CrudRepository}.
+ * This class will provide implementations for the methods introduced by the Spring framework through {@link org.springframework.data.repository.CrudRepository}.
  *
  * @author Milad Naseri (m.m.naseri@gmail.com)
  * @since 1.0 (10/6/15)
@@ -67,35 +66,13 @@ public class DefaultCrudRepository extends CrudRepositorySupport {
       final Optional<Object> found = findById(id);
       if (found.isPresent()) {
         log.trace(
-            "Entity found for key "
-                + id
-                + ", adding the found entity to the list of returned entity");
+          "Entity found for key "
+            + id
+            + ", adding the found entity to the list of returned entity");
         entities.add(found.get());
       }
     }
     return entities;
-  }
-
-  /**
-   * Deletes the entity with the given id and returns the actual entity that was just deleted.
-   *
-   * @param id the id
-   * @return the entity that was deleted or {@literal null} if it wasn't found
-   */
-  public Object delete(Object id) {
-    Object retrieved = getDataStore().retrieve(id);
-    log.info("Attempting to delete the entity with key " + id);
-    if (retrieved == null) {
-      log.info("Object not found with key " + id + ", try to find by identifier property");
-      try {
-        id = PropertyUtils.getPropertyValue(id, getRepositoryMetadata().getIdentifierProperty());
-        retrieved = getDataStore().retrieve(id);
-      } catch (IllegalStateException exception) {
-        log.info("Serialized id doesn't have a identifier property");
-      }
-    }
-    getDataStore().delete(id);
-    return retrieved;
   }
 
   /**
@@ -106,14 +83,36 @@ public class DefaultCrudRepository extends CrudRepositorySupport {
    * @throws EntityMissingKeyException if the passed entity doesn't have a key
    */
   public Object deleteById(Object entity) {
+    Object retrieved = getDataStore().retrieve(entity);
+    log.info("Attempting to delete the entity with key " + entity);
+    if (retrieved == null) {
+      log.info("Object not found with key " + entity + ", try to find by identifier property");
+      try {
+        entity = PropertyUtils.getPropertyValue(entity, getRepositoryMetadata().getIdentifierProperty());
+        retrieved = getDataStore().retrieve(entity);
+      } catch (IllegalStateException exception) {
+        log.info("Serialized id doesn't have a identifier property");
+      }
+    }
+    getDataStore().delete(entity);
+    return retrieved;
+  }
+
+  /**
+   * Deletes the entity with the given id and returns the actual entity that was just deleted.
+   *
+   * @param id the id
+   * @return the entity that was deleted or {@literal null} if it wasn't found
+   */
+  public Object delete(Object id) {
     final Object key =
-        PropertyUtils.getPropertyValue(entity, getRepositoryMetadata().getIdentifierProperty());
+      PropertyUtils.getPropertyValue(id, getRepositoryMetadata().getIdentifierProperty());
     if (key == null) {
       log.error("The entity that was supposed to be deleted, does not have a key");
       throw new EntityMissingKeyException(
-          getRepositoryMetadata().getEntityType(), getRepositoryMetadata().getIdentifierProperty());
+        getRepositoryMetadata().getEntityType(), getRepositoryMetadata().getIdentifierProperty());
     }
-    return delete(key);
+    return deleteById(key);
   }
 
   /**
@@ -130,7 +129,7 @@ public class DefaultCrudRepository extends CrudRepositorySupport {
       final Object deleted = deleteById(entity);
       if (deleted != null) {
         log.debug(
-            "The entity was deleted successfully and will be added to the list of deleted entities");
+          "The entity was deleted successfully and will be added to the list of deleted entities");
         list.add(deleted);
       }
     }
@@ -147,22 +146,22 @@ public class DefaultCrudRepository extends CrudRepositorySupport {
     final List list = new LinkedList();
     final Collection keys = getDataStore().keys();
     log.debug(
-        "There are "
-            + keys.size()
-            + " entities altogether in the data store that are going to be deleted");
+      "There are "
+        + keys.size()
+        + " entities altogether in the data store that are going to be deleted");
     for (Object key : keys) {
-      final Object deleted = delete((key));
+      final Object deleted = deleteById((key));
       if (deleted != null) {
         log.debug(
-            "The entity was deleted successfully and will be added to the list of deleted entities");
+          "The entity was deleted successfully and will be added to the list of deleted entities");
         list.add(deleted);
       }
     }
     final Collection remainingKeys = getDataStore().keys();
     log.debug(
-        "There are "
-            + remainingKeys.size()
-            + " keys remaining in the data store after the delete operation");
+      "There are "
+        + remainingKeys.size()
+        + " keys remaining in the data store after the delete operation");
     return list;
   }
 }
