@@ -4,6 +4,10 @@ import com.mmnaseri.utils.spring.data.proxy.NonDataOperationHandler;
 
 import java.lang.reflect.Method;
 
+import static com.mmnaseri.utils.spring.data.proxy.impl.regular.EqualsNonDataOperationHandler.superInterfaces;
+import static java.util.Comparator.comparing;
+import static java.util.stream.Collectors.toList;
+
 /**
  * This class will handle the {@link Object#toString()} method.
  *
@@ -21,6 +25,6 @@ public class ToStringNonDataOperationHandler implements NonDataOperationHandler 
 
   @Override
   public Object invoke(Object proxy, Object... args) {
-    return proxy.getClass().getName() + "@" + Integer.toHexString(System.identityHashCode(proxy));
+    return "mock<" + superInterfaces(proxy.getClass()).sorted(comparing(Class::getCanonicalName)).collect(toList()).toString() + ">";
   }
 }

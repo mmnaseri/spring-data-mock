@@ -1,8 +1,12 @@
 package com.mmnaseri.utils.spring.data.proxy.impl.regular;
 
+import com.google.common.base.Objects;
 import com.mmnaseri.utils.spring.data.proxy.NonDataOperationHandler;
 
 import java.lang.reflect.Method;
+import java.util.Comparator;
+
+import static com.mmnaseri.utils.spring.data.proxy.impl.regular.EqualsNonDataOperationHandler.superInterfaces;
 
 /**
  * This class will handle the {@link Object#hashCode()} method.
@@ -21,6 +25,6 @@ public class HashCodeNonDataOperationHandler implements NonDataOperationHandler 
 
   @Override
   public Object invoke(Object proxy, Object... args) {
-    return System.identityHashCode(proxy);
+    return Objects.hashCode(superInterfaces(proxy.getClass()).sorted(Comparator.comparing(Class::getCanonicalName)).toArray());
   }
 }

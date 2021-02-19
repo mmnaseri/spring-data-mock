@@ -60,6 +60,13 @@ public class RepositoryMockBuilderTest {
   }
 
   @Test
+  public void testEqualityOfMocks() {
+    assertThat(new RepositoryMockBuilder().mock(SimpleCrudPersonRepository.class), is(new RepositoryMockBuilder().mock(SimpleCrudPersonRepository.class)));
+    assertThat(new RepositoryMockBuilder().mock(SimpleCrudPersonRepository.class).hashCode(), is(new RepositoryMockBuilder().mock(SimpleCrudPersonRepository.class).hashCode()));
+    assertThat(new RepositoryMockBuilder().mock(SimpleCrudPersonRepository.class).toString(), is(new RepositoryMockBuilder().mock(SimpleCrudPersonRepository.class).toString()));
+  }
+
+  @Test
   public void testMockingWithoutKeyGeneration() {
     final SimpleCrudPersonRepository repository =
         new RepositoryMockBuilder().withoutGeneratingKeys().mock(SimpleCrudPersonRepository.class);
