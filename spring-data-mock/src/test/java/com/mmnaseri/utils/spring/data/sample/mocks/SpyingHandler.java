@@ -22,7 +22,7 @@ public class SpyingHandler implements NonDataOperationHandler {
     }
 
     @Override
-    public Object invoke(Object proxy, Object... args) {
+    public Object invoke(Object proxy, Method method, Object... args) {
         called = true;
         return null;
     }

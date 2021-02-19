@@ -14,10 +14,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.StreamSupport;
 
 import static com.mmnaseri.utils.spring.data.utils.TestUtils.iterableToList;
+import static java.util.stream.Collectors.toList;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.isIn;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
 
 /**
  * @author Milad Naseri (m.m.naseri@gmail.com)
@@ -43,7 +51,7 @@ public class DefaultCrudRepositoryTest {
         final List<Person> entities = Arrays.asList(new Person(), new Person(), new Person());
         final Iterable<Object> inserted = repository.saveAll(entities);
         assertThat(inserted, is(notNullValue()));
-        final List<Object> insertedList = iterableToList(inserted);
+        final List<Object> insertedList = StreamSupport.stream(inserted.spliterator(), /* parallel= */ false).collect(toList());
         assertThat(insertedList, hasSize(3));
         for (Object item : insertedList) {
             assertThat(item, is(instanceOf(Person.class)));
@@ -53,7 +61,7 @@ public class DefaultCrudRepositoryTest {
         assertThat(dataStore.retrieveAll(), hasSize(entities.size()));
         final Iterable<Object> updated = repository.saveAll(entities);
         assertThat(updated, is(notNullValue()));
-        final List<Object> updatedList = iterableToList(updated);
+        final List<Object> updatedList = StreamSupport.stream(updated.spliterator(), /* parallel= */ false).collect(toList());
         assertThat(updatedList, hasSize(3));
         for (Object item : updatedList) {
             assertThat(item, is(instanceOf(Person.class)));
@@ -95,7 +103,7 @@ public class DefaultCrudRepositoryTest {
         for (String id : existingIds) {
             expected.add(dataStore.retrieve(id));
         }
-        final List<?> list = iterableToList(repository.findAllById(request));
+        final List<?> list = StreamSupport.stream(((Iterable<Object>) repository.findAllById(request)).spliterator(), /* parallel= */ false).collect(toList());
         assertThat(list, hasSize(existingIds.size()));
         for (Object found : list) {
             assertThat(found, is(instanceOf(Person.class)));
@@ -105,7 +113,7 @@ public class DefaultCrudRepositoryTest {
 
     @Test
     public void testDeleteByKey() {
-        final Object deleted = repository.delete("1");
+        final Object deleted = repository.deleteById("1");
         assertThat(deleted, is(nullValue()));
     }
 
@@ -122,7 +130,7 @@ public class DefaultCrudRepositoryTest {
 
     @Test(expectedExceptions = EntityMissingKeyException.class)
     public void testDeleteByEntityWhenEntityHasNoKey() {
-        repository.deleteById(new Person());
+        repository.delete(new Person());
     }
 
     @Test

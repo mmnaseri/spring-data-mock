@@ -20,13 +20,13 @@ public class NonDataOperationInvocationHandlerTest {
     final Object proxy = new Object();
     assertThat(
         handler.invoke(proxy, Object.class.getMethod("hashCode"), new Object[] {}),
-        Matchers.is(proxy.hashCode()));
+        Matchers.is(1));
     assertThat(
         handler.invoke(proxy, Object.class.getMethod("toString"), new Object[] {}),
-        Matchers.is(proxy.toString()));
+        Matchers.is("mock<[]>"));
     assertThat(
         handler.invoke(proxy, Object.class.getMethod("equals", Object.class), new Object[] {proxy}),
-        Matchers.is(true));
+        Matchers.is(false));
     assertThat(
         handler.invoke(
             proxy, Object.class.getMethod("equals", Object.class), new Object[] {new Object()}),
