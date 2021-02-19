@@ -24,7 +24,7 @@ public class HashCodeNonDataOperationHandler implements NonDataOperationHandler 
   }
 
   @Override
-  public Object invoke(Object proxy, Object... args) {
+  public Object invoke(Object proxy, Method method, Object... args) {
     return Objects.hashCode(superInterfaces(proxy.getClass()).sorted(Comparator.comparing(Class::getCanonicalName)).toArray());
   }
 }

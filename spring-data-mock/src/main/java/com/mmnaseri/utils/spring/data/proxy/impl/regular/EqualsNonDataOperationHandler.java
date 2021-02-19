@@ -26,7 +26,7 @@ public class EqualsNonDataOperationHandler implements NonDataOperationHandler {
   }
 
   @Override
-  public Object invoke(Object proxy, Object... args) {
+  public Object invoke(Object proxy, Method method, Object... args) {
     final Object that = args[0];
     if (that == null || !Proxy.isProxyClass(that.getClass())) {
       return false;

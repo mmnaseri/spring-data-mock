@@ -24,7 +24,7 @@ public class ToStringNonDataOperationHandler implements NonDataOperationHandler 
   }
 
   @Override
-  public Object invoke(Object proxy, Object... args) {
+  public Object invoke(Object proxy, Method method, Object... args) {
     return "mock<" + superInterfaces(proxy.getClass()).sorted(comparing(Class::getCanonicalName)).collect(toList()).toString() + ">";
   }
 }

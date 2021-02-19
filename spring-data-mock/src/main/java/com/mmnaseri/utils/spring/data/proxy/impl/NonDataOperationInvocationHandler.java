@@ -4,6 +4,7 @@ import com.mmnaseri.utils.spring.data.error.UnknownDataOperationException;
 import com.mmnaseri.utils.spring.data.proxy.NonDataOperationHandler;
 import com.mmnaseri.utils.spring.data.proxy.impl.regular.EqualsNonDataOperationHandler;
 import com.mmnaseri.utils.spring.data.proxy.impl.regular.HashCodeNonDataOperationHandler;
+import com.mmnaseri.utils.spring.data.proxy.impl.regular.InterfaceDefaultMethodNonDataOperation;
 import com.mmnaseri.utils.spring.data.proxy.impl.regular.ToStringNonDataOperationHandler;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -36,6 +37,7 @@ public class NonDataOperationInvocationHandler implements InvocationHandler {
       handlers.add(new EqualsNonDataOperationHandler());
       handlers.add(new HashCodeNonDataOperationHandler());
       handlers.add(new ToStringNonDataOperationHandler());
+      handlers.add(new InterfaceDefaultMethodNonDataOperation());
     }
   }
 
@@ -45,7 +47,7 @@ public class NonDataOperationInvocationHandler implements InvocationHandler {
     for (NonDataOperationHandler handler : handlers) {
       if (handler.handles(proxy, method, args)) {
         log.info("Found handler " + handler + " for method " + method);
-        return handler.invoke(proxy, args);
+        return handler.invoke(proxy, method, args);
       }
     }
     log.error("No data or non-data operation handler could be found for method " + method);
