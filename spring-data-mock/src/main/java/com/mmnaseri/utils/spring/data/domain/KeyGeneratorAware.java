@@ -10,4 +10,6 @@ package com.mmnaseri.utils.spring.data.domain;
 public interface KeyGeneratorAware<S> {
 
   void setKeyGenerator(KeyGenerator<? extends S> keyGenerator);
+  void setKeyGenerationStrategy(KeyGenerationStrategy strategy);
+
 }

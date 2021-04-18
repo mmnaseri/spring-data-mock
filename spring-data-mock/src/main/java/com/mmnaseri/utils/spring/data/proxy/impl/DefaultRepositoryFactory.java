@@ -1,12 +1,6 @@
 package com.mmnaseri.utils.spring.data.proxy.impl;
 
-import com.mmnaseri.utils.spring.data.domain.DataStoreAware;
-import com.mmnaseri.utils.spring.data.domain.KeyGenerator;
-import com.mmnaseri.utils.spring.data.domain.KeyGeneratorAware;
-import com.mmnaseri.utils.spring.data.domain.RepositoryAware;
-import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
-import com.mmnaseri.utils.spring.data.domain.RepositoryMetadataAware;
-import com.mmnaseri.utils.spring.data.domain.RepositoryMetadataResolver;
+import com.mmnaseri.utils.spring.data.domain.*;
 import com.mmnaseri.utils.spring.data.domain.impl.MethodQueryDescriptionExtractor;
 import com.mmnaseri.utils.spring.data.domain.impl.key.NoOpKeyGenerator;
 import com.mmnaseri.utils.spring.data.proxy.DataOperationResolver;
@@ -73,7 +67,7 @@ public class DefaultRepositoryFactory implements RepositoryFactory {
 
   @Override
   public <E> E getInstance(
-      KeyGenerator<?> keyGenerator, Class<E> repositoryInterface, Class... implementations) {
+      KeyGenerator<?> keyGenerator, KeyGenerationStrategy keyGenerationStrategy, Class<E> repositoryInterface, Class... implementations) {
     final KeyGenerator<?> actualKeyGenerator;
     if (keyGenerator == null) {
       if (configuration.getDefaultKeyGenerator() != null) {
@@ -86,6 +80,19 @@ public class DefaultRepositoryFactory implements RepositoryFactory {
       }
     } else {
       actualKeyGenerator = keyGenerator;
+    }
+    final KeyGenerationStrategy actualKeyGenerationStrategy;
+    if (keyGenerationStrategy == null) {
+      if (configuration.getDefaultKeyGenerator() != null) {
+        // if no key generation strategy is passed and there is a default strategy specified, we
+        // fall back to that
+        actualKeyGenerationStrategy = configuration.getDefaultKeyGenerationStrategy();
+      } else {
+        // otherwise, fall back to ONLY_NULL
+        actualKeyGenerationStrategy = KeyGenerationStrategy.ONLY_NULL;
+      }
+    } else {
+      actualKeyGenerationStrategy = keyGenerationStrategy;
     }
     log.info(
         "We are going to create a proxy instance of type "
@@ -104,7 +111,7 @@ public class DefaultRepositoryFactory implements RepositoryFactory {
     log.info(
         "Trying to find all the proper type mappings for entity repository " + repositoryInterface);
     final List<TypeMapping<?>> typeMappings =
-        getTypeMappings(metadata, dataStore, actualKeyGenerator, implementations);
+        getTypeMappings(metadata, dataStore, actualKeyGenerator, actualKeyGenerationStrategy, implementations);
     // set up the data operation resolver
     final DataOperationResolver operationResolver =
         new DefaultDataOperationResolver(
@@ -176,6 +183,7 @@ public class DefaultRepositoryFactory implements RepositoryFactory {
    * @param metadata the repository metadata
    * @param dataStore the data store
    * @param keyGenerator the key generator
+   * @param keyGenerationStrategy
    * @param implementations the implementations specified by the user
    * @return the resolved list of type mappings
    */
@@ -183,6 +191,7 @@ public class DefaultRepositoryFactory implements RepositoryFactory {
       RepositoryMetadata metadata,
       DataStore<Object, ?> dataStore,
       KeyGenerator<?> keyGenerator,
+      KeyGenerationStrategy keyGenerationStrategy,
       Class[] implementations) {
     final TypeMappingContext localContext = new DefaultTypeMappingContext(typeMappingContext);
     for (Class implementation : implementations) {
@@ -203,6 +212,7 @@ public class DefaultRepositoryFactory implements RepositoryFactory {
         KeyGeneratorAware instance = (KeyGeneratorAware) mapping.getInstance();
         //noinspection unchecked
         instance.setKeyGenerator(keyGenerator);
+        instance.setKeyGenerationStrategy(keyGenerationStrategy);
       }
       if (mapping.getInstance() instanceof RepositoryFactoryConfigurationAware) {
         RepositoryFactoryConfigurationAware instance =

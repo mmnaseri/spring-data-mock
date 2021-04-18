@@ -1,5 +1,6 @@
 package com.mmnaseri.utils.spring.data.dsl.mock;
 
+import com.mmnaseri.utils.spring.data.domain.KeyGenerationStrategy;
 import com.mmnaseri.utils.spring.data.domain.KeyGenerator;
 import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
 import com.mmnaseri.utils.spring.data.domain.impl.key.NoOpKeyGenerator;
@@ -11,6 +12,7 @@ import com.mmnaseri.utils.spring.data.proxy.impl.DefaultRepositoryFactory;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * This class implements the interfaces used to define a DSL for mocking a repository.
@@ -23,34 +25,36 @@ public class RepositoryMockBuilder implements Start, ImplementationAnd, KeyGener
   private final RepositoryFactory factory;
   private final List<Class<?>> implementations;
   private final KeyGenerator<?> keyGenerator;
+  private final KeyGenerationStrategy keyGenerationStrategy;
 
   public RepositoryMockBuilder() {
-    this(null, new LinkedList<>(), null);
+    this(null, new LinkedList<>(), null, null);
   }
 
   private RepositoryMockBuilder(
-      RepositoryFactory factory, List<Class<?>> implementations, KeyGenerator<?> keyGenerator) {
+      RepositoryFactory factory, List<Class<?>> implementations, KeyGenerator<?> keyGenerator, KeyGenerationStrategy keyGenerationStrategy) {
     this.factory = factory;
     this.implementations = implementations;
     this.keyGenerator = keyGenerator;
+    this.keyGenerationStrategy = keyGenerationStrategy;
   }
 
   @Override
   public KeyGeneration useConfiguration(RepositoryFactoryConfiguration configuration) {
     return new RepositoryMockBuilder(
-        new DefaultRepositoryFactory(configuration), implementations, keyGenerator);
+        new DefaultRepositoryFactory(configuration), implementations, keyGenerator, keyGenerationStrategy);
   }
 
   @Override
   public KeyGeneration useFactory(RepositoryFactory factory) {
-    return new RepositoryMockBuilder(factory, implementations, keyGenerator);
+    return new RepositoryMockBuilder(factory, implementations, keyGenerator, keyGenerationStrategy);
   }
 
   @Override
   public ImplementationAnd usingImplementation(Class<?> implementation) {
     final LinkedList<Class<?>> implementations = new LinkedList<>(this.implementations);
     implementations.add(implementation);
-    return new RepositoryMockBuilder(factory, implementations, keyGenerator);
+    return new RepositoryMockBuilder(factory, implementations, keyGenerator, keyGenerationStrategy);
   }
 
   @Override
@@ -60,19 +64,29 @@ public class RepositoryMockBuilder implements Start, ImplementationAnd, KeyGener
 
   @Override
   public <S> Implementation generateKeysUsing(KeyGenerator<S> keyGenerator) {
-    return new RepositoryMockBuilder(factory, implementations, keyGenerator);
+    return generateKeysUsing(keyGenerator, keyGenerationStrategy);
+  }
+
+  @Override
+  public <S> Implementation generateKeysUsing(KeyGenerator<S> keyGenerator, KeyGenerationStrategy keyGenerationStrategy) {
+    return new RepositoryMockBuilder(factory, implementations, keyGenerator, keyGenerationStrategy);
   }
 
   @Override
   public <S, G extends KeyGenerator<S>> Implementation generateKeysUsing(Class<G> generatorType) {
+    return generateKeysUsing(generatorType, keyGenerationStrategy);
+  }
+
+  @Override
+  public <S, G extends KeyGenerator<S>> Implementation generateKeysUsing(Class<G> generatorType, KeyGenerationStrategy keyGenerationStrategy) {
     //noinspection unchecked
     final G instance = (G) createKeyGenerator(generatorType);
-    return generateKeysUsing(instance);
+    return generateKeysUsing(instance, keyGenerationStrategy);
   }
 
   @Override
   public Implementation withoutGeneratingKeys() {
-    return new RepositoryMockBuilder(factory, implementations, new NoOpKeyGenerator<>());
+    return new RepositoryMockBuilder(factory, implementations, new NoOpKeyGenerator<>(), keyGenerationStrategy);
   }
 
   private KeyGenerator<?> createKeyGenerator(Class<? extends KeyGenerator> generatorType) {
@@ -108,10 +122,10 @@ public class RepositoryMockBuilder implements Start, ImplementationAnd, KeyGener
             generatorProvider.getKeyGenerator(identifierType);
         evaluatedKeyGenerator = createKeyGenerator(keyGeneratorType);
       }
-      return generateKeysUsing(evaluatedKeyGenerator).mock(repositoryInterface);
+      return generateKeysUsing(evaluatedKeyGenerator, keyGenerationStrategy).mock(repositoryInterface);
     } else {
       return repositoryFactory.getInstance(
-          keyGenerator, repositoryInterface, implementations.toArray(new Class[0]));
+          keyGenerator, keyGenerationStrategy, repositoryInterface, implementations.toArray(new Class[0]));
     }
   }
 }

@@ -1,9 +1,6 @@
 package com.mmnaseri.utils.spring.data.dsl.factory;
 
-import com.mmnaseri.utils.spring.data.domain.KeyGenerator;
-import com.mmnaseri.utils.spring.data.domain.Operator;
-import com.mmnaseri.utils.spring.data.domain.OperatorContext;
-import com.mmnaseri.utils.spring.data.domain.RepositoryMetadataResolver;
+import com.mmnaseri.utils.spring.data.domain.*;
 import com.mmnaseri.utils.spring.data.domain.impl.DefaultOperatorContext;
 import com.mmnaseri.utils.spring.data.domain.impl.DefaultRepositoryMetadataResolver;
 import com.mmnaseri.utils.spring.data.domain.impl.MethodQueryDescriptionExtractor;
@@ -64,6 +61,7 @@ public class RepositoryFactoryBuilder
   private DataStoreEventListenerContext eventListenerContext;
   private NonDataOperationInvocationHandler operationInvocationHandler;
   private KeyGenerator<?> defaultKeyGenerator;
+  private KeyGenerationStrategy defaultKeyGenerationStrategy;
 
   private RepositoryFactoryBuilder() {
     metadataResolver = new DefaultRepositoryMetadataResolver();
@@ -76,6 +74,7 @@ public class RepositoryFactoryBuilder
     operationInvocationHandler = new NonDataOperationInvocationHandler();
     // by default, we do not want any key generator, unless one is specified
     defaultKeyGenerator = null;
+    defaultKeyGenerationStrategy = KeyGenerationStrategy.ONLY_NULL;
   }
 
   @Override
@@ -251,17 +250,28 @@ public class RepositoryFactoryBuilder
         typeMappingContext,
         eventListenerContext,
         operationInvocationHandler,
-        defaultKeyGenerator);
+        defaultKeyGenerator,
+        defaultKeyGenerationStrategy);
   }
 
   @Override
   public <S> Implementation generateKeysUsing(KeyGenerator<S> keyGenerator) {
-    return new RepositoryMockBuilder().useFactory(build()).generateKeysUsing(keyGenerator);
+    return generateKeysUsing(keyGenerator, defaultKeyGenerationStrategy);
+  }
+
+  @Override
+  public <S> Implementation generateKeysUsing(KeyGenerator<S> keyGenerator, KeyGenerationStrategy keyGenerationStrategy) {
+    return new RepositoryMockBuilder().useFactory(build()).generateKeysUsing(keyGenerator, keyGenerationStrategy);
   }
 
   @Override
   public <S, G extends KeyGenerator<S>> Implementation generateKeysUsing(Class<G> generatorType) {
-    return new RepositoryMockBuilder().useFactory(build()).generateKeysUsing(generatorType);
+    return generateKeysUsing(generatorType, defaultKeyGenerationStrategy);
+  }
+
+  @Override
+  public <S, G extends KeyGenerator<S>> Implementation generateKeysUsing(Class<G> generatorType, KeyGenerationStrategy keyGenerationStrategy) {
+    return new RepositoryMockBuilder().useFactory(build()).generateKeysUsing(generatorType, keyGenerationStrategy);
   }
 
   @Override
@@ -291,7 +301,8 @@ public class RepositoryFactoryBuilder
         builder.typeMappingContext,
         builder.eventListenerContext,
         builder.operationInvocationHandler,
-        builder.defaultKeyGenerator);
+        builder.defaultKeyGenerator,
+        builder.defaultKeyGenerationStrategy);
   }
 
   /**

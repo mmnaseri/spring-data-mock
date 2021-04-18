@@ -1,5 +1,6 @@
 package com.mmnaseri.utils.spring.data.proxy;
 
+import com.mmnaseri.utils.spring.data.domain.KeyGenerationStrategy;
 import com.mmnaseri.utils.spring.data.domain.KeyGenerator;
 import com.mmnaseri.utils.spring.data.domain.RepositoryMetadataResolver;
 import com.mmnaseri.utils.spring.data.domain.impl.MethodQueryDescriptionExtractor;
@@ -46,4 +47,10 @@ public interface RepositoryFactoryConfiguration {
    *     specified
    */
   KeyGenerator<?> getDefaultKeyGenerator();
+
+  /**
+   * @return the default key generation strategy that should be used as a fallback when no strategy is
+   *     specified
+   */
+  KeyGenerationStrategy getDefaultKeyGenerationStrategy();
 }

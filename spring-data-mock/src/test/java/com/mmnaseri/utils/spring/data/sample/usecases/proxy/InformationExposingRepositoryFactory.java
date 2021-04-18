@@ -1,5 +1,6 @@
 package com.mmnaseri.utils.spring.data.sample.usecases.proxy;
 
+import com.mmnaseri.utils.spring.data.domain.KeyGenerationStrategy;
 import com.mmnaseri.utils.spring.data.domain.KeyGenerator;
 import com.mmnaseri.utils.spring.data.proxy.RepositoryConfiguration;
 import com.mmnaseri.utils.spring.data.proxy.RepositoryFactory;
@@ -25,8 +26,8 @@ public class InformationExposingRepositoryFactory implements RepositoryFactory {
     }
 
     @Override
-    public <E> E getInstance(KeyGenerator<?> keyGenerator, Class<E> repositoryInterface, Class... implementations) {
-        final E instance = delegate.getInstance(keyGenerator, repositoryInterface, implementations);
+    public <E> E getInstance(KeyGenerator<?> keyGenerator, KeyGenerationStrategy keyGenerationStrategy, Class<E> repositoryInterface, Class... implementations) {
+        final E instance = delegate.getInstance(keyGenerator, keyGenerationStrategy, repositoryInterface, implementations);
         //noinspection unchecked
         final RepositoryConfiguration configuration = new ImmutableRepositoryConfiguration(
                 this.configuration.getRepositoryMetadataResolver().resolve(repositoryInterface), keyGenerator,

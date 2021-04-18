@@ -1,5 +1,6 @@
 package com.mmnaseri.utils.spring.data.proxy.impl;
 
+import com.mmnaseri.utils.spring.data.domain.KeyGenerationStrategy;
 import com.mmnaseri.utils.spring.data.domain.KeyGenerator;
 import com.mmnaseri.utils.spring.data.domain.RepositoryMetadataResolver;
 import com.mmnaseri.utils.spring.data.domain.impl.MethodQueryDescriptionExtractor;
@@ -29,6 +30,7 @@ public class ImmutableRepositoryFactoryConfiguration implements RepositoryFactor
   private final DataStoreEventListenerContext eventListenerContext;
   private final NonDataOperationInvocationHandler operationInvocationHandler;
   private final KeyGenerator<?> keyGenerator;
+  private final KeyGenerationStrategy keyGenerationStrategy;
 
   public ImmutableRepositoryFactoryConfiguration(RepositoryFactoryConfiguration configuration) {
     this(
@@ -40,7 +42,31 @@ public class ImmutableRepositoryFactoryConfiguration implements RepositoryFactor
         configuration.getTypeMappingContext(),
         configuration.getEventListenerContext(),
         configuration.getOperationInvocationHandler(),
-        configuration.getDefaultKeyGenerator());
+        configuration.getDefaultKeyGenerator(),
+        configuration.getDefaultKeyGenerationStrategy());
+  }
+
+  @Deprecated
+  public ImmutableRepositoryFactoryConfiguration(
+      RepositoryMetadataResolver metadataResolver,
+      MethodQueryDescriptionExtractor queryDescriptionExtractor,
+      DataFunctionRegistry functionRegistry,
+      DataStoreRegistry dataStoreRegistry,
+      ResultAdapterContext resultAdapterContext,
+      TypeMappingContext typeMappingContext,
+      DataStoreEventListenerContext eventListenerContext,
+      NonDataOperationInvocationHandler operationInvocationHandler,
+      KeyGenerator<?> keyGenerator) {
+    this(metadataResolver,
+            queryDescriptionExtractor,
+            functionRegistry,
+            dataStoreRegistry,
+            resultAdapterContext,
+            typeMappingContext,
+            eventListenerContext,
+            operationInvocationHandler,
+            keyGenerator,
+            KeyGenerationStrategy.ONLY_NULL);
   }
 
   public ImmutableRepositoryFactoryConfiguration(
@@ -52,7 +78,8 @@ public class ImmutableRepositoryFactoryConfiguration implements RepositoryFactor
       TypeMappingContext typeMappingContext,
       DataStoreEventListenerContext eventListenerContext,
       NonDataOperationInvocationHandler operationInvocationHandler,
-      KeyGenerator<?> keyGenerator) {
+      KeyGenerator<?> keyGenerator,
+      KeyGenerationStrategy keyGenerationStrategy) {
     this.metadataResolver = metadataResolver;
     this.queryDescriptionExtractor = queryDescriptionExtractor;
     this.functionRegistry = functionRegistry;
@@ -62,6 +89,7 @@ public class ImmutableRepositoryFactoryConfiguration implements RepositoryFactor
     this.eventListenerContext = eventListenerContext;
     this.operationInvocationHandler = operationInvocationHandler;
     this.keyGenerator = keyGenerator;
+    this.keyGenerationStrategy = keyGenerationStrategy;
   }
 
   @Override
@@ -107,5 +135,10 @@ public class ImmutableRepositoryFactoryConfiguration implements RepositoryFactor
   @Override
   public KeyGenerator<?> getDefaultKeyGenerator() {
     return keyGenerator;
+  }
+
+  @Override
+  public KeyGenerationStrategy getDefaultKeyGenerationStrategy() {
+    return keyGenerationStrategy;
   }
 }

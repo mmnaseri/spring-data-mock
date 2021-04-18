@@ -1,5 +1,6 @@
 package com.mmnaseri.utils.spring.data.proxy;
 
+import com.mmnaseri.utils.spring.data.domain.KeyGenerationStrategy;
 import com.mmnaseri.utils.spring.data.domain.KeyGenerator;
 
 /**
@@ -26,9 +27,30 @@ public interface RepositoryFactory {
    * @param <E> the type of the interface
    * @return a prepared instance of the repository
    * @throws com.mmnaseri.utils.spring.data.error.RepositoryMockException should anything go wrong
+   * @deprecated Use {@link #getInstance(KeyGenerator, KeyGenerationStrategy, Class, Class[])} instead.
+   */
+  @Deprecated
+  default <E> E getInstance(
+      KeyGenerator<?> keyGenerator, Class<E> repositoryInterface, Class... implementations) {
+    return getInstance(keyGenerator, KeyGenerationStrategy.ONLY_NULL, repositoryInterface, implementations);
+  }
+
+  /**
+   * Creates an instance of the repository as per the provided configuration.
+   *
+   * @param keyGenerator the key generator to use when inserting items (if auto generation is
+   *     required). You can specify a {@literal null} key generator to signify that {@link
+   *     RepositoryFactoryConfiguration#getDefaultKeyGenerator() the fallback key generator} should
+   *     be used when generating keys.
+   * @param keyGenerationStrategy the strategy when and for which entities a key should be generated.
+   * @param repositoryInterface the repository interface which we want to mock
+   * @param implementations all the concrete classes that can be used to figure out method mappings
+   * @param <E> the type of the interface
+   * @return a prepared instance of the repository
+   * @throws com.mmnaseri.utils.spring.data.error.RepositoryMockException should anything go wrong
    */
   <E> E getInstance(
-      KeyGenerator<?> keyGenerator, Class<E> repositoryInterface, Class... implementations);
+        KeyGenerator<?> keyGenerator, KeyGenerationStrategy keyGenerationStrategy, Class<E> repositoryInterface, Class... implementations);
 
   /** @return the configuration bound to this repository factory */
   RepositoryFactoryConfiguration getConfiguration();
