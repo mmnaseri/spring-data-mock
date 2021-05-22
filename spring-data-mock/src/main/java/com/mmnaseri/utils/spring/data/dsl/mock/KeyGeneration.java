@@ -1,5 +1,6 @@
 package com.mmnaseri.utils.spring.data.dsl.mock;
 
+import com.mmnaseri.utils.spring.data.domain.KeyGenerationStrategy;
 import com.mmnaseri.utils.spring.data.domain.KeyGenerator;
 
 /**
@@ -20,6 +21,17 @@ public interface KeyGeneration extends Implementation {
   <S> Implementation generateKeysUsing(KeyGenerator<S> keyGenerator);
 
   /**
+   * Sets the key generator to the provided instance
+   *
+   * @param keyGenerator the key generator
+   * @param keyGenerationStrategy the key generation strategy
+   * @param <S> the type of the keys
+   * @return the rest of the configuration
+   */
+  <S> Implementation generateKeysUsing(
+      KeyGenerator<S> keyGenerator, KeyGenerationStrategy keyGenerationStrategy);
+
+  /**
    * Sets the key generator to an instance of the provided type.
    *
    * @param generatorType the type of the key generator to use
@@ -28,6 +40,18 @@ public interface KeyGeneration extends Implementation {
    * @return the rest of the configuration
    */
   <S, G extends KeyGenerator<S>> Implementation generateKeysUsing(Class<G> generatorType);
+
+  /**
+   * Sets the key generator to an instance of the provided type.
+   *
+   * @param generatorType the type of the key generator to use
+   * @param keyGenerationStrategy the key generation strategy
+   * @param <S> the type of the keys the generator will be generating
+   * @param <G> the type of the generator
+   * @return the rest of the configuration
+   */
+  <S, G extends KeyGenerator<S>> Implementation generateKeysUsing(
+      Class<G> generatorType, KeyGenerationStrategy keyGenerationStrategy);
 
   /**
    * Tells the builder that we are not going to have any auto-generated keys

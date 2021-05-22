@@ -1,10 +1,6 @@
 package com.mmnaseri.utils.spring.data.repository;
 
-import com.mmnaseri.utils.spring.data.domain.DataStoreAware;
-import com.mmnaseri.utils.spring.data.domain.KeyGenerator;
-import com.mmnaseri.utils.spring.data.domain.KeyGeneratorAware;
-import com.mmnaseri.utils.spring.data.domain.RepositoryMetadata;
-import com.mmnaseri.utils.spring.data.domain.RepositoryMetadataAware;
+import com.mmnaseri.utils.spring.data.domain.*;
 import com.mmnaseri.utils.spring.data.store.DataStore;
 import com.mmnaseri.utils.spring.data.tools.PropertyUtils;
 import org.apache.commons.logging.Log;
@@ -25,6 +21,7 @@ public class CrudRepositorySupport
 
   private static final Log log = LogFactory.getLog(CrudRepositorySupport.class);
   private KeyGenerator<?> keyGenerator;
+  private KeyGenerationStrategy keyGenerationStrategy = KeyGenerationStrategy.ONLY_NULL;
   private DataStore dataStore;
   private RepositoryMetadata repositoryMetadata;
 
@@ -43,9 +40,9 @@ public class CrudRepositorySupport
     }
     Object key = PropertyUtils.getPropertyValue(entity, repositoryMetadata.getIdentifierProperty());
     log.info("The entity that is to be saved has a key with value " + key);
-    if (key == null && keyGenerator != null) {
+    if (needGenerateKey(entity, key) && keyGenerator != null) {
       log.info(
-          "The key was null, but the generator was not, so we are going to get a key for the entity");
+          "The key was null or entity is not managed, but the generator was not, so we are going to get a key for the entity");
       key = keyGenerator.generate();
       log.debug("The generated key for the entity was " + key);
       PropertyUtils.setPropertyValue(entity, repositoryMetadata.getIdentifierProperty(), key);
@@ -95,6 +92,11 @@ public class CrudRepositorySupport
     this.keyGenerator = keyGenerator;
   }
 
+  @Override
+  public void setKeyGenerationStrategy(KeyGenerationStrategy strategy) {
+    this.keyGenerationStrategy = strategy;
+  }
+
   protected DataStore getDataStore() {
     return dataStore;
   }
@@ -111,5 +113,14 @@ public class CrudRepositorySupport
   @Override
   public final void setRepositoryMetadata(RepositoryMetadata repositoryMetadata) {
     this.repositoryMetadata = repositoryMetadata;
+  }
+
+  private boolean needGenerateKey(Object entity, Object key) {
+    return null == key ||
+            KeyGenerationStrategy.ALL_UNMANAGED == keyGenerationStrategy && !isManaged(entity);
+  }
+
+  private boolean isManaged(Object entity) {
+    return dataStore.retrieveAll().contains(entity);
   }
 }

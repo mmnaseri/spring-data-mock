@@ -1,5 +1,6 @@
 package com.mmnaseri.utils.spring.data.proxy.impl;
 
+import com.mmnaseri.utils.spring.data.domain.KeyGenerationStrategy;
 import com.mmnaseri.utils.spring.data.domain.KeyGenerator;
 import com.mmnaseri.utils.spring.data.domain.RepositoryMetadataResolver;
 import com.mmnaseri.utils.spring.data.domain.impl.MethodQueryDescriptionExtractor;
@@ -27,6 +28,7 @@ public class DefaultRepositoryFactoryConfiguration implements RepositoryFactoryC
   private DataStoreEventListenerContext eventListenerContext;
   private NonDataOperationInvocationHandler operationInvocationHandler;
   private KeyGenerator<?> defaultKeyGenerator;
+  private KeyGenerationStrategy defaultKeyGenerationStrategy;
 
   public DefaultRepositoryFactoryConfiguration() {}
 
@@ -40,7 +42,31 @@ public class DefaultRepositoryFactoryConfiguration implements RepositoryFactoryC
         configuration.getTypeMappingContext(),
         configuration.getEventListenerContext(),
         configuration.getOperationInvocationHandler(),
-        configuration.getDefaultKeyGenerator());
+        configuration.getDefaultKeyGenerator(),
+        configuration.getDefaultKeyGenerationStrategy());
+  }
+
+  @Deprecated
+  public DefaultRepositoryFactoryConfiguration(
+      RepositoryMetadataResolver repositoryMetadataResolver,
+      MethodQueryDescriptionExtractor descriptionExtractor,
+      DataFunctionRegistry functionRegistry,
+      DataStoreRegistry dataStoreRegistry,
+      ResultAdapterContext resultAdapterContext,
+      TypeMappingContext typeMappingContext,
+      DataStoreEventListenerContext eventListenerContext,
+      NonDataOperationInvocationHandler operationInvocationHandler,
+      KeyGenerator<?> defaultKeyGenerator) {
+    this(repositoryMetadataResolver,
+            descriptionExtractor,
+            functionRegistry,
+            dataStoreRegistry,
+            resultAdapterContext,
+            typeMappingContext,
+            eventListenerContext,
+            operationInvocationHandler,
+            defaultKeyGenerator,
+            KeyGenerationStrategy.ONLY_NULL);
   }
 
   public DefaultRepositoryFactoryConfiguration(
@@ -52,7 +78,8 @@ public class DefaultRepositoryFactoryConfiguration implements RepositoryFactoryC
       TypeMappingContext typeMappingContext,
       DataStoreEventListenerContext eventListenerContext,
       NonDataOperationInvocationHandler operationInvocationHandler,
-      KeyGenerator<?> defaultKeyGenerator) {
+      KeyGenerator<?> defaultKeyGenerator,
+      KeyGenerationStrategy defaultKeyGenerationStrategy) {
     this.repositoryMetadataResolver = repositoryMetadataResolver;
     this.descriptionExtractor = descriptionExtractor;
     this.functionRegistry = functionRegistry;
@@ -62,6 +89,7 @@ public class DefaultRepositoryFactoryConfiguration implements RepositoryFactoryC
     this.eventListenerContext = eventListenerContext;
     this.operationInvocationHandler = operationInvocationHandler;
     this.defaultKeyGenerator = defaultKeyGenerator;
+    this.defaultKeyGenerationStrategy = defaultKeyGenerationStrategy;
   }
 
   @Override
@@ -144,5 +172,14 @@ public class DefaultRepositoryFactoryConfiguration implements RepositoryFactoryC
 
   public void setDefaultKeyGenerator(KeyGenerator<?> defaultKeyGenerator) {
     this.defaultKeyGenerator = defaultKeyGenerator;
+  }
+
+  @Override
+  public KeyGenerationStrategy getDefaultKeyGenerationStrategy() {
+    return defaultKeyGenerationStrategy;
+  }
+
+  public void setDefaultKeyGenerationStrategy(KeyGenerationStrategy defaultKeyGenerationStrategy) {
+    this.defaultKeyGenerationStrategy = defaultKeyGenerationStrategy;
   }
 }
