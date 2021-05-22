@@ -359,6 +359,18 @@ three operations:
 
 Certain repository methods can take advantage of these additional functionality if provided.
 
+### Caveats / Limitations
+
+Be careful when changing entities after saving or loading from the store.
+The standard implementation is an in-memory key-value store.
+This means that the entity in the store also changes if the entity should be changed after saving / loading because it is the same object reference.
+
+There are only a few sensible cases where this (in a test) could become a problem.
+
+An example: If a controller loads the entity from the store and modifies it before the response (e.g. an `CredentialsContainer.eraseCredentials()` is called on a user entity).
+
+You are warned.
+
 ## Result Adapters
 
 Many times the actual implementation methods for an operation return very generic results, such as a list or a set, whereas the
@@ -566,6 +578,7 @@ with this framework, and you can easily add your own by implementing `com.mmnase
   * `com.mmnaseri.utils.spring.data.domain.KeyGenerator`: when you genuinely do not wish to generate keys automatically. This key generator
   will basically generate `null` keys.
   * `com.mmnaseri.utils.spring.data.domain.impl.key.UUIDKeyGenerator`: generates UUID values and returns them as Strings.
+  * `com.mmnaseri.utils.spring.data.domain.impl.key.UUIDObjectTypeKeyGenerator`: generates UUID values and return the *java.util.UUID* objects.
   * `com.mmnaseri.utils.spring.data.domain.impl.key.SequentialIntegerKeyGenerator`: generates `int` values starting from `1`
   * `com.mmnaseri.utils.spring.data.domain.impl.key.SequentialLongKeyGenerator`: generates `long` values starting from `1`
   * `com.mmnaseri.utils.spring.data.domain.impl.key.ConfigurableSequentialIntegerKeyGenerator`: generates `int` values that start
@@ -579,3 +592,106 @@ If you are using the DSL to configure the repository factory and do not mention 
 explicitly say that you do not want key generation to be turned off, one of the above will be chosen for you automatically
 based on the type of the key.
 
+### Key Generation Strategy
+
+By default, only missing IDs are generated.
+This is an advantage in tests because the entity ID is always fixed.
+However, this does not correspond to the normal JPA (or at least with Hibernate) behavior for fields that are annotated with @GeneratedValue.
+
+The desired behavior can be changed using the KeyGenerationStrategy.
+
+#### Only generate missing IDs (default behavior)
+
+```java
+final UserRepository repository = new RepositoryMockBuilder()
+    .generateKeysUsing(UUIDKeyGenerator.class, KeyGenerationStrategy.ONLY_NULL)
+    .mock(UserRepository.class);
+```
+
+#### Generate IDs for all "unmanaged" entities (more JPA compliant)
+
+```java
+final UserRepository repository = new RepositoryMockBuilder()
+    .generateKeysUsing(UUIDKeyGenerator.class, KeyGenerationStrategy.ALL_UNMANAGED)
+    .mock(UserRepository.class);
+```
+
+#### Change behavior for multiple repositories
+
+````java
+final RepositoryFactoryConfiguration configuration = new DefaultRepositoryFactoryConfiguration();
+configuration.setDefaultKeyGenerator(new UUIDKeyGenerator());
+configuration.setsetDefaultKeyGenerationStrategy(KeyGenerationStrategy.ALL_UNMANAGED);
+
+final RepositoryMockBuilder base = new RepositoryMockBuilder();
+final RepositoryMockBuilder builder1 = base.useConfiguration(configuration)
+    .useConfiguration(configuration)
+    .usingImplementation(SampleImpl1.class);
+final RepositoryMockBuilder builder2 = base.useConfiguration(configuration)
+    .useConfiguration(configuration)
+    .usingImplementation(SampleImpl2.class);
+````
+
+#### Illustration of the differences
+
+`KeyGenerationStrategy.ONLY_NULL`
+
+```java
+final UserRepository repository = new RepositoryMockBuilder()
+    .generateKeysUsing(RandomIntegerKeyGenerator.class, KeyGenerationStrategy.ONLY_NULL)
+    .mock(UserRepository.class);
+
+User user1 = new User();
+user1.setId(123);
+user1 = repository.save(user1);
+assert(user1.id == 123); // id is preserved
+
+final int id1 = user1.getId();
+user1.setName("Charlie Brown");
+user1 = repository.save(user1);
+assert(user1.id == id1); // id is preserved
+
+
+User user2 = new User();
+user2.setId(123);
+user2 = repository.save(user2);
+assert(user2.id == 123); // id is preserved
+
+// At this point the object with the ID 123 in the store was replaced with user2!
+
+final int id2 = user2.getId();
+user1.setName("Linus van Pelt");
+user2 = repository.save(user2);
+assert(user2.id == id2); // id is preserved
+```
+
+`KeyGenerationStrategy.ALL_UNMANAGED`
+
+```java
+final UserRepository repository = new RepositoryMockBuilder()
+    .generateKeysUsing(RandomIntegerKeyGenerator.class, KeyGenerationStrategy.ALL_UNMANAGED)
+    .mock(UserRepository.class);
+
+User user1 = new User();
+user1.setId(123);
+user1 = repository.save(user1);
+assert(user1.id != 123); // new id is generated, previous id was overwritten
+
+final int id1 = user1.getId();
+user1.setName("Charlie Brown");
+user1 = repository.save(user1);
+assert(user1.id == id1); // id is preserved
+
+
+User user2 = new User();
+user2.setId(123);
+user2 = repository.save(user2);
+assert(user2.id != 123); // new id is generated, previous id was overwritten
+
+// At this point there are two items in the store. Neither of them has the ID 123!
+
+final int id2 = user2.getId();
+user1.setName("Linus van Pelt");
+user2 = repository.save(user2);
+assert(user2.id == id2); // id is preserved
+```
