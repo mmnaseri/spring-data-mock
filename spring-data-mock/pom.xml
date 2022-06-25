@@ -84,7 +84,7 @@
         <spring-data-commons.version>2.4.5</spring-data-commons.version>
         <spring-data-gemfire.version>2.3.7.RELEASE</spring-data-gemfire.version>
         <spring-data-jpa.version>2.4.4</spring-data-jpa.version>
-        <spring-data-mongo.version>3.1.5</spring-data-mongo.version>
+        <spring-data-mongo.version>3.3.5</spring-data-mongo.version>
         <querydsl.version>4.4.0</querydsl.version>
         <cglib.version>3.3.0</cglib.version>
         <ecj.version>3.24.0</ecj.version>
