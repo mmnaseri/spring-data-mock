@@ -37,6 +37,7 @@ import com.mmnaseri.utils.spring.data.store.impl.DefaultDataStoreRegistry;
 import com.mmnaseri.utils.spring.data.store.impl.MemoryDataStore;
 import org.hamcrest.Matchers;
 import org.springframework.data.domain.AuditorAware;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
