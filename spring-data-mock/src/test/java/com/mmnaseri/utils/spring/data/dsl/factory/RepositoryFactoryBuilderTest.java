@@ -460,4 +460,26 @@ public class RepositoryFactoryBuilderTest {
     assertThat(repository.findAll(), hasSize(3));
     assertThat(repository.findAll(), containsInAnyOrder(((List) iterable).toArray()));
   }
+
+  // please move the code where it should be
+  public class EntityWithAnnotatedIdFieldAndGetter {
+      @Id
+      private Long id;
+      public Long getId() {
+		return id;
+	}
+  }
+
+  // please move the code where it should be
+  public interface RepositoryForIssue extends JpaRepository<EntityWithAnnotatedIdFieldAndGetter, Long> {
+  }
+
+  // please move the code where it should be
+  @Test
+  public void privateIdFieldIssue() {
+	  final RepositoryForIssue repository =
+			  RepositoryFactoryBuilder.builder().mock(RepositoryForIssue.class);
+	  repository.save(new EntityWithAnnotatedIdFieldAndGetter());
+	  assertThat(repository.findAll(), hasSize(1));
+  }
 }
