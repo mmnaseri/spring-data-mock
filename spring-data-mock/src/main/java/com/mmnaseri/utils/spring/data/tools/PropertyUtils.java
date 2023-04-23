@@ -152,7 +152,7 @@ public final class PropertyUtils {
     } else {
       final Field field = ReflectionUtils.findField(context.getClass(), property);
       if (field != null) {
-        if (Modifier.isFinal(field.getModifiers())) {
+        if (Modifier.isFinal(field.getModifiers()) || Modifier.isPrivate(field.getModifiers())) {
           field.setAccessible(true);
         }
         try {
